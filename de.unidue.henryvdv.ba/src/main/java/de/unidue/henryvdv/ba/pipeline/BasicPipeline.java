@@ -14,7 +14,7 @@ public class BasicPipeline {
 		        SimplePipeline.runPipeline(
 		                CollectionReaderFactory.createReader(
 		                        WikiCorefReader.class,
-		                        WikiCorefReader.PARAM_INPUT_FILE, "src/test/resources/corefTest/Battle of Kosovo.xml"
+		                        WikiCorefReader.PARAM_INPUT_FILE, "src/test/resources/corefTest/Aberfoyle, Stirling.xml"
 		                ),
 		                AnalysisEngineFactory.createEngineDescription(InformationModule.class)
 		        );

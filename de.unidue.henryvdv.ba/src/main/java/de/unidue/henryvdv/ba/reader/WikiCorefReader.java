@@ -2,6 +2,7 @@ package de.unidue.henryvdv.ba.reader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -9,10 +10,13 @@ import org.apache.uima.UimaContext;
 import org.apache.uima.collection.CollectionException;
 import org.apache.uima.fit.component.JCasCollectionReader_ImplBase;
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
+import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Progress;
 
+import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceChain;
+import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceLink;
 import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
 import de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity;
 import de.tudarmstadt.ukp.dkpro.core.api.parameter.ComponentParameters;
@@ -92,6 +96,8 @@ public class WikiCorefReader
 	private static final String TAG_COREFERENCE = "coreference";
 	private static final String TAG_MENTION = "mention";
 	private static final String TAG_ROOT = "root";
+	private static final String TAG_COREF_START = "start";
+	private static final String TAG_COREF_END = "end";
 	
     private List<String> document;
     private String documentText;
@@ -99,6 +105,9 @@ public class WikiCorefReader
     private int currentLine;
     private int tokenStart;
     private int tokenEnd;
+    private CoreferenceChain currentCoreferenceChain;
+    private CoreferenceLink currentCoreferenceLink;
+    
       
     private boolean test = true;
     
@@ -255,14 +264,79 @@ public class WikiCorefReader
 	private void processCoreference(){
 		while(!document.get(currentLine).contains("</" + TAG_COREFERENCE + ">")){
 			if(document.get(currentLine).contains("<" + TAG_MENTION  + " representative=")){
-				//TODO
-			}			
+				currentLine++;
+				currentCoreferenceChain = new CoreferenceChain(aJCas);			
+				processMention();
+				
+			}
+			if(document.get(currentLine).contains("<" + TAG_MENTION  + ">")){
+				currentLine++;
+				processMention();
+			}
+			
 			currentLine++;
 		}
+		currentCoreferenceChain.addToIndexes();
 	}
-	
+		
 	private void processMention(){
-		//TODO
+		int sentence = 0, start = 0, end = 0;		
+		while(!document.get(currentLine).contains("</" + TAG_MENTION + ">")){
+			if(document.get(currentLine).contains("<" + TAG_SENTENCE + ">")){				
+				String sentenceS = document.get(currentLine);
+				sentenceS = sentenceS.replaceAll("<[^>]+>|\\s+", "");
+				sentence = Integer.parseInt(sentenceS);		
+			}
+			if(document.get(currentLine).contains("<" + TAG_COREF_START + ">")){				
+				String startS = document.get(currentLine);
+				startS = startS.replaceAll("<[^>]+>|\\s+", "");
+				start = Integer.parseInt(startS);		
+			}
+			if(document.get(currentLine).contains("<" + TAG_COREF_END + ">")){				
+				String endS = document.get(currentLine);
+				endS = endS.replaceAll("<[^>]+>|\\s+", "");
+				end = Integer.parseInt(endS);		
+			}
+			currentLine++;			
+		}
+		
+		Collection<Sentence> sentences = JCasUtil.select(aJCas, Sentence.class);
+		Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
+		//counter for sentences
+		int iSentence = 1;
+		int sentenceStart = 0;
+		//counter for word in sentence
+		int iToken = 1;
+		
+		for(Sentence s : sentences){		
+			if(sentence == iSentence){
+				sentenceStart = s.getBegin();				
+				break;
+			}						
+			iSentence++;
+		}
+		
+		for(Token t : tokens){
+			if(t.getBegin() >= sentenceStart){
+				if(iToken == start){
+					start = t.getBegin();
+				}
+				if(iToken == end - 1){
+					end = t.getEnd();
+					break;
+				}				
+				iToken++;
+			}
+		}
+		
+		CoreferenceLink corefLink = new CoreferenceLink(aJCas, start, end);
+		if(currentCoreferenceChain.getFirst() == null){
+			currentCoreferenceChain.setFirst(corefLink);
+		}else {
+			currentCoreferenceLink.setNext(corefLink);
+		}
+		currentCoreferenceLink = corefLink;
+		
 	}
 	
 }
