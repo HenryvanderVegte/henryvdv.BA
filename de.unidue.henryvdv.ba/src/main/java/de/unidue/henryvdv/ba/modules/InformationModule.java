@@ -11,6 +11,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceLink;
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 
 public class InformationModule 
 	extends JCasAnnotator_ImplBase
@@ -22,14 +23,34 @@ public class InformationModule
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		
-		
-		printCorefChains();
+	//	printDependencies();
+	//	printCorefChains();
 	//	printDocText();
 	//	printTokens();
 	//	printSentences();
-		
+	//	printSizes();
 		
 	//	explorePOS(10);
+		
+		
+	}
+	
+	private void printSizes(){
+		Collection<Sentence> sentences = JCasUtil.select(aJCas, Sentence.class);
+		System.out.println("Sentences: " + sentences.size());
+		
+	}
+	
+	private void printDependencies(){
+		Collection<Dependency> dependencies = JCasUtil.select(aJCas, Dependency.class);
+		System.out.println("----------------DEPENDENCIES-------------");
+		for(Dependency d : dependencies){
+			System.out.println("-----------------------------");
+			System.out.println("Dependency Type: " + d.getDependencyType());
+	     	System.out.println("Dependency Gov: " + d.getGovernor().getCoveredText());
+			System.out.println("Dependency Dep: " + d.getDependent().getCoveredText());			
+		}
+		System.out.println("----------------DEPENDENCIES-------------");
 	}
 	
 	private void printCorefChains(){
@@ -47,8 +68,7 @@ public class InformationModule
 	
 	private void printDocText(){
 		System.out.println("DocText:" + aJCas.getDocumentText());
-	}
-	
+	}	
 	
 	private void explorePOS(int n){
 		Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
@@ -73,8 +93,12 @@ public class InformationModule
 	
 	private void printSentences(){
 		Collection<Sentence> sentences = JCasUtil.select(aJCas, Sentence.class);
+		int i = 1;
 		for(Sentence s : sentences){
+			if(i == 43){
 			System.out.println(s.getCoveredText());
+			}
+			i++;
 		}
 	}
 

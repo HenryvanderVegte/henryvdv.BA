@@ -17,6 +17,7 @@ import org.apache.uima.util.Progress;
 
 import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceChain;
 import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceLink;
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
 import de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity;
 import de.tudarmstadt.ukp.dkpro.core.api.parameter.ComponentParameters;
@@ -96,17 +97,25 @@ public class WikiCorefReader
 	private static final String TAG_COREFERENCE = "coreference";
 	private static final String TAG_MENTION = "mention";
 	private static final String TAG_ROOT = "root";
+	
 	private static final String TAG_COREF_START = "start";
 	private static final String TAG_COREF_END = "end";
+	
+	private static final String TAG_DEPENDENCIES = "dependencies";
+	private static final String TAG_DEPENDENCY = "dep";
+	private static final String TAG_GOVERNOR = "governor";
+	private static final String TAG_DEPENDENT = "dependent";
 	
     private List<String> document;
     private String documentText;
     
     private int currentLine;
+    private int currentSentence;
     private int tokenStart;
     private int tokenEnd;
     private CoreferenceChain currentCoreferenceChain;
     private CoreferenceLink currentCoreferenceLink;
+    private Dependency currentDependency;
     
       
     private boolean test = true;
@@ -127,9 +136,7 @@ public class WikiCorefReader
         catch (IOException e) {
             throw new ResourceInitializationException(e);
         }
-    }
-    
-    
+    } 
     
 	public boolean hasNext() throws IOException, CollectionException {		
 		return test;
@@ -142,6 +149,7 @@ public class WikiCorefReader
 	public void getNext(JCas jCas) throws IOException, CollectionException {
 		documentText = "";
 		aJCas = jCas;
+		currentSentence = 1;
 		
 		while(!document.get(currentLine).contains("</" + TAG_ROOT + ">")){
 			
@@ -173,37 +181,46 @@ public class WikiCorefReader
 			if(document.get(currentLine).contains("<" + TAG_SENTENCE + " id=")){
 				currentLine++;
 				processSentence();
+				currentSentence++;
 			}
 			currentLine++;
 		}
 	}
 	
 	private void processSentence(){
-		int sentenceStart = documentText.length();
+		
 		while(!document.get(currentLine).contains("</" + TAG_SENTENCE + ">")){
 			if(document.get(currentLine).contains("<" + TAG_TOKENS + ">")){
 				currentLine++;
 				processTokens();
 			}
+			//--parse line here;
+			if(document.get(currentLine).contains("<" + TAG_DEPENDENCIES + " type=\"basic-dependencies\">")){
+				currentLine++;
+				processDependencies();
+			}
+			
 			currentLine++;
 		}
-		int sentenceStop = documentText.length() - 1;
-		
-		if(sentenceStart == sentenceStop){
-			System.out.println("ERROR");
-		} else {
-			Sentence s = new Sentence(aJCas, sentenceStart, sentenceStop);
-			s.addToIndexes();
-		}
+
 	}
 	
 	private void processTokens(){
+		int sentenceStart = documentText.length();
 		while(!document.get(currentLine).contains("</" + TAG_TOKENS + ">")){
 			if(document.get(currentLine).contains("<" + TAG_TOKEN + " id=")){
 				currentLine++;
 				processToken();
 			}
 			currentLine++;
+		}
+		//when all tokens of a sentence are processed, we can annotate the sentence
+		int sentenceStop = documentText.length() - 1;		
+		if(sentenceStart == sentenceStop){
+			System.out.println("ERROR");
+		} else {
+			Sentence s = new Sentence(aJCas, sentenceStart, sentenceStop);
+			s.addToIndexes();
 		}
 	}
 	
@@ -339,4 +356,80 @@ public class WikiCorefReader
 		
 	}
 	
+	private void processDependencies(){
+		while(!document.get(currentLine).contains("</" + TAG_DEPENDENCIES + ">")){
+			if(document.get(currentLine).contains("<" + TAG_DEPENDENCY + " type=")){
+				String depType = document.get(currentLine);
+				depType = depType.replaceAll("<dep type=\"|\\s+|\">", "");
+				currentDependency = new Dependency(aJCas);
+				currentDependency.setDependencyType(depType);
+				currentLine++;			
+				processDependency();
+			}		
+			currentLine++;
+		}
+	}
+	
+	private void processDependency(){
+		String govText = "", depText = "", govIDText, depIDText;
+		int govID = 0, depID = 0;
+		
+		while(!document.get(currentLine).contains("</" + TAG_DEPENDENCY + ">")){
+			if(document.get(currentLine).contains("<" + TAG_GOVERNOR )){
+				govText = document.get(currentLine);
+				govText = govText.replaceAll("<[^>]+>|\\s+", "");
+				govIDText = document.get(currentLine);
+				govIDText = govIDText.replaceAll("<governor idx=\"|\\s+|\">(.*)","");
+				govID = Integer.parseInt(govIDText);		
+			}
+			if(document.get(currentLine).contains("<" + TAG_DEPENDENT )){
+				depText = document.get(currentLine);
+				depText = depText.replaceAll("<[^>]+>|\\s+", "");
+				depIDText = document.get(currentLine);
+				depIDText = depIDText.replaceAll("<dependent idx=\"|\\s+|\">(.*)","");
+				depID = Integer.parseInt(depIDText);
+			}
+		
+			currentLine++;
+		}
+				
+		Collection<Sentence> sentences = JCasUtil.select(aJCas, Sentence.class);
+		Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
+		int iSentence = 1;
+		int sentenceStart = 0;
+		int iToken = 1;
+		
+		for(Sentence s : sentences){		
+			if(currentSentence == iSentence){
+				sentenceStart = s.getBegin();					
+				break;
+			}						
+			iSentence++;
+		}	
+		
+		for(Token t : tokens){
+			if(t.getBegin() >= sentenceStart){
+				if(iToken == govID){
+					currentDependency.setGovernor(t);
+					break;
+				}			
+				iToken++;
+			}
+		}
+		iToken = 1;
+		for(Token t : tokens){
+			if(t.getBegin() >= sentenceStart){
+				if(iToken == depID){
+					currentDependency.setDependent(t);
+					break;
+				}			
+				iToken++;
+			}
+		}	
+		
+		if(currentDependency.getGovernor() != null && currentDependency.getDependent() != null){
+			currentDependency.addToIndexes();
+		}
+		
+	}
 }
