@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
+  <name>DocumentInfo</name>
+  <description/>
+  <version>0.0.1</version>
+  <vendor/>
   <types>
     <typeDescription>
-      <name>de.unidue.henryvdv.ba.DocumentInfo</name>
+      <name>de.unidue.henryvdv.ba.type.DocumentInfo</name>
       <description/>
       <supertypeName>uima.tcas.Annotation</supertypeName>
       <features>

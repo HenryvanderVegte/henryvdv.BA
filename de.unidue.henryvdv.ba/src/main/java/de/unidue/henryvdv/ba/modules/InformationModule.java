@@ -14,7 +14,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
-import de.unidue.henryvdv.ba.DocumentInfo;
+import de.unidue.henryvdv.ba.type.DocumentInfo;
 
 public class InformationModule 
 	extends JCasAnnotator_ImplBase
@@ -26,7 +26,7 @@ public class InformationModule
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		
-		printInfos();
+	//	printInfos();
 	//	printNounPhrases();
 	//	printDependencies();
 	//	printCorefChains();
@@ -34,13 +34,17 @@ public class InformationModule
 	//	printTokens();
 	//	printSentences();
 		
-	//	explorePOS(10);
+		//explorePOS(10);
 		
-		
+		System.out.println("---------------------------------------------------");
 	}
 	
 	private void printNounPhrases(){
 		Collection<Constituent> constituents = JCasUtil.select(aJCas, Constituent.class);
+		if(constituents == null){
+			System.out.println("No Constituents");
+			return;
+		}
 		for(Constituent c : constituents){
 			if(c instanceof NP){
 				System.out.println("Noun Phrase: " +  c.getCoveredText());
@@ -58,6 +62,14 @@ public class InformationModule
 		
 		Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
 		System.out.println("Tokens     : " + tokens.size());
+		
+		FrequencyDistribution<String> fd = new FrequencyDistribution<String>();
+		for(Token t : tokens){
+			fd.inc(t.getPos().getPosValue());
+		}
+		
+		System.out.println("PRP : " + fd.getCount("PRP"));
+		System.out.println("PRP$ : " + fd.getCount("PRP$"));
 	}
 	
 	private void printDependencies(){
@@ -114,10 +126,7 @@ public class InformationModule
 		Collection<Sentence> sentences = JCasUtil.select(aJCas, Sentence.class);
 		int i = 1;
 		for(Sentence s : sentences){
-			if(i == 43){
 			System.out.println(s.getCoveredText());
-			}
-			i++;
 		}
 	}
 
