@@ -11,6 +11,8 @@ import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceLink;
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 
 public class InformationModule 
@@ -23,6 +25,7 @@ public class InformationModule
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		
+		printNounPhrases();
 	//	printDependencies();
 	//	printCorefChains();
 	//	printDocText();
@@ -35,10 +38,23 @@ public class InformationModule
 		
 	}
 	
+	private void printNounPhrases(){
+		Collection<Constituent> constituents = JCasUtil.select(aJCas, Constituent.class);
+		for(Constituent c : constituents){
+			if(c instanceof NP){
+				System.out.println("Noun Phrase: " +  c.getCoveredText());
+			}
+		}
+	}
+	
 	private void printSizes(){
-		Collection<Sentence> sentences = JCasUtil.select(aJCas, Sentence.class);
-		System.out.println("Sentences: " + sentences.size());
+		System.out.println("Text length: " + aJCas.getDocumentText().length()  + " chars");
 		
+		Collection<Sentence> sentences = JCasUtil.select(aJCas, Sentence.class);
+		System.out.println("Sentences  : " + sentences.size());
+		
+		Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
+		System.out.println("Tokens     : " + tokens.size());
 	}
 	
 	private void printDependencies(){

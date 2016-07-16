@@ -2,6 +2,7 @@ package de.unidue.henryvdv.ba.reader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,9 +15,10 @@ import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Progress;
-
 import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceChain;
 import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceLink;
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
 import de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity;
@@ -24,6 +26,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.parameter.ComponentParameters;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
+
 
 public class WikiCorefReader 
 	extends JCasCollectionReader_ImplBase
@@ -82,7 +85,7 @@ public class WikiCorefReader
 	public static final String PARAM_POS_TAG_SET = ComponentParameters.PARAM_POS_TAG_SET;
 	@ConfigurationParameter(name = PARAM_POS_TAG_SET, mandatory = false)
 	protected String posTagset;
-    
+	
 	
 	private static final String TAG_DOCUMENT = "document";
 	private static final String TAG_SENTENCES = "sentences";
@@ -95,6 +98,7 @@ public class WikiCorefReader
 	private static final String TAG_NER = "NER";
 	private static final String TAG_SPEAKER = "Speaker";
 	private static final String TAG_COREFERENCE = "coreference";
+	private static final String TAG_PARSE = "parse";
 	private static final String TAG_MENTION = "mention";
 	private static final String TAG_ROOT = "root";
 	
@@ -117,6 +121,7 @@ public class WikiCorefReader
     private CoreferenceLink currentCoreferenceLink;
     private Dependency currentDependency;
     
+    
       
     private boolean test = true;
     
@@ -127,6 +132,7 @@ public class WikiCorefReader
         throws ResourceInitializationException
     {
         super.initialize(context);
+      
         try {
             document = FileUtils.readLines(inputFile);
             document.remove(0);
@@ -150,6 +156,7 @@ public class WikiCorefReader
 		documentText = "";
 		aJCas = jCas;
 		currentSentence = 1;
+
 		
 		while(!document.get(currentLine).contains("</" + TAG_ROOT + ">")){
 			
@@ -194,7 +201,10 @@ public class WikiCorefReader
 				currentLine++;
 				processTokens();
 			}
-			//--parse line here;
+			
+			if(document.get(currentLine).contains("<" + TAG_PARSE + ">")){
+				processParseLine();
+			}
 			if(document.get(currentLine).contains("<" + TAG_DEPENDENCIES + " type=\"basic-dependencies\">")){
 				currentLine++;
 				processDependencies();
@@ -203,6 +213,73 @@ public class WikiCorefReader
 			currentLine++;
 		}
 
+	}
+	
+	private void processParseLine(){
+		String parseLine = document.get(currentLine);
+		int tokenNr = 1;
+		parseLine = parseLine.replaceAll("<" + TAG_PARSE + ">" + "|" + "</" + TAG_PARSE + ">", "");
+		
+		for(int i = 0; i < parseLine.length() - 3; i++){
+			if(i != 0 && parseLine.substring(i, i+1).equals(")") && !parseLine.substring(i-1, i).equals(")")){
+				tokenNr++;
+			}
+			if(parseLine.substring(i, i+3).equals("(NP")){
+				Integer[] npPhrase =  getStartEndParse(parseLine, tokenNr, i);
+				Constituent np = new NP(aJCas, npPhrase[0], npPhrase[1]);
+				np.addToIndexes();
+			}
+			//TODO: Maybe add other phrase levels, too
+		}
+	}
+	
+	//returns the begin of the start token + end of the end token of the identified phrase (NP/NN/PRP/...)
+	private Integer[] getStartEndParse(String parseLine, int tokenNr, int position){
+		int openBrackets = 0;
+		int firstToken = tokenNr;
+		int lastToken = firstToken;
+		for(int i = position; i < parseLine.length() - 1; i++){
+			if(i != position && parseLine.charAt(i) == ')' && parseLine.charAt(i-1) != ')'){
+				lastToken++;
+			}
+			if(parseLine.charAt(i) == ')'){
+				openBrackets--;
+			}
+			if(parseLine.charAt(i) == '('){
+				openBrackets++;
+			}
+			if(openBrackets == 0) break;
+		}
+		Collection<Sentence> sentences = JCasUtil.select(aJCas, Sentence.class);
+		Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
+		
+		int iSentence = 1, iToken = 1;
+		int sentenceStart = 0;
+		
+		for(Sentence s : sentences){		
+			if(currentSentence == iSentence){
+				sentenceStart = s.getBegin();				
+				break;
+			}						
+			iSentence++;
+		}		
+		for(Token t : tokens){
+			if(t.getBegin() >= sentenceStart){
+				if(iToken == firstToken){
+					firstToken = t.getBegin();
+				}
+				if(iToken == lastToken - 1){
+					lastToken = t.getEnd();
+					break;
+				}				
+				iToken++;
+			}
+		}
+		
+		Integer[] r = {firstToken, lastToken};
+		//Constituent np = new NP(aJCas, firstToken, lastToken);
+		//np.addToIndexes();
+		return r;
 	}
 	
 	private void processTokens(){
