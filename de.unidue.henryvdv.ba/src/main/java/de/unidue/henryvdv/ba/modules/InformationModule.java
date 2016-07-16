@@ -14,6 +14,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
+import de.unidue.henryvdv.ba.DocumentInfo;
 
 public class InformationModule 
 	extends JCasAnnotator_ImplBase
@@ -25,13 +26,13 @@ public class InformationModule
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		
-		printNounPhrases();
+		printInfos();
+	//	printNounPhrases();
 	//	printDependencies();
 	//	printCorefChains();
 	//	printDocText();
 	//	printTokens();
 	//	printSentences();
-	//	printSizes();
 		
 	//	explorePOS(10);
 		
@@ -47,7 +48,9 @@ public class InformationModule
 		}
 	}
 	
-	private void printSizes(){
+	private void printInfos(){
+		DocumentInfo docInfo = JCasUtil.selectSingle(aJCas, DocumentInfo.class);
+		System.out.println("Text Name : " + docInfo.getDocumentName());
 		System.out.println("Text length: " + aJCas.getDocumentText().length()  + " chars");
 		
 		Collection<Sentence> sentences = JCasUtil.select(aJCas, Sentence.class);

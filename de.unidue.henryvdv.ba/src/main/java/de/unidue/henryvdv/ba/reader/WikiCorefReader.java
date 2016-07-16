@@ -19,6 +19,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceLink;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
+import de.unidue.henryvdv.ba.DocumentInfo;
 import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
 import de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity;
 import de.tudarmstadt.ukp.dkpro.core.api.parameter.ComponentParameters;
@@ -155,12 +156,17 @@ public class WikiCorefReader
             document = FileUtils.readLines(inputFiles.get(docIndex));
             document.remove(0);
             document.remove(0); 
-            docIndex++;
+           
         }
         catch (IOException e) {
             throw new IOException(e);
         }
-
+        
+        DocumentInfo documentInfo = new DocumentInfo(aJCas);
+        documentInfo.setDocumentName(inputFiles.get(docIndex).getName());
+        documentInfo.addToIndexes();
+        docIndex++;
+        
 		while(!document.get(currentLine).contains("</" + TAG_ROOT + ">")){
 			
 			if(document.get(currentLine).contains("<" + TAG_ROOT + ">") ||
