@@ -2,7 +2,6 @@ package de.unidue.henryvdv.ba.reader;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -112,6 +111,8 @@ public class WikiCorefReader
 	
     private List<String> document;
     private String documentText;
+    private List<File> inputFiles;
+    private int docIndex;
     
     private int currentLine;
     private int currentSentence;
@@ -121,8 +122,6 @@ public class WikiCorefReader
     private CoreferenceLink currentCoreferenceLink;
     private Dependency currentDependency;
     
-    
-      
     private boolean test = true;
     
     private JCas aJCas;
@@ -132,20 +131,14 @@ public class WikiCorefReader
         throws ResourceInitializationException
     {
         super.initialize(context);
-      
-        try {
-            document = FileUtils.readLines(inputFile);
-            document.remove(0);
-            document.remove(0);          
-            currentLine = 0;
-        }
-        catch (IOException e) {
-            throw new ResourceInitializationException(e);
-        }
+        String[] ext = {"xml"};
+        File inputDir = new File("src/test/resources/corefTest/");
+        docIndex = 0;
+        inputFiles = (List<File>) FileUtils.listFiles(inputDir, ext, false);
     } 
     
 	public boolean hasNext() throws IOException, CollectionException {		
-		return test;
+		return docIndex < inputFiles.size();
 	}
 
 	public Progress[] getProgress() {
@@ -156,8 +149,18 @@ public class WikiCorefReader
 		documentText = "";
 		aJCas = jCas;
 		currentSentence = 1;
+		currentLine = 0;
 
-		
+        try {     	
+            document = FileUtils.readLines(inputFiles.get(docIndex));
+            document.remove(0);
+            document.remove(0); 
+            docIndex++;
+        }
+        catch (IOException e) {
+            throw new IOException(e);
+        }
+
 		while(!document.get(currentLine).contains("</" + TAG_ROOT + ">")){
 			
 			if(document.get(currentLine).contains("<" + TAG_ROOT + ">") ||
@@ -232,9 +235,9 @@ public class WikiCorefReader
 			//TODO: Maybe add other phrase levels, too
 		}
 	}
-	
-	//returns the begin of the start token + end of the end token of the identified phrase (NP/NN/PRP/...)
+		
 	private Integer[] getStartEndParse(String parseLine, int tokenNr, int position){
+	//returns the begin of the start token + end of the end token of the identified phrase (NP/NN/PRP/...)
 		int openBrackets = 0;
 		int firstToken = tokenNr;
 		int lastToken = firstToken;
@@ -277,8 +280,6 @@ public class WikiCorefReader
 		}
 		
 		Integer[] r = {firstToken, lastToken};
-		//Constituent np = new NP(aJCas, firstToken, lastToken);
-		//np.addToIndexes();
 		return r;
 	}
 	
