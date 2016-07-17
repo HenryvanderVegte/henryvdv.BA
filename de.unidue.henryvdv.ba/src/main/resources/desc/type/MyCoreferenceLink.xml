@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
+  <name>MyCoreferenceChain</name>
+  <description/>
+  <version>1.0</version>
+  <vendor/>
+<types>
+    <typeDescription>
+      <name>de.unidue.henryvdv.ba.type.MyCoreferenceLink</name>
+      <description/>
+      <supertypeName>uima.tcas.Annotation</supertypeName>
+      <features>
+        <featureDescription>
+          <name>next</name>
+          <description/>
+          <rangeTypeName>de.unidue.henryvdv.ba.type.MyCoreferenceLink</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>corefType</name>
+          <description/>
+          <rangeTypeName>uima.cas.String</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>mentionType</name>
+          <description/>
+          <rangeTypeName>uima.cas.String</rangeTypeName>
+        </featureDescription>
+      </features>
+    </typeDescription>
+  </types>
+</typeSystemDescription>

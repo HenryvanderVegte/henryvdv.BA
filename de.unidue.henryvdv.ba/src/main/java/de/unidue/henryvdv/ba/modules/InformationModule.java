@@ -15,6 +15,8 @@ import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 import de.unidue.henryvdv.ba.type.DocumentInfo;
+import de.unidue.henryvdv.ba.type.MyCoreferenceChain;
+import de.unidue.henryvdv.ba.type.MyCoreferenceLink;
 
 public class InformationModule 
 	extends JCasAnnotator_ImplBase
@@ -26,6 +28,7 @@ public class InformationModule
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		
+		printyMyCorefChains();
 	//	printInfos();
 	//	printNounPhrases();
 	//	printDependencies();
@@ -37,6 +40,25 @@ public class InformationModule
 		//explorePOS(10);
 		
 		System.out.println("---------------------------------------------------");
+	}
+	
+	private void printyMyCorefChains(){
+		Collection<MyCoreferenceChain> corefChains = JCasUtil.select(aJCas, MyCoreferenceChain.class);
+		for(MyCoreferenceChain c : corefChains){
+			System.out.println("* * * * * * * * * * * * * * * * *");
+			System.out.println("Coreference Chain: " + c.getCorefClass());
+			MyCoreferenceLink corefLink = c.getFirst();
+			while(corefLink.getNext() != null){
+				System.out.println("Text: " + corefLink.getCoveredText());
+				System.out.println("At Position: " + corefLink.getBegin());
+				System.out.println("Coref Type: " + corefLink.getCorefType());
+				System.out.println("Mention Type: " + corefLink.getMentionType());				
+				System.out.println("---------");	
+				corefLink = corefLink.getNext();
+			}
+			
+			
+		}
 	}
 	
 	private void printNounPhrases(){

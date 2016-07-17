@@ -1,11 +1,16 @@
 package de.unidue.henryvdv.ba.reader;
 
+import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceChain;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.unidue.henryvdv.ba.type.DocumentInfo;
+import de.unidue.henryvdv.ba.type.MyCoreferenceChain;
+import de.unidue.henryvdv.ba.type.MyCoreferenceLink;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -107,6 +112,7 @@ extends JCasCollectionReader_ImplBase{
         
         processWords();
         processSentences();
+        processCoreferences();
         
         System.out.println(documentText.length());
         aJCas.setDocumentText(documentText.trim());
@@ -121,24 +127,11 @@ extends JCasCollectionReader_ImplBase{
 		while(!sentenceDoc.get(currentLine).contains("</" + TAG_MARKABLES + ">")){
 			if(sentenceDoc.get(currentLine).contains("<" + TAG_MARKABLE + " ")){
 				String sentence = sentenceDoc.get(currentLine);
-				int startToken = 0;
-				int stopToken = 0;
+
+				Integer[] w = getWordSpan(sentence);
+				int startToken = w[0];
+				int stopToken = w[1];
 				
-				for(int i = 0; i < sentence.length() - 6; i++){
-					if(sentence.substring(i,i + 5).equals("word_")){
-						for(int j = i+5; j < sentence.length(); j++){
-							if(!Character.isDigit(sentence.charAt(j))){
-								 if(startToken == 0){
-									 startToken = Integer.parseInt(sentence.substring(i+5, j));
-									 
-								 } else {
-									 stopToken = Integer.parseInt(sentence.substring(i+5, j));
-								 }							 
-								 break;
-							}
-						}					
-					}			
-				}			
 				startAt = 0;
 				stopAt = 0;
 				Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
@@ -181,4 +174,104 @@ extends JCasCollectionReader_ImplBase{
 		}
 	}
 
+	private void processCoreferences(){
+		HashMap<String, MyCoreferenceChain>  corefChains = new HashMap<String, MyCoreferenceChain>();
+		currentLine = 2;
+		while(! corefDoc.get(currentLine).contains("</" + TAG_MARKABLES + ">")){
+			if( corefDoc.get(currentLine).contains("<" + TAG_MARKABLE + " id=")){
+				String curLine =  corefDoc.get(currentLine);
+				Integer[] wordSpan = getWordSpan(curLine);
+				int startToken = wordSpan[0];
+				int stopToken = wordSpan[1];
+				String corefClass = getStringAtTag(curLine, "coref_class");
+				String corefType = getStringAtTag(curLine, "coreftype");
+				String mentionType = getStringAtTag(curLine, "mentiontype");
+				
+				int startAt = 0;
+				int stopAt = 0;
+				
+				Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
+				int iToken = 1;
+				for(Token t : tokens){
+					if(iToken == startToken){
+						startAt = t.getBegin();
+					}
+					if(iToken == stopToken){
+						stopAt = t.getEnd();
+						break;
+					}				
+					iToken++;			
+				}
+				
+				if(corefChains.get(corefClass) == null){
+					MyCoreferenceChain corefChain = new MyCoreferenceChain(aJCas);
+					corefChain.setCorefClass(corefClass);
+					
+					MyCoreferenceLink corefLink = new MyCoreferenceLink(aJCas, startAt, stopAt);
+					corefLink.setCorefType(corefType);
+					corefLink.setMentionType(mentionType);
+					
+					corefChain.setFirst(corefLink);
+					
+					
+					corefChains.put(corefClass, corefChain);
+				} else {
+					MyCoreferenceChain corefChain = corefChains.get(corefClass);
+					MyCoreferenceLink corefLink = corefChain.getFirst();
+					while(corefLink.getNext() != null){
+						corefLink = corefLink.getNext();
+					}
+					MyCoreferenceLink newCorefLink = new MyCoreferenceLink(aJCas, startAt, stopAt);
+					newCorefLink.setMentionType(mentionType);
+					newCorefLink.setCorefType(corefType);
+					corefLink.setNext(newCorefLink);
+				}
+				
+			}
+			currentLine++;
+		}		
+		for(MyCoreferenceChain c : corefChains.values()){		
+			c.addToIndexes();
+		}
+	}
+	
+	private String getStringAtTag(String docLine, String typeName){
+		String r = "";
+		typeName += "=\"";
+		
+		for(int i = 0; i < docLine.length() - (typeName.length() + 1); i++){
+			if(docLine.substring(i,i + typeName.length()).equals(typeName)){
+				for(int j = i+13; j < docLine.length(); j++){
+					if(docLine.charAt(j) == '"' ){
+						 r = docLine.substring(i + typeName.length(),j);						 
+						 break;
+					}
+				}					
+			}			
+		}
+		return r;
+	}
+	
+	
+	private Integer[] getWordSpan(String docLine){
+		int startToken = 0;
+		int stopToken = 0;
+		for(int i = 0; i < docLine.length() - 6; i++){
+			if(docLine.substring(i,i + 5).equals("word_")){
+				for(int j = i+5; j < docLine.length(); j++){
+					if(!Character.isDigit(docLine.charAt(j))){
+						 if(startToken == 0){
+							 startToken = Integer.parseInt(docLine.substring(i+5, j));
+							 
+						 } else {
+							 stopToken = Integer.parseInt(docLine.substring(i+5, j));
+						 }							 
+						 break;
+					}
+				}					
+			}			
+		}
+		Integer[] r = {startToken, stopToken};
+		return r;
+	}
 }

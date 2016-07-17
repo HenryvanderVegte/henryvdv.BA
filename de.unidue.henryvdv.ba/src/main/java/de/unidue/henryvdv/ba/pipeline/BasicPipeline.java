@@ -48,10 +48,10 @@ public class BasicPipeline {
 	                        WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation"
 	                ),
 				   
-	        		AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
-	        		AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
-	        		AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),
-	        		AnalysisEngineFactory.createEngineDescription(StanfordParser.class),	        		
+	        	//	AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
+	        	//	AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
+	        	//	AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),
+	        	//	AnalysisEngineFactory.createEngineDescription(StanfordParser.class),	        		
 	                AnalysisEngineFactory.createEngineDescription(InformationModule.class)
 	            //    AnalysisEngineFactory.createEngineDescription(BaselineAnnotator.class)
 	        );
