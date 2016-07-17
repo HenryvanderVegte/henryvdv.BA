@@ -17,19 +17,20 @@ import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 import de.unidue.henryvdv.ba.type.DocumentInfo;
 import de.unidue.henryvdv.ba.type.MyCoreferenceChain;
 import de.unidue.henryvdv.ba.type.MyCoreferenceLink;
+import edu.stanford.nlp.trees.Tree;
 
 public class InformationModule 
 	extends JCasAnnotator_ImplBase
 {
 
-	JCas aJCas;
+	private JCas aJCas;
 	
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
-		
-		printyMyCorefChains();
-	//	printInfos();
+		System.out.println("---------------------------------------------------");
+	//	printyMyCorefChains();
+		printInfos();
 	//	printNounPhrases();
 	//	printDependencies();
 	//	printCorefChains();
@@ -41,6 +42,10 @@ public class InformationModule
 		
 		System.out.println("---------------------------------------------------");
 	}
+	
+	private void printTree(){
+	}
+	
 	
 	private void printyMyCorefChains(){
 		Collection<MyCoreferenceChain> corefChains = JCasUtil.select(aJCas, MyCoreferenceChain.class);
@@ -85,6 +90,7 @@ public class InformationModule
 		Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
 		System.out.println("Tokens     : " + tokens.size());
 		
+		/*
 		FrequencyDistribution<String> fd = new FrequencyDistribution<String>();
 		for(Token t : tokens){
 			fd.inc(t.getPos().getPosValue());
@@ -92,6 +98,7 @@ public class InformationModule
 		
 		System.out.println("PRP : " + fd.getCount("PRP"));
 		System.out.println("PRP$ : " + fd.getCount("PRP$"));
+		*/
 	}
 	
 	private void printDependencies(){

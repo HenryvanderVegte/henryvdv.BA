@@ -88,18 +88,14 @@ extends JCasCollectionReader_ImplBase{
 		aJCas.setDocumentLanguage("en");
         try {  
         	
-            basedataDoc = FileUtils.readLines(inputBasedataFiles.get(basedataIndex));
-            
-            corefDoc = FileUtils.readLines(inputMarkablesFiles.get(markablesDataIndex));
-            System.out.println("Coref Filename:" + inputMarkablesFiles.get(markablesDataIndex).getName() );
-            
+            basedataDoc = FileUtils.readLines(inputBasedataFiles.get(basedataIndex));           
+            corefDoc = FileUtils.readLines(inputMarkablesFiles.get(markablesDataIndex));        
             sentenceDoc = FileUtils.readLines(inputMarkablesFiles.get(markablesDataIndex + 1));
-            System.out.println("Coref Filename:" + inputMarkablesFiles.get(markablesDataIndex + 1).getName() );
             
             
             DocumentInfo docInfo = new DocumentInfo(aJCas);
             String docName = inputBasedataFiles.get(basedataIndex).getName();
-            docName = docName.substring(docName.length() - 10);
+            docName = docName.substring(0,docName.length() - 10);
             docInfo.setDocumentName(docName);
             
             docInfo.addToIndexes();
@@ -113,8 +109,7 @@ extends JCasCollectionReader_ImplBase{
         processWords();
         processSentences();
         processCoreferences();
-        
-        System.out.println(documentText.length());
+       
         aJCas.setDocumentText(documentText.trim());
         
 	}
