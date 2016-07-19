@@ -10,6 +10,7 @@ import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordNamedEntityRecognizer;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordParser;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordSegmenter;
+import de.unidue.henryvdv.ba.modules.Baseline_AnaphoraAnnotator;
 import de.unidue.henryvdv.ba.modules.Baseline_CorefAnnotator;
 import de.unidue.henryvdv.ba.modules.InformationModule;
 import de.unidue.henryvdv.ba.reader.SimpleTextReader;
@@ -51,9 +52,9 @@ public class BasicPipeline {
 	        		AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),
-	        		AnalysisEngineFactory.createEngineDescription(StanfordParser.class),	        		
-	                AnalysisEngineFactory.createEngineDescription(InformationModule.class),
-	                AnalysisEngineFactory.createEngineDescription(Baseline_CorefAnnotator.class)
+	        		AnalysisEngineFactory.createEngineDescription(StanfordParser.class),      		
+	               // AnalysisEngineFactory.createEngineDescription(InformationModule.class),
+	                AnalysisEngineFactory.createEngineDescription(Baseline_AnaphoraAnnotator.class)
 	        );
 	  }
 	  

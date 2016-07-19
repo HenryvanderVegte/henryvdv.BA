@@ -27,15 +27,18 @@ extends JCasAnnotator_ImplBase
 	private int totalNPs = 0;
 	private int correctNPs = 0;
 	
-	public List<NP> nps;
+	private List<NP> nps;
 	private List<GoldNP> goldnps;
 	private List<DetectedNP> detectednps;
 	
-	Collection<MyCoreferenceChain> corefChains;
+	private Collection<MyCoreferenceChain> corefChains;
 	
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
+		
+		totalNPs = 0;
+		correctNPs = 0;
 		nps = new ArrayList<NP>();
 		goldnps = new ArrayList<GoldNP>();
 		detectednps = new ArrayList<DetectedNP>();
