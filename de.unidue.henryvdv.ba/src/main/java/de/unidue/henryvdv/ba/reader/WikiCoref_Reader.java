@@ -29,6 +29,10 @@ extends JCasCollectionReader_ImplBase{
     public static final String PARAM_INPUT_DIRECTORY = "InputDirectory";
     @ConfigurationParameter(name = PARAM_INPUT_DIRECTORY, mandatory = true)
     private String inputDirectory;
+    
+    public static final String PARAM_MAX_DOCUMENTS = "MaxDocuments";
+    @ConfigurationParameter(name = PARAM_MAX_DOCUMENTS, mandatory = true)
+    private int maxDocuments;
 	
     private static final String TAG_WORD = "word";
     private static final String TAG_WORDS = "words";
@@ -58,6 +62,7 @@ extends JCasCollectionReader_ImplBase{
     {
         super.initialize(context);
         
+        
         String[] fileExtensions = {"xml"};
         File inputBasedataDirectory = new File(inputDirectory + "/Basedata");
         inputBasedataFiles = (List<File>) FileUtils.listFiles(inputBasedataDirectory, fileExtensions, false);
@@ -74,7 +79,7 @@ extends JCasCollectionReader_ImplBase{
     } 
 
 	public boolean hasNext() throws IOException, CollectionException {
-		return basedataIndex < inputBasedataFiles.size();
+		return (basedataIndex < inputBasedataFiles.size() && basedataIndex < maxDocuments);
 	}
 
 	public Progress[] getProgress() {
