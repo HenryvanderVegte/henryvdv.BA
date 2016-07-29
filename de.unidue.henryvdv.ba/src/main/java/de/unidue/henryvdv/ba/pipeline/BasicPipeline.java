@@ -15,6 +15,7 @@ import de.unidue.henryvdv.ba.modules.FeatureAnnotator_PronounAntecedent;
 import de.unidue.henryvdv.ba.modules.AnaphoraAnnotator;
 import de.unidue.henryvdv.ba.modules.InformationModule;
 import de.unidue.henryvdv.ba.modules.NegativeTrainingInstanceAnnotator;
+import de.unidue.henryvdv.ba.modules.SVMLearn;
 import de.unidue.henryvdv.ba.modules.SVMTrainingInstanceCreator;
 import de.unidue.henryvdv.ba.reader.SimpleTextReader;
 import de.unidue.henryvdv.ba.reader.WikiCoref_DCorefReader;
@@ -23,8 +24,10 @@ import de.unidue.henryvdv.ba.reader.WikiCoref_Reader;
 public class BasicPipeline {
 
 	  public static void main(String[] args)
-			  throws Exception {		  		  
-     		runWikiCorefReader();
+			  throws Exception {	
+		  SVMLearn svmLearn = new SVMLearn();
+		  svmLearn.learn();
+     	//	runWikiCorefReader();
 		//  runSimpleTextReader();
 	  }
 	  
@@ -40,7 +43,7 @@ public class BasicPipeline {
 				  AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),
 				  AnalysisEngineFactory.createEngineDescription(StanfordParser.class),
 				  
-				  AnalysisEngineFactory.createEngineDescription(InformationModule.class)			  
+				  AnalysisEngineFactory.createEngineDescription(InformationModule.class)		  
 				  );
 	  }
 	  
@@ -50,7 +53,7 @@ public class BasicPipeline {
 	        		CollectionReaderFactory.createReader(
 	                        WikiCoref_Reader.class,
 	                        WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
-	                        WikiCoref_Reader.PARAM_MAX_DOCUMENTS, 7
+	                        WikiCoref_Reader.PARAM_MAX_DOCUMENTS, 2
 	                ),
 	        	//	AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)
 				   
@@ -61,17 +64,18 @@ public class BasicPipeline {
 	        		AnalysisEngineFactory.createEngineDescription(InformationModule.class),
 	        		
 	        		AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
-	        	//	AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),  
-	        	//	AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_PronounAntecedent.class),  
+	        		AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),  
+	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_PronounAntecedent.class),  
 	        		
 	        		
-	        	//	AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)
+	        		AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)
 
 	        		
 	        		
-	        		AnalysisEngineFactory.createEngineDescription(Baseline_Evaluator.class) 
+	        	//	AnalysisEngineFactory.createEngineDescription(Baseline_Evaluator.class) 
 	         //       AnalysisEngineFactory.createEngineDescription(InformationModule.class)
 	        );
+		  
 	  }
 	  
 	  private static void runWikiCoref_DCorefReader() throws Exception{

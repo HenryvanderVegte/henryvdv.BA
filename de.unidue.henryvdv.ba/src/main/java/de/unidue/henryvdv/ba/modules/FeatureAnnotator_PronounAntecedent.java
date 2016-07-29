@@ -52,11 +52,11 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 	
 	public void annotateInPreviousSentenceFeature(){
 		for(Anaphora a : anaphoras){
-			boolean value = (getSentenceNr(a.getBegin()) == getSentenceNr(a.getAntecedent().getBegin())-1);
+			boolean value = (getSentenceNr(a.getBegin()) -1 == getSentenceNr(a.getAntecedent().getBegin()));
 			a.setP_A_InPreviousSentence(value);
 		}
 		for(NegativeTrainingInstance n : negInstances){
-			boolean value = (getSentenceNr(n.getBegin()) - 1 == getSentenceNr(n.getAnaphora().getBegin()));
+			boolean value = (getSentenceNr(n.getBegin()) == getSentenceNr(n.getAnaphora().getBegin()) -1 );
 			n.setP_A_InPreviousSentence(value);
 		}	
 	}
@@ -66,15 +66,6 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 			int anaphoraS = getSentenceNr(a.getBegin());
 			int antecedentS = getSentenceNr(a.getAntecedent().getBegin());
 			float value = (anaphoraS - antecedentS)/ 50.0f;
-			
-			if(value * 50.0f > 20){
-				System.out.println("Anaphora: " + a.getCoveredText());
-				System.out.println("Sentence number: " + getSentenceNr(a.getBegin()));
-				System.out.println("Antecedent: " + a.getAntecedent().getCoveredText());
-				System.out.println("Sentence number: " + getSentenceNr(a.getAntecedent().getBegin()));
-				
-			}
-			
 			a.setP_A_InterSentenceDiff(value);
 		}
 		for(NegativeTrainingInstance n : negInstances){

@@ -38,12 +38,12 @@ extends JCasAnnotator_ImplBase{
 
     public static final String PARAM_TRAINFILE_DIRECTORY= "TrainFileDirectory";
     @ConfigurationParameter(name = PARAM_TRAINFILE_DIRECTORY, mandatory = true, defaultValue = "src/main/resources/svm/train")
-    private String TrainFileDirectory;
+    private String trainFileDirectory;
 	
 	@Override
 	public void initialize(UimaContext context) throws ResourceInitializationException{
 		super.initialize(context);
-		trainFilePath = TrainFileDirectory + "/" +"train.dat";
+		trainFilePath = trainFileDirectory + "/" +"train.dat";
 		trainFile = new File(trainFilePath);
 		posFeatureVectors = new ArrayList<String>();
 		negFeatureVectors = new ArrayList<String>();
