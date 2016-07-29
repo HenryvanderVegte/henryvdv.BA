@@ -85,12 +85,25 @@ extends JCasAnnotator_ImplBase{
 		for(Anaphora an : anaphoras){
 			String featureVector = "1 ";
 			
-			//Sentence-Feature:
-			if(inSameSentence(an.getBegin(), an.getAntecedent().getBegin())){
+			//Same Sentence : 
+			if(an.getP_A_InSameSentence()){
 				featureVector += "1:1";
 			} else {
 				featureVector += "1:0";
 			}
+			featureVector += " ";
+			
+			//In Previous Sentence : 
+			if(an.getP_A_InPreviousSentence()){
+				featureVector += "2:1";
+			} else {
+				featureVector += "2:0";
+			}
+			featureVector += " ";
+			
+			//Inter-Sentence Diff.:			
+			featureVector += "3:" + an.getP_A_InterSentenceDiff();
+			
 			
 			posFeatureVectors.add(featureVector);
 		}
@@ -99,41 +112,30 @@ extends JCasAnnotator_ImplBase{
 	private void generateNegFeatureVectors(){
 		for(NegativeTrainingInstance neg : negTrainInstances){
 			String featureVector = "-1 ";
-			//Sentence-Feature:
-			if(inSameSentence(neg.getBegin(), neg.getAnaphora().getBegin())){
+			
+			//Same Sentence : 
+			if(neg.getP_A_InSameSentence()){
 				featureVector += "1:1";
 			} else {
 				featureVector += "1:0";
 			}
+			featureVector += " ";
+			
+			//In Previous Sentence : 
+			if(neg.getP_A_InPreviousSentence()){
+				featureVector += "2:1";
+			} else {
+				featureVector += "2:0";
+			}
+			featureVector += " ";
+			
+			//Inter-Sentence Diff.:			
+			featureVector += "3:" + neg.getP_A_InterSentenceDiff();
 			
 			negFeatureVectors.add(featureVector);
 		}
 		
 		
-	}
-	
-	
-	private boolean inSameSentence(int firstBegin, int secondBegin){
-		
-		Collection<Sentence> sentences = JCasUtil.select(aJCas, Sentence.class);
-		int anaphoraSentence = 1;
-		for(Sentence s : sentences){
-			if(s.getBegin() > firstBegin){
-				break;
-			}
-			anaphoraSentence++;
-		}
-		int antecedentSentence = 1;
-		for(Sentence s : sentences){
-			if(s.getBegin() > secondBegin){
-				break;
-			}
-			antecedentSentence++;
-		}
-		
-		if(antecedentSentence == anaphoraSentence)
-			return true;
-		return false;		
 	}
 	
 	

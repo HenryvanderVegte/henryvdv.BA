@@ -17,6 +17,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
+import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.DetectedNP;
 import de.unidue.henryvdv.ba.type.DocumentInfo;
 import de.unidue.henryvdv.ba.type.GoldNP;
@@ -35,14 +36,10 @@ extends JCasAnnotator_ImplBase{
 	private int correctAnaphorsTotal;
 	
 	private List<NP> nps;
-	private List<NP> npsWithAnaphora;
 	private List<GoldNP> goldAntecedent;
 	private List<DetectedNP> detectedAntecedent;
 	private Collection<MyCoreferenceChain> corefChains;
-	
-	private String[] whitelist = {"himself","herself","itself","themselves",
-								"his","her","its","their",
-								"he","it","she","they"};
+	private Collection<Anaphora> anaphoras;
 	
 	public void initialize(UimaContext context) throws ResourceInitializationException{
 		super.initialize(context);
@@ -54,24 +51,23 @@ extends JCasAnnotator_ImplBase{
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		nps = new ArrayList<NP>();
-		npsWithAnaphora = new ArrayList<NP>();
 		goldAntecedent = new ArrayList<GoldNP>();
 		detectedAntecedent = new ArrayList<DetectedNP>();
 		correctAnaphorsInDoc = 0;
 		anaphorsInDoc = 0;
 		
 		corefChains = JCasUtil.select(aJCas, MyCoreferenceChain.class);		
+		anaphoras = JCasUtil.select(aJCas, Anaphora.class);		
 		Collection<NP> nounphrases = JCasUtil.select(aJCas, NP.class);
 		
-		for(NP n : nounphrases){
-			List<Token> coveredTokens = getCoveredTokens(n.getBegin(), n.getEnd());		
-			if(containsAnaphora(coveredTokens)){
-				npsWithAnaphora.add(n);
-			}		
+		for(NP n : nounphrases){	
 			nps.add(n);			
 		}
+		
 		SetGoldNPs();
 		SetDetectedNPs();
+		
+		
 		if(detectedAntecedent.size() != goldAntecedent.size()){
 			System.out.println("Something wrong here");
 		} else {
@@ -90,9 +86,6 @@ extends JCasAnnotator_ImplBase{
 	}
 	
 	private void printResults(){
-		//System.out.println("RESULTS:   ");
-		//System.out.println("Correct (Abs): " + correctAnaphors);
-		//System.out.println("Total: " + totalAnaphors);
 		float rel = 0f;	
 		if(anaphorsInDoc != 0){
 			rel = ((float)correctAnaphorsInDoc / (float)anaphorsInDoc) * 100f;
@@ -103,7 +96,7 @@ extends JCasAnnotator_ImplBase{
 	}
 	
 	private void evaluate(){
-		for(int i = 0; i < npsWithAnaphora.size(); i++){
+		for(int i = 0; i < anaphoras.size(); i++){
 			if(goldAntecedent.get(i) == null && detectedAntecedent.get(i) == null){
 				/*
 				System.out.println("--Wrong--");
@@ -139,12 +132,12 @@ extends JCasAnnotator_ImplBase{
 			
 			if(goldAntecedent.get(i).getBegin() <= detectedAntecedent.get(i).getBegin() && 
 				goldAntecedent.get(i).getEnd() >= detectedAntecedent.get(i).getEnd()){
-				
+				/*
 				System.out.println("--Correct--");
 				System.out.println("Anaphora: " + npsWithAnaphora.get(i).getCoveredText() + "(Sentence: " + getSentenceNr(npsWithAnaphora.get(i).getBegin()) + ")" );
 				System.out.println("Gold : " + goldAntecedent.get(i).getCoveredText() + "(Sentence: " + getSentenceNr(goldAntecedent.get(i).getBegin()) + ")");
 				System.out.println("Detected : " + detectedAntecedent.get(i).getCoveredText() + "(Sentence: " + getSentenceNr(detectedAntecedent.get(i).getBegin()) + ")");
-				
+				*/
 				
 				
 				correctAnaphorsInDoc++;		
@@ -169,105 +162,35 @@ extends JCasAnnotator_ImplBase{
 		Collection<Sentence> se = JCasUtil.select(aJCas, Sentence.class);
 		int i = 1;
 		for(Sentence s : se){
-			if(s.getBegin() > begin){
+			if(s.getEnd() > begin){
 				break;
 			}
 			i++;
-		}
-		
+		}		
 		return i;
 	}
-	/*
-	private int getWordNrInSentence(NP np){
-		Collection<Sentence> se = JCasUtil.select(aJCas, Sentence.class);
-		Collection<Token> to = JCasUtil.select(aJCas, Token.class);
-		
-		
-	} */
+
 	
 	private void SetDetectedNPs(){
-		int i = 0;
-		int j = 0;
-		while(i < nps.size() && j < npsWithAnaphora.size()){
-			if(nps.get(i).equals(npsWithAnaphora.get(j))){				
-				DetectedNP n = new DetectedNP(aJCas, nps.get(i-1).getBegin(), nps.get(i-1).getEnd());
-				detectedAntecedent.add(n);
-				
-				j++;
-			}
-			i++;
+		for(Anaphora anaphora : anaphoras){
+			for(int i = 1; i < nps.size(); i++){
+				if(nps.get(i).getBegin() <= anaphora.getBegin() && nps.get(i).getEnd() >= anaphora.getEnd()){
+					DetectedNP np = new DetectedNP(aJCas, nps.get(i-1).getBegin(), nps.get(i -1).getEnd());
+					detectedAntecedent.add(np);
+					break;
+				}
+			}	
 		}
 	}
 	
 	private void SetGoldNPs(){
-		for(int i = 0; i < npsWithAnaphora.size(); i++){
-			int begin = npsWithAnaphora.get(i).getBegin();
-			int end = npsWithAnaphora.get(i).getEnd();
-			Integer[] anaphoraStartEnd = getAnaphoraBound(npsWithAnaphora.get(i));
-			/*
-			if(anaphoraStartEnd[0] + anaphoraStartEnd[1] == 0){
-				System.out.println("......");
-				System.out.println(npsWithAnaphora.get(i).getCoveredText());
-			}
-			*/
-			
-			if(anaphoraStartEnd[0] == 0 && anaphoraStartEnd[1] == 0){
-				goldAntecedent.add(null);
-			} else {
-				GoldNP np = new GoldNP(aJCas, anaphoraStartEnd[0], anaphoraStartEnd[1]);
-				goldAntecedent.add(np);
-			}
-			
+		for(Anaphora anaphora : anaphoras){
+			GoldNP np = new GoldNP(aJCas, anaphora.getAntecedent().getBegin(), anaphora.getAntecedent().getEnd());
+			goldAntecedent.add(np);
 		}
 	}
 	
-	private Integer[] getAnaphoraBound(Annotation anno){
-		
-		int begin = anno.getBegin(); 
-		int end = anno.getEnd();
-		
-		Integer[] r = {0,0};
-		for(MyCoreferenceChain c : corefChains){
-			MyCoreferenceLink corefLinkOld = c.getFirst();			
-			if(corefLinkOld.getBegin() == begin && corefLinkOld.getEnd() == end){
-				return r;
-			}
-			
-			while(corefLinkOld.getNext() != null){
-				MyCoreferenceLink corefLinkNew = corefLinkOld.getNext();
-				
-				if(corefLinkNew.getBegin() >= begin && corefLinkNew.getEnd() <= end){					
-					r[0] = corefLinkOld.getBegin();
-					r[1] = corefLinkOld.getEnd();
-					return r;
-				}
-				
-				if(corefLinkNew.getBegin() <= begin && corefLinkNew.getEnd() >= end){					
-					r[0] = corefLinkOld.getBegin();
-					r[1] = corefLinkOld.getEnd();
-					return r;
-				}
-				
-				corefLinkOld = corefLinkNew;
-			}
-		
-		}
-		return r;
-	}	
 	
-	private boolean containsAnaphora(List<Token> tokens){
-		for(Token t : tokens){
-			if(t.getPos().getPosValue() == "PRP" || 
-					t.getPos().getPosValue() == "PRP$" || 
-					t.getPos().getPosValue() == "WP$"
-			){
-				if(Arrays.asList(whitelist).contains(t.getCoveredText().toLowerCase())){
-					return true;
-				}
-			}
-		}
-		return false;
-	}
 	
 	private List<Token> getCoveredTokens(int begin, int end){
 		List<Token> coveredTokens = new ArrayList<Token>();

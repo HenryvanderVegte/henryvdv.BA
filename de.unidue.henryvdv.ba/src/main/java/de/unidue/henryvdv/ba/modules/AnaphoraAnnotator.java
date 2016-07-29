@@ -11,6 +11,7 @@ import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.unidue.henryvdv.ba.type.Anaphora;
@@ -26,6 +27,8 @@ extends JCasAnnotator_ImplBase{
 	
 	private List<NP> npsWithAnaphora;
 	private Collection<MyCoreferenceChain> corefChains;
+	private Collection<Token> tokens;
+	private Collection<Sentence> sentences;
 	
 	private String[] whitelist = {"himself","herself","itself","themselves",
 			"his","her","its","their",
@@ -37,44 +40,45 @@ extends JCasAnnotator_ImplBase{
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		npsWithAnaphora = new ArrayList<NP>();
-		
+		sentences = JCasUtil.select(aJCas, Sentence.class);			
 		corefChains = JCasUtil.select(aJCas, MyCoreferenceChain.class);	
-		Collection<NP> nounphrases = JCasUtil.select(aJCas, NP.class);
+		tokens = JCasUtil.select(aJCas, Token.class);
 		
-		for(NP n : nounphrases){
-			List<Token> coveredTokens = getCoveredTokens(n.getBegin(), n.getEnd());		
-			if(containsAnaphora(coveredTokens)){
-				npsWithAnaphora.add(n);
-			}			
-		}
-		
-		setAnaphors();
+		setAnaphoras();
 		
 		
 	}
 
-	private void setAnaphors(){
-		for(int i = 0; i < npsWithAnaphora.size(); i++){
-			int begin = npsWithAnaphora.get(i).getBegin();
-			int end = npsWithAnaphora.get(i).getEnd();
-			Integer[] antecedentStartEnd = getAntecedentBound(npsWithAnaphora.get(i));
-
-			Anaphora n = new Anaphora(aJCas, begin, end);
-			
-			Antecedent a = null;
-			
-			if(antecedentStartEnd[0] != 0 || antecedentStartEnd[1] != 0){			
-				a = new Antecedent(aJCas, antecedentStartEnd[0], antecedentStartEnd[1]);
+	private void setAnaphoras(){
+		List<Anaphora> anaphoras = new ArrayList<Anaphora>();
+		for(Token token : tokens){
+			if(token.getPos().getPosValue() == "PRP" || 
+					token.getPos().getPosValue() == "PRP$" || 
+					token.getPos().getPosValue() == "WP$"
+			){
+				if(Arrays.asList(whitelist).contains(token.getCoveredText().toLowerCase())){
+					Anaphora a = new Anaphora(aJCas, token.getBegin(), token.getEnd());
+					anaphoras.add(a);
+				}
 			}
-			n.setAntecedent(a);
-			if(a != null)
-				n.addToIndexes();
 		}
+
+		for(int i = 0; i < anaphoras.size(); i++){
+			Integer[] bound = getAntecedentBound(anaphoras.get(i));
+			if(bound[0] != 0 || bound[1] != 0){
+				Antecedent antecedent = new Antecedent(aJCas, bound[0], bound[1]);
+				anaphoras.get(i).setAntecedent(antecedent);
+				anaphoras.get(i).addToIndexes();
+			}
+			
+			
+		}
+		
 		
 	}
 	
-	private Integer[] getAntecedentBound(Annotation anno){
-		
+	
+	private Integer[] getAntecedentBound(Annotation anno){		
 		int begin = anno.getBegin(); 
 		int end = anno.getEnd();
 		
@@ -88,6 +92,12 @@ extends JCasAnnotator_ImplBase{
 			while(corefLinkOld.getNext() != null){
 				MyCoreferenceLink corefLinkNew = corefLinkOld.getNext();
 				
+				if(corefLinkNew.getBegin() == begin && corefLinkNew.getEnd() == end){					
+					r[0] = corefLinkOld.getBegin();
+					r[1] = corefLinkOld.getEnd();
+					return r;
+				}
+				/*
 				if(corefLinkNew.getBegin() >= begin && corefLinkNew.getEnd() <= end){					
 					r[0] = corefLinkOld.getBegin();
 					r[1] = corefLinkOld.getEnd();
@@ -98,7 +108,7 @@ extends JCasAnnotator_ImplBase{
 					r[0] = corefLinkOld.getBegin();
 					r[1] = corefLinkOld.getEnd();
 					return r;
-				}
+				}*/
 				
 				corefLinkOld = corefLinkNew;
 			}
@@ -107,31 +117,15 @@ extends JCasAnnotator_ImplBase{
 		return r;
 	}	
 	
-	private boolean containsAnaphora(List<Token> tokens){
-		for(Token t : tokens){
-			if(t.getPos().getPosValue() == "PRP" || 
-					t.getPos().getPosValue() == "PRP$" || 
-					t.getPos().getPosValue() == "WP$"
-			){
-				if(Arrays.asList(whitelist).contains(t.getCoveredText().toLowerCase())){
-					return true;
-				}
+	private int getSentenceNr(int begin){
+		int sentenceNr = 1;
+		for(Sentence s : sentences){
+			if(s.getEnd() > begin){
+				break;
 			}
-		}
-		return false;
+			sentenceNr++;
+		}	
+		return sentenceNr;
 	}
-	
-	private List<Token> getCoveredTokens(int begin, int end){
-		List<Token> coveredTokens = new ArrayList<Token>();
-		Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
-		
-		for(Token t : tokens){
-			if(t.getBegin() >= begin && t.getEnd() <= end){
-				coveredTokens.add(t);
-			}
-		}
-		return coveredTokens;
-	}
-	
 	
 }

@@ -18,6 +18,41 @@
           <description/>
           <rangeTypeName>de.unidue.henryvdv.ba.type.Antecedent</rangeTypeName>
         </featureDescription>
+      <featureDescription>
+          <name>p_A_InSameSentence</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>p_A_InPreviousSentence</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>p_A_SingularMatch</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>p_A_PluralMatch</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>p_A_IntraSentenceDiff</name>
+          <description/>
+          <rangeTypeName>uima.cas.Float</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>p_A_InterSentenceDiff</name>
+          <description/>
+          <rangeTypeName>uima.cas.Float</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>p_A_PrepositionalParallel</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
       </features>
     </typeDescription>
   </types>

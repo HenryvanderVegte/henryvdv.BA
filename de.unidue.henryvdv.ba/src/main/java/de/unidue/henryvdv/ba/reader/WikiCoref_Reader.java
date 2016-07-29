@@ -75,7 +75,7 @@ extends JCasCollectionReader_ImplBase{
         }
         
         basedataIndex = 0;
-        markablesDataIndex = 0;   
+        markablesDataIndex = basedataIndex*2;   
     } 
 
 	public boolean hasNext() throws IOException, CollectionException {
