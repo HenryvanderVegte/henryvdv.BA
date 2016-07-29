@@ -12,7 +12,7 @@ import org.apache.uima.cas.Type;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Thu Jul 28 18:46:15 CEST 2016
+ * Updated by JCasGen Fri Jul 29 14:01:49 CEST 2016
  * @generated */
 public class Antecedent_Type extends Annotation_Type {
   /** @generated 

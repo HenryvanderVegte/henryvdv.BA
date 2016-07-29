@@ -11,8 +11,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Thu Jul 28 18:46:15 CEST 2016
- * XML source: C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/src/main/resources/desc/type/Antecedent.xml
+ * Updated by JCasGen Fri Jul 29 14:01:49 CEST 2016
+ * XML source: C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/src/main/resources/desc/type/NegativeTrainingInstance.xml
  * @generated */
 public class Antecedent extends Annotation {
   /** @generated

@@ -11,8 +11,9 @@ import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordParser;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordSegmenter;
 import de.unidue.henryvdv.ba.modules.Baseline_Evaluator;
-import de.unidue.henryvdv.ba.modules.Baseline_CorefAnnotator;
+import de.unidue.henryvdv.ba.modules.AnaphoraAnnotator;
 import de.unidue.henryvdv.ba.modules.InformationModule;
+import de.unidue.henryvdv.ba.modules.NegativeTrainingInstanceAnnotator;
 import de.unidue.henryvdv.ba.modules.SVMTrainingInstanceCreator;
 import de.unidue.henryvdv.ba.reader.SimpleTextReader;
 import de.unidue.henryvdv.ba.reader.WikiCoref_DCorefReader;
@@ -48,17 +49,26 @@ public class BasicPipeline {
 	        		CollectionReaderFactory.createReader(
 	                        WikiCoref_Reader.class,
 	                        WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
-	                        WikiCoref_Reader.PARAM_MAX_DOCUMENTS, 6
+	                        WikiCoref_Reader.PARAM_MAX_DOCUMENTS, 1
 	                ),
-	        		AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)
+	        	//	AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)
 				   
-	        		/*AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
+	        		AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),
-	        		AnalysisEngineFactory.createEngineDescription(StanfordParser.class),   
-	        		AnalysisEngineFactory.createEngineDescription(Baseline_AnaphoraAnnotator.class) */
+	        		AnalysisEngineFactory.createEngineDescription(StanfordParser.class),  
+	        		
+	        		
+	        		AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),   
+	        		AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),  
+	        		
+	        		
+	        		AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class),
+	        		AnalysisEngineFactory.createEngineDescription(InformationModule.class)
+	        		
+	        		
+	        		//AnalysisEngineFactory.createEngineDescription(Baseline_AnaphoraAnnotator.class) 
 	         //       AnalysisEngineFactory.createEngineDescription(InformationModule.class)
-	          //      AnalysisEngineFactory.createEngineDescription(Baseline_AnaphoraAnnotator.class)
 	        );
 	  }
 	  

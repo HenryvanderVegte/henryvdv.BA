@@ -1,1 +1,8 @@
-SomethingSomethingSomething
+# svm train "WikiCoref" (training examples: 2 positive / 5 negative)
+1 1:1
+1 1:1
+-1 1:1
+-1 1:1
+-1 1:1
+-1 1:1
+-1 1:1

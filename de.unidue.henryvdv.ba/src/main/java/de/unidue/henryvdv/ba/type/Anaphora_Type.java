@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Thu Jul 28 18:46:13 CEST 2016
+ * Updated by JCasGen Fri Jul 29 14:01:49 CEST 2016
  * @generated */
 public class Anaphora_Type extends Annotation_Type {
   /** @generated 
