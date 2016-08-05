@@ -11,7 +11,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Fri Jul 29 15:25:09 CEST 2016
+ * Updated by JCasGen Wed Aug 03 20:04:07 CEST 2016
  * XML source: C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/src/main/resources/desc/type/NegativeTrainingInstance.xml
  * @generated */
 public class Anaphora extends Annotation {
@@ -250,6 +250,160 @@ public class Anaphora extends Annotation {
     if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_p_A_PrepositionalParallel == null)
       jcasType.jcas.throwFeatMissing("p_A_PrepositionalParallel", "de.unidue.henryvdv.ba.type.Anaphora");
     jcasType.ll_cas.ll_setBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_p_A_PrepositionalParallel, v);}    
+   
+    
+  //*--------------*
+  //* Feature: p_A_BindingTheory
+
+  /** getter for p_A_BindingTheory - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public boolean getP_A_BindingTheory() {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_p_A_BindingTheory == null)
+      jcasType.jcas.throwFeatMissing("p_A_BindingTheory", "de.unidue.henryvdv.ba.type.Anaphora");
+    return jcasType.ll_cas.ll_getBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_p_A_BindingTheory);}
+    
+  /** setter for p_A_BindingTheory - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setP_A_BindingTheory(boolean v) {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_p_A_BindingTheory == null)
+      jcasType.jcas.throwFeatMissing("p_A_BindingTheory", "de.unidue.henryvdv.ba.type.Anaphora");
+    jcasType.ll_cas.ll_setBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_p_A_BindingTheory, v);}    
+   
+    
+  //*--------------*
+  //* Feature: p_A_ReflexiveSubjMatch
+
+  /** getter for p_A_ReflexiveSubjMatch - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public boolean getP_A_ReflexiveSubjMatch() {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_p_A_ReflexiveSubjMatch == null)
+      jcasType.jcas.throwFeatMissing("p_A_ReflexiveSubjMatch", "de.unidue.henryvdv.ba.type.Anaphora");
+    return jcasType.ll_cas.ll_getBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_p_A_ReflexiveSubjMatch);}
+    
+  /** setter for p_A_ReflexiveSubjMatch - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setP_A_ReflexiveSubjMatch(boolean v) {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_p_A_ReflexiveSubjMatch == null)
+      jcasType.jcas.throwFeatMissing("p_A_ReflexiveSubjMatch", "de.unidue.henryvdv.ba.type.Anaphora");
+    jcasType.ll_cas.ll_setBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_p_A_ReflexiveSubjMatch, v);}    
+   
+    
+  //*--------------*
+  //* Feature: p_A_RelationMatch
+
+  /** getter for p_A_RelationMatch - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public boolean getP_A_RelationMatch() {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_p_A_RelationMatch == null)
+      jcasType.jcas.throwFeatMissing("p_A_RelationMatch", "de.unidue.henryvdv.ba.type.Anaphora");
+    return jcasType.ll_cas.ll_getBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_p_A_RelationMatch);}
+    
+  /** setter for p_A_RelationMatch - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setP_A_RelationMatch(boolean v) {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_p_A_RelationMatch == null)
+      jcasType.jcas.throwFeatMissing("p_A_RelationMatch", "de.unidue.henryvdv.ba.type.Anaphora");
+    jcasType.ll_cas.ll_setBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_p_A_RelationMatch, v);}    
+   
+    
+  //*--------------*
+  //* Feature: p_A_ParentRelationMatch
+
+  /** getter for p_A_ParentRelationMatch - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public boolean getP_A_ParentRelationMatch() {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_p_A_ParentRelationMatch == null)
+      jcasType.jcas.throwFeatMissing("p_A_ParentRelationMatch", "de.unidue.henryvdv.ba.type.Anaphora");
+    return jcasType.ll_cas.ll_getBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_p_A_ParentRelationMatch);}
+    
+  /** setter for p_A_ParentRelationMatch - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setP_A_ParentRelationMatch(boolean v) {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_p_A_ParentRelationMatch == null)
+      jcasType.jcas.throwFeatMissing("p_A_ParentRelationMatch", "de.unidue.henryvdv.ba.type.Anaphora");
+    jcasType.ll_cas.ll_setBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_p_A_ParentRelationMatch, v);}    
+   
+    
+  //*--------------*
+  //* Feature: p_A_ParentCatMatch
+
+  /** getter for p_A_ParentCatMatch - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public boolean getP_A_ParentCatMatch() {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_p_A_ParentCatMatch == null)
+      jcasType.jcas.throwFeatMissing("p_A_ParentCatMatch", "de.unidue.henryvdv.ba.type.Anaphora");
+    return jcasType.ll_cas.ll_getBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_p_A_ParentCatMatch);}
+    
+  /** setter for p_A_ParentCatMatch - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setP_A_ParentCatMatch(boolean v) {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_p_A_ParentCatMatch == null)
+      jcasType.jcas.throwFeatMissing("p_A_ParentCatMatch", "de.unidue.henryvdv.ba.type.Anaphora");
+    jcasType.ll_cas.ll_setBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_p_A_ParentCatMatch, v);}    
+   
+    
+  //*--------------*
+  //* Feature: p_A_ParentWordMatch
+
+  /** getter for p_A_ParentWordMatch - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public boolean getP_A_ParentWordMatch() {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_p_A_ParentWordMatch == null)
+      jcasType.jcas.throwFeatMissing("p_A_ParentWordMatch", "de.unidue.henryvdv.ba.type.Anaphora");
+    return jcasType.ll_cas.ll_getBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_p_A_ParentWordMatch);}
+    
+  /** setter for p_A_ParentWordMatch - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setP_A_ParentWordMatch(boolean v) {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_p_A_ParentWordMatch == null)
+      jcasType.jcas.throwFeatMissing("p_A_ParentWordMatch", "de.unidue.henryvdv.ba.type.Anaphora");
+    jcasType.ll_cas.ll_setBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_p_A_ParentWordMatch, v);}    
+   
+    
+  //*--------------*
+  //* Feature: p_A_QuotationSituation
+
+  /** getter for p_A_QuotationSituation - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public boolean getP_A_QuotationSituation() {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_p_A_QuotationSituation == null)
+      jcasType.jcas.throwFeatMissing("p_A_QuotationSituation", "de.unidue.henryvdv.ba.type.Anaphora");
+    return jcasType.ll_cas.ll_getBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_p_A_QuotationSituation);}
+    
+  /** setter for p_A_QuotationSituation - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setP_A_QuotationSituation(boolean v) {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_p_A_QuotationSituation == null)
+      jcasType.jcas.throwFeatMissing("p_A_QuotationSituation", "de.unidue.henryvdv.ba.type.Anaphora");
+    jcasType.ll_cas.ll_setBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_p_A_QuotationSituation, v);}    
   }
 
     

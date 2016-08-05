@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Fri Jul 29 15:25:09 CEST 2016
+ * Updated by JCasGen Wed Aug 03 20:04:07 CEST 2016
  * @generated */
 public class NegativeTrainingInstance_Type extends Annotation_Type {
   /** @generated 
@@ -237,6 +237,174 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_PrepositionalParallel, v);}
     
   
+ 
+  /** @generated */
+  final Feature casFeat_p_A_BindingTheory;
+  /** @generated */
+  final int     casFeatCode_p_A_BindingTheory;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public boolean getP_A_BindingTheory(int addr) {
+        if (featOkTst && casFeat_p_A_BindingTheory == null)
+      jcas.throwFeatMissing("p_A_BindingTheory", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_BindingTheory);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setP_A_BindingTheory(int addr, boolean v) {
+        if (featOkTst && casFeat_p_A_BindingTheory == null)
+      jcas.throwFeatMissing("p_A_BindingTheory", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_BindingTheory, v);}
+    
+  
+ 
+  /** @generated */
+  final Feature casFeat_p_A_ReflexiveSubjMatch;
+  /** @generated */
+  final int     casFeatCode_p_A_ReflexiveSubjMatch;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public boolean getP_A_ReflexiveSubjMatch(int addr) {
+        if (featOkTst && casFeat_p_A_ReflexiveSubjMatch == null)
+      jcas.throwFeatMissing("p_A_ReflexiveSubjMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_ReflexiveSubjMatch);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setP_A_ReflexiveSubjMatch(int addr, boolean v) {
+        if (featOkTst && casFeat_p_A_ReflexiveSubjMatch == null)
+      jcas.throwFeatMissing("p_A_ReflexiveSubjMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_ReflexiveSubjMatch, v);}
+    
+  
+ 
+  /** @generated */
+  final Feature casFeat_p_A_RelationMatch;
+  /** @generated */
+  final int     casFeatCode_p_A_RelationMatch;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public boolean getP_A_RelationMatch(int addr) {
+        if (featOkTst && casFeat_p_A_RelationMatch == null)
+      jcas.throwFeatMissing("p_A_RelationMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_RelationMatch);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setP_A_RelationMatch(int addr, boolean v) {
+        if (featOkTst && casFeat_p_A_RelationMatch == null)
+      jcas.throwFeatMissing("p_A_RelationMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_RelationMatch, v);}
+    
+  
+ 
+  /** @generated */
+  final Feature casFeat_p_A_ParentRelationMatch;
+  /** @generated */
+  final int     casFeatCode_p_A_ParentRelationMatch;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public boolean getP_A_ParentRelationMatch(int addr) {
+        if (featOkTst && casFeat_p_A_ParentRelationMatch == null)
+      jcas.throwFeatMissing("p_A_ParentRelationMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_ParentRelationMatch);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setP_A_ParentRelationMatch(int addr, boolean v) {
+        if (featOkTst && casFeat_p_A_ParentRelationMatch == null)
+      jcas.throwFeatMissing("p_A_ParentRelationMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_ParentRelationMatch, v);}
+    
+  
+ 
+  /** @generated */
+  final Feature casFeat_p_A_ParentCatMatch;
+  /** @generated */
+  final int     casFeatCode_p_A_ParentCatMatch;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public boolean getP_A_ParentCatMatch(int addr) {
+        if (featOkTst && casFeat_p_A_ParentCatMatch == null)
+      jcas.throwFeatMissing("p_A_ParentCatMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_ParentCatMatch);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setP_A_ParentCatMatch(int addr, boolean v) {
+        if (featOkTst && casFeat_p_A_ParentCatMatch == null)
+      jcas.throwFeatMissing("p_A_ParentCatMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_ParentCatMatch, v);}
+    
+  
+ 
+  /** @generated */
+  final Feature casFeat_p_A_ParentWordMatch;
+  /** @generated */
+  final int     casFeatCode_p_A_ParentWordMatch;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public boolean getP_A_ParentWordMatch(int addr) {
+        if (featOkTst && casFeat_p_A_ParentWordMatch == null)
+      jcas.throwFeatMissing("p_A_ParentWordMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_ParentWordMatch);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setP_A_ParentWordMatch(int addr, boolean v) {
+        if (featOkTst && casFeat_p_A_ParentWordMatch == null)
+      jcas.throwFeatMissing("p_A_ParentWordMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_ParentWordMatch, v);}
+    
+  
+ 
+  /** @generated */
+  final Feature casFeat_p_A_QuotationSituation;
+  /** @generated */
+  final int     casFeatCode_p_A_QuotationSituation;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public boolean getP_A_QuotationSituation(int addr) {
+        if (featOkTst && casFeat_p_A_QuotationSituation == null)
+      jcas.throwFeatMissing("p_A_QuotationSituation", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_QuotationSituation);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setP_A_QuotationSituation(int addr, boolean v) {
+        if (featOkTst && casFeat_p_A_QuotationSituation == null)
+      jcas.throwFeatMissing("p_A_QuotationSituation", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_QuotationSituation, v);}
+    
+  
 
 
 
@@ -280,6 +448,34 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
  
     casFeat_p_A_PrepositionalParallel = jcas.getRequiredFeatureDE(casType, "p_A_PrepositionalParallel", "uima.cas.Boolean", featOkTst);
     casFeatCode_p_A_PrepositionalParallel  = (null == casFeat_p_A_PrepositionalParallel) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_A_PrepositionalParallel).getCode();
+
+ 
+    casFeat_p_A_BindingTheory = jcas.getRequiredFeatureDE(casType, "p_A_BindingTheory", "uima.cas.Boolean", featOkTst);
+    casFeatCode_p_A_BindingTheory  = (null == casFeat_p_A_BindingTheory) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_A_BindingTheory).getCode();
+
+ 
+    casFeat_p_A_ReflexiveSubjMatch = jcas.getRequiredFeatureDE(casType, "p_A_ReflexiveSubjMatch", "uima.cas.Boolean", featOkTst);
+    casFeatCode_p_A_ReflexiveSubjMatch  = (null == casFeat_p_A_ReflexiveSubjMatch) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_A_ReflexiveSubjMatch).getCode();
+
+ 
+    casFeat_p_A_RelationMatch = jcas.getRequiredFeatureDE(casType, "p_A_RelationMatch", "uima.cas.Boolean", featOkTst);
+    casFeatCode_p_A_RelationMatch  = (null == casFeat_p_A_RelationMatch) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_A_RelationMatch).getCode();
+
+ 
+    casFeat_p_A_ParentRelationMatch = jcas.getRequiredFeatureDE(casType, "p_A_ParentRelationMatch", "uima.cas.Boolean", featOkTst);
+    casFeatCode_p_A_ParentRelationMatch  = (null == casFeat_p_A_ParentRelationMatch) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_A_ParentRelationMatch).getCode();
+
+ 
+    casFeat_p_A_ParentCatMatch = jcas.getRequiredFeatureDE(casType, "p_A_ParentCatMatch", "uima.cas.Boolean", featOkTst);
+    casFeatCode_p_A_ParentCatMatch  = (null == casFeat_p_A_ParentCatMatch) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_A_ParentCatMatch).getCode();
+
+ 
+    casFeat_p_A_ParentWordMatch = jcas.getRequiredFeatureDE(casType, "p_A_ParentWordMatch", "uima.cas.Boolean", featOkTst);
+    casFeatCode_p_A_ParentWordMatch  = (null == casFeat_p_A_ParentWordMatch) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_A_ParentWordMatch).getCode();
+
+ 
+    casFeat_p_A_QuotationSituation = jcas.getRequiredFeatureDE(casType, "p_A_QuotationSituation", "uima.cas.Boolean", featOkTst);
+    casFeatCode_p_A_QuotationSituation  = (null == casFeat_p_A_QuotationSituation) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_A_QuotationSituation).getCode();
 
   }
 }

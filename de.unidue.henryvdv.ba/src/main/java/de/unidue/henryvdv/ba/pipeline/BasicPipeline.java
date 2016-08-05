@@ -25,10 +25,9 @@ public class BasicPipeline {
 
 	  public static void main(String[] args)
 			  throws Exception {	
-		  SVMLearn svmLearn = new SVMLearn();
-		  svmLearn.learn();
-     	//	runWikiCorefReader();
-		//  runSimpleTextReader();
+		//  SVMLearn svmLearn = new SVMLearn();
+		//  svmLearn.learn();
+     		runWikiCorefReader();
 	  }
 	  
 	  
