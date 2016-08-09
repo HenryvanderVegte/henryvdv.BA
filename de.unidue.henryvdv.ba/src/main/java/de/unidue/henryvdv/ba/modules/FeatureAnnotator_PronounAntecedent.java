@@ -52,6 +52,7 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 		annotateInPreviousSentenceFeature();
 		annotateInterSentenceDiffFeature();
 		annotatePrepositionalParallelFeature();
+		annotateRelationMatchFeature();
 	}
 
 	public void annotateInSameSentenceFeature(){
@@ -103,16 +104,12 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 	}
 	
 	public void annotatePrepositionalParallelFeature(){	
-		Collection<Constituent> c = JCasUtil.select(aJCas, Constituent.class);
-		for(Constituent co : c){
-			System.out.println("CO : " + co.getCoveredText() + " Type: " +  co.getConstituentType());
-		}
+		//TODO: Fix this Feature
 		/*
 		for(Dependency d : dependencies){
 			System.out.println("Dependency: " + d.getDependent().getCoveredText() + "  Governor: " + d.getGovernor().getCoveredText() + " Type: " + d.getDependencyType());
 		}
 		*/
-		System.out.println("///////////////////////////////////");
 		for(Anaphora a : anaphoras){
 			String prepText = getPrepositionText(a);
 			/*
@@ -133,24 +130,24 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 			*/
 			//List<Token> anteTokens = getCoveredTokens(a.getAntecedent().getBegin(), a.getAntecedent().getEnd());
 			
+		}	
+	}
+	
+	public void annotateRelationMatchFeature(){
+		System.out.println("Positive:");
+		for(Anaphora a : anaphoras){
+			System.out.println("Instance:");
+			boolean value = relationMatch(a, a.getAntecedent());
+			System.out.println("Value: " + value);
+			a.setP_A_RelationMatch(value);
 		}
-		
-		
-		/*
-		for(Anaphora a : anaphoras){		
-			List<Token> covTokens = getCoveredTokens(a.getAntecedent().getBegin(),a.getAntecedent().getEnd());
-			boolean r = containsWord(a.getCoveredText(), covTokens);		
-			a.setP_A_PrepositionalParallel(r);		
-		}
+		System.out.println("Negative:");
 		for(NegativeTrainingInstance n : negInstances){
-			List<Token> covTokens = getCoveredTokens(n.getBegin(),n.getEnd());
-			boolean r = containsWord(n.getAnaphora().getCoveredText(), covTokens);			
-			n.setP_A_PrepositionalParallel(r);
+			System.out.println("Instance:");
+			boolean value = relationMatch(n.getAnaphora(), n);
+			System.out.println("Value: " + value);
+			n.setP_A_RelationMatch(value);
 		}
-		*/
-		
-		
-		
 	}
 	
 	
@@ -224,6 +221,30 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 			i++;
 		}
 		return null;
+	}
+	
+	private boolean relationMatch(Annotation anno1, Annotation anno2){
+		String type1 = null;
+		String type2 = null;
+		System.out.println("1: " + anno1.getCoveredText());
+		System.out.println("2: " + anno2.getCoveredText());
+		
+		for(Dependency d : dependencies){
+			if(d.getBegin()== anno1.getBegin() && d.getEnd() == anno1.getEnd()){
+				type1 = d.getDependencyType();
+				System.out.println("Type1: " + type1);
+			}
+			if(d.getBegin() == anno2.getBegin() && d.getEnd() ==anno2.getEnd()){
+				type2 = d.getDependencyType();
+				System.out.println("Type1: " + type2);
+			}
+		}
+		
+		if(type1 != null && type2 != null){
+			boolean value = type1.equals(type2);
+			return value;
+		}		
+		return false;		
 	}
 }
 
