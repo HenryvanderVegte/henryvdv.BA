@@ -9,6 +9,7 @@ import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordNamedEntityRecognizer;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordParser;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordSegmenter;
+import de.tudarmstadt.ukp.dkpro.core.corenlp.CoreNlpParser;
 import de.unidue.henryvdv.ba.modules.InformationModule;
 import de.unidue.henryvdv.ba.reader.SimpleTextReader;
 
@@ -31,9 +32,13 @@ public class TestPipeline {
 	        		AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),
-	        		AnalysisEngineFactory.createEngineDescription(StanfordParser.class,
+	        		AnalysisEngineFactory.createEngineDescription(CoreNlpParser.class,
+	        														CoreNlpParser.PARAM_ORIGINAL_DEPENDENCIES,
+	        														false),
+	        		
+	        		/*AnalysisEngineFactory.createEngineDescription(StanfordParser.class,
 	        														StanfordParser.PARAM_MODE,
-	        														StanfordParser.DependenciesMode.BASIC),  
+	        														StanfordParser.DependenciesMode.BASIC), */ 
 				  AnalysisEngineFactory.createEngineDescription(TestOutput.class)				  
 				  );
 	  }
