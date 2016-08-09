@@ -31,7 +31,9 @@ public class TestPipeline {
 	        		AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),
-	        		AnalysisEngineFactory.createEngineDescription(StanfordParser.class),  
+	        		AnalysisEngineFactory.createEngineDescription(StanfordParser.class,
+	        														StanfordParser.PARAM_MODE,
+	        														StanfordParser.DependenciesMode.BASIC),  
 				  AnalysisEngineFactory.createEngineDescription(TestOutput.class)				  
 				  );
 	  }

@@ -17,7 +17,7 @@ public class TestOutput	extends JCasAnnotator_ImplBase
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		//Document text:
 		System.out.println("Document text: " + aJCas.getDocumentText());
-		
+		System.out.println("");
 		//Tokens + POS
 		System.out.print("Tokens: ");
 		Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
@@ -25,7 +25,7 @@ public class TestOutput	extends JCasAnnotator_ImplBase
 			System.out.print(t.getCoveredText() + " [" + t.getPos().getPosValue() + "] ");
 		}
 		System.out.println("");
-		
+		System.out.println("");
 		//Dependencies:		
 		Collection<Dependency> dependencies = JCasUtil.select(aJCas, Dependency.class);
 		for(Dependency d : dependencies){
