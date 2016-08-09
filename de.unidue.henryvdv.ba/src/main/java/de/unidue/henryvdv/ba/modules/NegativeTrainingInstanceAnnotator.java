@@ -49,11 +49,27 @@ public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 			if(np.getBegin() > ant.getEnd() && np.getEnd() > ant.getEnd() &&
 				np.getBegin() < an.getBegin() && np.getEnd() < an.getBegin()){
 					
-				npsBetween.add(np);
+					npsBetween.add(np);
 				
 				}
-		}		
-		return npsBetween;
+		}
+		//Delete nps which cover other nps
+		List<NP> fixedNpsBetween = new ArrayList<NP>();
+		for(NP np1 : npsBetween){
+			boolean addIt = true;
+			for(NP np2 : npsBetween){
+				if(np1 != np2){
+					if(np1.getBegin() <=  np2.getBegin() && np1.getEnd() >= np2.getEnd()){
+						addIt = false;
+					}
+				}
+			}
+			if(addIt){
+				fixedNpsBetween.add(np1);
+			}
+		}
+		
+		return fixedNpsBetween;
 	}
 	
 }
