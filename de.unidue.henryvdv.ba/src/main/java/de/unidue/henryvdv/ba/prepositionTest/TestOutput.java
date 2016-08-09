@@ -25,8 +25,8 @@ public class TestOutput	extends JCasAnnotator_ImplBase
 			System.out.print(t.getCoveredText() + " [" + t.getPos().getPosValue() + "] ");
 		}
 		System.out.println("");
-		//Dependencies:
 		
+		//Dependencies:		
 		Collection<Dependency> dependencies = JCasUtil.select(aJCas, Dependency.class);
 		for(Dependency d : dependencies){
 			System.out.println("Dependent: " + d.getDependent().getCoveredText() + 

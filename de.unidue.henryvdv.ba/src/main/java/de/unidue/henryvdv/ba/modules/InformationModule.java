@@ -32,7 +32,7 @@ public class InformationModule
 	//	printyMyCorefChains();
 		printInfos();
 	//	printNounPhrases();
-	//	printDependencies();
+		printDependencies();
 	//	printCorefChains();
 	//	printDocText();
 	//	printTokens();

@@ -10,6 +10,7 @@ import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordNamedEntityRecognizer;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordParser;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordSegmenter;
+import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordCoreferenceResolver;
 import de.unidue.henryvdv.ba.modules.Baseline_Evaluator;
 import de.unidue.henryvdv.ba.modules.FeatureAnnotator_PronounAntecedent;
 import de.unidue.henryvdv.ba.modules.AnaphoraAnnotator;
@@ -37,12 +38,18 @@ public class BasicPipeline {
 				  CollectionReaderFactory.createReader(
 						  				SimpleTextReader.class,
 						  				SimpleTextReader.PARAM_INPUT_DIRECTORY,
-						  				"src/test/resources/WikiCoref_Text"),
+						  				"src/test/resources/prepositionTest"),
 				  AnalysisEngineFactory.createEngineDescription(StanfordSegmenter.class),
+				  AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
+				  AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
 				  AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),
-				  AnalysisEngineFactory.createEngineDescription(StanfordParser.class),
-				  
-				  AnalysisEngineFactory.createEngineDescription(InformationModule.class)		  
+				  AnalysisEngineFactory.createEngineDescription(StanfordParser.class, 
+	        													StanfordParser.PARAM_MODE,
+	        													StanfordParser.DependenciesMode.BASIC),
+	        	AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
+	        	AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),  
+	        	AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_PronounAntecedent.class),
+	        	AnalysisEngineFactory.createEngineDescription(InformationModule.class)	        	
 				  );
 	  }
 	  
@@ -52,22 +59,20 @@ public class BasicPipeline {
 	        		CollectionReaderFactory.createReader(
 	                        WikiCoref_Reader.class,
 	                        WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
-	                        WikiCoref_Reader.PARAM_MAX_DOCUMENTS, 2
-	                ),
-	        	//	AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)
-				   
+	                        WikiCoref_Reader.PARAM_MAX_DOCUMENTS, 1
+	                ),			   
 	        		AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),
-	        		AnalysisEngineFactory.createEngineDescription(StanfordParser.class),  
-	        		AnalysisEngineFactory.createEngineDescription(InformationModule.class),
-	        		
+	        		AnalysisEngineFactory.createEngineDescription(StanfordParser.class, 
+	        														StanfordParser.PARAM_MODE,
+	        														StanfordParser.DependenciesMode.BASIC),  
 	        		AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
 	        		AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),  
-	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_PronounAntecedent.class),  
+	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_PronounAntecedent.class)  
 	        		
 	        		
-	        		AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)
+	        	//	AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)
 
 	        		
 	        		

@@ -13,6 +13,8 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Progress;
 
+import de.unidue.henryvdv.ba.type.DocumentInfo;
+
 public class SimpleTextReader
 	extends JCasCollectionReader_ImplBase{
 	
@@ -49,6 +51,12 @@ public class SimpleTextReader
 	@Override
 	public void getNext(JCas jCas) throws IOException, CollectionException {
 		jCas.setDocumentLanguage("en");
+		DocumentInfo docInfo = new DocumentInfo(jCas);
+        String docName =  inputFiles.get(docIndex).getName();
+        docName = docName.substring(0,docName.length() - 4);
+        docInfo.setDocumentName(docName);       
+        docInfo.addToIndexes();
+		
 		documentText = FileUtils.readFileToString(inputFiles.get(docIndex));
 		docIndex++;
 		jCas.setDocumentText(documentText.trim());

@@ -15,6 +15,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.PREP;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.NegativeTrainingInstance;
@@ -33,6 +34,7 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 	private JCas aJCas;
 	private Collection<NegativeTrainingInstance> negInstances;
 	private Collection<Anaphora> anaphoras;
+	private Collection<Token> tokens;
 	private Collection<Sentence> sentences;
 	private Collection<Dependency> dependencies;
 	
@@ -44,6 +46,7 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 		negInstances = JCasUtil.select(aJCas, NegativeTrainingInstance.class);
 		sentences = JCasUtil.select(aJCas, Sentence.class);
 		dependencies = JCasUtil.select(aJCas, Dependency.class);
+		tokens = JCasUtil.select(aJCas, Token.class);
 		annotateInSameSentenceFeature();
 		annotateIntraSentenceDiffFeature();
 		annotateInPreviousSentenceFeature();
@@ -99,27 +102,35 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 		}
 	}
 	
-	public void annotatePrepositionalParallelFeature(){
-		
-		Collection<NP> pp = JCasUtil.select(aJCas, NP.class);
-		for(NP p :pp){
-		//	System.out.println("NP:" + p.getCoveredText());
-		}
-		
-		Collection<PREP> prep = JCasUtil.select(aJCas, PREP.class);
-		for(PREP p : prep){
-			System.out.println("Dependent: " + p.getCoveredText() + "Gov : " + p.getGovernor().getCoveredText());
+	public void annotatePrepositionalParallelFeature(){	
+		Collection<Constituent> c = JCasUtil.select(aJCas, Constituent.class);
+		for(Constituent co : c){
+			System.out.println("CO : " + co.getCoveredText() + " Type: " +  co.getConstituentType());
 		}
 		/*
 		for(Dependency d : dependencies){
-			System.out.println("Dependent: " + d.getCoveredText() + " Governor: " + d.getGovernor().getCoveredText());
-		} */
-		
+			System.out.println("Dependency: " + d.getDependent().getCoveredText() + "  Governor: " + d.getGovernor().getCoveredText() + " Type: " + d.getDependencyType());
+		}
+		*/
+		System.out.println("///////////////////////////////////");
 		for(Anaphora a : anaphoras){
-			//String prepText = getPrepositionText(a);
+			String prepText = getPrepositionText(a);
+			/*
+			if(prepText != null){
+		     	System.out.println("Prep: " + prepText + " A: " + a.getCoveredText());
+			} else {
+				System.out.println("No Prep. " + a.getCoveredText() );
+			}
 			
-		//	System.out.println("Prep: " + prepText + " A: " + a.getCoveredText());
+			int nr = getTokenNr(a);
+			Token t = getToken(nr -1);
 			
+			if(t == null){
+				System.out.println("Pronoun: " + a.getCoveredText());
+			} else {
+				System.out.println("Pronoun: " + a.getCoveredText() + "   Before: " + t.getCoveredText() + "["+ t.getPos().getPosValue() + "]");
+			}
+			*/
 			//List<Token> anteTokens = getCoveredTokens(a.getAntecedent().getBegin(), a.getAntecedent().getEnd());
 			
 		}
@@ -176,17 +187,43 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 	}
 	
 	private String getPrepositionText(Annotation anno){
+		Token govToken = null;
 		for(Dependency d : dependencies){
-			
-			/*
-			if(d.getGovernor().getBegin() == anno.getBegin() && 
-					d.getGovernor().getEnd() == anno.getEnd() &&
-					d.getDependent().getPos().getPosValue().equals("IN")){
-				return d.getCoveredText();
-			}*/
+			if(d.getDependent().getBegin() == anno.getBegin() && 
+					d.getDependent().getEnd() == anno.getEnd()){
+				govToken = d.getGovernor();
+			}
 		}
-		
+		if(govToken == null)
+			return null;
+		for(Dependency d : dependencies){
+			if(d.getGovernor() == govToken && d.getDependencyType().contains("prep_")){
+				return d.getDependencyType();
+			}
+		}		
 		return null;
 	}
 	
+	private int getTokenNr(Annotation anno){
+		int i = 1;
+		for(Token t : tokens){
+			if(anno.getBegin() <= t.getBegin()){
+				break;
+			}
+			i++;
+		}
+		return i;
+	}
+	
+	private Token getToken(int nr){
+		int i = 1;
+		for(Token t : tokens){
+			if(i == nr){
+				return t;
+			}
+			i++;
+		}
+		return null;
+	}
 }
+
