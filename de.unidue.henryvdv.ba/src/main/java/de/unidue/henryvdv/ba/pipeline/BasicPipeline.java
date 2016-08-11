@@ -13,6 +13,7 @@ import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordSegmenter;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordCoreferenceResolver;
 import de.unidue.henryvdv.ba.modules.Baseline_Evaluator;
+import de.unidue.henryvdv.ba.modules.FeatureAnnotator_Antecedent;
 import de.unidue.henryvdv.ba.modules.FeatureAnnotator_PronounAntecedent;
 import de.unidue.henryvdv.ba.modules.AnaphoraAnnotator;
 import de.unidue.henryvdv.ba.modules.InformationModule;
@@ -62,7 +63,7 @@ public class BasicPipeline {
 	        		CollectionReaderFactory.createReader(
 	                        WikiCoref_Reader.class,
 	                        WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
-	                        WikiCoref_Reader.PARAM_MAX_DOCUMENTS, 7
+	                        WikiCoref_Reader.PARAM_MAX_DOCUMENTS, 1
 	                ),			   
 	        		AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
@@ -73,6 +74,7 @@ public class BasicPipeline {
 	        		AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
 	        		AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
 	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_PronounAntecedent.class),
+	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_Antecedent.class),
         		
 	        	//	AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)        		
 	        	//	AnalysisEngineFactory.createEngineDescription(Baseline_Evaluator.class) 

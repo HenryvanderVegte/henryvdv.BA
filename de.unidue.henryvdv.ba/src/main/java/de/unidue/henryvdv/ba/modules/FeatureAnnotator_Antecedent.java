@@ -23,9 +23,10 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 	private Collection<Sentence> sentences;
 	private Collection<Dependency> dependencies;
 	private Collection<Quotation> quotes;
+	private String documentText;
 	
 	@Override
-	public void process(JCas arg0) throws AnalysisEngineProcessException {
+	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
 		negInstances = JCasUtil.select(aJCas, NegativeTrainingInstance.class);
@@ -33,11 +34,13 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 		dependencies = JCasUtil.select(aJCas, Dependency.class);
 		tokens = JCasUtil.select(aJCas, Token.class);
 		quotes = JCasUtil.select(aJCas, Quotation.class);
-		
+		annotateAntecedentFrequency();
 	}
 
 	public void annotateAntecedentFrequency(){
-		
+		for(Anaphora anaphora : anaphoras){
+			System.out.println(anaphora.getAntecedent().getCoveredText());
+		}
 	}
 	
 	

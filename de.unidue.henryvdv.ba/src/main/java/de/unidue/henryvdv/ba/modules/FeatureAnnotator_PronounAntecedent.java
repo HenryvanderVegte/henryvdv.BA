@@ -21,6 +21,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.NegativeTrainingInstance;
 import de.unidue.henryvdv.ba.type.Quotation;
+import de.unidue.henryvdv.ba.util.AnnotationUtils;
 
 public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 	
@@ -177,7 +178,7 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 				break;			
 			}
 			String anaphoraParentString = anaphoraparent.getCoveredText();
-			List<Token> anteTokens = getCoveredTokens(a.getAntecedent().getBegin(), a.getAntecedent().getEnd());
+			List<Token> anteTokens = getCoveredTokens(a.getAntecedent().getBegin(), a.getAntecedent().getEnd());					
 			boolean value = false;
 			for(Token t : anteTokens){
 				Token tParent = getParent(t);
@@ -255,45 +256,10 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 		}	
 	}
 	
-	private int getSentenceNr(int begin){
-		int sentenceNr = 1;
-		for(Sentence s : sentences){
-			if(s.getEnd() > begin){
-				break;
-			}
-			sentenceNr++;
-		}	
-		return sentenceNr;
-	}
+
 	
-	private boolean containsWord(String word, List<Token> tokens){
-		for(int i = 0; i < tokens.size(); i++){
-			if(tokens.get(i).getCoveredText().toLowerCase().equals(word.toLowerCase())){
-				return true;
-			}
-		}
-		return false;
-	}
 	
-	private List<Token> getCoveredTokens(int begin, int end){
-		List<Token> coveredTokens = new ArrayList<Token>();
-		for(Token t : tokens){
-			if(t.getBegin() >= begin && t.getEnd() <= end){
-				coveredTokens.add(t);
-			}
-		}
-		return coveredTokens;
-	}
-	
-	private Token getCoveredToken(Annotation anno){
-		for(Token t : tokens){
-			if(t.getBegin() >= anno.getBegin()){
-				return t;
-			}
-		}
-		return null;
-	}
-	
+
 	private String getPrepositionText(Annotation anno){
 		Token govToken = null;
 		for(Dependency d : dependencies){
@@ -312,27 +278,7 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 		return null;
 	}
 	
-	private int getTokenNr(Annotation anno){
-		int i = 1;
-		for(Token t : tokens){
-			if(anno.getBegin() <= t.getBegin()){
-				break;
-			}
-			i++;
-		}
-		return i;
-	}
-	
-	private Token getToken(int nr){
-		int i = 1;
-		for(Token t : tokens){
-			if(i == nr){
-				return t;
-			}
-			i++;
-		}
-		return null;
-	}
+
 	
 	private Token getParent(Annotation anno){
 		for(Dependency d : dependencies){
@@ -452,6 +398,14 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 			return true;
 		
 		return false;
+	}
+	
+	private int getSentenceNr(int begin){
+		return AnnotationUtils.getSentenceNr(begin, sentences);
+	}
+	
+	private List<Token> getCoveredTokens(int begin, int end){
+		return AnnotationUtils.getCoveredTokens(begin, end, tokens);
 	}
 }
 
