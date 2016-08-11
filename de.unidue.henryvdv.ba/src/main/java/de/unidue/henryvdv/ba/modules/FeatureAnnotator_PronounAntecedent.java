@@ -76,10 +76,10 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 		annotateInterSentenceDiffFeature();
 		annotatePrepositionalParallelFeature();
 		//annotateRelationMatchFeature();
-		annotateParentWordMatch();
-		annotateQuotationSituation();
-		annotateSingularMatch();
-		annotatePluralMatch();
+		annotateParentWordMatchFeature();
+		annotateQuotationSituationFeature();
+		annotateSingularMatchFeature();
+		annotatePluralMatchFeature();
 	}
 
 	public void annotateInSameSentenceFeature(){
@@ -170,7 +170,7 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 		}
 	}
 
-	public void annotateParentWordMatch(){
+	public void annotateParentWordMatchFeature(){
 		for(Anaphora a : anaphoras){
 			Token anaphoraparent = getParent(a);
 			if(anaphoraparent == null){
@@ -213,7 +213,7 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 		}
 	}
 	
-	public void annotateQuotationSituation(){
+	public void annotateQuotationSituationFeature(){
 		for(Anaphora a : anaphoras){
 			boolean valueA = isInQuotes(a);
 			boolean valueB = isInQuotes(a.getAntecedent());
@@ -234,7 +234,7 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 		}
 	}
 
-	public void annotateSingularMatch(){
+	public void annotateSingularMatchFeature(){
 		for(Anaphora a : anaphoras){
 			boolean value = isBothSingular(a, a.getAntecedent());
 			a.setP_A_SingularMatch(value);
@@ -245,7 +245,7 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 		}	
 	}
 	
-	public void annotatePluralMatch(){
+	public void annotatePluralMatchFeature(){
 		for(Anaphora a : anaphoras){
 			boolean value = isBothPlural(a, a.getAntecedent());
 			a.setP_A_PluralMatch(value);

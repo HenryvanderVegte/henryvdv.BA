@@ -117,15 +117,4 @@ extends JCasAnnotator_ImplBase{
 		return r;
 	}	
 	
-	private int getSentenceNr(int begin){
-		int sentenceNr = 1;
-		for(Sentence s : sentences){
-			if(s.getEnd() > begin){
-				break;
-			}
-			sentenceNr++;
-		}	
-		return sentenceNr;
-	}
-	
 }

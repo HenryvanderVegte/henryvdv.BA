@@ -8,6 +8,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 
 public class AnnotationUtils {
 
@@ -61,6 +62,17 @@ public class AnnotationUtils {
 		return coveredTokens;
 	}
 	
+	public static List<Token> getCoveredTokens(Annotation anno, Collection<Token> tokens){
+		List<Token> coveredTokens = new ArrayList<Token>();
+		for(Token t : tokens){
+			if(t.getBegin() >= anno.getBegin() && t.getEnd() <= anno.getEnd()){
+				coveredTokens.add(t);
+			}
+		}
+		return coveredTokens;
+	}
+	
+	
 	public static int getSentenceNr(int begin, Collection<Sentence> sentences){
 		int sentenceNr = 1;
 		for(Sentence s : sentences){
@@ -71,5 +83,24 @@ public class AnnotationUtils {
 		}	
 		return sentenceNr;
 	}
+	
+	public static Sentence getSentence(int begin, Collection<Sentence> sentences){
+		for(Sentence s : sentences){
+			if(s.getEnd() > begin){
+				return s;
+			}
+		}	
+		return null;
+	}
+	
+	public static Token getParent(Token token, Collection<Dependency> dependencies){
+		for(Dependency d : dependencies){
+			if(d.getDependent() == token){
+				return d.getGovernor();
+			}
+		}
+		return null;
+	}
+	
 	
 }

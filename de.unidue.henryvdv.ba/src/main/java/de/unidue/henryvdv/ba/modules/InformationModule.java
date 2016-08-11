@@ -60,7 +60,7 @@ public class InformationModule
 	public void collectionProcessComplete(){
 		for(Integer s : sentenceDistanceFD.getKeys()){
 			System.out.println("Sentence-distance: " + s);
-			System.out.println("Count: " + (float)sentenceDistanceFD.getCount(s)/(float)sentenceDistanceFD.getN());
+			System.out.println("Count: " + ((float)sentenceDistanceFD.getCount(s)/(float)sentenceDistanceFD.getN()*100f) + " %");
 		}
 	}
 	

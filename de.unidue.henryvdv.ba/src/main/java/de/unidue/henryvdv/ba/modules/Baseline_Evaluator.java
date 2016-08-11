@@ -157,18 +157,6 @@ extends JCasAnnotator_ImplBase{
 		correctAnaphorsTotal += correctAnaphorsInDoc;
 		
 	}
-	
-	private int getSentenceNr(int begin){
-		Collection<Sentence> se = JCasUtil.select(aJCas, Sentence.class);
-		int i = 1;
-		for(Sentence s : se){
-			if(s.getEnd() > begin){
-				break;
-			}
-			i++;
-		}		
-		return i;
-	}
 
 	
 	private void SetDetectedNPs(){
@@ -190,18 +178,5 @@ extends JCasAnnotator_ImplBase{
 		}
 	}
 	
-	
-	
-	private List<Token> getCoveredTokens(int begin, int end){
-		List<Token> coveredTokens = new ArrayList<Token>();
-		Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
-		
-		for(Token t : tokens){
-			if(t.getBegin() >= begin && t.getEnd() <= end){
-				coveredTokens.add(t);
-			}
-		}
-		return coveredTokens;
-	}
 
 }

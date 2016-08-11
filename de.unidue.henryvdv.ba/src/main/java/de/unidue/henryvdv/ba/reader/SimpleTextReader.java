@@ -44,7 +44,6 @@ public class SimpleTextReader
 	}
 
 	public Progress[] getProgress() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
