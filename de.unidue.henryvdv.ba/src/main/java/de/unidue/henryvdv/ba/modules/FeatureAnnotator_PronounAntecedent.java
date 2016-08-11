@@ -19,7 +19,8 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.unidue.henryvdv.ba.type.Anaphora;
-import de.unidue.henryvdv.ba.type.NegativeTrainingInstance;
+import de.unidue.henryvdv.ba.type.AntecedentFeatures;
+import de.unidue.henryvdv.ba.type.PronounAntecedentFeatures;
 import de.unidue.henryvdv.ba.type.Quotation;
 import de.unidue.henryvdv.ba.util.AnnotationUtils;
 
@@ -49,7 +50,6 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 	 ************************************************/
 	
 	private JCas aJCas;
-	private Collection<NegativeTrainingInstance> negInstances;
 	private Collection<Anaphora> anaphoras;
 	private Collection<Token> tokens;
 	private Collection<Sentence> sentences;
@@ -65,11 +65,11 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
-		negInstances = JCasUtil.select(aJCas, NegativeTrainingInstance.class);
 		sentences = JCasUtil.select(aJCas, Sentence.class);
 		dependencies = JCasUtil.select(aJCas, Dependency.class);
 		tokens = JCasUtil.select(aJCas, Token.class);
 		quotes = JCasUtil.select(aJCas, Quotation.class);
+		prepareAnnotations();
 		annotateInSameSentenceFeature();
 		annotateIntraSentenceDiffFeature();
 		annotateInPreviousSentenceFeature();
@@ -81,27 +81,26 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 		annotateSingularMatchFeature();
 		annotatePluralMatchFeature();
 	}
+	
+	public void prepareAnnotations(){
+		for(Anaphora anaphora : anaphoras){
+			PronounAntecedentFeatures a = new PronounAntecedentFeatures(aJCas);
+			anaphora.setPronounAntecedentFeatures(a);
+		}
+	}
 
 	public void annotateInSameSentenceFeature(){
 		for(Anaphora a : anaphoras){
 			boolean value = (getSentenceNr(a.getBegin()) == getSentenceNr(a.getAntecedent().getBegin()));
-			a.setP_A_InSameSentence(value);
-		}
-		for(NegativeTrainingInstance n : negInstances){
-			boolean value = (getSentenceNr(n.getBegin()) == getSentenceNr(n.getAnaphora().getBegin()));
-			n.setP_A_InSameSentence(value);
+			a.getPronounAntecedentFeatures().setP_A_InSameSentence(value);
 		}	
 	}
 	
 	public void annotateInPreviousSentenceFeature(){
 		for(Anaphora a : anaphoras){
 			boolean value = (getSentenceNr(a.getBegin()) -1 == getSentenceNr(a.getAntecedent().getBegin()));
-			a.setP_A_InPreviousSentence(value);
+			a.getPronounAntecedentFeatures().setP_A_InPreviousSentence(value);
 		}
-		for(NegativeTrainingInstance n : negInstances){
-			boolean value = (getSentenceNr(n.getBegin()) == getSentenceNr(n.getAnaphora().getBegin()) -1 );
-			n.setP_A_InPreviousSentence(value);
-		}	
 	}
 	
 	public void annotateInterSentenceDiffFeature(){
@@ -109,64 +108,38 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 			int anaphoraS = getSentenceNr(a.getBegin());
 			int antecedentS = getSentenceNr(a.getAntecedent().getBegin());
 			float value = (anaphoraS - antecedentS)/ 50.0f;
-			a.setP_A_InterSentenceDiff(value);
-		}
-		for(NegativeTrainingInstance n : negInstances){
-			int anaphoraS = getSentenceNr(n.getAnaphora().getBegin());
-			int negS = getSentenceNr(n.getBegin());
-			float value = (anaphoraS - negS)/ 50.0f;
-			n.setP_A_InterSentenceDiff(value);
+			a.getPronounAntecedentFeatures().setP_A_InterSentenceDiff(value);
 		}
 	}
 	
 	public void annotateIntraSentenceDiffFeature(){
 		for(Anaphora a : anaphoras){
 			float value = (a.getBegin() - a.getAntecedent().getBegin())/ 50.0f;
-			a.setP_A_IntraSentenceDiff(value);
-		}
-		for(NegativeTrainingInstance n : negInstances){
-			float value = (n.getAnaphora().getBegin() - n.getBegin())/ 50.0f;
-			n.setP_A_IntraSentenceDiff(value);
+			a.getPronounAntecedentFeatures().setP_A_IntraSentenceDiff(value);
 		}
 	}
 	
 	public void annotatePrepositionalParallelFeature(){
 		for(Anaphora a : anaphoras){
 			boolean value = prepositionalParallel(a, a.getAntecedent());
-			a.setP_A_PrepositionalParallel(value);
+			a.getPronounAntecedentFeatures().setP_A_PrepositionalParallel(value);
 		}	
-		for(NegativeTrainingInstance n : negInstances){
-			boolean value = prepositionalParallel(n.getAnaphora(), n);	
-			n.setP_A_PrepositionalParallel(value);
-		}
 	}
 	
 	public void annotateRelationMatchFeature(){
 		//TODO: FIX
-		System.out.println("Positive:");
 		for(Anaphora a : anaphoras){
 			System.out.println("Instance:");
 			boolean value = relationMatch(a, a.getAntecedent());
 			System.out.println("Value: " + value);
-			a.setP_A_RelationMatch(value);
-		}
-		System.out.println("Negative:");
-		for(NegativeTrainingInstance n : negInstances){
-			System.out.println("Instance:");
-			boolean value = relationMatch(n.getAnaphora(), n);
-			System.out.println("Value: " + value);
-			n.setP_A_RelationMatch(value);
+			a.getPronounAntecedentFeatures().setP_A_RelationMatch(value);
 		}
 	}
 		
 	public void annotateParentCategoryMatch(){
 		for(Anaphora a : anaphoras){
 			boolean value = parentCategoryMatch(a, a.getAntecedent());
-			a.setP_A_ParentCatMatch(value);
-		}
-		for(NegativeTrainingInstance n : negInstances){
-			boolean value = parentCategoryMatch(n.getAnaphora(), n);
-			n.setP_A_ParentCatMatch(value);
+			a.getPronounAntecedentFeatures().setP_A_ParentCatMatch(value);
 		}
 	}
 
@@ -174,7 +147,7 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 		for(Anaphora a : anaphoras){
 			Token anaphoraparent = getParent(a);
 			if(anaphoraparent == null){
-				a.setP_A_ParentWordMatch(false);
+				a.getPronounAntecedentFeatures().setP_A_ParentWordMatch(false);
 				break;			
 			}
 			String anaphoraParentString = anaphoraparent.getCoveredText();
@@ -189,27 +162,7 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 					value = true;
 				}
 			}
-			a.setP_A_ParentWordMatch(value);
-		}
-		for(NegativeTrainingInstance n : negInstances){
-			Token anaphoraparent = getParent(n.getAnaphora());
-			if(anaphoraparent == null){
-				n.setP_A_ParentWordMatch(false);
-				break;			
-			}		
-			String anaphoraParentString = anaphoraparent.getCoveredText();
-			List<Token> anteTokens = getCoveredTokens(n.getBegin(), n.getEnd());
-			boolean value = false;
-			for(Token t : anteTokens){
-				Token tParent = getParent(t);
-				if(tParent == null)
-					break;		
-				String tParentString = tParent.getCoveredText();
-				if(anaphoraParentString.equalsIgnoreCase(tParentString)){
-					value = true;
-				}
-			}
-			n.setP_A_ParentWordMatch(value);
+			a.getPronounAntecedentFeatures().setP_A_ParentWordMatch(value);
 		}
 	}
 	
@@ -221,44 +174,23 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 			if(valueA == valueB){
 				returnValue = true;
 			}
-			a.setP_A_QuotationSituation(returnValue);
-		}
-		for(NegativeTrainingInstance n : negInstances){
-			boolean valueA = isInQuotes(n);
-			boolean valueB = isInQuotes(n.getAnaphora());
-			boolean returnValue = false;
-			if(valueA == valueB){
-				returnValue = true;
-			}
-			n.setP_A_QuotationSituation(returnValue);
+			a.getPronounAntecedentFeatures().setP_A_QuotationSituation(returnValue);
 		}
 	}
 
 	public void annotateSingularMatchFeature(){
 		for(Anaphora a : anaphoras){
 			boolean value = isBothSingular(a, a.getAntecedent());
-			a.setP_A_SingularMatch(value);
+			a.getPronounAntecedentFeatures().setP_A_SingularMatch(value);
 		}
-		for(NegativeTrainingInstance n : negInstances){
-			boolean value = isBothSingular(n.getAnaphora(), n);
-			n.setP_A_SingularMatch(value);
-		}	
 	}
 	
 	public void annotatePluralMatchFeature(){
 		for(Anaphora a : anaphoras){
 			boolean value = isBothPlural(a, a.getAntecedent());
-			a.setP_A_PluralMatch(value);
+			a.getPronounAntecedentFeatures().setP_A_PluralMatch(value);
 		}
-		for(NegativeTrainingInstance n : negInstances){
-			boolean value = isBothPlural(n.getAnaphora(), n);
-			n.setP_A_PluralMatch(value);
-		}	
 	}
-	
-
-	
-	
 
 	private String getPrepositionText(Annotation anno){
 		Token govToken = null;

@@ -1,25 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
-  <name>MyCoreferenceChain</name>
+  <name>PronounAntecedentFeatures</name>
   <description/>
   <version>1.0</version>
   <vendor/>
-<imports>
-    <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/Anaphora.xml"/>
-  <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/AntecedentFeatures.xml"/>
-  </imports>
-  <types>
+<types>
     <typeDescription>
-      <name>de.unidue.henryvdv.ba.type.NegativeTrainingInstance</name>
+      <name>de.unidue.henryvdv.ba.type.PronounAntecedentFeatures</name>
       <description/>
       <supertypeName>uima.tcas.Annotation</supertypeName>
       <features>
         <featureDescription>
-          <name>anaphora</name>
-          <description/>
-          <rangeTypeName>de.unidue.henryvdv.ba.type.Anaphora</rangeTypeName>
-        </featureDescription>
-      <featureDescription>
           <name>p_A_InSameSentence</name>
           <description/>
           <rangeTypeName>uima.cas.Boolean</rangeTypeName>
@@ -44,7 +35,7 @@
           <description/>
           <rangeTypeName>uima.cas.Float</rangeTypeName>
         </featureDescription>
-      <featureDescription>
+        <featureDescription>
           <name>p_A_InterSentenceDiff</name>
           <description/>
           <rangeTypeName>uima.cas.Float</rangeTypeName>
@@ -88,11 +79,6 @@
           <name>p_A_QuotationSituation</name>
           <description/>
           <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-      <featureDescription>
-          <name>antecedentFeatures</name>
-          <description/>
-          <rangeTypeName>de.unidue.henryvdv.ba.type.AntecedentFeatures</rangeTypeName>
         </featureDescription>
       </features>
     </typeDescription>

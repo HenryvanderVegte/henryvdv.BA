@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Wed Aug 10 13:46:48 CEST 2016
+ * Updated by JCasGen Thu Aug 11 18:56:41 CEST 2016
  * @generated */
 public class AntecedentFeatures_Type extends Annotation_Type {
   /** @generated 

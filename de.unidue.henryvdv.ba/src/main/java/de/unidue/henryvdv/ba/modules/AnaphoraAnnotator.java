@@ -68,6 +68,7 @@ extends JCasAnnotator_ImplBase{
 			if(bound[0] != 0 || bound[1] != 0){
 				Antecedent antecedent = new Antecedent(aJCas, bound[0], bound[1]);
 				anaphoras.get(i).setAntecedent(antecedent);
+				anaphoras.get(i).setHasCorrectAntecedent(true);
 				anaphoras.get(i).addToIndexes();
 			}
 			

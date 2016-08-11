@@ -7,6 +7,7 @@
 <imports>
     <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/Antecedent.xml"/>
   <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/AntecedentFeatures.xml"/>
+  <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/PronounAntecedentFeatures.xml"/>
   </imports>
   <types>
     <typeDescription>
@@ -20,79 +21,19 @@
           <rangeTypeName>de.unidue.henryvdv.ba.type.Antecedent</rangeTypeName>
         </featureDescription>
       <featureDescription>
-          <name>p_A_InSameSentence</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_InPreviousSentence</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_SingularMatch</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_PluralMatch</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_IntraSentenceDiff</name>
-          <description/>
-          <rangeTypeName>uima.cas.Float</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_InterSentenceDiff</name>
-          <description/>
-          <rangeTypeName>uima.cas.Float</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_PrepositionalParallel</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-      <featureDescription>
-          <name>p_A_BindingTheory</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_ReflexiveSubjMatch</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_RelationMatch</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_ParentRelationMatch</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_ParentCatMatch</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_ParentWordMatch</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_QuotationSituation</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-      <featureDescription>
           <name>antecedentFeatures</name>
           <description/>
           <rangeTypeName>de.unidue.henryvdv.ba.type.AntecedentFeatures</rangeTypeName>
+        </featureDescription>
+      <featureDescription>
+          <name>pronounAntecedentFeatures</name>
+          <description/>
+          <rangeTypeName>de.unidue.henryvdv.ba.type.PronounAntecedentFeatures</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>hasCorrectAntecedent</name>
+          <description>Determines if it is a positive or negative instance</description>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
         </featureDescription>
       </features>
     </typeDescription>

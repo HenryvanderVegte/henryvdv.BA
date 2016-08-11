@@ -22,7 +22,6 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Antecedent;
-import de.unidue.henryvdv.ba.type.NegativeTrainingInstance;
 
 public class SVMTrainingInstanceCreator 
 extends JCasAnnotator_ImplBase{
@@ -32,9 +31,13 @@ extends JCasAnnotator_ImplBase{
 	private String trainFilePath;
 	private List<String> posFeatureVectors;
 	private List<String> negFeatureVectors;
-	Collection<Anaphora> anaphoras;
-	Collection<NegativeTrainingInstance> negTrainInstances;
-	Collection<NP> nps;
+	private Collection<Anaphora> anaphoras;
+	private Collection<NP> nps;
+	
+	private int currentFeatureCount;
+	private String currentFeatureVector;
+	private Anaphora currentAnaphora;
+	
 
     public static final String PARAM_TRAINFILE_DIRECTORY= "TrainFileDirectory";
     @ConfigurationParameter(name = PARAM_TRAINFILE_DIRECTORY, mandatory = true, defaultValue = "src/main/resources/svm/train")
@@ -47,8 +50,6 @@ extends JCasAnnotator_ImplBase{
 		trainFile = new File(trainFilePath);
 		posFeatureVectors = new ArrayList<String>();
 		negFeatureVectors = new ArrayList<String>();
-
-		
 		
 		if(trainFile.isFile()){
 			trainFile.delete();
@@ -68,10 +69,8 @@ extends JCasAnnotator_ImplBase{
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
-		negTrainInstances = JCasUtil.select(aJCas, NegativeTrainingInstance.class);
 		nps = JCasUtil.select(aJCas, NP.class);
-		generatePosFeatureVectors();
-		generateNegFeatureVectors();
+		generateFeatureVectors();
 	}
 	
 	@Override
@@ -80,62 +79,47 @@ extends JCasAnnotator_ImplBase{
 		writeFeaturevectorsToFile();
 	}
 	
-	private void generatePosFeatureVectors(){
+	private void generateFeatureVectors(){
 
-		for(Anaphora an : anaphoras){
-			String featureVector = "1 ";
-			
-			//Same Sentence : 
-			if(an.getP_A_InSameSentence()){
-				featureVector += "1:1";
+		for(Anaphora anaphora : anaphoras){
+			currentFeatureCount = 1;
+			currentFeatureVector = "";
+			currentAnaphora = anaphora;
+			if(anaphora.getHasCorrectAntecedent()){
+				currentFeatureVector += "1";
 			} else {
-				featureVector += "1:0";
+				currentFeatureVector += "-1";
 			}
-			featureVector += " ";
 			
-			//In Previous Sentence : 
-			if(an.getP_A_InPreviousSentence()){
-				featureVector += "2:1";
+			addPA_SameSentence();
+			addPA_IntraSentenceDiff();
+			addPA_InPreviousSentence();
+			addPA_InterSentenceDiff();
+			addPA_PrepositionalParallel();
+			addPA_ParentCatMatch();
+			addPA_ParentWordMatch();
+			addPA_QuotationSituation();
+			addPA_SingularMatch();
+			addPA_PluralMatch();
+			
+			addA_AntecedentFrequency();
+			addA_Subject();
+			addA_Object();
+			addA_Predicate();
+			addA_Pronominal();
+			addA_HeadWordEmphasis();
+			addA_Conjunction();
+			addA_PrenominalModifier();
+			addA_Org();
+			addA_Person();
+			
+			if(anaphora.getHasCorrectAntecedent()){
+				posFeatureVectors.add(currentFeatureVector);
 			} else {
-				featureVector += "2:0";
+				negFeatureVectors.add(currentFeatureVector);
 			}
-			featureVector += " ";
 			
-			//Inter-Sentence Diff.:			
-			featureVector += "3:" + an.getP_A_InterSentenceDiff();
-			
-			
-			posFeatureVectors.add(featureVector);
 		}
-	}
-	
-	private void generateNegFeatureVectors(){
-		for(NegativeTrainingInstance neg : negTrainInstances){
-			String featureVector = "-1 ";
-			
-			//Same Sentence : 
-			if(neg.getP_A_InSameSentence()){
-				featureVector += "1:1";
-			} else {
-				featureVector += "1:0";
-			}
-			featureVector += " ";
-			
-			//In Previous Sentence : 
-			if(neg.getP_A_InPreviousSentence()){
-				featureVector += "2:1";
-			} else {
-				featureVector += "2:0";
-			}
-			featureVector += " ";
-			
-			//Inter-Sentence Diff.:			
-			featureVector += "3:" + neg.getP_A_InterSentenceDiff();
-			
-			negFeatureVectors.add(featureVector);
-		}
-		
-		
 	}
 	
 	
@@ -169,9 +153,103 @@ extends JCasAnnotator_ImplBase{
 			   System.out.println("Failed to close writer.");
 			   e.printStackTrace();
 		   }
+		}		
+	}
+	
+	private void addPA_SameSentence(){
+		addBinarizedFeature(currentAnaphora.getPronounAntecedentFeatures().getP_A_InSameSentence());
+	}	
+	
+	private void addPA_IntraSentenceDiff(){
+		addFloatFeature(currentAnaphora.getPronounAntecedentFeatures().getP_A_IntraSentenceDiff());
+	}
+	
+	private void addPA_InPreviousSentence(){
+		addBinarizedFeature(currentAnaphora.getPronounAntecedentFeatures().getP_A_InPreviousSentence());
+	}
+	
+	private void addPA_InterSentenceDiff(){
+		addFloatFeature(currentAnaphora.getPronounAntecedentFeatures().getP_A_InterSentenceDiff());
+	}
+	
+	private void addPA_PrepositionalParallel(){
+		addBinarizedFeature(currentAnaphora.getPronounAntecedentFeatures().getP_A_PrepositionalParallel());
+	}
+	
+	private void addPA_ParentCatMatch(){
+		addBinarizedFeature(currentAnaphora.getPronounAntecedentFeatures().getP_A_ParentCatMatch());
+	}
+	
+	private void addPA_ParentWordMatch(){
+		addBinarizedFeature(currentAnaphora.getPronounAntecedentFeatures().getP_A_ParentWordMatch());
+	}
+	
+	private void addPA_QuotationSituation(){
+		addBinarizedFeature(currentAnaphora.getPronounAntecedentFeatures().getP_A_QuotationSituation());
+	}
+	
+	private void addPA_SingularMatch(){
+		addBinarizedFeature(currentAnaphora.getPronounAntecedentFeatures().getP_A_SingularMatch());
+	}
+	
+	private void addPA_PluralMatch(){
+		addBinarizedFeature(currentAnaphora.getPronounAntecedentFeatures().getP_A_PluralMatch());
+	}
+	
+	private void addA_AntecedentFrequency(){
+		addFloatFeature(currentAnaphora.getAntecedentFeatures().getA_AntecedentFrequency());
+	}
+	
+	private void addA_Subject(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_Subject());
+	}	
+	
+	private void addA_Object(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_Object());
+	}
+	
+	private void addA_Predicate(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_Predicate());
+	}
+	
+	private void addA_Pronominal(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_Pronominal());
+	}
+	
+	private void addA_HeadWordEmphasis(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_HeadWordEmphasis());
+	}
+	
+	private void addA_Conjunction(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_Conjunction());
+	}
+	
+	private void addA_PrenominalModifier(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_PrenominalModifier());
+	}
+	
+	private void addA_Org(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_Org());
+	}
+	
+	private void addA_Person(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_Person());
+	}
+	
+	private void addBinarizedFeature(boolean value){
+		currentFeatureVector += " ";
+		if(value){
+			currentFeatureVector += currentFeatureCount + ":1";
+		} else {
+			currentFeatureVector += currentFeatureCount + ":0";
 		}
-		
-		
+		currentFeatureCount++;
+	}
+	
+	private void addFloatFeature(float value){
+		currentFeatureVector += " ";  
+		currentFeatureVector += currentFeatureCount + ":" + value;
+		currentFeatureCount++;
 	}
 	
 }

@@ -1,5 +1,5 @@
 
-/* First created by JCasGen Fri Jul 29 14:01:49 CEST 2016 */
+/* First created by JCasGen Thu Aug 11 18:52:08 CEST 2016 */
 package de.unidue.henryvdv.ba.type;
 
 import org.apache.uima.jcas.JCas;
@@ -14,9 +14,9 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Wed Aug 10 13:46:44 CEST 2016
+ * Updated by JCasGen Thu Aug 11 18:56:41 CEST 2016
  * @generated */
-public class NegativeTrainingInstance_Type extends Annotation_Type {
+public class PronounAntecedentFeatures_Type extends Annotation_Type {
   /** @generated 
    * @return the generator for this type
    */
@@ -26,49 +26,25 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
   private final FSGenerator fsGenerator = 
     new FSGenerator() {
       public FeatureStructure createFS(int addr, CASImpl cas) {
-  			 if (NegativeTrainingInstance_Type.this.useExistingInstance) {
+  			 if (PronounAntecedentFeatures_Type.this.useExistingInstance) {
   			   // Return eq fs instance if already created
-  		     FeatureStructure fs = NegativeTrainingInstance_Type.this.jcas.getJfsFromCaddr(addr);
+  		     FeatureStructure fs = PronounAntecedentFeatures_Type.this.jcas.getJfsFromCaddr(addr);
   		     if (null == fs) {
-  		       fs = new NegativeTrainingInstance(addr, NegativeTrainingInstance_Type.this);
-  			   NegativeTrainingInstance_Type.this.jcas.putJfsFromCaddr(addr, fs);
+  		       fs = new PronounAntecedentFeatures(addr, PronounAntecedentFeatures_Type.this);
+  			   PronounAntecedentFeatures_Type.this.jcas.putJfsFromCaddr(addr, fs);
   			   return fs;
   		     }
   		     return fs;
-        } else return new NegativeTrainingInstance(addr, NegativeTrainingInstance_Type.this);
+        } else return new PronounAntecedentFeatures(addr, PronounAntecedentFeatures_Type.this);
   	  }
     };
   /** @generated */
   @SuppressWarnings ("hiding")
-  public final static int typeIndexID = NegativeTrainingInstance.typeIndexID;
+  public final static int typeIndexID = PronounAntecedentFeatures.typeIndexID;
   /** @generated 
      @modifiable */
   @SuppressWarnings ("hiding")
-  public final static boolean featOkTst = JCasRegistry.getFeatOkTst("de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
- 
-  /** @generated */
-  final Feature casFeat_anaphora;
-  /** @generated */
-  final int     casFeatCode_anaphora;
-  /** @generated
-   * @param addr low level Feature Structure reference
-   * @return the feature value 
-   */ 
-  public int getAnaphora(int addr) {
-        if (featOkTst && casFeat_anaphora == null)
-      jcas.throwFeatMissing("anaphora", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
-    return ll_cas.ll_getRefValue(addr, casFeatCode_anaphora);
-  }
-  /** @generated
-   * @param addr low level Feature Structure reference
-   * @param v value to set 
-   */    
-  public void setAnaphora(int addr, int v) {
-        if (featOkTst && casFeat_anaphora == null)
-      jcas.throwFeatMissing("anaphora", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
-    ll_cas.ll_setRefValue(addr, casFeatCode_anaphora, v);}
-    
-  
+  public final static boolean featOkTst = JCasRegistry.getFeatOkTst("de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
  
   /** @generated */
   final Feature casFeat_p_A_InSameSentence;
@@ -80,7 +56,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */ 
   public boolean getP_A_InSameSentence(int addr) {
         if (featOkTst && casFeat_p_A_InSameSentence == null)
-      jcas.throwFeatMissing("p_A_InSameSentence", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_InSameSentence", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_InSameSentence);
   }
   /** @generated
@@ -89,7 +65,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */    
   public void setP_A_InSameSentence(int addr, boolean v) {
         if (featOkTst && casFeat_p_A_InSameSentence == null)
-      jcas.throwFeatMissing("p_A_InSameSentence", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_InSameSentence", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_InSameSentence, v);}
     
   
@@ -104,7 +80,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */ 
   public boolean getP_A_InPreviousSentence(int addr) {
         if (featOkTst && casFeat_p_A_InPreviousSentence == null)
-      jcas.throwFeatMissing("p_A_InPreviousSentence", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_InPreviousSentence", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_InPreviousSentence);
   }
   /** @generated
@@ -113,7 +89,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */    
   public void setP_A_InPreviousSentence(int addr, boolean v) {
         if (featOkTst && casFeat_p_A_InPreviousSentence == null)
-      jcas.throwFeatMissing("p_A_InPreviousSentence", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_InPreviousSentence", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_InPreviousSentence, v);}
     
   
@@ -128,7 +104,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */ 
   public boolean getP_A_SingularMatch(int addr) {
         if (featOkTst && casFeat_p_A_SingularMatch == null)
-      jcas.throwFeatMissing("p_A_SingularMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_SingularMatch", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_SingularMatch);
   }
   /** @generated
@@ -137,7 +113,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */    
   public void setP_A_SingularMatch(int addr, boolean v) {
         if (featOkTst && casFeat_p_A_SingularMatch == null)
-      jcas.throwFeatMissing("p_A_SingularMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_SingularMatch", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_SingularMatch, v);}
     
   
@@ -152,7 +128,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */ 
   public boolean getP_A_PluralMatch(int addr) {
         if (featOkTst && casFeat_p_A_PluralMatch == null)
-      jcas.throwFeatMissing("p_A_PluralMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_PluralMatch", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_PluralMatch);
   }
   /** @generated
@@ -161,7 +137,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */    
   public void setP_A_PluralMatch(int addr, boolean v) {
         if (featOkTst && casFeat_p_A_PluralMatch == null)
-      jcas.throwFeatMissing("p_A_PluralMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_PluralMatch", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_PluralMatch, v);}
     
   
@@ -176,7 +152,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */ 
   public float getP_A_IntraSentenceDiff(int addr) {
         if (featOkTst && casFeat_p_A_IntraSentenceDiff == null)
-      jcas.throwFeatMissing("p_A_IntraSentenceDiff", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_IntraSentenceDiff", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     return ll_cas.ll_getFloatValue(addr, casFeatCode_p_A_IntraSentenceDiff);
   }
   /** @generated
@@ -185,7 +161,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */    
   public void setP_A_IntraSentenceDiff(int addr, float v) {
         if (featOkTst && casFeat_p_A_IntraSentenceDiff == null)
-      jcas.throwFeatMissing("p_A_IntraSentenceDiff", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_IntraSentenceDiff", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     ll_cas.ll_setFloatValue(addr, casFeatCode_p_A_IntraSentenceDiff, v);}
     
   
@@ -200,7 +176,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */ 
   public float getP_A_InterSentenceDiff(int addr) {
         if (featOkTst && casFeat_p_A_InterSentenceDiff == null)
-      jcas.throwFeatMissing("p_A_InterSentenceDiff", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_InterSentenceDiff", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     return ll_cas.ll_getFloatValue(addr, casFeatCode_p_A_InterSentenceDiff);
   }
   /** @generated
@@ -209,7 +185,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */    
   public void setP_A_InterSentenceDiff(int addr, float v) {
         if (featOkTst && casFeat_p_A_InterSentenceDiff == null)
-      jcas.throwFeatMissing("p_A_InterSentenceDiff", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_InterSentenceDiff", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     ll_cas.ll_setFloatValue(addr, casFeatCode_p_A_InterSentenceDiff, v);}
     
   
@@ -224,7 +200,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */ 
   public boolean getP_A_PrepositionalParallel(int addr) {
         if (featOkTst && casFeat_p_A_PrepositionalParallel == null)
-      jcas.throwFeatMissing("p_A_PrepositionalParallel", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_PrepositionalParallel", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_PrepositionalParallel);
   }
   /** @generated
@@ -233,7 +209,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */    
   public void setP_A_PrepositionalParallel(int addr, boolean v) {
         if (featOkTst && casFeat_p_A_PrepositionalParallel == null)
-      jcas.throwFeatMissing("p_A_PrepositionalParallel", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_PrepositionalParallel", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_PrepositionalParallel, v);}
     
   
@@ -248,7 +224,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */ 
   public boolean getP_A_BindingTheory(int addr) {
         if (featOkTst && casFeat_p_A_BindingTheory == null)
-      jcas.throwFeatMissing("p_A_BindingTheory", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_BindingTheory", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_BindingTheory);
   }
   /** @generated
@@ -257,7 +233,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */    
   public void setP_A_BindingTheory(int addr, boolean v) {
         if (featOkTst && casFeat_p_A_BindingTheory == null)
-      jcas.throwFeatMissing("p_A_BindingTheory", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_BindingTheory", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_BindingTheory, v);}
     
   
@@ -272,7 +248,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */ 
   public boolean getP_A_ReflexiveSubjMatch(int addr) {
         if (featOkTst && casFeat_p_A_ReflexiveSubjMatch == null)
-      jcas.throwFeatMissing("p_A_ReflexiveSubjMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_ReflexiveSubjMatch", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_ReflexiveSubjMatch);
   }
   /** @generated
@@ -281,7 +257,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */    
   public void setP_A_ReflexiveSubjMatch(int addr, boolean v) {
         if (featOkTst && casFeat_p_A_ReflexiveSubjMatch == null)
-      jcas.throwFeatMissing("p_A_ReflexiveSubjMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_ReflexiveSubjMatch", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_ReflexiveSubjMatch, v);}
     
   
@@ -296,7 +272,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */ 
   public boolean getP_A_RelationMatch(int addr) {
         if (featOkTst && casFeat_p_A_RelationMatch == null)
-      jcas.throwFeatMissing("p_A_RelationMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_RelationMatch", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_RelationMatch);
   }
   /** @generated
@@ -305,7 +281,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */    
   public void setP_A_RelationMatch(int addr, boolean v) {
         if (featOkTst && casFeat_p_A_RelationMatch == null)
-      jcas.throwFeatMissing("p_A_RelationMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_RelationMatch", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_RelationMatch, v);}
     
   
@@ -320,7 +296,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */ 
   public boolean getP_A_ParentRelationMatch(int addr) {
         if (featOkTst && casFeat_p_A_ParentRelationMatch == null)
-      jcas.throwFeatMissing("p_A_ParentRelationMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_ParentRelationMatch", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_ParentRelationMatch);
   }
   /** @generated
@@ -329,7 +305,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */    
   public void setP_A_ParentRelationMatch(int addr, boolean v) {
         if (featOkTst && casFeat_p_A_ParentRelationMatch == null)
-      jcas.throwFeatMissing("p_A_ParentRelationMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_ParentRelationMatch", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_ParentRelationMatch, v);}
     
   
@@ -344,7 +320,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */ 
   public boolean getP_A_ParentCatMatch(int addr) {
         if (featOkTst && casFeat_p_A_ParentCatMatch == null)
-      jcas.throwFeatMissing("p_A_ParentCatMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_ParentCatMatch", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_ParentCatMatch);
   }
   /** @generated
@@ -353,7 +329,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */    
   public void setP_A_ParentCatMatch(int addr, boolean v) {
         if (featOkTst && casFeat_p_A_ParentCatMatch == null)
-      jcas.throwFeatMissing("p_A_ParentCatMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_ParentCatMatch", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_ParentCatMatch, v);}
     
   
@@ -368,7 +344,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */ 
   public boolean getP_A_ParentWordMatch(int addr) {
         if (featOkTst && casFeat_p_A_ParentWordMatch == null)
-      jcas.throwFeatMissing("p_A_ParentWordMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_ParentWordMatch", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_ParentWordMatch);
   }
   /** @generated
@@ -377,7 +353,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */    
   public void setP_A_ParentWordMatch(int addr, boolean v) {
         if (featOkTst && casFeat_p_A_ParentWordMatch == null)
-      jcas.throwFeatMissing("p_A_ParentWordMatch", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_ParentWordMatch", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_ParentWordMatch, v);}
     
   
@@ -392,7 +368,7 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */ 
   public boolean getP_A_QuotationSituation(int addr) {
         if (featOkTst && casFeat_p_A_QuotationSituation == null)
-      jcas.throwFeatMissing("p_A_QuotationSituation", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_QuotationSituation", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_A_QuotationSituation);
   }
   /** @generated
@@ -401,32 +377,8 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
    */    
   public void setP_A_QuotationSituation(int addr, boolean v) {
         if (featOkTst && casFeat_p_A_QuotationSituation == null)
-      jcas.throwFeatMissing("p_A_QuotationSituation", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+      jcas.throwFeatMissing("p_A_QuotationSituation", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_QuotationSituation, v);}
-    
-  
- 
-  /** @generated */
-  final Feature casFeat_antecedentFeatures;
-  /** @generated */
-  final int     casFeatCode_antecedentFeatures;
-  /** @generated
-   * @param addr low level Feature Structure reference
-   * @return the feature value 
-   */ 
-  public int getAntecedentFeatures(int addr) {
-        if (featOkTst && casFeat_antecedentFeatures == null)
-      jcas.throwFeatMissing("antecedentFeatures", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
-    return ll_cas.ll_getRefValue(addr, casFeatCode_antecedentFeatures);
-  }
-  /** @generated
-   * @param addr low level Feature Structure reference
-   * @param v value to set 
-   */    
-  public void setAntecedentFeatures(int addr, int v) {
-        if (featOkTst && casFeat_antecedentFeatures == null)
-      jcas.throwFeatMissing("antecedentFeatures", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
-    ll_cas.ll_setRefValue(addr, casFeatCode_antecedentFeatures, v);}
     
   
 
@@ -437,13 +389,9 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
 	 * @param jcas JCas
 	 * @param casType Type 
 	 */
-  public NegativeTrainingInstance_Type(JCas jcas, Type casType) {
+  public PronounAntecedentFeatures_Type(JCas jcas, Type casType) {
     super(jcas, casType);
     casImpl.getFSClassRegistry().addGeneratorForType((TypeImpl)this.casType, getFSGenerator());
-
- 
-    casFeat_anaphora = jcas.getRequiredFeatureDE(casType, "anaphora", "de.unidue.henryvdv.ba.type.Anaphora", featOkTst);
-    casFeatCode_anaphora  = (null == casFeat_anaphora) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_anaphora).getCode();
 
  
     casFeat_p_A_InSameSentence = jcas.getRequiredFeatureDE(casType, "p_A_InSameSentence", "uima.cas.Boolean", featOkTst);
@@ -500,10 +448,6 @@ public class NegativeTrainingInstance_Type extends Annotation_Type {
  
     casFeat_p_A_QuotationSituation = jcas.getRequiredFeatureDE(casType, "p_A_QuotationSituation", "uima.cas.Boolean", featOkTst);
     casFeatCode_p_A_QuotationSituation  = (null == casFeat_p_A_QuotationSituation) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_A_QuotationSituation).getCode();
-
- 
-    casFeat_antecedentFeatures = jcas.getRequiredFeatureDE(casType, "antecedentFeatures", "de.unidue.henryvdv.ba.type.AntecedentFeatures", featOkTst);
-    casFeatCode_antecedentFeatures  = (null == casFeat_antecedentFeatures) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_antecedentFeatures).getCode();
 
   }
 }

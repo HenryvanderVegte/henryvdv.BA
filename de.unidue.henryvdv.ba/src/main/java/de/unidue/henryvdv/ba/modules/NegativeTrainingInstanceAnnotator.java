@@ -12,7 +12,6 @@ import org.apache.uima.jcas.JCas;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Antecedent;
-import de.unidue.henryvdv.ba.type.NegativeTrainingInstance;
 
 public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 
@@ -30,16 +29,21 @@ public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 	}
 
 	public void generateNegativeTrainingInstances(){
+		List<Anaphora> negAnaphoras = new ArrayList<Anaphora>();
 		for(Anaphora an : anaphoras){
 			for(NP np : getNPSBetween(an, an.getAntecedent())){
-
-				NegativeTrainingInstance instance = new NegativeTrainingInstance(aJCas, np.getBegin(), np.getEnd());
-				instance.setAnaphora(an);
-				instance.addToIndexes();
 				
+				Anaphora negInst = new Anaphora(aJCas, an.getBegin(), an.getEnd());				
+				Antecedent antecedent = new Antecedent(aJCas, np.getBegin(), np.getEnd());				
+				negInst.setAntecedent(antecedent);
+				negInst.setHasCorrectAntecedent(false);
+				negAnaphoras.add(negInst);
 			}
-			
 		}
+		for(Anaphora a : negAnaphoras){
+			a.addToIndexes();
+		}
+		
 	}
 	
 	private List<NP> getNPSBetween(Anaphora an, Antecedent ant){

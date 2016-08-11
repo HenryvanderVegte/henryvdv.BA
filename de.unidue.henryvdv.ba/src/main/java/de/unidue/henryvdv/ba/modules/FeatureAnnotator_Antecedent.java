@@ -16,14 +16,31 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.AntecedentFeatures;
-import de.unidue.henryvdv.ba.type.NegativeTrainingInstance;
 import de.unidue.henryvdv.ba.type.Quotation;
 import de.unidue.henryvdv.ba.util.AnnotationUtils;
 
 public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 
+	/************************************************
+	 *  Annotates the Antecedent-Features   		*
+	 *  -Antecedent Frequency (float)				*
+	 *  -Subject (bool)								*
+	 *  -Object (bool)								*
+	 *  -Predicate (bool)							*
+	 *  -Pronominal (bool)							*
+	 *  -Head-Word Emphasis (bool)					*
+	 *  -Conjunction (bool)							*
+	 *  -Prenominal Modifier (bool)					*
+	 *  -Organization (bool)						*
+	 *  -Person (bool)								*
+	 *  											*
+	 *  Missing:									*
+	 *  ...											*
+	 * 												*
+	 ************************************************/
+	
+	
 	private JCas aJCas;
-	private Collection<NegativeTrainingInstance> negInstances;
 	private Collection<Anaphora> anaphoras;
 	private Collection<Token> tokens;
 	private Collection<Sentence> sentences;
@@ -36,7 +53,6 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
-		negInstances = JCasUtil.select(aJCas, NegativeTrainingInstance.class);
 		sentences = JCasUtil.select(aJCas, Sentence.class);
 		dependencies = JCasUtil.select(aJCas, Dependency.class);
 		tokens = JCasUtil.select(aJCas, Token.class);
@@ -60,10 +76,6 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 			AntecedentFeatures a = new AntecedentFeatures(aJCas);
 			anaphora.setAntecedentFeatures(a);
 		}
-		for(NegativeTrainingInstance n : negInstances){
-			AntecedentFeatures a = new AntecedentFeatures(aJCas);
-			n.setAntecedentFeatures(a);
-		}
 	}
 	
 	public void annotateAntecedentFrequencyFeature(){
@@ -71,11 +83,6 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 			List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());		
 			int count = getNrOfOccurences(covTokens);
 			anaphora.getAntecedentFeatures().setA_AntecedentFrequency((float)count / 10f);
-		}
-		for(NegativeTrainingInstance n : negInstances){
-			List<Token> covTokens = getCoveredTokens(n);		
-			int count = getNrOfOccurences(covTokens);
-			n.getAntecedentFeatures().setA_AntecedentFrequency((float)count / 10f);
 		}
 	}
 	
@@ -90,16 +97,6 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 			}
 			anaphora.getAntecedentFeatures().setA_Subject(containsSubj);
 		}
-		for(NegativeTrainingInstance n : negInstances){
-			List<Token> covTokens = getCoveredTokens(n);	
-			boolean containsSubj = false;
-			for(Token t : covTokens){				
-				if(isSubject(t)){
-					containsSubj = true;
-				}
-			}
-			n.getAntecedentFeatures().setA_Subject(containsSubj);
-		}	
 	}
 	
 	public void annotateObjectFeature(){
@@ -113,16 +110,6 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 			}
 			anaphora.getAntecedentFeatures().setA_Object(containsObj);
 		}
-		for(NegativeTrainingInstance n : negInstances){
-			List<Token> covTokens = getCoveredTokens(n);	
-			boolean containsObj = false;
-			for(Token t : covTokens){				
-				if(isObject(t)){
-					containsObj = true;
-				}
-			}
-			n.getAntecedentFeatures().setA_Object(containsObj);
-		}	
 	}
 
 	public void annotatePredicateFeature(){
@@ -136,16 +123,6 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 			}
 			anaphora.getAntecedentFeatures().setA_Predicate(containsPredicate);
 		}
-		for(NegativeTrainingInstance n : negInstances){
-			List<Token> covTokens = getCoveredTokens(n);	
-			boolean containsPredicate = false;
-			for(Token t : covTokens){				
-				if(isPredicate(t)){
-					containsPredicate = true;
-				}
-			}
-			n.getAntecedentFeatures().setA_Predicate(containsPredicate);
-		}	
 	}
 	
 	public void annotatePronounFeature(){
@@ -158,18 +135,7 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 				}
 			}
 			anaphora.getAntecedentFeatures().setA_Pronominal(containsPronoun);
-		}
-		for(NegativeTrainingInstance n : negInstances){
-			List<Token> covTokens = getCoveredTokens(n);	
-			boolean containsPronoun = false;
-			for(Token t : covTokens){				
-				if(isPronoun(t)){
-					containsPronoun = true;
-				}
-			}
-			n.getAntecedentFeatures().setA_Pronominal(containsPronoun);
-		}	
-		
+		}		
 	}
 	
 	public void annotateHeadWordEmphasisFeature(){
@@ -183,19 +149,7 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 				}
 			}
 			anaphora.getAntecedentFeatures().setA_HeadWordEmphasis(!parentIsNoun);
-		}
-		for(NegativeTrainingInstance n : negInstances){
-			List<Token> covTokens = getCoveredTokens(n);
-			boolean parentIsNoun = false;
-			for(Token t : covTokens){
-				Token parent = getParent(t);
-				if(parent != null && isNoun(parent)){
-					parentIsNoun = true;
-				}
-			}
-			n.getAntecedentFeatures().setA_HeadWordEmphasis(!parentIsNoun);
-		}
-		
+		}		
 	}
 
 	public void annotateConjunctionFeature(){
@@ -208,16 +162,6 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 				}
 			}
 			anaphora.getAntecedentFeatures().setA_Conjunction(!containsConjunction);
-		}
-		for(NegativeTrainingInstance n : negInstances){
-			List<Token> covTokens = getCoveredTokens(n);
-			boolean containsConjunction = false;
-			for(Token t : covTokens){
-				if(isConjunction(t)){
-					containsConjunction = true;
-				}
-			}
-			n.getAntecedentFeatures().setA_Conjunction(!containsConjunction);
 		}
 	}
 	
@@ -232,16 +176,6 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 			}
 			anaphora.getAntecedentFeatures().setA_PrenominalModifier(value);
 		}
-		for(NegativeTrainingInstance n : negInstances){
-			List<Token> covTokens = getCoveredTokens(n);
-			boolean value = false;
-			for(Token t : covTokens){
-				if(isPrenominalModifier(t)){
-					value = true;
-				}
-			}
-			n.getAntecedentFeatures().setA_PrenominalModifier(value);
-		}
 	}
 	
 	public void annotateOrganizationFeature(){
@@ -255,19 +189,7 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 				}
 			}
 			anaphora.getAntecedentFeatures().setA_Org(value);
-		}
-		for(NegativeTrainingInstance n : negInstances){
-			List<Token> covTokens = getCoveredTokens(n);
-			boolean value = false;			
-			for(Token t : covTokens){
-				String ne = getNamedEntityValue(t);
-				if(ne != null && ne.equals("ORGANIZATION")){
-					value = true;
-				}
-			}
-			n.getAntecedentFeatures().setA_Org(value);
-		}
-		
+		}		
 	}
 	
 	public void annotatePersonFeature(){
@@ -281,17 +203,6 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 				}
 			}
 			anaphora.getAntecedentFeatures().setA_Org(value);
-		}
-		for(NegativeTrainingInstance n : negInstances){
-			List<Token> covTokens = getCoveredTokens(n);
-			boolean value = false;			
-			for(Token t : covTokens){
-				String ne = getNamedEntityValue(t);
-				if(ne != null && ne.equals("PERSON")){
-					value = true;
-				}
-			}
-			n.getAntecedentFeatures().setA_Org(value);
 		}
 	}
 	

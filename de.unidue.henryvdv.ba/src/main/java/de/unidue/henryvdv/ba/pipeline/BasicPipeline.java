@@ -29,9 +29,10 @@ public class BasicPipeline {
 
 	  public static void main(String[] args)
 			  throws Exception {	
-		//  SVMLearn svmLearn = new SVMLearn();
-		//  svmLearn.learn();
+
      		runWikiCorefReader();
+    		//  SVMLearn svmLearn = new SVMLearn();
+    		//  svmLearn.learn();
 	  }
 	  
 	  
@@ -74,9 +75,9 @@ public class BasicPipeline {
 	        		AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
 	        		AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
 	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_PronounAntecedent.class),
-	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_Antecedent.class)
+	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_Antecedent.class),
         		
-	        	//	AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)        		
+	        		AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)        		
 	        	//	AnalysisEngineFactory.createEngineDescription(Baseline_Evaluator.class) 
 	           //     AnalysisEngineFactory.createEngineDescription(InformationModule.class)
 	        );
