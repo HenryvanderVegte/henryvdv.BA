@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Wed Aug 03 20:04:07 CEST 2016
+ * Updated by JCasGen Wed Aug 10 13:46:48 CEST 2016
  * @generated */
 public class Anaphora_Type extends Annotation_Type {
   /** @generated 
@@ -405,6 +405,30 @@ public class Anaphora_Type extends Annotation_Type {
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_QuotationSituation, v);}
     
   
+ 
+  /** @generated */
+  final Feature casFeat_antecedentFeatures;
+  /** @generated */
+  final int     casFeatCode_antecedentFeatures;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public int getAntecedentFeatures(int addr) {
+        if (featOkTst && casFeat_antecedentFeatures == null)
+      jcas.throwFeatMissing("antecedentFeatures", "de.unidue.henryvdv.ba.type.Anaphora");
+    return ll_cas.ll_getRefValue(addr, casFeatCode_antecedentFeatures);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setAntecedentFeatures(int addr, int v) {
+        if (featOkTst && casFeat_antecedentFeatures == null)
+      jcas.throwFeatMissing("antecedentFeatures", "de.unidue.henryvdv.ba.type.Anaphora");
+    ll_cas.ll_setRefValue(addr, casFeatCode_antecedentFeatures, v);}
+    
+  
 
 
 
@@ -476,6 +500,10 @@ public class Anaphora_Type extends Annotation_Type {
  
     casFeat_p_A_QuotationSituation = jcas.getRequiredFeatureDE(casType, "p_A_QuotationSituation", "uima.cas.Boolean", featOkTst);
     casFeatCode_p_A_QuotationSituation  = (null == casFeat_p_A_QuotationSituation) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_A_QuotationSituation).getCode();
+
+ 
+    casFeat_antecedentFeatures = jcas.getRequiredFeatureDE(casType, "antecedentFeatures", "de.unidue.henryvdv.ba.type.AntecedentFeatures", featOkTst);
+    casFeatCode_antecedentFeatures  = (null == casFeat_antecedentFeatures) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_antecedentFeatures).getCode();
 
   }
 }

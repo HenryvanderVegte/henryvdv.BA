@@ -26,11 +26,25 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 	
 	/************************************************
 	 *  Annotates the Pronoun-Antecedent-Features   *
-	 *  -Same Sentence (bool)
-	 *  -In Previous Sentence (bool)
-	 *  
-	 * 
-	 * 
+	 *  -Same Sentence (bool)						*
+	 *  -Intra-Sentence Difference (float)			*
+	 *  -In Previous Sentence (bool)				*
+	 *  -Inter-Sentence Difference (float)			*
+	 *  -Prepositional Parallel (bool)				*
+	 *  -Parent Category Match (bool)				*
+	 *  -Parent Word Match (bool)					*
+	 *  -Quotation Situation (bool)					*
+	 *  -Singular Match (bool)						*
+	 *  -Plural Match (bool)						*
+	 *  											*
+	 *  Missing:									*
+	 *  -Binding Theory								*
+	 *  -Reflexive Subj. Match						*
+	 *  -Relation-Match								*
+	 *  -Parent Relation Match						*
+	 *  -MI Value									*
+	 *  -MI Available								*
+	 * 												*
 	 ************************************************/
 	
 	private JCas aJCas;
@@ -157,25 +171,39 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 
 	public void annotateParentWordMatch(){
 		for(Anaphora a : anaphoras){
-			String anaphoraParentString = getParent(a).getCoveredText();
+			Token anaphoraparent = getParent(a);
+			if(anaphoraparent == null){
+				a.setP_A_ParentWordMatch(false);
+				break;			
+			}
+			String anaphoraParentString = anaphoraparent.getCoveredText();
 			List<Token> anteTokens = getCoveredTokens(a.getAntecedent().getBegin(), a.getAntecedent().getEnd());
 			boolean value = false;
 			for(Token t : anteTokens){
-				String tParentString = getParent(t).getCoveredText();
-				if(anaphoraParentString != null && tParentString != null){
-					if(anaphoraParentString.equalsIgnoreCase(tParentString)){
-						value = true;
-					}
+				Token tParent = getParent(t);
+				if(tParent == null)
+					break;			
+				String tParentString = tParent.getCoveredText();
+				if(anaphoraParentString.equalsIgnoreCase(tParentString)){
+					value = true;
 				}
 			}
 			a.setP_A_ParentWordMatch(value);
 		}
 		for(NegativeTrainingInstance n : negInstances){
-			String anaphoraParentString = getParent(n.getAnaphora()).getCoveredText();
+			Token anaphoraparent = getParent(n.getAnaphora());
+			if(anaphoraparent == null){
+				n.setP_A_ParentWordMatch(false);
+				break;			
+			}		
+			String anaphoraParentString = anaphoraparent.getCoveredText();
 			List<Token> anteTokens = getCoveredTokens(n.getBegin(), n.getEnd());
 			boolean value = false;
 			for(Token t : anteTokens){
-				String tParentString = getParent(t).getCoveredText();
+				Token tParent = getParent(t);
+				if(tParent == null)
+					break;		
+				String tParentString = tParent.getCoveredText();
 				if(anaphoraParentString.equalsIgnoreCase(tParentString)){
 					value = true;
 				}

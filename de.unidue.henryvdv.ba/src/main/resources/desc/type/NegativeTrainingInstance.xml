@@ -6,6 +6,7 @@
   <vendor/>
 <imports>
     <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/Anaphora.xml"/>
+  <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/AntecedentFeatures.xml"/>
   </imports>
   <types>
     <typeDescription>
@@ -87,6 +88,11 @@
           <name>p_A_QuotationSituation</name>
           <description/>
           <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+      <featureDescription>
+          <name>antecedentFeatures</name>
+          <description/>
+          <rangeTypeName>de.unidue.henryvdv.ba.type.AntecedentFeatures</rangeTypeName>
         </featureDescription>
       </features>
     </typeDescription>

@@ -1,10 +1,13 @@
 package de.unidue.henryvdv.ba.modules;
 
 import java.util.Collection;
+
+import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.fit.component.JCasAnnotator_ImplBase;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
+import org.apache.uima.resource.ResourceInitializationException;
 
 import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceChain;
 import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceLink;
@@ -14,6 +17,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
+import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.DocumentInfo;
 import de.unidue.henryvdv.ba.type.MyCoreferenceChain;
 import de.unidue.henryvdv.ba.type.MyCoreferenceLink;
@@ -24,15 +28,25 @@ public class InformationModule
 {
 
 	private JCas aJCas;
+	private FrequencyDistribution<Integer> sentenceDistanceFD;
+	private Collection<Anaphora> anaphoras;
+	private Collection<Sentence> sentences;
+	
+	public void initialize(UimaContext context) throws ResourceInitializationException{
+		super.initialize(context);
+		sentenceDistanceFD = new FrequencyDistribution<Integer>();
+	}
 	
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
-		System.out.println("---------------------------------------------------");
+		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
+		sentences = JCasUtil.select(aJCas, Sentence.class);
+		collectSentenceDistanceInfo();
 	//	printyMyCorefChains();
 		printInfos();
 	//	printNounPhrases();
-		printDependencies();
+	//	printDependencies();
 	//	printCorefChains();
 	//	printDocText();
 	//	printTokens();
@@ -40,12 +54,30 @@ public class InformationModule
 		
 		//explorePOS(10);
 		
-		System.out.println("---------------------------------------------------");
 	}
 	
-	private void printTree(){
+	@Override
+	public void collectionProcessComplete(){
+		for(Integer s : sentenceDistanceFD.getKeys()){
+			System.out.println("Sentence-distance: " + s);
+			System.out.println("Count: " + (float)sentenceDistanceFD.getCount(s)/(float)sentenceDistanceFD.getN());
+		}
 	}
 	
+	private void collectSentenceDistanceInfo(){
+		for(Anaphora anaphora : anaphoras){
+			int nr1 = getSentenceNr(anaphora.getBegin());
+			int nr2 = getSentenceNr(anaphora.getAntecedent().getBegin());
+			int dist = nr1 - nr2;
+
+			if(dist >= 0){
+				sentenceDistanceFD.inc((Integer)dist);
+			} else {
+				System.out.println("Something wrong here: " + dist);
+			}
+
+		}
+	}
 	
 	private void printyMyCorefChains(){
 		Collection<MyCoreferenceChain> corefChains = JCasUtil.select(aJCas, MyCoreferenceChain.class);
@@ -157,6 +189,17 @@ public class InformationModule
 		for(Sentence s : sentences){
 			System.out.println(s.getCoveredText());
 		}
+	}
+	
+	private int getSentenceNr(int begin){
+		int i = 1;
+		for(Sentence s : sentences){
+			if(s.getEnd() > begin){
+				break;
+			}
+			i++;
+		}		
+		return i;
 	}
 
 }

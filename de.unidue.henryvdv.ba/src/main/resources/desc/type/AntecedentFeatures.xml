@@ -1,98 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
-  <name>Anaphora</name>
+  <name>AntecedentFeatures</name>
   <description/>
   <version>1.0</version>
   <vendor/>
-<imports>
-    <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/Antecedent.xml"/>
-  <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/AntecedentFeatures.xml"/>
-  </imports>
-  <types>
+<types>
     <typeDescription>
-      <name>de.unidue.henryvdv.ba.type.Anaphora</name>
+      <name>de.unidue.henryvdv.ba.type.AntecedentFeatures</name>
       <description/>
       <supertypeName>uima.tcas.Annotation</supertypeName>
       <features>
         <featureDescription>
-          <name>antecedent</name>
-          <description/>
-          <rangeTypeName>de.unidue.henryvdv.ba.type.Antecedent</rangeTypeName>
-        </featureDescription>
-      <featureDescription>
-          <name>p_A_InSameSentence</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_InPreviousSentence</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_SingularMatch</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_PluralMatch</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_IntraSentenceDiff</name>
+          <name>a_AntecedentFrequency</name>
           <description/>
           <rangeTypeName>uima.cas.Float</rangeTypeName>
         </featureDescription>
         <featureDescription>
-          <name>p_A_InterSentenceDiff</name>
-          <description/>
-          <rangeTypeName>uima.cas.Float</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
-          <name>p_A_PrepositionalParallel</name>
-          <description/>
-          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
-        </featureDescription>
-      <featureDescription>
-          <name>p_A_BindingTheory</name>
+          <name>a_Subject</name>
           <description/>
           <rangeTypeName>uima.cas.Boolean</rangeTypeName>
         </featureDescription>
         <featureDescription>
-          <name>p_A_ReflexiveSubjMatch</name>
+          <name>a_Object</name>
           <description/>
           <rangeTypeName>uima.cas.Boolean</rangeTypeName>
         </featureDescription>
         <featureDescription>
-          <name>p_A_RelationMatch</name>
+          <name>a_Predicate</name>
           <description/>
           <rangeTypeName>uima.cas.Boolean</rangeTypeName>
         </featureDescription>
         <featureDescription>
-          <name>p_A_ParentRelationMatch</name>
+          <name>a_Pronominal</name>
           <description/>
           <rangeTypeName>uima.cas.Boolean</rangeTypeName>
         </featureDescription>
         <featureDescription>
-          <name>p_A_ParentCatMatch</name>
+          <name>a_Prepositional</name>
           <description/>
           <rangeTypeName>uima.cas.Boolean</rangeTypeName>
         </featureDescription>
         <featureDescription>
-          <name>p_A_ParentWordMatch</name>
+          <name>a_HeadWordEmphasis</name>
           <description/>
           <rangeTypeName>uima.cas.Boolean</rangeTypeName>
         </featureDescription>
         <featureDescription>
-          <name>p_A_QuotationSituation</name>
+          <name>a_Conjunction</name>
           <description/>
           <rangeTypeName>uima.cas.Boolean</rangeTypeName>
         </featureDescription>
-      <featureDescription>
-          <name>antecedentFeatures</name>
+        <featureDescription>
+          <name>a_PrenominalModifier</name>
           <description/>
-          <rangeTypeName>de.unidue.henryvdv.ba.type.AntecedentFeatures</rangeTypeName>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>a_Org</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>a_Person</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>a_Time</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>a_Date</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>a_Money</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>a_Price</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>a_Amount</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>a_Number</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>a_Definite</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>a_HisHer</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>a_HeHis</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
         </featureDescription>
       </features>
     </typeDescription>

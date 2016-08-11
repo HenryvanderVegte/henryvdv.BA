@@ -11,7 +11,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Wed Aug 03 20:04:07 CEST 2016
+ * Updated by JCasGen Wed Aug 10 13:46:44 CEST 2016
  * XML source: C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/src/main/resources/desc/type/NegativeTrainingInstance.xml
  * @generated */
 public class NegativeTrainingInstance extends Annotation {
@@ -404,6 +404,28 @@ public class NegativeTrainingInstance extends Annotation {
     if (NegativeTrainingInstance_Type.featOkTst && ((NegativeTrainingInstance_Type)jcasType).casFeat_p_A_QuotationSituation == null)
       jcasType.jcas.throwFeatMissing("p_A_QuotationSituation", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
     jcasType.ll_cas.ll_setBooleanValue(addr, ((NegativeTrainingInstance_Type)jcasType).casFeatCode_p_A_QuotationSituation, v);}    
+   
+    
+  //*--------------*
+  //* Feature: antecedentFeatures
+
+  /** getter for antecedentFeatures - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public AntecedentFeatures getAntecedentFeatures() {
+    if (NegativeTrainingInstance_Type.featOkTst && ((NegativeTrainingInstance_Type)jcasType).casFeat_antecedentFeatures == null)
+      jcasType.jcas.throwFeatMissing("antecedentFeatures", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    return (AntecedentFeatures)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((NegativeTrainingInstance_Type)jcasType).casFeatCode_antecedentFeatures)));}
+    
+  /** setter for antecedentFeatures - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setAntecedentFeatures(AntecedentFeatures v) {
+    if (NegativeTrainingInstance_Type.featOkTst && ((NegativeTrainingInstance_Type)jcasType).casFeat_antecedentFeatures == null)
+      jcasType.jcas.throwFeatMissing("antecedentFeatures", "de.unidue.henryvdv.ba.type.NegativeTrainingInstance");
+    jcasType.ll_cas.ll_setRefValue(addr, ((NegativeTrainingInstance_Type)jcasType).casFeatCode_antecedentFeatures, jcasType.ll_cas.ll_getFSRef(v));}    
   }
 
     
