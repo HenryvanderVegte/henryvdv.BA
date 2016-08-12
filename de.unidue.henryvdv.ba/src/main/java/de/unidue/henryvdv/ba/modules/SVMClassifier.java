@@ -1,19 +1,28 @@
 package de.unidue.henryvdv.ba.modules;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
+import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.dkpro.tc.core.Constants;
 
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordParser.DependenciesMode;
+import de.unidue.henryvdv.ba.type.Anaphora;
+import de.unidue.henryvdv.ba.type.Antecedent;
+import de.unidue.henryvdv.ba.type.DetectedNP;
+import de.unidue.henryvdv.ba.type.GoldNP;
 
 
 public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
@@ -41,7 +50,6 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	
 	private static final String BINARIES_BASE_LOCATION = "src/main/resources/svm/bin";
 
-	// where the trained model is stored
 	private static final String MODEL_NAME = "svm_light.model";
 
 	private static final String MODEL_DIRECTORY = "src/main/resources/svm/dat";
@@ -57,6 +65,13 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	private File modelFile;
 	private File testFile;
 	private File outputFile;
+	private String featureVector;
+	private List<String> testCommand;
+	private Collection<Anaphora> anaphoras;
+	private Collection<NP> allNPs;
+	private List<GoldNP> goldAntecedent;
+	private List<DetectedNP> detectedAntecedent;
+	private List<NP> fixedNPs;
 	
 	private JCas aJCas;
 	
@@ -97,30 +112,116 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 			throw new ResourceInitializationException();
 		}
 		
-		
+		testCommand = buildTestCommand(testFile, modelFile, outputFile);
 	}
 	
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
+		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
+		goldAntecedent = new ArrayList<GoldNP>();
+		detectedAntecedent = new ArrayList<DetectedNP>();
+		allNPs = JCasUtil.select(aJCas, NP.class);
+		setFixedNPs();
+		setGoldNPs();
+	}
+	
+	private void setGoldNPs(){
+		for(Anaphora anaphora : anaphoras){
+			if(!anaphora.getHasCorrectAntecedent())
+				continue;
+			GoldNP np = new GoldNP(aJCas, anaphora.getAntecedent().getBegin(), anaphora.getAntecedent().getEnd());
+			goldAntecedent.add(np);
+		}
+	}
+	
+	private void setDetectedNPs(){
+		for(Anaphora anaphora : anaphoras){
+			if(!anaphora.getHasCorrectAntecedent())
+				continue;
+			for(int i = 1; i < fixedNPs.size(); i++){
+				if(fixedNPs.get(i).getBegin() >= anaphora.getBegin()){
+					checkPossibleAntecedent(anaphora, fixedNPs.get(i-1));
+					break;
+				}
+			}	
+		}
+	}
+	
+	private void checkPossibleAntecedent(Anaphora a, NP n){
+		Anaphora possibleA = new Anaphora(aJCas, a.getBegin(), a.getEnd());
+		Antecedent ant = new Antecedent(aJCas, n.getBegin(), n.getEnd());
+		possibleA.setAntecedent(ant);
+		
+		createFeatureVector();
+	}
+	
+	/**
+	 * The feature numbers must(!) match the feature numbers in
+	 *  SVMLearn
+	 * 
+	 **/	
+	private void createFeatureVector(){
 		
 	}
 	
 	
-
-	public void classify() throws IOException  {		
-		List<String> command = buildTrainCommand(testFile, modelFile, outputFile);
-		System.out.println(command);
-		
+	
+	/**
+	 *  This method removes the chance of discoveringg noun phrases in noun phrases
+	 * 
+	 **/
+	private void setFixedNPs(){	
+		fixedNPs = new ArrayList<NP>();
+		for(NP np1 : allNPs){
+			boolean addIt = true;
+			for(NP np2 : allNPs){
+				if(np1 != np2){
+					if(np1.getBegin() <=  np2.getBegin() && np1.getEnd() >= np2.getEnd()){
+						addIt = false;
+					}
+				}
+			}
+			if(addIt){
+				fixedNPs.add(np1);
+			}
+		}
+	}
+	
+	
+	private void writeFeaturevectorToFile(){
+		BufferedWriter writer = null;
 		try {
-			runCommand(command);
+            writer = new BufferedWriter(new FileWriter(testFile));
+		    writer.write("# svm test \"WikiCoref\"");	    
+		    writer.newLine();
+		    writer.write(featureVector);
+		    
+		    
+		} catch (IOException e) {
+		  System.out.println("Failed to write feature vectors to train file.");
+		  e.printStackTrace();
+		} finally {
+		   try {
+			   writer.close();
+		   } catch (Exception e)
+		   {
+			   System.out.println("Failed to close writer.");
+			   e.printStackTrace();
+		   }
+		}		
+	}
+
+	public void classify() throws IOException  {			
+		try {
+			runCommand(testCommand);
 		} catch (Exception e) {
 			System.out.println("Error occured while creating the modelfile.");
 			e.printStackTrace();
 		}
 	}
 	
-	private List<String> buildTrainCommand(File testFile, File modelFile, File outputFile) {
+	private List<String> buildTestCommand(File testFile, File modelFile, File outputFile) {
 		List<String> result = new ArrayList<String>();
 		result.add(BINARIES_BASE_LOCATION + "/svm_classify.exe");		
 		// test file

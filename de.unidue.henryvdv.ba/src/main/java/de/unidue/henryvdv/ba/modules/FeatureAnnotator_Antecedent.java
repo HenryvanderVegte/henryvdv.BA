@@ -18,6 +18,8 @@ import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.AntecedentFeatures;
 import de.unidue.henryvdv.ba.type.Quotation;
 import de.unidue.henryvdv.ba.util.AnnotationUtils;
+import de.unidue.henryvdv.ba.util.AntecedentFeatureUtils;
+import de.unidue.henryvdv.ba.util.PronounAntecedentFeatureUtils;
 
 public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 
@@ -45,9 +47,10 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 	private Collection<Token> tokens;
 	private Collection<Sentence> sentences;
 	private Collection<Dependency> dependencies;
-	private Collection<Quotation> quotes;
 	private Collection<NamedEntity> namedEntities;
 	private String documentText;
+	
+	private AntecedentFeatureUtils aUtil;
 	
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
@@ -56,8 +59,10 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 		sentences = JCasUtil.select(aJCas, Sentence.class);
 		dependencies = JCasUtil.select(aJCas, Dependency.class);
 		tokens = JCasUtil.select(aJCas, Token.class);
-		quotes = JCasUtil.select(aJCas, Quotation.class);
 		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
+		
+		aUtil = new AntecedentFeatureUtils(tokens, sentences,dependencies,namedEntities);
+		
 		prepareAnnotations();
 		annotateAntecedentFrequencyFeature();
 		annotateSubjectFeature();
@@ -71,6 +76,10 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 		annotatePersonFeature();
 	}
 
+	public void annotateFeatures(Anaphora a){
+		
+	}
+	
 	public void prepareAnnotations(){
 		for(Anaphora anaphora : anaphoras){
 			AntecedentFeatures a = new AntecedentFeatures(aJCas);
@@ -80,235 +89,72 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 	
 	public void annotateAntecedentFrequencyFeature(){
 		for(Anaphora anaphora : anaphoras){
-			List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());		
-			int count = getNrOfOccurences(covTokens);
-			anaphora.getAntecedentFeatures().setA_AntecedentFrequency((float)count / 10f);
+			float value = aUtil.antecedentFrequency(anaphora);
+			anaphora.getAntecedentFeatures().setA_AntecedentFrequency(value);
 		}
 	}
 	
 	public void annotateSubjectFeature(){
 		for(Anaphora anaphora : anaphoras){
-			List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());	
-			boolean containsSubj = false;
-			for(Token t : covTokens){				
-				if(isSubject(t)){
-					containsSubj = true;
-				}
-			}
-			anaphora.getAntecedentFeatures().setA_Subject(containsSubj);
+			boolean value = aUtil.subject(anaphora);
+			anaphora.getAntecedentFeatures().setA_Subject(value);
 		}
 	}
 	
 	public void annotateObjectFeature(){
 		for(Anaphora anaphora : anaphoras){
-			List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());	
-			boolean containsObj = false;
-			for(Token t : covTokens){				
-				if(isObject(t)){
-					containsObj = true;
-				}
-			}
-			anaphora.getAntecedentFeatures().setA_Object(containsObj);
+			boolean value = aUtil.object(anaphora);
+			anaphora.getAntecedentFeatures().setA_Object(value);
 		}
 	}
 
 	public void annotatePredicateFeature(){
 		for(Anaphora anaphora : anaphoras){
-			List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());	
-			boolean containsPredicate = false;
-			for(Token t : covTokens){				
-				if(isPredicate(t)){
-					containsPredicate = true;
-				}
-			}
-			anaphora.getAntecedentFeatures().setA_Predicate(containsPredicate);
+			boolean value = aUtil.predicate(anaphora);
+			anaphora.getAntecedentFeatures().setA_Predicate(value);
 		}
 	}
 	
 	public void annotatePronounFeature(){
 		for(Anaphora anaphora : anaphoras){
-			List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());	
-			boolean containsPronoun = false;
-			for(Token t : covTokens){				
-				if(isPronoun(t)){
-					containsPronoun = true;
-				}
-			}
-			anaphora.getAntecedentFeatures().setA_Pronominal(containsPronoun);
+			boolean value = aUtil.pronominal(anaphora);
+			anaphora.getAntecedentFeatures().setA_Pronominal(value);
 		}		
 	}
 	
 	public void annotateHeadWordEmphasisFeature(){
 		for(Anaphora anaphora : anaphoras){
-			List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
-			boolean parentIsNoun = false;
-			for(Token t : covTokens){
-				Token parent = getParent(t);
-				if(parent != null && isNoun(parent)){
-					parentIsNoun = true;
-				}
-			}
-			anaphora.getAntecedentFeatures().setA_HeadWordEmphasis(!parentIsNoun);
+			boolean value = aUtil.headWordEmphasis(anaphora);
+			anaphora.getAntecedentFeatures().setA_HeadWordEmphasis(value);
 		}		
 	}
 
 	public void annotateConjunctionFeature(){
 		for(Anaphora anaphora : anaphoras){
-			List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
-			boolean containsConjunction = false;
-			for(Token t : covTokens){
-				if(isConjunction(t)){
-					containsConjunction = true;
-				}
-			}
-			anaphora.getAntecedentFeatures().setA_Conjunction(!containsConjunction);
+			boolean value = aUtil.conjunction(anaphora);
+			anaphora.getAntecedentFeatures().setA_Conjunction(value);
 		}
 	}
 	
 	public void annotatePrenominalModifierFeature(){
 		for(Anaphora anaphora : anaphoras){
-			List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
-			boolean value = false;
-			for(Token t : covTokens){
-				if(isPrenominalModifier(t)){
-					value = true;
-				}
-			}
+			boolean value = aUtil.prenominalModifier(anaphora);
 			anaphora.getAntecedentFeatures().setA_PrenominalModifier(value);
 		}
 	}
 	
 	public void annotateOrganizationFeature(){
 		for(Anaphora anaphora : anaphoras){
-			List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
-			boolean value = false;			
-			for(Token t : covTokens){
-				String ne = getNamedEntityValue(t);
-				if(ne != null && ne.equals("ORGANIZATION")){
-					value = true;
-				}
-			}
+			boolean value = aUtil.organization(anaphora);
 			anaphora.getAntecedentFeatures().setA_Org(value);
 		}		
 	}
 	
 	public void annotatePersonFeature(){
 		for(Anaphora anaphora : anaphoras){
-			List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
-			boolean value = false;			
-			for(Token t : covTokens){
-				String ne = getNamedEntityValue(t);
-				if(ne != null && ne.equals("PERSON")){
-					value = true;
-				}
-			}
+			boolean value = aUtil.person(anaphora);
 			anaphora.getAntecedentFeatures().setA_Org(value);
 		}
-	}
-	
-	private int getNrOfOccurences(List<Token> checkTokens){
-		Token[] tokenArray = tokens.toArray(new Token[tokens.size()]);
-		int nrOfOcc = 0;
-		boolean isSame = false;		
-		for(int i = 0; i < tokenArray.length; i++){
-			isSame = true;
-			for(int j = 0; j < checkTokens.size(); j++){
-				if(j+i >= tokenArray.length){
-					isSame = false;
-					break;
-				}
-				if(!tokenArray[j+i].getCoveredText().equalsIgnoreCase(checkTokens.get(j).getCoveredText())){
-					isSame = false;
-					break;
-				}
-			}
-			if(isSame){
-				nrOfOcc++;
-				i += checkTokens.size();
-			}
-		}	
-		return nrOfOcc;		
-	}
-		
-	private boolean isSubject(Token token){
-		for(Dependency d : dependencies){
-			if(d.getDependent() == token && d.getDependencyType().contains("subj")){
-				return true;
-			}
-		}	
-		return false;
-	}
-	
-	private boolean isObject(Token token){
-		for(Dependency d : dependencies){
-			if(d.getDependent() == token && d.getDependencyType().contains("obj")){
-				return true;
-			}
-		}	
-		return false;
-	}
-	
-	private boolean isPredicate(Token token){
-		if(token.getPos().getPosValue().length() >= 2 && token.getPos().getPosValue().substring(0, 2).equals("VB"))
-			return true;
-		return false;
-	}
-	
-	private boolean isPronoun(Token token){
-		if(token.getPos().getPosValue().length() >= 3 && 
-				token.getPos().getPosValue().substring(0, 3).equals("PRP")) //TODO: Think about implementing WP & WP$		
-			return true;
-		return false;
-	}
-	
-	private boolean isNoun(Token token){
-		if(token.getPos().getPosValue().length() >= 2 && 
-				token.getPos().getPosValue().substring(0, 2).equals("NN")) 		
-			return true;
-		return false;
-	}
-	
-	private boolean isConjunction(Token token){
-		if(token.getPos().getPosValue().length() >= 2 && 
-				token.getPos().getPosValue().substring(0, 2).equals("CC")) 	//TODO: Maybe Check for subordinating conjunctions	
-			return true;
-		return false;
-	}
-
-	private boolean isPrenominalModifier(Token token){
-		if(isNoun(token) && isModifier(token) && getParent(token) != null && isNoun(getParent(token)))
-			return true;
-		return false;
-	}
-	
-	private boolean isModifier(Token token){
-		for(Dependency d : dependencies){
-			if(d.getDependent() == token && d.getDependencyType().contains("mod")){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private String getNamedEntityValue(Token token){
-		for(NamedEntity n : namedEntities){
-			if(n.getBegin() <= token.getBegin() && n.getEnd() >= token.getEnd()){
-				return n.getValue();
-			}
-		}
-		return null;
-	}
-	
-	private List<Token> getCoveredTokens(Annotation anno){
-		return AnnotationUtils.getCoveredTokens(anno, tokens);
-	}
-	
-	private Token getParent(Token token){
-		return AnnotationUtils.getParent(token, dependencies);
-	}
-	
-	private Sentence getSentence(int begin){
-		return AnnotationUtils.getSentence(begin, sentences);
 	}
 
 }
