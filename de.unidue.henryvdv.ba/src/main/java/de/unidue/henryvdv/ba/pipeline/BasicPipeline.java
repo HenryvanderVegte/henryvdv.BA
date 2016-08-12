@@ -64,7 +64,7 @@ public class BasicPipeline {
 	        		CollectionReaderFactory.createReader(
 	                        WikiCoref_Reader.class,
 	                        WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
-	                        WikiCoref_Reader.PARAM_MAX_DOCUMENTS, 1
+	                        WikiCoref_Reader.PARAM_MAX_DOCUMENTS, 30
 	                ),			   
 	        		AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
@@ -77,9 +77,9 @@ public class BasicPipeline {
 	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_PronounAntecedent.class),
 	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_Antecedent.class),
         		
-	        		AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)        		
-	        	//	AnalysisEngineFactory.createEngineDescription(Baseline_Evaluator.class) 
-	           //     AnalysisEngineFactory.createEngineDescription(InformationModule.class)
+	        		AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class),       		
+	        		//AnalysisEngineFactory.createEngineDescription(Baseline_Evaluator.class),
+	                AnalysisEngineFactory.createEngineDescription(InformationModule.class)
 	        );
 		  
 	  }

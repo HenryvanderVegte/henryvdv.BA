@@ -72,7 +72,7 @@ extends JCasAnnotator_ImplBase{
 			System.out.println("Something wrong here");
 		} else {
 			evaluate();
-			printResults();
+			//printResults();
 		}
 	}
 	
@@ -82,7 +82,7 @@ extends JCasAnnotator_ImplBase{
 		if(anaphorsTotal != 0){
 			rel = ((float)correctAnaphorsTotal / (float)anaphorsTotal) * 100f;
 		} 
-		System.out.println("Total: " + rel + " % ");
+		System.out.println("Baseline Accuracy: " + rel + " % ");
 	}
 	
 	private void printResults(){
@@ -96,7 +96,9 @@ extends JCasAnnotator_ImplBase{
 	}
 	
 	private void evaluate(){
-		for(int i = 0; i < anaphoras.size(); i++){
+
+		
+		for(int i = 0; i < goldAntecedent.size(); i++){
 			if(goldAntecedent.get(i) == null && detectedAntecedent.get(i) == null){
 				/*
 				System.out.println("--Wrong--");
@@ -161,6 +163,8 @@ extends JCasAnnotator_ImplBase{
 	
 	private void SetDetectedNPs(){
 		for(Anaphora anaphora : anaphoras){
+			if(!anaphora.getHasCorrectAntecedent())
+				continue;
 			for(int i = 1; i < nps.size(); i++){
 				if(nps.get(i).getBegin() <= anaphora.getBegin() && nps.get(i).getEnd() >= anaphora.getEnd()){
 					DetectedNP np = new DetectedNP(aJCas, nps.get(i-1).getBegin(), nps.get(i -1).getEnd());
@@ -173,6 +177,8 @@ extends JCasAnnotator_ImplBase{
 	
 	private void SetGoldNPs(){
 		for(Anaphora anaphora : anaphoras){
+			if(!anaphora.getHasCorrectAntecedent())
+				continue;
 			GoldNP np = new GoldNP(aJCas, anaphora.getAntecedent().getBegin(), anaphora.getAntecedent().getEnd());
 			goldAntecedent.add(np);
 		}

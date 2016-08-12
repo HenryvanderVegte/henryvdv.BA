@@ -108,11 +108,11 @@ public class SVMLearn implements Constants {
 	// where the trained model is stored
 	private static final String MODEL_NAME = "svm_light.model";
 
-	private static final String MODEL_DIRECTORY = "src/main/resources/svm/model";
+	private static final String MODEL_DIRECTORY = "src/main/resources/svm/dat";
 	
 	private static final String TRAIN_NAME = "train.dat";
 
-	private static final String TRAIN_DIRECTORY = "src/main/resources/svm/train";
+	private static final String TRAIN_DIRECTORY = "src/main/resources/svm/dat";
 	
 	public void learn(){
 		

@@ -40,7 +40,7 @@ extends JCasAnnotator_ImplBase{
 	
 
     public static final String PARAM_TRAINFILE_DIRECTORY= "TrainFileDirectory";
-    @ConfigurationParameter(name = PARAM_TRAINFILE_DIRECTORY, mandatory = true, defaultValue = "src/main/resources/svm/train")
+    @ConfigurationParameter(name = PARAM_TRAINFILE_DIRECTORY, mandatory = true, defaultValue = "src/main/resources/svm/dat")
     private String trainFileDirectory;
 	
 	@Override

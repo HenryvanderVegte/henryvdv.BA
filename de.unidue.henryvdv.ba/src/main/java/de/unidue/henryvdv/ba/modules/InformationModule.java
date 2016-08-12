@@ -114,6 +114,8 @@ public class InformationModule
 	private void printInfos(){
 		DocumentInfo docInfo = JCasUtil.selectSingle(aJCas, DocumentInfo.class);
 		System.out.println("Text Name : " + docInfo.getDocumentName());
+		
+		/*
 		System.out.println("Text length: " + aJCas.getDocumentText().length()  + " chars");
 		
 		Collection<Sentence> sentences = JCasUtil.select(aJCas, Sentence.class);
@@ -121,7 +123,7 @@ public class InformationModule
 		
 		Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
 		System.out.println("Tokens     : " + tokens.size());
-		
+		*/
 		/*
 		FrequencyDistribution<String> fd = new FrequencyDistribution<String>();
 		for(Token t : tokens){
