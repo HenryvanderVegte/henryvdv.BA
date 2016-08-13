@@ -31,6 +31,31 @@ public class AntecedentFeatureUtils {
 		this.namedEntities = namedEntities;
 	}
 	
+	public void annotateFeatures(Anaphora a){
+		//Antecedent Frequency
+		a.getAntecedentFeatures().setA_AntecedentFrequency(antecedentFrequency(a));	
+		//Subject
+		a.getAntecedentFeatures().setA_Subject(subject(a));
+		//Object
+		a.getAntecedentFeatures().setA_Object(object(a));
+		//Predicate
+		a.getAntecedentFeatures().setA_Predicate(predicate(a));
+		//Pronominal
+		a.getAntecedentFeatures().setA_Pronominal(pronominal(a));
+		//Head-Word Emphasis
+		a.getAntecedentFeatures().setA_HeadWordEmphasis(headWordEmphasis(a));
+		//Conjunction
+		a.getAntecedentFeatures().setA_Conjunction(conjunction(a));
+		//Prenominal Modifier
+		a.getAntecedentFeatures().setA_PrenominalModifier(prenominalModifier(a));
+		//Org
+		a.getAntecedentFeatures().setA_Org(organization(a));
+		//Person
+		a.getAntecedentFeatures().setA_Org(person(a));
+	}
+	
+	
+	
 	public float antecedentFrequency(Anaphora a){
 		List<Token> covTokens = getCoveredTokens(a.getAntecedent());		
 		int count = getNrOfOccurences(covTokens);

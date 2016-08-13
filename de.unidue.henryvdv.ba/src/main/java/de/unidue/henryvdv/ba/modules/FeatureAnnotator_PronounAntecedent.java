@@ -68,9 +68,7 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 		}
 	}
 	
-	public void annotateRelationMatchFeature(){
-		//TODO: FIX
-	}
+
 
 
 }

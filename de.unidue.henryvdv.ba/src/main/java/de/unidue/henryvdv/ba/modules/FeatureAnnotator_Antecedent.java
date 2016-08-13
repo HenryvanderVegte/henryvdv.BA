@@ -63,98 +63,15 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 		
 		aUtil = new AntecedentFeatureUtils(tokens, sentences,dependencies,namedEntities);
 		
-		prepareAnnotations();
-		annotateAntecedentFrequencyFeature();
-		annotateSubjectFeature();
-		annotateObjectFeature();
-		annotatePredicateFeature();
-		annotatePronounFeature();
-		annotateHeadWordEmphasisFeature();
-		annotateConjunctionFeature();
-		annotatePrenominalModifierFeature();
-		annotateOrganizationFeature();
-		annotatePersonFeature();
-	}
-
-	public void annotateFeatures(Anaphora a){
-		
-	}
-	
-	public void prepareAnnotations(){
 		for(Anaphora anaphora : anaphoras){
 			AntecedentFeatures a = new AntecedentFeatures(aJCas);
 			anaphora.setAntecedentFeatures(a);
+			aUtil.annotateFeatures(anaphora);
 		}
-	}
-	
-	public void annotateAntecedentFrequencyFeature(){
-		for(Anaphora anaphora : anaphoras){
-			float value = aUtil.antecedentFrequency(anaphora);
-			anaphora.getAntecedentFeatures().setA_AntecedentFrequency(value);
-		}
-	}
-	
-	public void annotateSubjectFeature(){
-		for(Anaphora anaphora : anaphoras){
-			boolean value = aUtil.subject(anaphora);
-			anaphora.getAntecedentFeatures().setA_Subject(value);
-		}
-	}
-	
-	public void annotateObjectFeature(){
-		for(Anaphora anaphora : anaphoras){
-			boolean value = aUtil.object(anaphora);
-			anaphora.getAntecedentFeatures().setA_Object(value);
-		}
+		
 	}
 
-	public void annotatePredicateFeature(){
-		for(Anaphora anaphora : anaphoras){
-			boolean value = aUtil.predicate(anaphora);
-			anaphora.getAntecedentFeatures().setA_Predicate(value);
-		}
-	}
 	
-	public void annotatePronounFeature(){
-		for(Anaphora anaphora : anaphoras){
-			boolean value = aUtil.pronominal(anaphora);
-			anaphora.getAntecedentFeatures().setA_Pronominal(value);
-		}		
-	}
-	
-	public void annotateHeadWordEmphasisFeature(){
-		for(Anaphora anaphora : anaphoras){
-			boolean value = aUtil.headWordEmphasis(anaphora);
-			anaphora.getAntecedentFeatures().setA_HeadWordEmphasis(value);
-		}		
-	}
 
-	public void annotateConjunctionFeature(){
-		for(Anaphora anaphora : anaphoras){
-			boolean value = aUtil.conjunction(anaphora);
-			anaphora.getAntecedentFeatures().setA_Conjunction(value);
-		}
-	}
-	
-	public void annotatePrenominalModifierFeature(){
-		for(Anaphora anaphora : anaphoras){
-			boolean value = aUtil.prenominalModifier(anaphora);
-			anaphora.getAntecedentFeatures().setA_PrenominalModifier(value);
-		}
-	}
-	
-	public void annotateOrganizationFeature(){
-		for(Anaphora anaphora : anaphoras){
-			boolean value = aUtil.organization(anaphora);
-			anaphora.getAntecedentFeatures().setA_Org(value);
-		}		
-	}
-	
-	public void annotatePersonFeature(){
-		for(Anaphora anaphora : anaphoras){
-			boolean value = aUtil.person(anaphora);
-			anaphora.getAntecedentFeatures().setA_Org(value);
-		}
-	}
 
 }
