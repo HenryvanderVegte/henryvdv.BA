@@ -3,9 +3,12 @@ package de.unidue.henryvdv.ba.util;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.uima.fit.util.JCasUtil;
+import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 
 import de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity;
+import de.tudarmstadt.ukp.dkpro.core.api.ner.type.Time;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
@@ -17,18 +20,17 @@ public class AntecedentFeatureUtils {
 	private Collection<Token> tokens;
 	private Collection<Sentence> sentences;
 	private Collection<Dependency> dependencies;
-	Collection<NamedEntity> namedEntities;
+	private Collection<NamedEntity> namedEntities;
+	private Collection<Time> times;
 	
 	private static String[] pluralPronouns = {"themselves","their","they"};
 	
-	public AntecedentFeatureUtils(Collection<Token> tokens, 
-										Collection<Sentence> sentences, Collection<Dependency> dependencies,
-										Collection<NamedEntity> namedEntities){
-
-		this.tokens = tokens;
-		this.sentences = sentences;
-		this.dependencies = dependencies;
-		this.namedEntities = namedEntities;
+	public AntecedentFeatureUtils(JCas aJCas){
+		sentences = JCasUtil.select(aJCas, Sentence.class);
+		dependencies = JCasUtil.select(aJCas, Dependency.class);
+		tokens = JCasUtil.select(aJCas, Token.class);
+		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
+		times = JCasUtil.select(aJCas, Time.class);
 	}
 	
 	public void annotateFeatures(Anaphora a){
@@ -52,6 +54,8 @@ public class AntecedentFeatureUtils {
 		a.getAntecedentFeatures().setA_Org(organization(a));
 		//Person
 		a.getAntecedentFeatures().setA_Org(person(a));
+		//Time
+		a.getAntecedentFeatures().setA_Time(time(a));
 	}
 	
 	
@@ -162,6 +166,15 @@ public class AntecedentFeatureUtils {
 			}
 		}
 		return value;
+	}
+	
+	public boolean time(Anaphora a){
+
+
+		for(NamedEntity n : namedEntities){
+			System.out.println(n.getCoveredText() + "  " + n.getValue());
+		}
+		return false;
 	}
 	
 	private int getNrOfOccurences(List<Token> checkTokens){

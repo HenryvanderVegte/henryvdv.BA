@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.uima.fit.util.JCasUtil;
+import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
@@ -21,13 +23,11 @@ public class PronounAntecedentFeatureUtils {
 	
 	private static String[] pluralPronouns = {"themselves","their","they"};
 	
-	public PronounAntecedentFeatureUtils(Collection<Token> tokens, 
-										Collection<Sentence> sentences, Collection<Dependency> dependencies,
-										Collection<Quotation> quotes){
-		this.tokens = tokens;
-		this.sentences = sentences;
-		this.dependencies = dependencies;
-		this.quotes = quotes;		
+	public PronounAntecedentFeatureUtils(JCas aJCas){
+		sentences = JCasUtil.select(aJCas, Sentence.class);
+		dependencies = JCasUtil.select(aJCas, Dependency.class);
+		tokens = JCasUtil.select(aJCas, Token.class);
+		quotes = JCasUtil.select(aJCas, Quotation.class);
 	}
 	
 	
@@ -178,11 +178,13 @@ public class PronounAntecedentFeatureUtils {
 
 	public boolean parentCategoryMatch(Annotation anaphora, Annotation antecedent){
 		Token anaphoraParent = getParent(anaphora);	
+		if(anaphoraParent == null)
+			return false;
 		List<Token> anteTokens = getCoveredTokens(antecedent.getBegin(), antecedent.getEnd());
 		boolean value = false;
 		for(Token t : anteTokens){
-			Token anteParent = getParent(t);
-			if(anaphoraParent.getPos().getPosValue().equals(anteParent.getPos().getPosValue())){
+			Token anteParent = getParent(t);		
+			if(anteParent != null && anaphoraParent.getPos().getPosValue().equals(anteParent.getPos().getPosValue())){
 				value = true;
 			}
 		}

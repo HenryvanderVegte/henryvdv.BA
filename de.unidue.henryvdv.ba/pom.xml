@@ -206,5 +206,10 @@
   		</artifactId>
   		<version>20140104.1</version>
   	</dependency>
+  	<dependency>
+  		<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+  		<artifactId>de.tudarmstadt.ukp.dkpro.core.stanfordnlp-model-ner-en-all.3class.distsim.crf</artifactId>
+  		<version>20150420.1</version>
+  	</dependency>
   </dependencies>
 </project>

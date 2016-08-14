@@ -80,13 +80,8 @@ extends JCasAnnotator_ImplBase{
 	}
 	
 	private void generateFeatureVectors(){
-		
-		
 		for(Anaphora anaphora : anaphoras){
-
-			String currentFeatureVector = featureVectorUtil.createFeatureVector(anaphora);
-			
-			
+			String currentFeatureVector = featureVectorUtil.createFeatureVector(anaphora);		
 			if(anaphora.getHasCorrectAntecedent()){
 				posFeatureVectors.add(currentFeatureVector);
 			} else {
@@ -114,7 +109,7 @@ extends JCasAnnotator_ImplBase{
 		    	writer.newLine();
 		    	writer.write(negFeatureVectors.get(i));
 		    }
-		    
+		    writer.newLine();
 		    
 		} catch (IOException e) {
 		  System.out.println("Failed to write feature vectors to train file.");

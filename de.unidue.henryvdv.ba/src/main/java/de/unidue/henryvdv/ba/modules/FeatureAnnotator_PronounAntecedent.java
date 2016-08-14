@@ -43,10 +43,7 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 	
 	private JCas aJCas;
 	private Collection<Anaphora> anaphoras;
-	private Collection<Token> tokens;
-	private Collection<Sentence> sentences;
-	private Collection<Dependency> dependencies;
-	private Collection<Quotation> quotes;
+
 	
 	private PronounAntecedentFeatureUtils paUtil;
 	
@@ -54,12 +51,8 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
-		sentences = JCasUtil.select(aJCas, Sentence.class);
-		dependencies = JCasUtil.select(aJCas, Dependency.class);
-		tokens = JCasUtil.select(aJCas, Token.class);
-		quotes = JCasUtil.select(aJCas, Quotation.class);
 		
-		paUtil = new PronounAntecedentFeatureUtils(tokens, sentences, dependencies, quotes);
+		paUtil = new PronounAntecedentFeatureUtils(aJCas);
 		
 		for(Anaphora anaphora : anaphoras){
 			PronounAntecedentFeatures a = new PronounAntecedentFeatures(aJCas);

@@ -44,11 +44,6 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 	
 	private JCas aJCas;
 	private Collection<Anaphora> anaphoras;
-	private Collection<Token> tokens;
-	private Collection<Sentence> sentences;
-	private Collection<Dependency> dependencies;
-	private Collection<NamedEntity> namedEntities;
-	private String documentText;
 	
 	private AntecedentFeatureUtils aUtil;
 	
@@ -56,12 +51,8 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
-		sentences = JCasUtil.select(aJCas, Sentence.class);
-		dependencies = JCasUtil.select(aJCas, Dependency.class);
-		tokens = JCasUtil.select(aJCas, Token.class);
-		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
 		
-		aUtil = new AntecedentFeatureUtils(tokens, sentences,dependencies,namedEntities);
+		aUtil = new AntecedentFeatureUtils(aJCas);
 		
 		for(Anaphora anaphora : anaphoras){
 			AntecedentFeatures a = new AntecedentFeatures(aJCas);
