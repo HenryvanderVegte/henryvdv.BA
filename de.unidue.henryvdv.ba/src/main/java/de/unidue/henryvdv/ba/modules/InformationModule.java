@@ -42,7 +42,7 @@ public class InformationModule
 		this.aJCas = aJCas;
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
 		sentences = JCasUtil.select(aJCas, Sentence.class);
-		collectSentenceDistanceInfo();
+	//	collectSentenceDistanceInfo();
 	//	printyMyCorefChains();
 		printInfos();
 	//	printNounPhrases();
@@ -58,10 +58,11 @@ public class InformationModule
 	
 	@Override
 	public void collectionProcessComplete(){
+		/*
 		for(Integer s : sentenceDistanceFD.getKeys()){
 			System.out.println("Sentence-distance: " + s);
 			System.out.println("Count: " + ((float)sentenceDistanceFD.getCount(s)/(float)sentenceDistanceFD.getN()*100f) + " %");
-		}
+		}*/
 	}
 	
 	private void collectSentenceDistanceInfo(){
@@ -113,7 +114,7 @@ public class InformationModule
 	
 	private void printInfos(){
 		DocumentInfo docInfo = JCasUtil.selectSingle(aJCas, DocumentInfo.class);
-		System.out.println("Text Name : " + docInfo.getDocumentName());
+		System.out.print(docInfo.getDocumentName() + ", ");
 		
 		/*
 		System.out.println("Text length: " + aJCas.getDocumentText().length()  + " chars");

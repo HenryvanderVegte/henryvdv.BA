@@ -8,6 +8,7 @@
     <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/Antecedent.xml"/>
   <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/AntecedentFeatures.xml"/>
   <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/PronounAntecedentFeatures.xml"/>
+  <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/PronounFeatures.xml"/>
   </imports>
   <types>
     <typeDescription>
@@ -34,6 +35,11 @@
           <name>hasCorrectAntecedent</name>
           <description>Determines if it is a positive or negative instance</description>
           <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+      <featureDescription>
+          <name>pronounFeatures</name>
+          <description/>
+          <rangeTypeName>de.unidue.henryvdv.ba.type.PronounFeatures</rangeTypeName>
         </featureDescription>
       </features>
     </typeDescription>

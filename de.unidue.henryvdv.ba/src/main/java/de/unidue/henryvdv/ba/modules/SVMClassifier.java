@@ -30,12 +30,14 @@ import de.unidue.henryvdv.ba.type.AntecedentFeatures;
 import de.unidue.henryvdv.ba.type.DetectedNP;
 import de.unidue.henryvdv.ba.type.GoldNP;
 import de.unidue.henryvdv.ba.type.PronounAntecedentFeatures;
+import de.unidue.henryvdv.ba.type.PronounFeatures;
 import de.unidue.henryvdv.ba.type.Quotation;
 import de.unidue.henryvdv.ba.util.AnaphoraEvaluator;
 import de.unidue.henryvdv.ba.util.AnnotationUtils;
 import de.unidue.henryvdv.ba.util.AntecedentFeatureUtils;
 import de.unidue.henryvdv.ba.util.FeatureVectorUtils;
 import de.unidue.henryvdv.ba.util.PronounAntecedentFeatureUtils;
+import de.unidue.henryvdv.ba.util.PronounFeatureUtils;
 
 
 public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
@@ -75,9 +77,6 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 
 	private static final String PREDICTION_DIRECTORY = "src/main/resources/svm/dat";
 	
-	private static final String ECHO_NAME = "svmclassify.txt";
-
-	private static final String ECHO_DIRECTORY = "src/main/resources/svm/echo";
 	
 	private static final int MAX_SENTENCE_DIST = 2;
 	
@@ -90,12 +89,12 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	private Collection<Quotation> quotes;
 	private AntecedentFeatureUtils aFUtil;
 	private PronounAntecedentFeatureUtils paFUtil;
+	private PronounFeatureUtils pFUtil;
 	private FeatureVectorUtils featureVectorUtil;
 	
 	private File modelFile;
 	private File testFile;
 	private File outputFile;
-	private File echoFile;
 	private String featureVector;
 	private List<String> testCommand;
 	private Collection<NP> allNPs;
@@ -109,8 +108,9 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	private JCas aJCas;
 	
 	public void initialize(UimaContext context) throws ResourceInitializationException{
-		eval = new AnaphoraEvaluator();
 		super.initialize(context);
+		eval = new AnaphoraEvaluator();
+
 		featureVectorUtil = new FeatureVectorUtils();
 		String modelFilePath = MODEL_DIRECTORY + "/" + MODEL_NAME;
 		modelFile = new File(modelFilePath);
@@ -121,8 +121,6 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		String outputFilePath = PREDICTION_DIRECTORY + "/" + PREDICTION_NAME;
 		outputFile = new File(outputFilePath);
 		
-		String echoFilePath = ECHO_DIRECTORY + "/" + ECHO_NAME;
-		echoFile = new File(echoFilePath);
 		if(!modelFile.isFile() || !testFile.isFile()){
 			System.out.println("Cant read file.");
 			throw new ResourceInitializationException();
@@ -164,7 +162,8 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		
 		aFUtil = new AntecedentFeatureUtils(aJCas);
 		paFUtil = new PronounAntecedentFeatureUtils(aJCas);
-				
+		pFUtil = new PronounFeatureUtils();	
+		
 		goldAntecedents = new ArrayList<GoldNP>();
 		detectedAntecedents = new ArrayList<DetectedNP>();
 		allNPs = JCasUtil.select(aJCas, NP.class);
@@ -211,7 +210,6 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 				for(int i = anteNPnumber; i > 0; i--){
 					int anteSentenceNr = AnnotationUtils.getSentenceNr(fixedNPs.get(i).getBegin(), sentences);
 					if((anaphoraSentenceNr - anteSentenceNr) > MAX_SENTENCE_DIST){
-						System.out.println("Too much diff");
 						break;
 					}
 
@@ -258,9 +256,11 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	private String createFeatureVector(Anaphora a){		
 		a.setAntecedentFeatures(new AntecedentFeatures(aJCas));
 		a.setPronounAntecedentFeatures(new PronounAntecedentFeatures(aJCas));
+		a.setPronounFeatures(new PronounFeatures(aJCas));
 		
 		paFUtil.annotateFeatures(a);
 		aFUtil.annotateFeatures(a);
+		pFUtil.annotateFeatures(a);
 		return featureVectorUtil.createFeatureVector(a);
 	}
 	

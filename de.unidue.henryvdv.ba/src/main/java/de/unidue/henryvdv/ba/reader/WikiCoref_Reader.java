@@ -34,6 +34,23 @@ extends JCasCollectionReader_ImplBase{
     @ConfigurationParameter(name = PARAM_MAX_DOCUMENTS, mandatory = true)
     private int maxDocuments;
 	
+    
+    /**
+     * Parameter to select one document to leave it out
+     * select value = -1 if no document should be left out
+     **/ 
+    public static final String PARAM_LEAVE_OUT = "LeaveOut";
+    @ConfigurationParameter(name = PARAM_LEAVE_OUT, mandatory = true)
+    private int leaveOut;
+    
+    /**
+     * Parameter to select only one document to use it
+     * select value = -1 if multiple documents should be used
+     **/ 
+    public static final String PARAM_USE_ONLY_THIS = "UseOnlyThis";
+    @ConfigurationParameter(name = PARAM_USE_ONLY_THIS, mandatory = true)
+    private int useOnlyThis;
+    
     private static final String TAG_WORD = "word";
     private static final String TAG_WORDS = "words";
     private static final String TAG_MARKABLES = "markables";
@@ -75,10 +92,23 @@ extends JCasCollectionReader_ImplBase{
         }
         
         basedataIndex = 0;
+        if(leaveOut == 0)
+        	basedataIndex++;
+        if(useOnlyThis >= 0){
+        	if(inputBasedataFiles.size() >= useOnlyThis){
+        		basedataIndex = useOnlyThis;
+        	} else {
+        		System.out.println("Selected and doc out of range. Only doc 0 will be used.");
+        		basedataIndex = 0;
+        		useOnlyThis = -1;
+        	}
+        }
         markablesDataIndex = basedataIndex*2;   
     } 
 
 	public boolean hasNext() throws IOException, CollectionException {
+		if(useOnlyThis >= 0 && basedataIndex != useOnlyThis)
+			return false;
 		return (basedataIndex < inputBasedataFiles.size() && basedataIndex < maxDocuments);
 	}
 
@@ -106,6 +136,10 @@ extends JCasCollectionReader_ImplBase{
             docInfo.addToIndexes();
             basedataIndex++;
             markablesDataIndex += 2;
+            if(basedataIndex == leaveOut){
+                basedataIndex++;
+                markablesDataIndex += 2;
+            }
         }  
         catch (IOException e) {
             throw new IOException(e);

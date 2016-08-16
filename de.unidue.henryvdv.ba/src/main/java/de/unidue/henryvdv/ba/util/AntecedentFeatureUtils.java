@@ -1,5 +1,6 @@
 package de.unidue.henryvdv.ba.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -53,11 +54,24 @@ public class AntecedentFeatureUtils {
 		//Org
 		a.getAntecedentFeatures().setA_Org(organization(a));
 		//Person
-		a.getAntecedentFeatures().setA_Org(person(a));
+		a.getAntecedentFeatures().setA_Person(person(a));
 		//Time
 		a.getAntecedentFeatures().setA_Time(time(a));
+		//Date
+		a.getAntecedentFeatures().setA_Date(date(a));
+		//Money
+		a.getAntecedentFeatures().setA_Money(money(a));
+		//Money
+		a.getAntecedentFeatures().setA_Number(number(a));
+		//Definite Article
+		a.getAntecedentFeatures().setA_Definite(definiteArticle(a));
+		// His/Her
+		a.getAntecedentFeatures().setA_HisHer(hisHerPattern(a));
+		// He/His
+		a.getAntecedentFeatures().setA_HeHis(heHisPattern(a));
 	}
 	
+
 	
 	
 	public float antecedentFrequency(Anaphora a){
@@ -169,13 +183,87 @@ public class AntecedentFeatureUtils {
 	}
 	
 	public boolean time(Anaphora a){
-
-
-		for(NamedEntity n : namedEntities){
-			System.out.println(n.getCoveredText() + "  " + n.getValue());
+		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+		boolean value = false;			
+		for(Token t : covTokens){
+			String ne = getNamedEntityValue(t);
+			if(ne != null && ne.equals("TIME")){
+				value = true;
+			}
 		}
-		return false;
+		return value;
 	}
+	
+	public boolean date(Anaphora a){
+		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+		boolean value = false;			
+		for(Token t : covTokens){
+			String ne = getNamedEntityValue(t);
+			if(ne != null && ne.equals("DATE")){
+				value = true;
+			}
+		}
+		return value;
+	}
+	
+	public boolean money(Anaphora a){
+		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+		boolean value = false;			
+		for(Token t : covTokens){
+			String ne = getNamedEntityValue(t);
+			if(ne != null && ne.equals("MONEY")){
+				value = true;
+			}
+		}
+		return value;
+	}
+	
+	public boolean number(Anaphora a){
+		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+		boolean value = false;			
+		for(Token t : covTokens){
+			String ne = getNamedEntityValue(t);
+			if(ne != null && ne.equals("NUMBER")){
+				value = true;
+			}
+		}
+		return value;
+	}
+	
+	public boolean definiteArticle(Anaphora a){
+		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+		boolean value = false;			
+		for(Token t : covTokens){
+			if(t.getCoveredText().equalsIgnoreCase("the")){
+				value = true;
+			}
+		}
+		return value;
+	}
+	
+	public boolean hisHerPattern(Anaphora a){
+		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+		boolean value = false;			
+		for(Token t : covTokens){
+			if(t.getCoveredText().equalsIgnoreCase("his")||t.getCoveredText().equalsIgnoreCase("her")){
+				value = true;
+			}
+		}
+		return value;
+	}
+	
+	public boolean heHisPattern(Anaphora a){
+		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+		boolean value = false;			
+		for(Token t : covTokens){
+			if(t.getCoveredText().equalsIgnoreCase("he")||t.getCoveredText().equalsIgnoreCase("his")){
+				value = true;
+			}
+		}
+		return value;
+	}
+	
+	
 	
 	private int getNrOfOccurences(List<Token> checkTokens){
 		Token[] tokenArray = tokens.toArray(new Token[tokens.size()]);

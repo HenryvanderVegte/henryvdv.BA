@@ -1,13 +1,16 @@
 package de.unidue.henryvdv.ba.modules;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
+import org.apache.uima.resource.ResourceInitializationException;
 
 import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.CONJ;
 import de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity;
@@ -44,14 +47,15 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 	
 	private JCas aJCas;
 	private Collection<Anaphora> anaphoras;
-	
 	private AntecedentFeatureUtils aUtil;
+
+	
+
 	
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
-		
 		aUtil = new AntecedentFeatureUtils(aJCas);
 		
 		for(Anaphora anaphora : anaphoras){
@@ -61,8 +65,8 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 		}
 		
 	}
-
 	
+
 
 
 }

@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Thu Aug 11 18:56:41 CEST 2016
+ * Updated by JCasGen Sun Aug 14 23:41:59 CEST 2016
  * @generated */
 public class Anaphora_Type extends Annotation_Type {
   /** @generated 
@@ -141,6 +141,30 @@ public class Anaphora_Type extends Annotation_Type {
     ll_cas.ll_setBooleanValue(addr, casFeatCode_hasCorrectAntecedent, v);}
     
   
+ 
+  /** @generated */
+  final Feature casFeat_pronounFeatures;
+  /** @generated */
+  final int     casFeatCode_pronounFeatures;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public int getPronounFeatures(int addr) {
+        if (featOkTst && casFeat_pronounFeatures == null)
+      jcas.throwFeatMissing("pronounFeatures", "de.unidue.henryvdv.ba.type.Anaphora");
+    return ll_cas.ll_getRefValue(addr, casFeatCode_pronounFeatures);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setPronounFeatures(int addr, int v) {
+        if (featOkTst && casFeat_pronounFeatures == null)
+      jcas.throwFeatMissing("pronounFeatures", "de.unidue.henryvdv.ba.type.Anaphora");
+    ll_cas.ll_setRefValue(addr, casFeatCode_pronounFeatures, v);}
+    
+  
 
 
 
@@ -168,6 +192,10 @@ public class Anaphora_Type extends Annotation_Type {
  
     casFeat_hasCorrectAntecedent = jcas.getRequiredFeatureDE(casType, "hasCorrectAntecedent", "uima.cas.Boolean", featOkTst);
     casFeatCode_hasCorrectAntecedent  = (null == casFeat_hasCorrectAntecedent) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_hasCorrectAntecedent).getCode();
+
+ 
+    casFeat_pronounFeatures = jcas.getRequiredFeatureDE(casType, "pronounFeatures", "de.unidue.henryvdv.ba.type.PronounFeatures", featOkTst);
+    casFeatCode_pronounFeatures  = (null == casFeat_pronounFeatures) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_pronounFeatures).getCode();
 
   }
 }

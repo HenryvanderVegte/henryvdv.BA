@@ -11,7 +11,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Thu Aug 11 18:56:41 CEST 2016
+ * Updated by JCasGen Sun Aug 14 23:41:59 CEST 2016
  * XML source: C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/src/main/resources/desc/type/Anaphora.xml
  * @generated */
 public class Anaphora extends Annotation {
@@ -162,6 +162,28 @@ public class Anaphora extends Annotation {
     if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_hasCorrectAntecedent == null)
       jcasType.jcas.throwFeatMissing("hasCorrectAntecedent", "de.unidue.henryvdv.ba.type.Anaphora");
     jcasType.ll_cas.ll_setBooleanValue(addr, ((Anaphora_Type)jcasType).casFeatCode_hasCorrectAntecedent, v);}    
+   
+    
+  //*--------------*
+  //* Feature: pronounFeatures
+
+  /** getter for pronounFeatures - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public PronounFeatures getPronounFeatures() {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_pronounFeatures == null)
+      jcasType.jcas.throwFeatMissing("pronounFeatures", "de.unidue.henryvdv.ba.type.Anaphora");
+    return (PronounFeatures)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Anaphora_Type)jcasType).casFeatCode_pronounFeatures)));}
+    
+  /** setter for pronounFeatures - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setPronounFeatures(PronounFeatures v) {
+    if (Anaphora_Type.featOkTst && ((Anaphora_Type)jcasType).casFeat_pronounFeatures == null)
+      jcasType.jcas.throwFeatMissing("pronounFeatures", "de.unidue.henryvdv.ba.type.Anaphora");
+    jcasType.ll_cas.ll_setRefValue(addr, ((Anaphora_Type)jcasType).casFeatCode_pronounFeatures, jcasType.ll_cas.ll_getFSRef(v));}    
   }
 
     

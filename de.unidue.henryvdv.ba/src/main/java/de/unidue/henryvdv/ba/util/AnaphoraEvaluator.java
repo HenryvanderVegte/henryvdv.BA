@@ -1,14 +1,32 @@
 package de.unidue.henryvdv.ba.util;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import de.unidue.henryvdv.ba.type.DetectedNP;
 import de.unidue.henryvdv.ba.type.GoldNP;
 
 public class AnaphoraEvaluator {
+	
+	private static final String PRINT_FILE_NAME = "accuracyOutput.txt";
+
+	private static final String PRINT_FILE_DIRECTORY = "src/main/resources/output";
+	
+	public static final boolean PARAM_PRINTFILE = true;
 
 	private int anaphorsTotal = 0;
 	private int correctAnaphorsTotal = 0;
+	
+	private File outputFile;
+	
+	public AnaphoraEvaluator(){
+		super();
+		outputFile = new File(PRINT_FILE_DIRECTORY + "/" + PRINT_FILE_NAME);
+	}
 	
 	public void evaluate(List<DetectedNP> detectedAntecedents, List<GoldNP> goldAntecedents){
 		if(detectedAntecedents.size() != goldAntecedents.size()){
@@ -85,6 +103,40 @@ public class AnaphoraEvaluator {
 			rel = ((float)correctAnaphorsTotal / (float)anaphorsTotal) * 100f;
 		} 
 		System.out.println("Accuracy: " + rel + " % ");
+		if(PARAM_PRINTFILE){
+			
+			FileWriter fw = null;
+			BufferedWriter bw = null;
+			PrintWriter out = null;
+			try {
+
+				fw = new FileWriter(outputFile, true);
+			    bw = new BufferedWriter(fw);
+			    out = new PrintWriter(bw);
+			    out.println("Correct: " + correctAnaphorsTotal + "  Total: " + anaphorsTotal + "  Accuracy: " + rel);
+			    out.close();
+			} catch (IOException e) {
+			    //exception handling left as an exercise for the reader
+			}
+			finally {
+			    if(out != null)
+				    out.close();
+			    try {
+			        if(bw != null)
+			            bw.close();
+			    } catch (IOException e) {
+			        //exception handling left as an exercise for the reader
+			    }
+			    try {
+			        if(fw != null)
+			            fw.close();
+			    } catch (IOException e) {
+			        //exception handling left as an exercise for the reader
+			    }
+			}
+			
+			
+		}
 	}
 	
 }

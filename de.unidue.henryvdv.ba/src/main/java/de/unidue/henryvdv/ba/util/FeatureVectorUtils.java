@@ -40,7 +40,19 @@ public class FeatureVectorUtils {
 		addA_PrenominalModifier();
 		addA_Org();
 		addA_Person();
+		addA_Time();
+		addA_Date();
+		addA_Money();
+		addA_Number();
+		addA_Definite();
+		addA_HisHer();
+		addA_HeHis();
 		
+		addP_Masculine();
+		addP_Feminine();
+		addP_Neutral();
+		addP_Plural();
+	
 		return currentFeatureVector;
 	}
 	
@@ -122,6 +134,50 @@ public class FeatureVectorUtils {
 	
 	private void addA_Person(){
 		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_Person());
+	}
+	
+	private void addA_Time(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_Time());
+	}
+	
+	private void addA_Date(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_Date());
+	}
+	
+	private void addA_Money(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_Money());
+	}
+	
+	private void addA_Number(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_Number());
+	}
+	
+	private void addA_Definite(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_Definite());
+	}
+	
+	private void addA_HisHer(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_HisHer());
+	}
+	
+	private void addA_HeHis(){
+		addBinarizedFeature(currentAnaphora.getAntecedentFeatures().getA_HeHis());
+	}
+	
+	private void addP_Masculine(){
+		addBinarizedFeature(currentAnaphora.getPronounFeatures().getP_Masculine());
+	}
+	
+	private void addP_Feminine(){
+		addBinarizedFeature(currentAnaphora.getPronounFeatures().getP_Feminine());
+	}
+	
+	private void addP_Neutral(){
+		addBinarizedFeature(currentAnaphora.getPronounFeatures().getP_Neutral());
+	}
+	
+	private void addP_Plural(){
+		addBinarizedFeature(currentAnaphora.getPronounFeatures().getP_Plural());
 	}
 	
 	private void addBinarizedFeature(boolean value){
