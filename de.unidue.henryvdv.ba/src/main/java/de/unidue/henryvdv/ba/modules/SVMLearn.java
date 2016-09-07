@@ -178,7 +178,6 @@ public class SVMLearn implements Constants {
 
 	
 	private static void runCommand(List<String> command) throws Exception {
-
 		Process process = new ProcessBuilder().command(command).start();
 		process.waitFor();
 	}
