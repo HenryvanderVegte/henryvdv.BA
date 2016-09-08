@@ -33,7 +33,11 @@ public class FrequencyCounter extends JCasAnnotator_ImplBase {
 	private String[] reflexive = {"himself","herself","itself","themselves"};
 	private String[] possessive = {"his","her","its","their"};
 	private String[] nominative = {"he","she","it","they"};
-	private String[] designators = {"mr","mrs","miss","lady","lord","mr.","mrs.","mister",};
+	private String[] designators = {"mr","mrs",
+									"mister","miss",
+									"lord","lady",
+									"mr.","mrs.",
+									"sir","madam"};
 	
 	private static final String OUTPUT_DIRECTORY = "src/gender/resources/output";
 	
@@ -126,20 +130,26 @@ public class FrequencyCounter extends JCasAnnotator_ImplBase {
 						//System.out.println("Add Predicate: " + predicateFrequencies.getN());
 						continue;
 					}				
-				}
-				//Designators:
-				if(i < tokens.length - 1 &&
-						Arrays.asList(designators).contains(tokens[i].getCoveredText().toLowerCase()) &&
-						tokens[i+1] != null &&
-						tokens[i+1].getPos().getPosValue().contains("NN")
-						){
-					designatorFrequencies.addSample(tokens[i].getCoveredText().toLowerCase(), tokens[i+1].getCoveredText().toLowerCase(), 1);
-					//System.out.println("Add Designator: " + designatorFrequencies.getN());
-					continue;
-				}
-				
+				}	
 			}	
+			//Designators:
+			if(i < tokens.length - 1 &&
+					Arrays.asList(designators).contains(tokens[i].getCoveredText().toLowerCase()) &&
+					tokens[i+1] != null &&
+					tokens[i+1].getPos().getPosValue().contains("NN")
+					){
+				designatorFrequencies.addSample(tokens[i].getCoveredText().toLowerCase(), tokens[i+1].getCoveredText().toLowerCase(), 1);
+				//System.out.println("Add Designator: " + designatorFrequencies.getN());
+				continue;
+			}
 		}	
+		
+		System.out.println("Designators: " + designatorFrequencies.getN());
+		System.out.println("Nominatives: " + nominativeFrequencies.getN());
+		System.out.println("Possessives: " + possessiveFrequencies.getN());
+		System.out.println("Predicates:  " + predicateFrequencies.getN());
+		System.out.println("Reflexives:  " + reflexiveFrequencies.getN());
+		
 	}
 
 	
@@ -255,7 +265,13 @@ public class FrequencyCounter extends JCasAnnotator_ImplBase {
     				writer.write(outputline);
     				writer.newLine();
     			}
-    		}    
+    		} 
+            try {
+  			   writer.close();
+  		   } catch (Exception e)
+  		   {
+  			   e.printStackTrace();
+  		   }
 		} catch (IOException e) {
 		  e.printStackTrace();
 		} finally {

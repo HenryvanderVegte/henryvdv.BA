@@ -2,6 +2,7 @@ package de.unidue.henryvdv.ba.gender.reader;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -58,10 +59,9 @@ public class CorpusTextReader
 		return null;
 	}
 
-	@Override
 	public void getNext(JCas jCas) throws IOException, CollectionException {
 		System.out.println("Read Document Nr: " + docIndex);
-		System.out.println("From line " + currentLine + " to line " + currentLine + maxSentences);
+		System.out.println("From line " + currentLine + " to (at most) line " + (currentLine + maxSentences));
 		jCas.setDocumentLanguage("en");
 		
 		DocumentInfo docInfo = new DocumentInfo(jCas);
@@ -86,11 +86,21 @@ public class CorpusTextReader
         			break;
         		}
         	}
-        	for(int j = 0; j < s.length(); j++){
-        		if(s.codePointAt(j) == 65533){
-        			s = s.substring(0, j) + s.substring(j+1);
+        	
+        	s = Normalizer
+        	        .normalize(s, Normalizer.Form.NFD)
+        	        .replaceAll("[^\\p{ASCII}]", "");
+        	
+        	/*
+        	String a = s + "";
+        	for(int j = 0; j < a.length(); j++){   
+        		if(!(Character.isLetterOrDigit(a.charAt(j)) || Character.is(a.charAt(j)))){
+        			//System.out.println("Removed: " + s.charAt(j) + "--- " + j);
+        			a = a.substring(0, j) + a.substring(j+1);
         		}
         	}
+        	System.out.println(a);
+     		*/
         	
         	
         	documentText += s + " ";
@@ -104,7 +114,6 @@ public class CorpusTextReader
         		readFromFile = false;
         	}
         }
-
 		jCas.setDocumentText(documentText.trim());     
 	}
 

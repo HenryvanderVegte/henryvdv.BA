@@ -1,5 +1,0 @@
-himself;tim;1
-himself;john;2
-himself;mark;1
-itself;idea;1
-herself;lisa;1
