@@ -21,11 +21,21 @@ public class CorpusTextReader
     public static final String PARAM_INPUT_DIRECTORY= "InputDirectory";
     @ConfigurationParameter(name = PARAM_INPUT_DIRECTORY, mandatory = true)
     private String inputDirectory;
+    
+    /**
+     * The maximum of sentences allowed per document.
+     * If there are more sentences in one document, the document will be split.
+     */
+    public static final String PARAM_MAX_SENTENCES = "MaxSentences";
+    @ConfigurationParameter(name = PARAM_MAX_SENTENCES, mandatory = true)
+    private int maxSentences;
    
     
     private int docIndex;
     private List<File> inputFiles;
     private String documentText;
+    
+    private int currentLine;
     
     @Override
     public void initialize(UimaContext context)
@@ -36,6 +46,7 @@ public class CorpusTextReader
         File inputDir = new File(inputDirectory);
         docIndex = 0;
         inputFiles = (List<File>) FileUtils.listFiles(inputDir, ext, false);
+        currentLine = 0;
     }
     
 
@@ -49,28 +60,52 @@ public class CorpusTextReader
 
 	@Override
 	public void getNext(JCas jCas) throws IOException, CollectionException {
+		System.out.println("Read Document Nr: " + docIndex);
+		System.out.println("From line " + currentLine + " to line " + currentLine + maxSentences);
 		jCas.setDocumentLanguage("en");
+		
 		DocumentInfo docInfo = new DocumentInfo(jCas);
         String docName =  inputFiles.get(docIndex).getName();
         docName = docName.substring(0,docName.length() - 4);
         docInfo.setDocumentName(docName);       
         docInfo.addToIndexes();
+        
+        
 		documentText = "";
         
         List<String> docText = FileUtils.readLines(inputFiles.get(docIndex));
         
-        for(String s : docText){
-        	for(int i = 0; i < s.length(); i++){
-        		if(Character.isAlphabetic(s.charAt(i))){
-        			s = s.substring(i);
+        
+        boolean readFromFile = true;
+        
+        while(readFromFile){
+        	String s = docText.get(currentLine);
+        	for(int j = 0; j < s.length(); j++){
+        		if(Character.isAlphabetic(s.charAt(j))){
+        			s = s.substring(j);
         			break;
         		}
         	}
+        	for(int j = 0; j < s.length(); j++){
+        		if(s.codePointAt(j) == 65533){
+        			s = s.substring(0, j) + s.substring(j+1);
+        		}
+        	}
+        	
+        	
         	documentText += s + " ";
+        	currentLine++;
+        	
+        	if(currentLine == docText.size()){
+        		readFromFile = false;
+        		docIndex++;
+        		currentLine = 0;
+        	} else if((currentLine % maxSentences) == 0){
+        		readFromFile = false;
+        	}
         }
-		
-		docIndex++;
-		jCas.setDocumentText(documentText.trim());
+
+		jCas.setDocumentText(documentText.trim());     
 	}
 
 }

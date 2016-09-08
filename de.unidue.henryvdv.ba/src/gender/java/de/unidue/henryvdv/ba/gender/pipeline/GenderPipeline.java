@@ -29,7 +29,9 @@ public class GenderPipeline {
 				  CollectionReaderFactory.createReader(
 						  				CorpusTextReader.class,
 						  				CorpusTextReader.PARAM_INPUT_DIRECTORY,
-						  				"src/gender/resources/input"),
+						  				"src/gender/resources/input",
+						  				CorpusTextReader.PARAM_MAX_SENTENCES,
+						  				10),
 				  AnalysisEngineFactory.createEngineDescription(StanfordSegmenter.class),
 				  AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
 				  AnalysisEngineFactory.createEngineDescription(FrequencyCounter.class)

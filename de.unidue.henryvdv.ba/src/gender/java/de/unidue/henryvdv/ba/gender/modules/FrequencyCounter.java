@@ -20,6 +20,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.ConditionalFrequencyDistribution;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
+import de.unidue.henryvdv.ba.type.DocumentInfo;
 
 public class FrequencyCounter extends JCasAnnotator_ImplBase {
 
@@ -43,6 +44,7 @@ public class FrequencyCounter extends JCasAnnotator_ImplBase {
 	private static final String REFLEXIVE_NAME = "reflexiveFrequencies.txt";
 	
 	
+	
 	public void initialize(UimaContext context) throws ResourceInitializationException{
 		super.initialize(context);
 		reflexiveFrequencies = new ConditionalFrequencyDistribution<String, String>();
@@ -50,80 +52,90 @@ public class FrequencyCounter extends JCasAnnotator_ImplBase {
 		nominativeFrequencies = new ConditionalFrequencyDistribution<String, String>();
 		predicateFrequencies = new ConditionalFrequencyDistribution<String, String>();
 		designatorFrequencies = new ConditionalFrequencyDistribution<String, String>();
-		
 	}
 	
 	
 	
 	@Override
-	public void process(JCas aJCas) throws AnalysisEngineProcessException {
-		Collection<Token> tokensColl = JCasUtil.select(aJCas, Token.class);
-		Collection<Sentence> sentences = JCasUtil.select(aJCas, Sentence.class);
+	public void process(JCas aJCas) throws AnalysisEngineProcessException {		
+		Collection<Token> tokensColl = JCasUtil.select(aJCas, Token.class);	
 		
-		List<Token> tokens = new ArrayList(tokensColl);
+		Token[] tokens = new Token[tokensColl.size()];
+		int c = 0;
+		for(Token t : tokensColl){
+			tokens[c] = t;
+			c++;
+		}
 		
-		for(int i = 0; i < tokens.size(); i++){
+		for(int i = 0; i < tokens.length; i++){
 			//Reflexives:
 			if( i > 1 &&
-					Arrays.asList(reflexive).contains(tokens.get(i).getCoveredText().toLowerCase()) &&
-					tokens.get(i-1) != null &&
-					tokens.get(i-1).getPos().getPosValue().contains("VB") &&
-					tokens.get(i-2) != null &&
-					tokens.get(i-2).getPos().getPosValue().contains("NN")){
+					Arrays.asList(reflexive).contains(tokens[i].getCoveredText().toLowerCase()) &&
+					tokens[i-1] != null &&
+					tokens[i-1].getPos().getPosValue().contains("VB") &&
+					tokens[i-2] != null &&
+					tokens[i-2].getPos().getPosValue().contains("NN")){
 				
-				reflexiveFrequencies.addSample(tokens.get(i).getCoveredText().toLowerCase(), tokens.get(i-2).getCoveredText().toLowerCase(), 1);
+				reflexiveFrequencies.addSample(tokens[i].getCoveredText().toLowerCase(), tokens[i-2].getCoveredText().toLowerCase(), 1);
+				//System.out.println("Add Reflexive: " + reflexiveFrequencies.getN());
 				continue;
 			}
 			//Possessives:
 			if( i > 1 &&
-					Arrays.asList(possessive).contains(tokens.get(i).getCoveredText().toLowerCase()) &&
-					tokens.get(i-1) != null &&
-					tokens.get(i-1).getPos().getPosValue().contains("VB") &&
-					tokens.get(i-2) != null &&
-					tokens.get(i-2).getPos().getPosValue().contains("NN")){
+					Arrays.asList(possessive).contains(tokens[i].getCoveredText().toLowerCase()) &&
+					tokens[i-1] != null &&
+					tokens[i-1].getPos().getPosValue().contains("VB") &&
+					tokens[i-2] != null &&
+					tokens[i-2].getPos().getPosValue().contains("NN")){
 				
-				possessiveFrequencies.addSample(tokens.get(i).getCoveredText().toLowerCase(), tokens.get(i-2).getCoveredText().toLowerCase(), 1);
+				possessiveFrequencies.addSample(tokens[i].getCoveredText().toLowerCase(), tokens[i-2].getCoveredText().toLowerCase(), 1);
+				//System.out.println("Add Possessive: " + possessiveFrequencies.getN());
 				continue;
 			}
 			//Nominatives:
 			if( i > 1 &&
-					Arrays.asList(nominative).contains(tokens.get(i).getCoveredText().toLowerCase()) &&
-					tokens.get(i-1) != null &&
-					tokens.get(i-1).getPos().getPosValue().contains("VB") &&
-					tokens.get(i-2) != null &&
-					tokens.get(i-2).getPos().getPosValue().contains("NN")){
+					Arrays.asList(nominative).contains(tokens[i].getCoveredText().toLowerCase()) &&
+					tokens[i-1] != null &&
+					tokens[i-1].getPos().getPosValue().contains("VB") &&
+					tokens[i-2] != null &&
+					tokens[i-2].getPos().getPosValue().contains("NN")){
 				
-				possessiveFrequencies.addSample(tokens.get(i).getCoveredText().toLowerCase(), tokens.get(i-2).getCoveredText().toLowerCase(), 1);
+				nominativeFrequencies.addSample(tokens[i].getCoveredText().toLowerCase(), tokens[i-2].getCoveredText().toLowerCase(), 1);
+				//System.out.println("Add Nominative: " + nominativeFrequencies.getN());
 				continue;
 			}
 			
 			//Predicates:
-			if( i < tokens.size() - 3 &&
-					Arrays.asList(nominative).contains(tokens.get(i).getCoveredText().toLowerCase())&&
-					tokens.get(i+1) != null &&
-						(tokens.get(i+1).getCoveredText().toLowerCase().equals("is") || 
-						 tokens.get(i+1).getCoveredText().toLowerCase().equals("are"))){
+			if( i < tokens.length - 3 &&
+					Arrays.asList(nominative).contains(tokens[i].getCoveredText().toLowerCase())&&
+					tokens[i+1] != null &&
+						(tokens[i+1].getCoveredText().toLowerCase().equals("is") || 
+						 tokens[i+1].getCoveredText().toLowerCase().equals("are"))){
 				
-				if(tokens.get(i+2).getPos().getPosValue().contains("NN")){
-					predicateFrequencies.addSample(tokens.get(i).getCoveredText().toLowerCase(), tokens.get(i+2).getCoveredText().toLowerCase(), 1);
+				if(tokens[i+2].getPos().getPosValue().contains("NN")){
+					predicateFrequencies.addSample(tokens[i].getCoveredText().toLowerCase(), tokens[i+2].getCoveredText().toLowerCase(), 1);
+					//System.out.println("Add Predicate: " + predicateFrequencies.getN());
 					continue;
 				}
 				
-				if(tokens.get(i+2).getCoveredText().toLowerCase().equals("a") || 
-						tokens.get(i+2).getCoveredText().toLowerCase().equals("an")){
+				if(tokens[i+2].getCoveredText().toLowerCase().equals("a") || 
+						tokens[i+2].getCoveredText().toLowerCase().equals("an")){
 					
-					if(tokens.get(i+3).getPos().getPosValue().contains("NN")){
-						predicateFrequencies.addSample(tokens.get(i).getCoveredText().toLowerCase(), tokens.get(i+3).getCoveredText().toLowerCase(), 1);
+					if(tokens[i+3].getPos().getPosValue().contains("NN")){
+						predicateFrequencies.addSample(tokens[i].getCoveredText().toLowerCase(), tokens[i+3].getCoveredText().toLowerCase(), 1);
+						//System.out.println("Add Predicate: " + predicateFrequencies.getN());
 						continue;
 					}				
 				}
 				//Designators:
-				if(i < tokens.size() - 1 &&
-						Arrays.asList(designators).contains(tokens.get(i).getCoveredText().toLowerCase()) &&
-						tokens.get(i+1) != null &&
-						tokens.get(i+1).getPos().getPosValue().contains("NN")
+				if(i < tokens.length - 1 &&
+						Arrays.asList(designators).contains(tokens[i].getCoveredText().toLowerCase()) &&
+						tokens[i+1] != null &&
+						tokens[i+1].getPos().getPosValue().contains("NN")
 						){
-					designatorFrequencies.addSample(tokens.get(i).getCoveredText().toLowerCase(), tokens.get(i+1).getCoveredText().toLowerCase(), 1);
+					designatorFrequencies.addSample(tokens[i].getCoveredText().toLowerCase(), tokens[i+1].getCoveredText().toLowerCase(), 1);
+					//System.out.println("Add Designator: " + designatorFrequencies.getN());
+					continue;
 				}
 				
 			}	
