@@ -21,6 +21,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.ConditionalFrequencyDistribution;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
+import de.unidue.henryvdv.ba.gender.param.GenderParam;
 import de.unidue.henryvdv.ba.type.DocumentInfo;
 
 public class FrequencyCounter2 extends JCasAnnotator_ImplBase {
@@ -31,14 +32,10 @@ public class FrequencyCounter2 extends JCasAnnotator_ImplBase {
 	private List<String> predicateFrequencies; 
 	private List<String> designatorFrequencies; 
 	
-	private String[] reflexive = {"himself","herself","itself","themselves"};
-	private String[] possessive = {"his","her","its","their"};
-	private String[] nominative = {"he","she","it","they"};
-	private String[] designators = {"mr","mrs",
-									"mister","miss",
-									"lord","lady",
-									"mr.","mrs.",
-									"sir","madam"};
+	private String[] reflexive = GenderParam.reflexive;
+	private String[] possessive = GenderParam.possessive;
+	private String[] nominative = GenderParam.nominative;
+	private String[] designators = GenderParam.designators;
 	
 	private static final String OUTPUT_DIRECTORY = "src/gender/resources/output";
 	

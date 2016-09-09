@@ -14,6 +14,8 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Progress;
 
+import de.unidue.henryvdv.ba.gender.param.GenderParam;
+import de.unidue.henryvdv.ba.gender.util.GenderUtil;
 import de.unidue.henryvdv.ba.type.DocumentInfo;
 
 public class CorpusTextReader
@@ -38,6 +40,8 @@ public class CorpusTextReader
     
     private int currentLine;
     
+    private String[] identifiers;
+
     @Override
     public void initialize(UimaContext context)
         throws ResourceInitializationException
@@ -45,9 +49,13 @@ public class CorpusTextReader
         super.initialize(context);
         String[] ext = {"txt"};
         File inputDir = new File(inputDirectory);
-        docIndex = 0;
+        docIndex = 5;
         inputFiles = (List<File>) FileUtils.listFiles(inputDir, ext, false);
-        currentLine = 0;
+        currentLine = 100000;
+        identifiers = GenderUtil.concatAll(GenderParam.reflexive,
+        									GenderParam.nominative,
+        									GenderParam.possessive,
+        									GenderParam.designators);
     }
     
 
@@ -74,9 +82,10 @@ public class CorpusTextReader
 		documentText = "";
         
         List<String> docText = FileUtils.readLines(inputFiles.get(docIndex));
-        
-        
+               
         boolean readFromFile = true;
+        
+        int filteredLines = 0;
         
         while(readFromFile){
         	String s = docText.get(currentLine);
@@ -91,19 +100,16 @@ public class CorpusTextReader
         	        .normalize(s, Normalizer.Form.NFD)
         	        .replaceAll("[^\\p{ASCII}]", "");
         	
-        	/*
-        	String a = s + "";
-        	for(int j = 0; j < a.length(); j++){   
-        		if(!(Character.isLetterOrDigit(a.charAt(j)) || Character.is(a.charAt(j)))){
-        			//System.out.println("Removed: " + s.charAt(j) + "--- " + j);
-        			a = a.substring(0, j) + a.substring(j+1);
+        	
+        	for(int i = 0; i < identifiers.length; i++){        		
+        		if(s.contains(" " + identifiers[i] + " ")){
+        			filteredLines++;
+        			documentText += s + " ";
+        			break;
         		}
         	}
-        	System.out.println(a);
-     		*/
         	
-        	
-        	documentText += s + " ";
+     
         	currentLine++;
         	
         	if(currentLine == docText.size()){
@@ -114,6 +120,7 @@ public class CorpusTextReader
         		readFromFile = false;
         	}
         }
+        System.out.println("Lines with Identifier: " + filteredLines);
 		jCas.setDocumentText(documentText.trim());     
 	}
 

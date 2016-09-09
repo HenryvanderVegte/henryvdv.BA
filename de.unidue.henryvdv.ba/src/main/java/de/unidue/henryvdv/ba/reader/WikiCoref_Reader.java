@@ -33,7 +33,17 @@ extends JCasCollectionReader_ImplBase{
     public static final String PARAM_MAX_DOCUMENTS = "MaxDocuments";
     @ConfigurationParameter(name = PARAM_MAX_DOCUMENTS, mandatory = true)
     private int maxDocuments;
-	
+    
+    
+    /**
+     * Parameter to select all documents (through their indexes) that
+     * should be read
+     */
+    public static final String PARAM_USED_DOCUMENT_NUMBERS = "usedDocuments";
+    @ConfigurationParameter(name = PARAM_USED_DOCUMENT_NUMBERS, mandatory = true)
+    private Integer[] usedDocuments;
+    
+    
     
     /**
      * Parameter to select one document to leave it out
