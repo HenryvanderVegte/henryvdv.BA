@@ -21,46 +21,26 @@ import de.unidue.henryvdv.ba.modules.SVMTrainingInstanceCreator;
 import de.unidue.henryvdv.ba.reader.WikiCoref_Reader;
 
 public class TrainTestPipeline {
+	
+	private final static Integer[] usedDocs = {0,100};
 
 	public static void main(String[] args)
 			  throws Exception {	
 		
-		for(int i = 26; i < 30; i++){
-			long start = System.currentTimeMillis();
-			System.out.println("Nr." + i + ":");
-			System.out.print("Train on:");
-			
-			trainPipeline(i, -1);
-			
-			System.out.println("");
-			
-			SVMLearn svmLearn = new SVMLearn();
-			svmLearn.learn();
-			
-			System.out.print("Test on:");
-			
-			testPipeline(-1,i);
-			long elapsedTimeMillis = System.currentTimeMillis()-start;
-			float elapsedTimeMin = elapsedTimeMillis/(60*1000F);
-			System.out.println("Elapsed Time: " + elapsedTimeMin);
-			System.out.println("");
-		}
-	}
-	
-	private static void trainTest(){
+		trainPipeline(usedDocs);
 		
 	}
 	
-	  private static void trainPipeline(int leaveOut, int useThis) throws Exception{
+	private static void trainTest(){
+	}
+	
+	  private static void trainPipeline(Integer[] _usedDocs) throws Exception{
 		  SimplePipeline.runPipeline(	               
 	        		
 	        		CollectionReaderFactory.createReader(
 	                        WikiCoref_Reader.class,
 	                        WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
-	                        WikiCoref_Reader.PARAM_MAX_DOCUMENTS, 30,
-	                        WikiCoref_Reader.PARAM_LEAVE_OUT, leaveOut,
-	                        WikiCoref_Reader.PARAM_USE_ONLY_THIS, useThis
-	                ),			   
+	                        WikiCoref_Reader.PARAM_USED_DOCUMENT_NUMBERS, _usedDocs),			   
 	        		AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
 	        		AnalysisEngineFactory.createEngineDescription(CoreNlpNamedEntityRecognizer.class),
@@ -77,15 +57,12 @@ public class TrainTestPipeline {
 	        );  
 	  }
 	  
-	  private static void testPipeline(int leaveOut, int useThis) throws Exception{
+	  private static void testPipeline(Integer[] _usedDocs) throws Exception{
 		  SimplePipeline.runPipeline(	        		
 	        		CollectionReaderFactory.createReader(
 	                        WikiCoref_Reader.class,
 	                        WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
-	                        WikiCoref_Reader.PARAM_MAX_DOCUMENTS, 30,
-	                        WikiCoref_Reader.PARAM_LEAVE_OUT, leaveOut,
-	                        WikiCoref_Reader.PARAM_USE_ONLY_THIS, useThis
-	                ),			   
+	                        WikiCoref_Reader.PARAM_USED_DOCUMENT_NUMBERS, _usedDocs),	   
 	        		AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
 	        		AnalysisEngineFactory.createEngineDescription(CoreNlpNamedEntityRecognizer.class),

@@ -114,7 +114,7 @@ public class InformationModule
 	
 	private void printInfos(){
 		DocumentInfo docInfo = JCasUtil.selectSingle(aJCas, DocumentInfo.class);
-		System.out.print(docInfo.getDocumentName() + ", ");
+		System.out.print("Document name: " + docInfo.getDocumentName());
 		
 		/*
 		System.out.println("Text length: " + aJCas.getDocumentText().length()  + " chars");

@@ -26,6 +26,8 @@ import de.unidue.henryvdv.ba.reader.WikiCoref_DCorefReader;
 import de.unidue.henryvdv.ba.reader.WikiCoref_Reader;
 
 public class BasicPipeline {
+	
+	private static Integer[] usedDocs = {0,1};
 
 	  public static void main(String[] args)
 			  throws Exception {	
@@ -41,8 +43,7 @@ public class BasicPipeline {
 		  SimplePipeline.runPipeline(
 				  CollectionReaderFactory.createReader(
 						  				SimpleTextReader.class,
-						  				SimpleTextReader.PARAM_INPUT_DIRECTORY,
-						  				"src/test/resources/prepositionTest"),
+						  				SimpleTextReader.PARAM_INPUT_DIRECTORY,"src/test/resources/prepositionTest"),
 				  AnalysisEngineFactory.createEngineDescription(StanfordSegmenter.class),
 				  AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
 				  AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
@@ -64,8 +65,7 @@ public class BasicPipeline {
 	        		CollectionReaderFactory.createReader(
 	                        WikiCoref_Reader.class,
 	                        WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
-	                        WikiCoref_Reader.PARAM_MAX_DOCUMENTS, 30
-	                ),			   
+	                        WikiCoref_Reader.PARAM_USED_DOCUMENT_NUMBERS, usedDocs),   
 	        		AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),

@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.uima.UimaContext;
 import org.apache.uima.collection.CollectionException;
 import org.apache.uima.fit.component.JCasCollectionReader_ImplBase;
@@ -30,11 +31,6 @@ extends JCasCollectionReader_ImplBase{
     @ConfigurationParameter(name = PARAM_INPUT_DIRECTORY, mandatory = true)
     private String inputDirectory;
     
-    public static final String PARAM_MAX_DOCUMENTS = "MaxDocuments";
-    @ConfigurationParameter(name = PARAM_MAX_DOCUMENTS, mandatory = true)
-    private int maxDocuments;
-    
-    
     /**
      * Parameter to select all documents (through their indexes) that
      * should be read
@@ -42,24 +38,6 @@ extends JCasCollectionReader_ImplBase{
     public static final String PARAM_USED_DOCUMENT_NUMBERS = "usedDocuments";
     @ConfigurationParameter(name = PARAM_USED_DOCUMENT_NUMBERS, mandatory = true)
     private Integer[] usedDocuments;
-    
-    
-    
-    /**
-     * Parameter to select one document to leave it out
-     * select value = -1 if no document should be left out
-     **/ 
-    public static final String PARAM_LEAVE_OUT = "LeaveOut";
-    @ConfigurationParameter(name = PARAM_LEAVE_OUT, mandatory = true)
-    private int leaveOut;
-    
-    /**
-     * Parameter to select only one document to use it
-     * select value = -1 if multiple documents should be used
-     **/ 
-    public static final String PARAM_USE_ONLY_THIS = "UseOnlyThis";
-    @ConfigurationParameter(name = PARAM_USE_ONLY_THIS, mandatory = true)
-    private int useOnlyThis;
     
     private static final String TAG_WORD = "word";
     private static final String TAG_WORDS = "words";
@@ -102,24 +80,19 @@ extends JCasCollectionReader_ImplBase{
         }
         
         basedataIndex = 0;
-        if(leaveOut == 0)
+        
+        while(basedataIndex < inputBasedataFiles.size()){
+        	if(ArrayUtils.contains(usedDocuments, basedataIndex)){
+            	break;
+            }
         	basedataIndex++;
-        if(useOnlyThis >= 0){
-        	if(inputBasedataFiles.size() >= useOnlyThis){
-        		basedataIndex = useOnlyThis;
-        	} else {
-        		System.out.println("Selected and doc out of range. Only doc 0 will be used.");
-        		basedataIndex = 0;
-        		useOnlyThis = -1;
-        	}
         }
+        
         markablesDataIndex = basedataIndex*2;   
     } 
 
 	public boolean hasNext() throws IOException, CollectionException {
-		if(useOnlyThis >= 0 && basedataIndex != useOnlyThis)
-			return false;
-		return (basedataIndex < inputBasedataFiles.size() && basedataIndex < maxDocuments);
+		return (basedataIndex < inputBasedataFiles.size());
 	}
 
 	public Progress[] getProgress() {
@@ -145,11 +118,15 @@ extends JCasCollectionReader_ImplBase{
             
             docInfo.addToIndexes();
             basedataIndex++;
-            markablesDataIndex += 2;
-            if(basedataIndex == leaveOut){
-                basedataIndex++;
-                markablesDataIndex += 2;
+            
+            while(basedataIndex < inputBasedataFiles.size()){
+            	if(ArrayUtils.contains(usedDocuments, basedataIndex)){
+                	break;
+                }
+            	basedataIndex++;
             }
+            
+            markablesDataIndex = basedataIndex*2;  
         }  
         catch (IOException e) {
             throw new IOException(e);
@@ -158,7 +135,7 @@ extends JCasCollectionReader_ImplBase{
         processWords();
         processSentences();
         processCoreferences();
-       
+
         aJCas.setDocumentText(documentText.trim());
         
 	}
