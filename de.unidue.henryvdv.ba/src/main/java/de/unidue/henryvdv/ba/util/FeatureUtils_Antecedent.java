@@ -16,7 +16,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Quotation;
 
-public class AntecedentFeatureUtils {
+public class FeatureUtils_Antecedent {
 
 	private Collection<Token> tokens;
 	private Collection<Sentence> sentences;
@@ -24,9 +24,7 @@ public class AntecedentFeatureUtils {
 	private Collection<NamedEntity> namedEntities;
 	private Collection<Time> times;
 	
-	private static String[] pluralPronouns = {"themselves","their","they"};
-	
-	public AntecedentFeatureUtils(JCas aJCas){
+	public FeatureUtils_Antecedent(JCas aJCas){
 		sentences = JCasUtil.select(aJCas, Sentence.class);
 		dependencies = JCasUtil.select(aJCas, Dependency.class);
 		tokens = JCasUtil.select(aJCas, Token.class);

@@ -14,6 +14,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
+import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Antecedent;
 import de.unidue.henryvdv.ba.type.GoldNP;
@@ -28,13 +29,7 @@ extends JCasAnnotator_ImplBase{
 	private List<NP> npsWithAnaphora;
 	private Collection<MyCoreferenceChain> corefChains;
 	private Collection<Token> tokens;
-	private Collection<Sentence> sentences;
-	
-	private String[] whitelist = {"himself","herself","itself","themselves",
-			"his","her","its","their",
-			"he","she","they"};
-
-	
+	private Collection<Sentence> sentences;	
 	
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
@@ -56,7 +51,7 @@ extends JCasAnnotator_ImplBase{
 					token.getPos().getPosValue() == "PRP$" || 
 					token.getPos().getPosValue() == "WP$"
 			){
-				if(Arrays.asList(whitelist).contains(token.getCoveredText().toLowerCase())){
+				if(Arrays.asList(Parameters.allPronouns).contains(token.getCoveredText().toLowerCase())){
 					Anaphora a = new Anaphora(aJCas, token.getBegin(), token.getEnd());
 					anaphoras.add(a);
 				}

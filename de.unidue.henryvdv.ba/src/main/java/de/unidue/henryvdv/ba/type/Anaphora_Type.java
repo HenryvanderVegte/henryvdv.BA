@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Sun Aug 14 23:41:59 CEST 2016
+ * Updated by JCasGen Fri Sep 09 21:03:11 CEST 2016
  * @generated */
 public class Anaphora_Type extends Annotation_Type {
   /** @generated 
@@ -165,6 +165,30 @@ public class Anaphora_Type extends Annotation_Type {
     ll_cas.ll_setRefValue(addr, casFeatCode_pronounFeatures, v);}
     
   
+ 
+  /** @generated */
+  final Feature casFeat_genderFeatures;
+  /** @generated */
+  final int     casFeatCode_genderFeatures;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public int getGenderFeatures(int addr) {
+        if (featOkTst && casFeat_genderFeatures == null)
+      jcas.throwFeatMissing("genderFeatures", "de.unidue.henryvdv.ba.type.Anaphora");
+    return ll_cas.ll_getRefValue(addr, casFeatCode_genderFeatures);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setGenderFeatures(int addr, int v) {
+        if (featOkTst && casFeat_genderFeatures == null)
+      jcas.throwFeatMissing("genderFeatures", "de.unidue.henryvdv.ba.type.Anaphora");
+    ll_cas.ll_setRefValue(addr, casFeatCode_genderFeatures, v);}
+    
+  
 
 
 
@@ -196,6 +220,10 @@ public class Anaphora_Type extends Annotation_Type {
  
     casFeat_pronounFeatures = jcas.getRequiredFeatureDE(casType, "pronounFeatures", "de.unidue.henryvdv.ba.type.PronounFeatures", featOkTst);
     casFeatCode_pronounFeatures  = (null == casFeat_pronounFeatures) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_pronounFeatures).getCode();
+
+ 
+    casFeat_genderFeatures = jcas.getRequiredFeatureDE(casType, "genderFeatures", "de.unidue.henryvdv.ba.type.GenderFeatures", featOkTst);
+    casFeatCode_genderFeatures  = (null == casFeat_genderFeatures) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_genderFeatures).getCode();
 
   }
 }

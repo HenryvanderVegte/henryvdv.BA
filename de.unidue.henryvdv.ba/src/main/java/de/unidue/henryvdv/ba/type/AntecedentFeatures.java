@@ -11,7 +11,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Sun Aug 14 23:41:59 CEST 2016
+ * Updated by JCasGen Fri Sep 09 21:03:12 CEST 2016
  * XML source: C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/src/main/resources/desc/type/Anaphora.xml
  * @generated */
 public class AntecedentFeatures extends Annotation {

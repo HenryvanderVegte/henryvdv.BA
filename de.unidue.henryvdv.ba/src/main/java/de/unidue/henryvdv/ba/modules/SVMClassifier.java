@@ -6,7 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.uima.UimaContext;
@@ -24,6 +26,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordParser.DependenciesMode;
+import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Antecedent;
 import de.unidue.henryvdv.ba.type.AntecedentFeatures;
@@ -34,10 +37,11 @@ import de.unidue.henryvdv.ba.type.PronounFeatures;
 import de.unidue.henryvdv.ba.type.Quotation;
 import de.unidue.henryvdv.ba.util.AnaphoraEvaluator;
 import de.unidue.henryvdv.ba.util.AnnotationUtils;
-import de.unidue.henryvdv.ba.util.AntecedentFeatureUtils;
+import de.unidue.henryvdv.ba.util.FeatureUtils_Antecedent;
+import de.unidue.henryvdv.ba.util.FeatureUtils_Gender;
 import de.unidue.henryvdv.ba.util.FeatureVectorUtils;
-import de.unidue.henryvdv.ba.util.PronounAntecedentFeatureUtils;
-import de.unidue.henryvdv.ba.util.PronounFeatureUtils;
+import de.unidue.henryvdv.ba.util.FeatureUtils_PronounAntecedent;
+import de.unidue.henryvdv.ba.util.FeatureUtils_Pronoun;
 
 
 public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
@@ -87,10 +91,13 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	private Collection<Dependency> dependencies;
 	private Collection<NamedEntity> namedEntities;
 	private Collection<Quotation> quotes;
-	private AntecedentFeatureUtils aFUtil;
-	private PronounAntecedentFeatureUtils paFUtil;
-	private PronounFeatureUtils pFUtil;
+	private FeatureUtils_Antecedent aFUtil;
+	private FeatureUtils_PronounAntecedent paFUtil;
+	private FeatureUtils_Pronoun pFUtil;
+	private FeatureUtils_Gender gFUtil;
 	private FeatureVectorUtils featureVectorUtil;
+	
+	private Map<String, Integer[]> corpusFrequencies = new HashMap<String, Integer[]>();
 	
 	private File modelFile;
 	private File testFile;
@@ -112,6 +119,12 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		eval = new AnaphoraEvaluator();
 
 		featureVectorUtil = new FeatureVectorUtils();
+
+		prepareFiles();
+		readCorpus();
+	}
+	
+	private void prepareFiles() throws ResourceInitializationException{
 		String modelFilePath = MODEL_DIRECTORY + "/" + MODEL_NAME;
 		modelFile = new File(modelFilePath);
 		
@@ -150,6 +163,50 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		testCommand = buildTestCommand(testFile, modelFile, outputFile);
 	}
 	
+	//reads all documents for the gender corpus frequencies
+	private void readCorpus(){
+		File folder = new File(Parameters.genderCorpusDirectory);
+	    File[] files = folder.listFiles();
+	    for(File f : files){
+	    	List<String> inputLines;
+	    	try {
+				inputLines = FileUtils.readLines(f);	
+				readCorpusLines(inputLines);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	    	
+	    }
+	}
+	
+	// reads all lines in a document and puts the frequencies in the corpusFrequencies-Map
+	private void readCorpusLines(List<String> inputLines){
+		for(String s : inputLines){
+			String word = "";
+			String freq = "";
+			for(int i = 0; i < s.length(); i++){
+				if(s.charAt(i) == '\t'){
+					word = s.substring(0, i);
+					freq = s.substring(i + 1, s.length());
+					break;
+				}
+			}
+			Integer[] frequencies = new Integer[4];
+			int startAt = 0;
+			int arrayNr = 0;
+			freq = freq + " ";
+			for(int i = 0; i < freq.length(); i++){
+				if(!Character.isDigit(freq.charAt(i))){
+					String stringValue = freq.substring(startAt, i);
+					frequencies[arrayNr] = Integer.parseInt(stringValue);
+					startAt = i + 1;
+					arrayNr++;
+				}
+			}
+			corpusFrequencies.put(word, frequencies);
+		}
+	}
+	
+	
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
@@ -160,9 +217,10 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
 		quotes = JCasUtil.select(aJCas, Quotation.class);	
 		
-		aFUtil = new AntecedentFeatureUtils(aJCas);
-		paFUtil = new PronounAntecedentFeatureUtils(aJCas);
-		pFUtil = new PronounFeatureUtils();	
+		aFUtil = new FeatureUtils_Antecedent(aJCas);
+		paFUtil = new FeatureUtils_PronounAntecedent(aJCas);
+		pFUtil = new FeatureUtils_Pronoun();
+		gFUtil = new FeatureUtils_Gender(aJCas, corpusFrequencies);
 		
 		goldAntecedents = new ArrayList<GoldNP>();
 		detectedAntecedents = new ArrayList<DetectedNP>();
@@ -261,13 +319,12 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		paFUtil.annotateFeatures(a);
 		aFUtil.annotateFeatures(a);
 		pFUtil.annotateFeatures(a);
+		gFUtil.annotateFeatures(a);
 		return featureVectorUtil.createFeatureVector(a);
 	}
 	
-	
-	
 	/**
-	 *  This method removes the chance of discoveringg noun phrases in noun phrases
+	 *  This method removes the chance of discovering noun phrases in noun phrases
 	 * 
 	 **/
 	private void setFixedNPs(){	

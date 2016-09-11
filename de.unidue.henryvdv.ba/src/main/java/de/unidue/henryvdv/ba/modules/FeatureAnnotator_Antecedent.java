@@ -21,8 +21,8 @@ import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.AntecedentFeatures;
 import de.unidue.henryvdv.ba.type.Quotation;
 import de.unidue.henryvdv.ba.util.AnnotationUtils;
-import de.unidue.henryvdv.ba.util.AntecedentFeatureUtils;
-import de.unidue.henryvdv.ba.util.PronounAntecedentFeatureUtils;
+import de.unidue.henryvdv.ba.util.FeatureUtils_Antecedent;
+import de.unidue.henryvdv.ba.util.FeatureUtils_PronounAntecedent;
 
 public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 
@@ -47,7 +47,7 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 	
 	private JCas aJCas;
 	private Collection<Anaphora> anaphoras;
-	private AntecedentFeatureUtils aUtil;
+	private FeatureUtils_Antecedent aUtil;
 
 	
 
@@ -56,7 +56,7 @@ public class FeatureAnnotator_Antecedent extends JCasAnnotator_ImplBase {
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
-		aUtil = new AntecedentFeatureUtils(aJCas);
+		aUtil = new FeatureUtils_Antecedent(aJCas);
 		
 		for(Anaphora anaphora : anaphoras){
 			AntecedentFeatures a = new AntecedentFeatures(aJCas);

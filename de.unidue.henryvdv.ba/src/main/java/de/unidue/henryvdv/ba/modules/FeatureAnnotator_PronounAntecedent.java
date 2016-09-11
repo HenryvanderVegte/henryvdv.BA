@@ -14,45 +14,21 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.PronounAntecedentFeatures;
 import de.unidue.henryvdv.ba.type.Quotation;
-import de.unidue.henryvdv.ba.util.PronounAntecedentFeatureUtils;
+import de.unidue.henryvdv.ba.util.FeatureUtils_PronounAntecedent;
 
 public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
-	
-	/************************************************
-	 *  Annotates the Pronoun-Antecedent-Features   *
-	 *  -Same Sentence (bool)						*
-	 *  -Intra-Sentence Difference (float)			*
-	 *  -In Previous Sentence (bool)				*
-	 *  -Inter-Sentence Difference (float)			*
-	 *  -Prepositional Parallel (bool)				*
-	 *  -Parent Category Match (bool)				*
-	 *  -Parent Word Match (bool)					*
-	 *  -Quotation Situation (bool)					*
-	 *  -Singular Match (bool)						*
-	 *  -Plural Match (bool)						*
-	 *  											*
-	 *  Missing:									*
-	 *  -Binding Theory								*
-	 *  -Reflexive Subj. Match						*
-	 *  -Relation-Match								*
-	 *  -Parent Relation Match						*
-	 *  -MI Value									*
-	 *  -MI Available								*
-	 * 												*
-	 ************************************************/
-	
+		
 	private JCas aJCas;
 	private Collection<Anaphora> anaphoras;
-
 	
-	private PronounAntecedentFeatureUtils paUtil;
+	private FeatureUtils_PronounAntecedent paUtil;
 	
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
 		
-		paUtil = new PronounAntecedentFeatureUtils(aJCas);
+		paUtil = new FeatureUtils_PronounAntecedent(aJCas);
 		
 		for(Anaphora anaphora : anaphoras){
 			PronounAntecedentFeatures a = new PronounAntecedentFeatures(aJCas);

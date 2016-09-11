@@ -8,22 +8,23 @@ import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 
+import com.google.common.reflect.Parameter;
+
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
+import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Quotation;
 
-public class PronounAntecedentFeatureUtils {
+public class FeatureUtils_PronounAntecedent {
 	
 	private Collection<Token> tokens;
 	private Collection<Sentence> sentences;
 	private Collection<Dependency> dependencies;
 	private Collection<Quotation> quotes;
 	
-	private static String[] pluralPronouns = {"themselves","their","they"};
-	
-	public PronounAntecedentFeatureUtils(JCas aJCas){
+	public FeatureUtils_PronounAntecedent(JCas aJCas){
 		sentences = JCasUtil.select(aJCas, Sentence.class);
 		dependencies = JCasUtil.select(aJCas, Dependency.class);
 		tokens = JCasUtil.select(aJCas, Token.class);
@@ -203,7 +204,7 @@ public class PronounAntecedentFeatureUtils {
 	
 	public boolean isBothSingular(Annotation anaphora, Annotation antecedent){
 		boolean isSingularA = true;
-		if(Arrays.asList(pluralPronouns).contains(anaphora.getCoveredText().toLowerCase())){
+		if(Arrays.asList(Parameters.pluralPronouns).contains(anaphora.getCoveredText().toLowerCase())){
 			isSingularA = false;
 		}
 		boolean isSingularB = false;
@@ -226,7 +227,7 @@ public class PronounAntecedentFeatureUtils {
 	
 	public boolean isBothPlural(Annotation anaphora, Annotation antecedent){
 		boolean isSingularA = true;
-		if(Arrays.asList(pluralPronouns).contains(anaphora.getCoveredText().toLowerCase())){
+		if(Arrays.asList(Parameters.pluralPronouns).contains(anaphora.getCoveredText().toLowerCase())){
 			isSingularA = false;
 		}
 		boolean isSingularB = true;

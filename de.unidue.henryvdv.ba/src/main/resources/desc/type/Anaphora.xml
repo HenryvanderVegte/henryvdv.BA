@@ -9,6 +9,7 @@
   <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/AntecedentFeatures.xml"/>
   <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/PronounAntecedentFeatures.xml"/>
   <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/PronounFeatures.xml"/>
+  <import location="file:/C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/target/classes/desc/type/GenderFeatures.xml"/>
   </imports>
   <types>
     <typeDescription>
@@ -40,6 +41,11 @@
           <name>pronounFeatures</name>
           <description/>
           <rangeTypeName>de.unidue.henryvdv.ba.type.PronounFeatures</rangeTypeName>
+        </featureDescription>
+      <featureDescription>
+          <name>genderFeatures</name>
+          <description/>
+          <rangeTypeName>de.unidue.henryvdv.ba.type.GenderFeatures</rangeTypeName>
         </featureDescription>
       </features>
     </typeDescription>

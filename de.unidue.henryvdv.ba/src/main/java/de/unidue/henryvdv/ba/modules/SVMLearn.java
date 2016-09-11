@@ -99,7 +99,7 @@ public class SVMLearn implements Constants {
 	/**
 	 * Parameter 
 	 *   -m [5..]    - size of cache for kernel evaluations in MB (default 40)
-     *                  The larger the faster...                
+     *                  The larger the faster                
 	 */
 	public static final String PARAM_M = "paramM";
 	@Discriminator

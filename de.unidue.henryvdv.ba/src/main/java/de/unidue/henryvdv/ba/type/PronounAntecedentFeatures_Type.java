@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Sun Aug 14 23:41:59 CEST 2016
+ * Updated by JCasGen Fri Sep 09 21:03:12 CEST 2016
  * @generated */
 public class PronounAntecedentFeatures_Type extends Annotation_Type {
   /** @generated 

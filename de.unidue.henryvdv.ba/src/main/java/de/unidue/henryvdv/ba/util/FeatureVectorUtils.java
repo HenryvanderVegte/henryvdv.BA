@@ -19,6 +19,7 @@ public class FeatureVectorUtils {
 			currentFeatureVector += "-1";
 		}
 		
+		//Pronoun-Antecedent-Features (10)
 		addPA_SameSentence();
 		addPA_IntraSentenceDiff();
 		addPA_InPreviousSentence();
@@ -30,6 +31,7 @@ public class FeatureVectorUtils {
 		addPA_SingularMatch();
 		addPA_PluralMatch();
 		
+		//Antecedent Features (17)
 		addA_AntecedentFrequency();
 		addA_Subject();
 		addA_Object();
@@ -48,6 +50,7 @@ public class FeatureVectorUtils {
 		addA_HisHer();
 		addA_HeHis();
 		
+		//Pronoun Features (4)
 		addP_Masculine();
 		addP_Feminine();
 		addP_Neutral();
