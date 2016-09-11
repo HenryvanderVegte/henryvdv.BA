@@ -85,7 +85,6 @@ public class FeatureUtils_Gender {
 		}
 		
 		if(anteGender == anaphoraGender && anteGender != Gender.unknown){
-			System.out.println("Gender Match: " + a.getCoveredText()+ "  " + a.getAntecedent().getCoveredText());
 			return true;
 		}
 		return false;
@@ -120,7 +119,6 @@ public class FeatureUtils_Gender {
 		}
 		
 		if(anteGender != anaphoraGender && anteGender != Gender.unknown){
-			System.out.println("Gender Mismatch: " + a.getCoveredText()+ "  " + a.getAntecedent().getCoveredText());
 			return true;
 		}
 		
@@ -135,7 +133,6 @@ public class FeatureUtils_Gender {
 			String tokenText = token.getCoveredText().toLowerCase();
 			if(Arrays.asList(Parameters.allPronouns).contains(tokenText)){
 				if(antecedentType != PronounType.unknown){
-					System.out.println("More than one Pronoun: " + a.getAntecedent().getCoveredText());
 					return false;
 				}				
 
@@ -187,11 +184,11 @@ public class FeatureUtils_Gender {
 		if(corpusFrequencies.containsKey(ante)){
 			Integer[] freq = corpusFrequencies.get(ante);
 			alpha += freq[0];
-			beta += freq[1] + freq[2] + freq[3];		
-			System.out.println("NP: " + ante + " Masculine: " + alpha + "   -Masculine: " + beta);
+			beta += freq[1] + freq[2] + freq[3];
 		}
 		a.getGenderFeatures().setG_Masculine_Mean(getMean(alpha, beta));
 		a.getGenderFeatures().setG_Masculine_StdDev(getStandardDeviation(alpha, beta));
+		
 	}
 	
 	public void setFeminineDistribution(Anaphora a){
@@ -234,16 +231,23 @@ public class FeatureUtils_Gender {
 	}
 	
 	public double getMean(int alpha, int beta){
-		double r = alpha / (double)(alpha + beta);
+		double r = (double)alpha / (double)(alpha + beta);
 		return r;
 		
 	}
 	
 	public double getStandardDeviation(int alpha, int beta){
-		int sum = alpha + beta;
-		double r = (alpha * beta) / (double)(sum * sum * (sum + 1));
-		r = Math.sqrt(r);	
-		return r;
+		double dAlpha = alpha;
+		double dBeta = beta;
+		double sum = dAlpha + dBeta;
+		double product = dAlpha * dBeta;
+		double a = sum * sum * (sum + 1);
+	
+		double variance = product /a;
+		
+		double stdDev = Math.sqrt(variance);	
+		
+		return stdDev;
 	}
 	
 }

@@ -38,7 +38,7 @@ public class TrainTestPipeline {
 		}
 		trainPipeline(docs);
 		*/
-		cv(10, 30, true);
+		cv(10, 30, false);
 	}
 	
 	private static void cv(int folds, int docSize, boolean randomFolds) throws Exception{
@@ -90,12 +90,15 @@ public class TrainTestPipeline {
 			System.out.println("---------------------------------");
 			*/
 			
-
+			
+			System.out.println("Training - Fold nr " + i);
+			
 			trainPipeline(trainOnArray);
 			
 			SVMLearn svmLearn = new SVMLearn();
 			svmLearn.learn();
 			
+			System.out.println("Testing - Fold nr " + i);
 			testPipeline(testOnArray);
 			
 		}

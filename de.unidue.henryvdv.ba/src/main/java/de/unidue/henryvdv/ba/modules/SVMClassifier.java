@@ -31,6 +31,7 @@ import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Antecedent;
 import de.unidue.henryvdv.ba.type.AntecedentFeatures;
 import de.unidue.henryvdv.ba.type.DetectedNP;
+import de.unidue.henryvdv.ba.type.GenderFeatures;
 import de.unidue.henryvdv.ba.type.GoldNP;
 import de.unidue.henryvdv.ba.type.PronounAntecedentFeatures;
 import de.unidue.henryvdv.ba.type.PronounFeatures;
@@ -221,7 +222,6 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		paFUtil = new FeatureUtils_PronounAntecedent(aJCas);
 		pFUtil = new FeatureUtils_Pronoun();
 		gFUtil = new FeatureUtils_Gender(aJCas, corpusFrequencies);
-		
 		goldAntecedents = new ArrayList<GoldNP>();
 		detectedAntecedents = new ArrayList<DetectedNP>();
 		allNPs = JCasUtil.select(aJCas, NP.class);
@@ -249,7 +249,10 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	}
 	
 	private void setDetectedNPs(){
+		int count = 1;
 		for(Anaphora anaphora : anaphoras){
+			System.out.println("Nr." + count + " of " + anaphoras.size());
+			count++;
 			if(!anaphora.getHasCorrectAntecedent())
 				continue;
 			int anteNPnumber = 0;
@@ -271,7 +274,6 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 						break;
 					}
 
-					
 					float outputValue = getOutputValue(anaphora, fixedNPs.get(i));
 					if(outputValue > threshold){
 						foundAntecedent = true;
@@ -308,6 +310,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 			e.printStackTrace();
 		}
 		float value = Float.parseFloat(outputFileText.get(0));
+
 		return value;
 	}
 	
@@ -315,6 +318,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		a.setAntecedentFeatures(new AntecedentFeatures(aJCas));
 		a.setPronounAntecedentFeatures(new PronounAntecedentFeatures(aJCas));
 		a.setPronounFeatures(new PronounFeatures(aJCas));
+		a.setGenderFeatures(new GenderFeatures(aJCas));
 		
 		paFUtil.annotateFeatures(a);
 		aFUtil.annotateFeatures(a);
