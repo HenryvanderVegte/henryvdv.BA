@@ -11,7 +11,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Sun Sep 11 09:45:22 CEST 2016
+ * Updated by JCasGen Sun Sep 11 23:43:22 CEST 2016
  * XML source: C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/src/main/resources/desc/type/GenderFeatures.xml
  * @generated */
 public class GenderFeatures extends Annotation {
@@ -149,41 +149,41 @@ public class GenderFeatures extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public double getG_Masculine_Mean() {
+  public float getG_Masculine_Mean() {
     if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Masculine_Mean == null)
       jcasType.jcas.throwFeatMissing("g_Masculine_Mean", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    return jcasType.ll_cas.ll_getDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Masculine_Mean);}
+    return jcasType.ll_cas.ll_getFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Masculine_Mean);}
     
   /** setter for g_Masculine_Mean - sets  
    * @generated
    * @param v value to set into the feature 
    */
-  public void setG_Masculine_Mean(double v) {
+  public void setG_Masculine_Mean(float v) {
     if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Masculine_Mean == null)
       jcasType.jcas.throwFeatMissing("g_Masculine_Mean", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    jcasType.ll_cas.ll_setDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Masculine_Mean, v);}    
+    jcasType.ll_cas.ll_setFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Masculine_Mean, v);}    
    
     
   //*--------------*
-  //* Feature: g_Masculine_StdDev
+  //* Feature: g_Masculine_Variance
 
-  /** getter for g_Masculine_StdDev - gets 
+  /** getter for g_Masculine_Variance - gets 
    * @generated
    * @return value of the feature 
    */
-  public double getG_Masculine_StdDev() {
-    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Masculine_StdDev == null)
-      jcasType.jcas.throwFeatMissing("g_Masculine_StdDev", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    return jcasType.ll_cas.ll_getDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Masculine_StdDev);}
+  public float getG_Masculine_Variance() {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Masculine_Variance == null)
+      jcasType.jcas.throwFeatMissing("g_Masculine_Variance", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    return jcasType.ll_cas.ll_getFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Masculine_Variance);}
     
-  /** setter for g_Masculine_StdDev - sets  
+  /** setter for g_Masculine_Variance - sets  
    * @generated
    * @param v value to set into the feature 
    */
-  public void setG_Masculine_StdDev(double v) {
-    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Masculine_StdDev == null)
-      jcasType.jcas.throwFeatMissing("g_Masculine_StdDev", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    jcasType.ll_cas.ll_setDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Masculine_StdDev, v);}    
+  public void setG_Masculine_Variance(float v) {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Masculine_Variance == null)
+      jcasType.jcas.throwFeatMissing("g_Masculine_Variance", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    jcasType.ll_cas.ll_setFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Masculine_Variance, v);}    
    
     
   //*--------------*
@@ -193,41 +193,41 @@ public class GenderFeatures extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public double getG_Feminine_Mean() {
+  public float getG_Feminine_Mean() {
     if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Feminine_Mean == null)
       jcasType.jcas.throwFeatMissing("g_Feminine_Mean", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    return jcasType.ll_cas.ll_getDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Feminine_Mean);}
+    return jcasType.ll_cas.ll_getFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Feminine_Mean);}
     
   /** setter for g_Feminine_Mean - sets  
    * @generated
    * @param v value to set into the feature 
    */
-  public void setG_Feminine_Mean(double v) {
+  public void setG_Feminine_Mean(float v) {
     if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Feminine_Mean == null)
       jcasType.jcas.throwFeatMissing("g_Feminine_Mean", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    jcasType.ll_cas.ll_setDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Feminine_Mean, v);}    
+    jcasType.ll_cas.ll_setFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Feminine_Mean, v);}    
    
     
   //*--------------*
-  //* Feature: g_Feminine_StdDev
+  //* Feature: g_Feminine_Variance
 
-  /** getter for g_Feminine_StdDev - gets 
+  /** getter for g_Feminine_Variance - gets 
    * @generated
    * @return value of the feature 
    */
-  public double getG_Feminine_StdDev() {
-    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Feminine_StdDev == null)
-      jcasType.jcas.throwFeatMissing("g_Feminine_StdDev", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    return jcasType.ll_cas.ll_getDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Feminine_StdDev);}
+  public float getG_Feminine_Variance() {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Feminine_Variance == null)
+      jcasType.jcas.throwFeatMissing("g_Feminine_Variance", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    return jcasType.ll_cas.ll_getFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Feminine_Variance);}
     
-  /** setter for g_Feminine_StdDev - sets  
+  /** setter for g_Feminine_Variance - sets  
    * @generated
    * @param v value to set into the feature 
    */
-  public void setG_Feminine_StdDev(double v) {
-    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Feminine_StdDev == null)
-      jcasType.jcas.throwFeatMissing("g_Feminine_StdDev", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    jcasType.ll_cas.ll_setDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Feminine_StdDev, v);}    
+  public void setG_Feminine_Variance(float v) {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Feminine_Variance == null)
+      jcasType.jcas.throwFeatMissing("g_Feminine_Variance", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    jcasType.ll_cas.ll_setFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Feminine_Variance, v);}    
    
     
   //*--------------*
@@ -237,41 +237,41 @@ public class GenderFeatures extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public double getG_Neutral_Mean() {
+  public float getG_Neutral_Mean() {
     if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Neutral_Mean == null)
       jcasType.jcas.throwFeatMissing("g_Neutral_Mean", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    return jcasType.ll_cas.ll_getDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Neutral_Mean);}
+    return jcasType.ll_cas.ll_getFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Neutral_Mean);}
     
   /** setter for g_Neutral_Mean - sets  
    * @generated
    * @param v value to set into the feature 
    */
-  public void setG_Neutral_Mean(double v) {
+  public void setG_Neutral_Mean(float v) {
     if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Neutral_Mean == null)
       jcasType.jcas.throwFeatMissing("g_Neutral_Mean", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    jcasType.ll_cas.ll_setDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Neutral_Mean, v);}    
+    jcasType.ll_cas.ll_setFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Neutral_Mean, v);}    
    
     
   //*--------------*
-  //* Feature: g_Neutral_StdDev
+  //* Feature: g_Neutral_Variance
 
-  /** getter for g_Neutral_StdDev - gets 
+  /** getter for g_Neutral_Variance - gets 
    * @generated
    * @return value of the feature 
    */
-  public double getG_Neutral_StdDev() {
-    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Neutral_StdDev == null)
-      jcasType.jcas.throwFeatMissing("g_Neutral_StdDev", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    return jcasType.ll_cas.ll_getDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Neutral_StdDev);}
+  public float getG_Neutral_Variance() {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Neutral_Variance == null)
+      jcasType.jcas.throwFeatMissing("g_Neutral_Variance", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    return jcasType.ll_cas.ll_getFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Neutral_Variance);}
     
-  /** setter for g_Neutral_StdDev - sets  
+  /** setter for g_Neutral_Variance - sets  
    * @generated
    * @param v value to set into the feature 
    */
-  public void setG_Neutral_StdDev(double v) {
-    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Neutral_StdDev == null)
-      jcasType.jcas.throwFeatMissing("g_Neutral_StdDev", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    jcasType.ll_cas.ll_setDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Neutral_StdDev, v);}    
+  public void setG_Neutral_Variance(float v) {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Neutral_Variance == null)
+      jcasType.jcas.throwFeatMissing("g_Neutral_Variance", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    jcasType.ll_cas.ll_setFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Neutral_Variance, v);}    
    
     
   //*--------------*
@@ -281,41 +281,41 @@ public class GenderFeatures extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public double getG_Plural_Mean() {
+  public float getG_Plural_Mean() {
     if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Plural_Mean == null)
       jcasType.jcas.throwFeatMissing("g_Plural_Mean", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    return jcasType.ll_cas.ll_getDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Plural_Mean);}
+    return jcasType.ll_cas.ll_getFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Plural_Mean);}
     
   /** setter for g_Plural_Mean - sets  
    * @generated
    * @param v value to set into the feature 
    */
-  public void setG_Plural_Mean(double v) {
+  public void setG_Plural_Mean(float v) {
     if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Plural_Mean == null)
       jcasType.jcas.throwFeatMissing("g_Plural_Mean", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    jcasType.ll_cas.ll_setDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Plural_Mean, v);}    
+    jcasType.ll_cas.ll_setFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Plural_Mean, v);}    
    
     
   //*--------------*
-  //* Feature: g_Plural_StdDev
+  //* Feature: g_Plural_Variance
 
-  /** getter for g_Plural_StdDev - gets 
+  /** getter for g_Plural_Variance - gets 
    * @generated
    * @return value of the feature 
    */
-  public double getG_Plural_StdDev() {
-    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Plural_StdDev == null)
-      jcasType.jcas.throwFeatMissing("g_Plural_StdDev", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    return jcasType.ll_cas.ll_getDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Plural_StdDev);}
+  public float getG_Plural_Variance() {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Plural_Variance == null)
+      jcasType.jcas.throwFeatMissing("g_Plural_Variance", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    return jcasType.ll_cas.ll_getFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Plural_Variance);}
     
-  /** setter for g_Plural_StdDev - sets  
+  /** setter for g_Plural_Variance - sets  
    * @generated
    * @param v value to set into the feature 
    */
-  public void setG_Plural_StdDev(double v) {
-    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Plural_StdDev == null)
-      jcasType.jcas.throwFeatMissing("g_Plural_StdDev", "de.unidue.henryvdv.ba.type.GenderFeatures");
-    jcasType.ll_cas.ll_setDoubleValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Plural_StdDev, v);}    
+  public void setG_Plural_Variance(float v) {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Plural_Variance == null)
+      jcasType.jcas.throwFeatMissing("g_Plural_Variance", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    jcasType.ll_cas.ll_setFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Plural_Variance, v);}    
   }
 
     

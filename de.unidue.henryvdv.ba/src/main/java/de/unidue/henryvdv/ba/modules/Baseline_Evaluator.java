@@ -72,7 +72,7 @@ extends JCasAnnotator_ImplBase{
 			System.out.println("Something wrong here");
 		} else {
 			evaluate();
-			//printResults();
+			printResults();
 		}
 	}
 	

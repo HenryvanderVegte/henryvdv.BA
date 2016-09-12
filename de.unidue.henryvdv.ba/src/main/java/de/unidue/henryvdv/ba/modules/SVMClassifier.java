@@ -7,8 +7,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.uima.UimaContext;
@@ -20,6 +22,7 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.dkpro.tc.core.Constants;
 
+import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceChain;
 import de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
@@ -33,6 +36,8 @@ import de.unidue.henryvdv.ba.type.AntecedentFeatures;
 import de.unidue.henryvdv.ba.type.DetectedNP;
 import de.unidue.henryvdv.ba.type.GenderFeatures;
 import de.unidue.henryvdv.ba.type.GoldNP;
+import de.unidue.henryvdv.ba.type.MyCoreferenceChain;
+import de.unidue.henryvdv.ba.type.MyCoreferenceLink;
 import de.unidue.henryvdv.ba.type.PronounAntecedentFeatures;
 import de.unidue.henryvdv.ba.type.PronounFeatures;
 import de.unidue.henryvdv.ba.type.Quotation;
@@ -92,6 +97,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	private Collection<Dependency> dependencies;
 	private Collection<NamedEntity> namedEntities;
 	private Collection<Quotation> quotes;
+	private Collection<MyCoreferenceChain> corefChains;
 	private FeatureUtils_Antecedent aFUtil;
 	private FeatureUtils_PronounAntecedent paFUtil;
 	private FeatureUtils_Pronoun pFUtil;
@@ -216,7 +222,8 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		dependencies = JCasUtil.select(aJCas, Dependency.class);
 		tokens = JCasUtil.select(aJCas, Token.class);
 		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
-		quotes = JCasUtil.select(aJCas, Quotation.class);	
+		quotes = JCasUtil.select(aJCas, Quotation.class);
+		corefChains = JCasUtil.select(aJCas, MyCoreferenceChain.class);
 		
 		aFUtil = new FeatureUtils_Antecedent(aJCas);
 		paFUtil = new FeatureUtils_PronounAntecedent(aJCas);
@@ -230,7 +237,14 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		setGoldNPs();
 		setDetectedNPs();
 		
-		eval.evaluate(detectedAntecedents, goldAntecedents);
+		List<Anaphora> anaphorasList = new ArrayList<Anaphora>();
+		for(Anaphora a : anaphoras){
+			if(a.getHasCorrectAntecedent()){
+				anaphorasList.add(a);
+			}
+		}
+		
+		eval.evaluate(detectedAntecedents, goldAntecedents, anaphorasList, false);
 	}
 	
 	@Override
@@ -251,7 +265,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	private void setDetectedNPs(){
 		int count = 1;
 		for(Anaphora anaphora : anaphoras){
-			System.out.println("Nr." + count + " of " + anaphoras.size());
+			//System.out.println("Nr." + count + " of " + anaphoras.size());
 			count++;
 			if(!anaphora.getHasCorrectAntecedent())
 				continue;
@@ -264,29 +278,47 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 					break;
 				}
 			}		
+
+			int anaphoraSentenceNr = AnnotationUtils.getSentenceNr(anaphora.getBegin(), sentences);
+
+			LinkedHashMap<NP, Float> npValues = new LinkedHashMap<NP, Float>();
+			for(int i = anteNPnumber; i > 0; i--){
+				int anteSentenceNr = AnnotationUtils.getSentenceNr(fixedNPs.get(i).getBegin(), sentences);
+				if((anaphoraSentenceNr - anteSentenceNr) > MAX_SENTENCE_DIST){
+					break;
+				}
+				float outputValue = getOutputValue(anaphora, fixedNPs.get(i));
+				npValues.put(fixedNPs.get(i), outputValue);
+			}
+			
 			boolean foundAntecedent = false;
 			float threshold = 1.0f;
-			int anaphoraSentenceNr = AnnotationUtils.getSentenceNr(anaphora.getBegin(), sentences);
-			while(!foundAntecedent){
-				for(int i = anteNPnumber; i > 0; i--){
-					int anteSentenceNr = AnnotationUtils.getSentenceNr(fixedNPs.get(i).getBegin(), sentences);
-					if((anaphoraSentenceNr - anteSentenceNr) > MAX_SENTENCE_DIST){
-						break;
-					}
-
-					float outputValue = getOutputValue(anaphora, fixedNPs.get(i));
-					if(outputValue > threshold){
-						foundAntecedent = true;
-						DetectedNP det = new DetectedNP(aJCas, fixedNPs.get(i).getBegin(),
-								fixedNPs.get(i).getEnd());
-						detectedAntecedents.add(det);
-						break;
-					}
-				}
-				if(!foundAntecedent){
-					threshold -= 0.01f;
+			
+			
+			for(NP np : npValues.keySet()){
+				if(npValues.get(np) > threshold){
+					foundAntecedent = true;
+					DetectedNP det = new DetectedNP(aJCas, np.getBegin(), np.getEnd());
+					detectedAntecedents.add(det);
+					break;
 				}
 			}
+			
+			if(!foundAntecedent){	
+				NP highestValue = npValues.keySet().iterator().next();
+				float value = npValues.get(highestValue);
+
+				for(NP np : npValues.keySet()){
+					if(npValues.get(np) > value){
+						highestValue = np;
+						value = npValues.get(np);
+					}
+				}
+				foundAntecedent = true;
+				DetectedNP det = new DetectedNP(aJCas, highestValue.getBegin(), highestValue.getEnd());
+				detectedAntecedents.add(det);
+			}
+			
 		}
 	}
 	

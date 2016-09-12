@@ -1,11 +1,14 @@
 package de.unidue.henryvdv.ba.pipeline;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.uima.UIMAException;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.apache.uima.fit.pipeline.SimplePipeline;
+import org.apache.uima.resource.ResourceInitializationException;
 
 import de.tudarmstadt.ukp.dkpro.core.corenlp.CoreNlpNamedEntityRecognizer;
 import de.tudarmstadt.ukp.dkpro.core.corenlp.CoreNlpParser;
@@ -13,6 +16,7 @@ import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordLemmatizer;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordNamedEntityRecognizer;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
 import de.unidue.henryvdv.ba.modules.AnaphoraAnnotator;
+import de.unidue.henryvdv.ba.modules.Baseline_Evaluator;
 import de.unidue.henryvdv.ba.modules.FeatureAnnotator_Antecedent;
 import de.unidue.henryvdv.ba.modules.FeatureAnnotator_Gender;
 import de.unidue.henryvdv.ba.modules.FeatureAnnotator_Pronoun;
@@ -26,22 +30,22 @@ import de.unidue.henryvdv.ba.reader.WikiCoref_Reader;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TrainTestPipeline {
-	
-	private final static Integer[] usedDocs = {0,1,2,3,4,5,6};
 
 	public static void main(String[] args)
 			  throws Exception {	
+
+		crossvalidation(3, 30, false);
+		
 		/*
-		Integer[] docs = new Integer[30];
-		for(int i = 0; i < docs.length; i++){
-			docs[i] = i;
+		Integer[] allDocs = new Integer[30];
+		for(int i = 0; i < 30; i++){
+			allDocs[i] = i;
 		}
-		trainPipeline(docs);
+		baseline(allDocs);
 		*/
-		cv(10, 30, false);
 	}
 	
-	private static void cv(int folds, int docSize, boolean randomFolds) throws Exception{
+	private static void crossvalidation(int folds, int docSize, boolean randomFolds) throws Exception{
 		List<Integer> allDocs = new ArrayList<Integer>();
 		for(int i = 0; i < docSize; i++){
 			allDocs.add(i);
@@ -91,17 +95,46 @@ public class TrainTestPipeline {
 			*/
 			
 			
-			System.out.println("Training - Fold nr " + i);
+			System.out.print("Training - Fold nr " + i + "  (");
+			for(Integer t : trainOnArray){
+				System.out.print("  " + t );
+			}
 			
+			System.out.println(")");
 			trainPipeline(trainOnArray);
 			
 			SVMLearn svmLearn = new SVMLearn();
 			svmLearn.learn();
 			
-			System.out.println("Testing - Fold nr " + i);
+			System.out.print("Testing - Fold nr " + i + "  (");
+			for(Integer t : testOnArray){
+				System.out.print("  " + t );
+			}
+			
+			System.out.println(")");
 			testPipeline(testOnArray);
 			
 		}
+	}
+	
+	private static void baseline(Integer[] _usedDocs) throws Exception{
+		SimplePipeline.runPipeline(	               
+        		
+		        CollectionReaderFactory.createReader(
+		                      WikiCoref_Reader.class,
+		                      WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
+		                      WikiCoref_Reader.PARAM_USED_DOCUMENT_NUMBERS, _usedDocs),			   
+		        AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
+		        AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
+		        AnalysisEngineFactory.createEngineDescription(CoreNlpNamedEntityRecognizer.class),
+		        AnalysisEngineFactory.createEngineDescription(CoreNlpParser.class,
+																CoreNlpParser.PARAM_ORIGINAL_DEPENDENCIES,
+																false),
+		        AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
+		        AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
+		        AnalysisEngineFactory.createEngineDescription(Baseline_Evaluator.class),
+		        AnalysisEngineFactory.createEngineDescription(InformationModule.class)	        
+		        );
 	}
 	
 	private static void trainTest(){

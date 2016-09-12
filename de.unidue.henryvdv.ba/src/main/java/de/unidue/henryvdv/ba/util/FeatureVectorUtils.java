@@ -57,18 +57,19 @@ public class FeatureVectorUtils {
 		addP_Plural();
 		
 		//Gender Features (11)
+		/*
 		addG_StdGenderMatch();
 		addG_StdGenderMismatch();
 		addG_PronounMismatch();
 		addG_MasculineMean();
-		addG_MasculineStdDeviation();
+		addG_MasculineVariance();
 		addG_FeminineMean();
-		addG_FeminineStdDeviation();
+		addG_FeminineVariance();
 		addG_NeutralMean();
-		addG_NeutralStdDeviation();
+		addG_NeutralVariance();
 		addG_PluralMean();
-		addG_PluralStdDeviation();
-	
+		addG_PluralVariance();
+		*/
 		return currentFeatureVector;
 	}
 	
@@ -207,35 +208,35 @@ public class FeatureVectorUtils {
 	}
 	
 	private void addG_MasculineMean(){
-		addDoubleFeature(currentAnaphora.getGenderFeatures().getG_Masculine_Mean());
+		addFloatFeature(currentAnaphora.getGenderFeatures().getG_Masculine_Mean());
 	}
 	
-	private void addG_MasculineStdDeviation(){
-		addDoubleFeature(currentAnaphora.getGenderFeatures().getG_Masculine_StdDev());
+	private void addG_MasculineVariance(){
+		addFloatFeature(currentAnaphora.getGenderFeatures().getG_Masculine_Variance());
 	}
 	
 	private void addG_FeminineMean(){
-		addDoubleFeature(currentAnaphora.getGenderFeatures().getG_Feminine_Mean());
+		addFloatFeature(currentAnaphora.getGenderFeatures().getG_Feminine_Mean());
 	}
 	
-	private void addG_FeminineStdDeviation(){
-		addDoubleFeature(currentAnaphora.getGenderFeatures().getG_Feminine_StdDev());
+	private void addG_FeminineVariance(){
+		addFloatFeature(currentAnaphora.getGenderFeatures().getG_Feminine_Variance());
 	}
 	
 	private void addG_NeutralMean(){
-		addDoubleFeature(currentAnaphora.getGenderFeatures().getG_Neutral_Mean());
+		addFloatFeature(currentAnaphora.getGenderFeatures().getG_Neutral_Mean());
 	}
 	
-	private void addG_NeutralStdDeviation(){
-		addDoubleFeature(currentAnaphora.getGenderFeatures().getG_Neutral_StdDev());
+	private void addG_NeutralVariance(){
+		addFloatFeature(currentAnaphora.getGenderFeatures().getG_Neutral_Variance());
 	}
 	
 	private void addG_PluralMean(){
-		addDoubleFeature(currentAnaphora.getGenderFeatures().getG_Plural_Mean());
+		addFloatFeature(currentAnaphora.getGenderFeatures().getG_Plural_Mean());
 	}
 	
-	private void addG_PluralStdDeviation(){
-		addDoubleFeature(currentAnaphora.getGenderFeatures().getG_Plural_StdDev());
+	private void addG_PluralVariance(){
+		addFloatFeature(currentAnaphora.getGenderFeatures().getG_Plural_Variance());
 	}	
 	
 	private void addBinarizedFeature(boolean value){
@@ -249,12 +250,6 @@ public class FeatureVectorUtils {
 	}
 	
 	private void addFloatFeature(float value){
-		currentFeatureVector += " ";  
-		currentFeatureVector += currentFeatureCount + ":" + value;
-		currentFeatureCount++;
-	}
-	
-	private void addDoubleFeature(double value){
 		currentFeatureVector += " ";  
 		currentFeatureVector += currentFeatureCount + ":" + value;
 		currentFeatureCount++;

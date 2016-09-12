@@ -28,42 +28,42 @@
         <featureDescription>
           <name>g_Masculine_Mean</name>
           <description/>
-          <rangeTypeName>uima.cas.Double</rangeTypeName>
+          <rangeTypeName>uima.cas.Float</rangeTypeName>
         </featureDescription>
       <featureDescription>
-          <name>g_Masculine_StdDev</name>
+          <name>g_Masculine_Variance</name>
           <description/>
-          <rangeTypeName>uima.cas.Double</rangeTypeName>
+          <rangeTypeName>uima.cas.Float</rangeTypeName>
         </featureDescription>
         <featureDescription>
           <name>g_Feminine_Mean</name>
           <description/>
-          <rangeTypeName>uima.cas.Double</rangeTypeName>
+          <rangeTypeName>uima.cas.Float</rangeTypeName>
         </featureDescription>
         <featureDescription>
-          <name>g_Feminine_StdDev</name>
+          <name>g_Feminine_Variance</name>
           <description/>
-          <rangeTypeName>uima.cas.Double</rangeTypeName>
+          <rangeTypeName>uima.cas.Float</rangeTypeName>
         </featureDescription>
         <featureDescription>
           <name>g_Neutral_Mean</name>
           <description/>
-          <rangeTypeName>uima.cas.Double</rangeTypeName>
+          <rangeTypeName>uima.cas.Float</rangeTypeName>
         </featureDescription>
         <featureDescription>
-          <name>g_Neutral_StdDev</name>
+          <name>g_Neutral_Variance</name>
           <description/>
-          <rangeTypeName>uima.cas.Double</rangeTypeName>
+          <rangeTypeName>uima.cas.Float</rangeTypeName>
         </featureDescription>
         <featureDescription>
           <name>g_Plural_Mean</name>
           <description/>
-          <rangeTypeName>uima.cas.Double</rangeTypeName>
+          <rangeTypeName>uima.cas.Float</rangeTypeName>
         </featureDescription>
         <featureDescription>
-          <name>g_Plural_StdDev</name>
+          <name>g_Plural_Variance</name>
           <description/>
-          <rangeTypeName>uima.cas.Double</rangeTypeName>
+          <rangeTypeName>uima.cas.Float</rangeTypeName>
         </featureDescription>
       </features>
     </typeDescription>

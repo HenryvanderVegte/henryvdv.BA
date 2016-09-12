@@ -8,7 +8,9 @@ import java.util.Map;
 
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
+import org.apache.uima.jcas.tcas.Annotation;
 
+import de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
@@ -20,10 +22,14 @@ public class FeatureUtils_Gender {
 	
 	private Collection<Token> tokens;
 	private Map<String, Integer[]> corpusFrequencies;
+	private Collection<NamedEntity> namedEntities;
+	private Collection<Dependency> dependencies;
 	
 	public FeatureUtils_Gender(JCas aJCas, Map<String, Integer[]> corpusFrequencies){
 		this.corpusFrequencies = corpusFrequencies;
 		tokens = JCasUtil.select(aJCas, Token.class);
+		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
+		dependencies = JCasUtil.select(aJCas, Dependency.class);
 	}
 	
 	
@@ -181,13 +187,48 @@ public class FeatureUtils_Gender {
 		String ante = a.getAntecedent().getCoveredText().toLowerCase();
 		int alpha = 1;
 		int beta = 1;
+		
+		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
+		String person = null;
+		for(Token t : covTokens){
+			if(isPerson(t)){
+				//Only take the first name (e.g. token) of a person
+				person = t.getCoveredText();
+			}
+		}
+		
 		if(corpusFrequencies.containsKey(ante)){
 			Integer[] freq = corpusFrequencies.get(ante);
 			alpha += freq[0];
 			beta += freq[1] + freq[2] + freq[3];
+		} else if(person != null) {
+			if(corpusFrequencies.containsKey(person.toLowerCase())){
+				Integer[] freq = corpusFrequencies.get(person.toLowerCase());
+				alpha += freq[0];
+				beta += freq[1] + freq[2] + freq[3];
+			}
+
+		} else {
+			Token head = getHeadNoun(a.getAntecedent());
+			if(head != null && corpusFrequencies.containsKey(head.getCoveredText().toLowerCase())){
+				Integer[] freq = corpusFrequencies.get(head.getCoveredText().toLowerCase());
+				alpha += freq[0];
+				beta += freq[1] + freq[2] + freq[3];
+			} else {
+				for(Token t : covTokens){
+					if(t.getPos().getPosValue().contains("NN")){
+						if(corpusFrequencies.containsKey(t.getCoveredText().toLowerCase())){
+							Integer[] freq = corpusFrequencies.get(t.getCoveredText().toLowerCase());
+							alpha += freq[0];
+							beta += freq[1] + freq[2] + freq[3];
+							break;
+						}
+					}
+				}
+			}
 		}
 		a.getGenderFeatures().setG_Masculine_Mean(getMean(alpha, beta));
-		a.getGenderFeatures().setG_Masculine_StdDev(getStandardDeviation(alpha, beta));
+		a.getGenderFeatures().setG_Masculine_Variance(getVariance(alpha, beta));
 		
 	}
 	
@@ -195,59 +236,194 @@ public class FeatureUtils_Gender {
 		String ante = a.getAntecedent().getCoveredText().toLowerCase();
 		int alpha = 1;
 		int beta = 1;
-		if(corpusFrequencies.containsKey(ante)){			
+
+		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
+		String person = null;
+		for(Token t : covTokens){
+			if(isPerson(t)){
+				//Only take the first name (e.g. token) of a person
+				person = t.getCoveredText();
+			}
+		}
+		
+		if(corpusFrequencies.containsKey(ante)){
 			Integer[] freq = corpusFrequencies.get(ante);
 			alpha += freq[1];
 			beta += freq[0] + freq[2] + freq[3];
+		} else if(person != null) {
+			if(corpusFrequencies.containsKey(person.toLowerCase())){
+				Integer[] freq = corpusFrequencies.get(person.toLowerCase());
+				alpha += freq[1];
+				beta += freq[0] + freq[2] + freq[3];
+			}
+
+		} else {
+			Token head = getHeadNoun(a.getAntecedent());
+			if(head != null && corpusFrequencies.containsKey(head.getCoveredText().toLowerCase())){
+				Integer[] freq = corpusFrequencies.get(head.getCoveredText().toLowerCase());
+				alpha += freq[1];
+				beta += freq[0] + freq[2] + freq[3];
+			} else {
+				for(Token t : covTokens){
+					if(t.getPos().getPosValue().contains("NN")){
+						if(corpusFrequencies.containsKey(t.getCoveredText().toLowerCase())){
+							Integer[] freq = corpusFrequencies.get(t.getCoveredText().toLowerCase());
+							alpha += freq[1];
+							beta += freq[0] + freq[2] + freq[3];
+							break;
+						}
+					}
+				}
+			}	
 		}
 		a.getGenderFeatures().setG_Feminine_Mean(getMean(alpha, beta));
-		a.getGenderFeatures().setG_Feminine_StdDev(getStandardDeviation(alpha, beta));
+		a.getGenderFeatures().setG_Feminine_Variance(getVariance(alpha, beta));
 	}
 	
 	public void setNeutralDistribution(Anaphora a){
 		String ante = a.getAntecedent().getCoveredText().toLowerCase();
 		int alpha = 1;
 		int beta = 1;
-		if(corpusFrequencies.containsKey(ante)){			
+
+		
+		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
+		String person = null;
+		for(Token t : covTokens){
+			if(isPerson(t)){
+				//Only take the first name (e.g. token) of a person
+				person = t.getCoveredText();
+			}
+		}
+		
+		if(corpusFrequencies.containsKey(ante)){
 			Integer[] freq = corpusFrequencies.get(ante);
 			alpha += freq[2];
 			beta += freq[0] + freq[1] + freq[3];
+		} else if(person != null) {
+			if(corpusFrequencies.containsKey(person.toLowerCase())){
+				Integer[] freq = corpusFrequencies.get(person.toLowerCase());
+				alpha += freq[2];
+				beta += freq[0] + freq[1] + freq[3];
+			}
+
+		} else {
+			Token head = getHeadNoun(a.getAntecedent());
+			if(head != null && corpusFrequencies.containsKey(head.getCoveredText().toLowerCase())){
+				Integer[] freq = corpusFrequencies.get(head.getCoveredText().toLowerCase());
+				alpha += freq[2];
+				beta += freq[0] + freq[1] + freq[3];
+			}else {
+				for(Token t : covTokens){
+					if(t.getPos().getPosValue().contains("NN")){
+						if(corpusFrequencies.containsKey(t.getCoveredText().toLowerCase())){
+							Integer[] freq = corpusFrequencies.get(t.getCoveredText().toLowerCase());
+							alpha += freq[2];
+							beta += freq[0] + freq[1] + freq[3];
+							break;
+						}
+					}
+				}
+			}	
 		}
+	
 		a.getGenderFeatures().setG_Neutral_Mean(getMean(alpha, beta));
-		a.getGenderFeatures().setG_Neutral_StdDev(getStandardDeviation(alpha, beta));
+		a.getGenderFeatures().setG_Neutral_Variance(getVariance(alpha, beta));
 	}
 	
 	public void setPluralDistribution(Anaphora a){
 		String ante = a.getAntecedent().getCoveredText().toLowerCase();
 		int alpha = 1;
 		int beta = 1;
-		if(corpusFrequencies.containsKey(ante)){			
+
+		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
+		String person = null;
+		for(Token t : covTokens){
+			if(isPerson(t)){
+				//Only take the first name (e.g. token) of a person
+				person = t.getCoveredText();
+			}
+		}
+		
+		if(corpusFrequencies.containsKey(ante)){
 			Integer[] freq = corpusFrequencies.get(ante);
 			alpha += freq[3];
 			beta += freq[0] + freq[1] + freq[2];
+		} else if(person != null) {
+			if(corpusFrequencies.containsKey(person.toLowerCase())){
+				Integer[] freq = corpusFrequencies.get(person.toLowerCase());
+				alpha += freq[3];
+				beta += freq[0] + freq[1] + freq[2];
+			}
+
+		} else {
+			Token head = getHeadNoun(a.getAntecedent());
+			if(head != null && corpusFrequencies.containsKey(head.getCoveredText().toLowerCase())){
+				Integer[] freq = corpusFrequencies.get(head.getCoveredText().toLowerCase());
+				alpha += freq[3];
+				beta += freq[0] + freq[1] + freq[2];
+			}else {
+				for(Token t : covTokens){
+					if(t.getPos().getPosValue().contains("NN")){
+						if(corpusFrequencies.containsKey(t.getCoveredText().toLowerCase())){
+							Integer[] freq = corpusFrequencies.get(t.getCoveredText().toLowerCase());
+							alpha += freq[3];
+							beta += freq[0] + freq[1] + freq[2];
+							break;
+						}
+					}
+				}
+			}
 		}
+		
 		a.getGenderFeatures().setG_Plural_Mean(getMean(alpha, beta));
-		a.getGenderFeatures().setG_Plural_StdDev(getStandardDeviation(alpha, beta));
+		a.getGenderFeatures().setG_Plural_Variance(getVariance(alpha, beta));
 	}
 	
-	public double getMean(int alpha, int beta){
-		double r = (double)alpha / (double)(alpha + beta);
-		return r;
+	public float getMean(int alpha, int beta){
+		float fAlpha = alpha;
+		float fBeta = beta;
+		return (fAlpha / (fAlpha + fBeta));
 		
 	}
 	
-	public double getStandardDeviation(int alpha, int beta){
-		double dAlpha = alpha;
-		double dBeta = beta;
-		double sum = dAlpha + dBeta;
-		double product = dAlpha * dBeta;
-		double a = sum * sum * (sum + 1);
+	public float getVariance(int alpha, int beta){
+		float fAlpha = alpha;
+		float fBeta = beta;
+		float sum = fAlpha + fBeta;
+		float product = fAlpha * fBeta;
 	
-		double variance = product /a;
+		float variance = product / (sum * sum * (sum + 1));
 		
-		double stdDev = Math.sqrt(variance);	
-		
-		return stdDev;
+		if(variance < 0){
+			System.out.println("Variance cant be < 0");
+		}
+		return variance;
 	}
 	
+	private boolean isPerson(Token token){
+		for(NamedEntity n : namedEntities){
+			if(n.getBegin() <= token.getBegin() && n.getEnd() >= token.getEnd() && n.getValue().equals("PERSON")){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private Token getHeadNoun(Annotation nounphrase){
+		List<Token> covTokens = AnnotationUtils.getCoveredTokens(nounphrase, tokens);
+		
+		for(Token t : covTokens){
+			if(t.getPos().getPosValue().contains("NN")){
+				for(Dependency d : dependencies){
+					if(d.getDependent() == t && d.getGovernor().getPos().getPosValue().contains("NN")){
+						Token gov = d.getGovernor();
+						if(nounphrase.getBegin() <= gov.getBegin() && nounphrase.getEnd() >= gov.getEnd())
+							return d.getGovernor();					
+					}
+				}
+			}
+		}
+		
+		return null;
+	}
 }
