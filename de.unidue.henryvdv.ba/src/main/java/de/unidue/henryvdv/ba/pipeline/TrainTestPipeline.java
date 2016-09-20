@@ -34,15 +34,17 @@ public class TrainTestPipeline {
 	public static void main(String[] args)
 			  throws Exception {	
 
-		crossvalidation(3, 30, false);
+		crossvalidation(10, 30, true);
 		
 		/*
 		Integer[] allDocs = new Integer[30];
 		for(int i = 0; i < 30; i++){
 			allDocs[i] = i;
 		}
-		baseline(allDocs);
+		
+		trainPipeline(allDocs);
 		*/
+		//baseline(allDocs);
 	}
 	
 	private static void crossvalidation(int folds, int docSize, boolean randomFolds) throws Exception{
@@ -79,21 +81,7 @@ public class TrainTestPipeline {
 				}
 			}
 			Integer[] trainOnArray = trainOnList.toArray(new Integer[trainOnList.size()]);
-			Integer[] testOnArray = foldsList.get(i).toArray(new Integer[foldsList.get(i).size()]);
-			/*
-			System.out.println("Train On: ");
-			for(Integer x : trainOnArray){
-				System.out.print(x + "  ");
-			}
-			System.out.println("");
-			System.out.println("Test On: ");
-			for(Integer x : testOnArray){
-				System.out.print(x + "  ");
-			}
-			System.out.println("");
-			System.out.println("---------------------------------");
-			*/
-			
+			Integer[] testOnArray = foldsList.get(i).toArray(new Integer[foldsList.get(i).size()]);			
 			
 			System.out.print("Training - Fold nr " + i + "  (");
 			for(Integer t : trainOnArray){

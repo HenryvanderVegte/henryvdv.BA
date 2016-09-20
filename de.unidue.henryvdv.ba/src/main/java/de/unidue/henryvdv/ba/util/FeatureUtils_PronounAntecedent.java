@@ -73,7 +73,12 @@ public class FeatureUtils_PronounAntecedent {
 	}
 	
 	public float intraSentenceDiff(Anaphora a){
-		float value = (a.getBegin() - a.getAntecedent().getBegin())/ 50.0f;
+		int dist = 0;
+		for(Token t : tokens){
+			if(t.getBegin() > a.getAntecedent().getBegin() && t.getBegin() < a.getBegin())
+				dist++;
+		}
+		float value = (float)dist / 50.0f;
 		return value;
 	}
 	
@@ -202,6 +207,7 @@ public class FeatureUtils_PronounAntecedent {
 		return value;
 	}
 	
+	//TODO: Only check the Head Noun
 	public boolean isBothSingular(Annotation anaphora, Annotation antecedent){
 		boolean isSingularA = true;
 		if(Arrays.asList(Parameters.pluralPronouns).contains(anaphora.getCoveredText().toLowerCase())){

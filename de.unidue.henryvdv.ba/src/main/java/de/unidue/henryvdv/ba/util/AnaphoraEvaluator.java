@@ -8,7 +8,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.DetectedNP;
 import de.unidue.henryvdv.ba.type.GoldNP;
@@ -17,7 +19,9 @@ import de.unidue.henryvdv.ba.type.MyCoreferenceLink;
 
 public class AnaphoraEvaluator {
 	
-	private static final String PRINT_FILE_NAME = "accuracyOutput.txt";
+	private static final String ACCURACY_FILE_NAME = "accuracyOutput.txt";
+	
+	private static final String OUTPUT_FILE_NAME = "output.txt";
 
 	private static final String PRINT_FILE_DIRECTORY = "src/main/resources/output";
 	
@@ -26,14 +30,20 @@ public class AnaphoraEvaluator {
 	private int anaphorsTotal = 0;
 	private int correctAnaphorsTotal = 0;
 	
+	private File accuracyOutputFile;
 	private File outputFile;
+	private List<String> output;
 	
 	public AnaphoraEvaluator(){
 		super();
-		outputFile = new File(PRINT_FILE_DIRECTORY + "/" + PRINT_FILE_NAME);
+		accuracyOutputFile = new File(PRINT_FILE_DIRECTORY + "/" + ACCURACY_FILE_NAME);
+		outputFile = new File(PRINT_FILE_DIRECTORY + "/" + OUTPUT_FILE_NAME);
+		
+		output = new ArrayList<String>();
+		output.add("-----------------------------------------NEW EVALUATION----------------------------------");
 	}
 	
-	public void evaluateSameEntity(List<DetectedNP> detectedAntecedents, List<Anaphora> anaphoras, Collection<MyCoreferenceChain> corefChains, boolean printChoices){
+	public void evaluateSameEntity_Bergsma(List<DetectedNP> detectedAntecedents, List<Anaphora> anaphoras, Collection<MyCoreferenceChain> corefChains, boolean printChoices, String documentName){
 
 		List<MyCoreferenceChain> anaphoraChains = new ArrayList<MyCoreferenceChain>();
 		for(int i = 0; i < anaphoras.size(); i++){
@@ -91,51 +101,42 @@ public class AnaphoraEvaluator {
 				correct++;
 			total++;
 		}
-		System.out.println("Correct in this Doc: " + correct);
-		System.out.println("Total in this Doc: " + total + "  " + (anaphoras.size()));
 		anaphorsTotal += total;
 		correctAnaphorsTotal += correct;
 	}
 	
-	public void evaluate(List<DetectedNP> detectedAntecedents, List<GoldNP> goldAntecedents, List<Anaphora> anaphoras, boolean printChoices){
+	public void evaluate_Bergsma(List<DetectedNP> detectedAntecedents, List<GoldNP> goldAntecedents, List<Anaphora> anaphoras, boolean printChoices, String documentName){
 		if(detectedAntecedents.size() != goldAntecedents.size() || detectedAntecedents.size() != anaphoras.size()){
 			System.out.println("Gold Antecedent List and Detected Antecedent List are not the same size - return");
 			return;
 		}
+		output.add("********  Document:  " + documentName + "  ********");
 		
 		int correct = 0;
 		int total = 0;
 		
 		for(int i = 0; i < goldAntecedents.size(); i++){
 			if(goldAntecedents.get(i) == null && detectedAntecedents.get(i) == null){
-				
-				if(printChoices){
-					System.out.println("--Correct--");
-					System.out.println("Both are null");
-				}
-
+				output.add("--Correct--");
+				output.add("Both are null");
 				
 				correct++;	
 				total++;
 				continue;
 			}
 			if(goldAntecedents.get(i) == null || detectedAntecedents.get(i) == null){
-				if(printChoices){
-					System.out.println("--Wrong--");
-					System.out.println("One is null");
-				}
+				output.add("--Wrong--");
+				output.add("One is null");
 				total++;
 				continue;
 			}		
 			if(goldAntecedents.get(i).getBegin() >= detectedAntecedents.get(i).getBegin() && 
 				goldAntecedents.get(i).getEnd() <= detectedAntecedents.get(i).getEnd()){
+				output.add("--Correct--");
+				output.add("Anaphora: " + anaphoras.get(i).getCoveredText());
+				output.add("Gold : " + goldAntecedents.get(i).getCoveredText());
+				output.add("Detected : " + detectedAntecedents.get(i).getCoveredText());
 				
-				if(printChoices){
-					System.out.println("--Correct--");
-					System.out.println("Anaphora: " + anaphoras.get(i).getCoveredText());
-					System.out.println("Gold : " + goldAntecedents.get(i).getCoveredText());
-					System.out.println("Detected : " + detectedAntecedents.get(i).getCoveredText());
-				}
 				
 				correct++;	
 				total++;
@@ -144,31 +145,66 @@ public class AnaphoraEvaluator {
 			
 			if(goldAntecedents.get(i).getBegin() <= detectedAntecedents.get(i).getBegin() && 
 				goldAntecedents.get(i).getEnd() >= detectedAntecedents.get(i).getEnd()){
-				if(printChoices){
-					System.out.println("--Correct--");
-					System.out.println("Anaphora: " + anaphoras.get(i).getCoveredText());
-					System.out.println("Gold : " + goldAntecedents.get(i).getCoveredText());
-					System.out.println("Detected : " + detectedAntecedents.get(i).getCoveredText());
-				}
+				output.add("--Correct--");
+				output.add("Anaphora: " + anaphoras.get(i).getCoveredText());
+				output.add("Gold : " + goldAntecedents.get(i).getCoveredText());
+				output.add("Detected : " + detectedAntecedents.get(i).getCoveredText());
 				
 				correct++;		
 				total++;
 				continue;
 			}
-			if(printChoices){
-				System.out.println("--Wrong--");
-				System.out.println("Anaphora: " + anaphoras.get(i).getCoveredText());
-				System.out.println("Gold : " + goldAntecedents.get(i).getCoveredText());
-				System.out.println("Detected : " + detectedAntecedents.get(i).getCoveredText());
-			}
+			output.add("--Wrong--");
+			output.add("Anaphora: " + anaphoras.get(i).getCoveredText());
+			output.add("Gold : " + goldAntecedents.get(i).getCoveredText());
+			output.add("Detected : " + detectedAntecedents.get(i).getCoveredText());
 			total++;
+			
+		}
+		output.add("");
+		anaphorsTotal += total;
+		correctAnaphorsTotal += correct;
+	}
+	
+	public void evaluate_last_n_sentences(Map<Anaphora, List<NP>> acceptedNPs, boolean printChoices){
+		int correct = 0;
+		int total = 0;
+		
+		for(Anaphora anaphora : acceptedNPs.keySet()){
+			int goldAntecedentBegin = anaphora.getAntecedent().getBegin();
+			int goldAntecedentEnd = anaphora.getAntecedent().getEnd();
+			
+			if(printChoices)
+				System.out.println("Anaphora: " + anaphora.getCoveredText());
+			if(acceptedNPs.get(anaphora).size() == 0){
+				total++;
+			}
+			
+			for(NP np : acceptedNPs.get(anaphora)){
+				int npBegin = np.getBegin();
+				int npEnd = np.getEnd();
+				
+				if(printChoices)
+					System.out.print("Possible antecedent: " + np.getCoveredText());
+				
+				if((goldAntecedentBegin >= npBegin && goldAntecedentEnd <= npEnd) || goldAntecedentBegin <= npBegin && goldAntecedentEnd >= npEnd){
+					correct++;
+					if(printChoices)
+						System.out.println(" - Correct");
+				} else if(printChoices){
+					System.out.println(" - Wrong");
+				}
+				total++;
+			}
 			
 		}
 		anaphorsTotal += total;
 		correctAnaphorsTotal += correct;
 	}
 	
+	
 	public void printResults(){
+		output.add("-----------------------------------------EVALUATION END----------------------------------");
 		float rel = 0f;	
 		if(anaphorsTotal != 0){
 			rel = ((float)correctAnaphorsTotal / (float)anaphorsTotal) * 100f;
@@ -181,11 +217,20 @@ public class AnaphoraEvaluator {
 			PrintWriter out = null;
 			try {
 
-				fw = new FileWriter(outputFile, true);
+				fw = new FileWriter(accuracyOutputFile, true);
 			    bw = new BufferedWriter(fw);
 			    out = new PrintWriter(bw);
 			    out.println("Correct: " + correctAnaphorsTotal + "  Total: " + anaphorsTotal + "  Accuracy: " + rel);
 			    out.close();
+			    
+			    fw = new FileWriter(outputFile, true);
+			    bw = new BufferedWriter(fw);
+			    out = new PrintWriter(bw);
+			    for(String s : output){
+				    out.println(s);
+			    }
+			    out.close();
+			    
 			} catch (IOException e) {
 			    //exception handling left as an exercise for the reader
 			}

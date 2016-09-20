@@ -34,6 +34,7 @@ import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Antecedent;
 import de.unidue.henryvdv.ba.type.AntecedentFeatures;
 import de.unidue.henryvdv.ba.type.DetectedNP;
+import de.unidue.henryvdv.ba.type.DocumentInfo;
 import de.unidue.henryvdv.ba.type.GenderFeatures;
 import de.unidue.henryvdv.ba.type.GoldNP;
 import de.unidue.henryvdv.ba.type.MyCoreferenceChain;
@@ -69,9 +70,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		
 	}
 	
-    public static final String PARAM_CLASS_MODE = "classificationMode";
-    @ConfigurationParameter(name = PARAM_CLASS_MODE, mandatory = false, defaultValue = "BERGSMA")
-    protected ClassificationMode mode;
+    private static final ClassificationMode classificationMode = ClassificationMode.BERGSMA;
 	
 	private static final String BINARIES_BASE_LOCATION = "src/main/resources/svm/bin";
 
@@ -224,6 +223,8 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
 		quotes = JCasUtil.select(aJCas, Quotation.class);
 		corefChains = JCasUtil.select(aJCas, MyCoreferenceChain.class);
+		DocumentInfo docInfo = JCasUtil.selectSingle(aJCas, DocumentInfo.class);
+		String docName = docInfo.getDocumentName();
 		
 		aFUtil = new FeatureUtils_Antecedent(aJCas);
 		paFUtil = new FeatureUtils_PronounAntecedent(aJCas);
@@ -234,17 +235,37 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		allNPs = JCasUtil.select(aJCas, NP.class);
 	
 		setFixedNPs();
-		setGoldNPs();
-		setDetectedNPs();
 		
-		List<Anaphora> anaphorasList = new ArrayList<Anaphora>();
-		for(Anaphora a : anaphoras){
-			if(a.getHasCorrectAntecedent()){
-				anaphorasList.add(a);
+		
+		if(classificationMode == ClassificationMode.BERGSMA){
+			setGoldNPs();
+			setDetectedNPs();
+			
+			List<Anaphora> anaphorasList = new ArrayList<Anaphora>();
+			for(Anaphora a : anaphoras){
+				if(a.getHasCorrectAntecedent()){
+					anaphorasList.add(a);
+				}
 			}
-		}
+			
+			eval.evaluate_Bergsma(detectedAntecedents, goldAntecedents, anaphorasList, false, docName);
+			
+			//eval.evaluateSameEntity_Bergsma(detectedAntecedents, anaphorasList, corefChains, false);
+		}		
 		
-		eval.evaluate(detectedAntecedents, goldAntecedents, anaphorasList, false);
+		if(classificationMode == ClassificationMode.LAST_N_SENTENCES){
+			List<Anaphora> anaphorasList = new ArrayList<Anaphora>();
+			for(Anaphora a : anaphoras){
+				if(a.getHasCorrectAntecedent()){
+					anaphorasList.add(a);
+				}
+			}
+			
+			Map<Anaphora, List<NP>> acceptedNPs = setAcceptedNPs(anaphorasList);
+			eval.evaluate_last_n_sentences(acceptedNPs, true);
+			
+		}
+
 	}
 	
 	@Override
@@ -322,6 +343,52 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		}
 	}
 	
+	/**
+	 * Annotates all nounphrases that have been accepted by the svm classifier of 
+	 * the last n sentences
+	 * 
+	 */
+	private Map<Anaphora, List<NP>> setAcceptedNPs(List<Anaphora> anaphorasList){
+		Map<Anaphora, List<NP>> frequencies = new HashMap<Anaphora, List<NP>>();
+		
+		
+		for(Anaphora anaphora : anaphorasList){
+			
+			int anteNPnumber = 0;
+			for(int i = 0; i < fixedNPs.size(); i++){
+				if(fixedNPs.get(i).getBegin() >= anaphora.getBegin()){
+					anteNPnumber = i - 1;
+					if(anteNPnumber < 0 )
+						System.out.println("!!!!!!!!!!!!!!");
+					break;
+				}
+			}		
+
+			int anaphoraSentenceNr = AnnotationUtils.getSentenceNr(anaphora.getBegin(), sentences);
+
+			LinkedHashMap<NP, Float> npValues = new LinkedHashMap<NP, Float>();
+			List<NP> acceptedNPs = new ArrayList<NP>();
+			for(int i = anteNPnumber; i > 0; i--){
+				int anteSentenceNr = AnnotationUtils.getSentenceNr(fixedNPs.get(i).getBegin(), sentences);
+				if((anaphoraSentenceNr - anteSentenceNr) > MAX_SENTENCE_DIST){
+					break;
+				}
+				float outputValue = getOutputValue(anaphora, fixedNPs.get(i));
+				npValues.put(fixedNPs.get(i), outputValue);
+			}
+			
+			float threshold = 1.0f;
+			
+			for(NP np : npValues.keySet()){
+				if(npValues.get(np) > threshold){
+					acceptedNPs.add(np);
+				}
+			}
+			frequencies.put(anaphora, acceptedNPs);
+		}
+		return frequencies;
+	}
+	
 	private float getOutputValue(Anaphora a, NP n){
 		Anaphora possibleA = new Anaphora(aJCas, a.getBegin(), a.getEnd());
 		Antecedent ant = new Antecedent(aJCas, n.getBegin(), n.getEnd());
@@ -360,7 +427,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	}
 	
 	/**
-	 *  This method removes the chance of discovering noun phrases in noun phrases
+	 *  This method removes the possibility of discovering noun phrases in noun phrases
 	 * 
 	 **/
 	private void setFixedNPs(){	

@@ -1,0 +1,692 @@
+-----------------------------------------NEW EVALUATION----------------------------------
+********  Document:  Anatole France  ********
+--Correct--
+Anaphora: He
+Gold : a French poet , journalist , and novelist
+Detected : poet , journalist , and novelist
+--Correct--
+Anaphora: He
+Gold : He
+Detected : He
+--Wrong--
+Anaphora: he
+Gold : a successful novelist
+Detected : He
+--Correct--
+Anaphora: his
+Gold : he
+Detected : he
+--Wrong--
+Anaphora: He
+Gold : his
+Detected : he
+--Wrong--
+Anaphora: his
+Gold : a member of the Académie française
+Detected : He
+--Correct--
+Anaphora: his
+Gold : The son of a bookseller , France
+Detected : France
+--Wrong--
+Anaphora: His
+Gold : a bibliophile
+Detected : France
+--Wrong--
+Anaphora: he
+Gold : Anatole France
+Detected : France
+--Correct--
+Anaphora: his
+Gold : he
+Detected : he
+--Wrong--
+Anaphora: his
+Gold : his father
+Detected : he
+--Wrong--
+Anaphora: he
+Gold : his
+Detected : he
+--Correct--
+Anaphora: he
+Gold : he
+Detected : he
+--Correct--
+Anaphora: his
+Gold : Anatole France
+Detected : Anatole France
+--Wrong--
+Anaphora: his
+Gold : a poet and a journalist
+Detected : Anatole France
+--Wrong--
+Anaphora: he
+Gold : his
+Detected : Anatole France
+--Wrong--
+Anaphora: he
+Gold : a journalist
+Detected : he
+--Correct--
+Anaphora: He
+Gold : he
+Detected : he
+--Wrong--
+Anaphora: Its
+Gold : the novel Le Crime de Sylvestre Bonnard -LRB- 1881 -RRB-
+Detected : He
+--Wrong--
+Anaphora: its
+Gold : The novel
+Detected : He
+--Correct--
+Anaphora: He
+Gold : France
+Detected : France
+--Correct--
+Anaphora: his
+Gold : France
+Detected : France
+--Wrong--
+Anaphora: his
+Gold : a true-believing follower of Robespierre
+Detected : France
+--Wrong--
+Anaphora: He
+Gold : France 's
+Detected : the
+--Correct--
+Anaphora: He
+Gold : He
+Detected : He
+--Wrong--
+Anaphora: He
+Gold : France 's
+Detected : He
+--Correct--
+Anaphora: he
+Gold : Anatole France
+Detected : Anatole France
+--Wrong--
+Anaphora: he
+Gold : France 's
+Detected : he
+--Wrong--
+Anaphora: her
+Gold : Madame Arman de Caillavet , who conducted a celebrated literary salon of the Third Republic
+Detected : he
+--Correct--
+Anaphora: his
+Gold : he
+Detected : he
+--Wrong--
+Anaphora: he
+Gold : his
+Detected : he
+--Correct--
+Anaphora: his
+Gold : France
+Detected : France
+--Wrong--
+Anaphora: he
+Gold : the object of attacks
+Detected : France
+--Wrong--
+Anaphora: he
+Gold : him
+Detected : he
+--Correct--
+Anaphora: he
+Gold : he
+Detected : he
+--Wrong--
+Anaphora: they
+Gold : The clerics and reactionaries
+Detected : he
+--Correct--
+Anaphora: He
+Gold : France
+Detected : France
+
+********  Document:  Jarvis Island  ********
+--Wrong--
+Anaphora: its
+Gold : The ground
+Detected : The island
+--Correct--
+Anaphora: Its
+Gold : the island
+Detected : the island
+--Wrong--
+Anaphora: His
+Gold : caretaker for several months
+Detected : Squire Flockton
+--Wrong--
+Anaphora: their
+Gold : the four young colonists
+Detected : The submarine
+--Correct--
+Anaphora: its
+Gold : The submarine
+Detected : The submarine
+--Correct--
+Anaphora: they
+Gold : These cats
+Detected : These cats
+
+********  Document:  Siege of Chaves  ********
+--Correct--
+Anaphora: his
+Gold : Napoleon
+Detected : Napoleon
+--Wrong--
+Anaphora: he
+Gold : his
+Detected : Napoleon
+--Wrong--
+Anaphora: his
+Gold : he
+Detected : The British
+--Correct--
+Anaphora: himself
+Gold : Napoleon
+Detected : Napoleon
+--Wrong--
+Anaphora: He
+Gold : himself
+Detected : Napoleon
+--Correct--
+Anaphora: himself
+Gold : the British general himself
+Detected : the British general
+--Correct--
+Anaphora: his
+Gold : himself
+Detected : himself
+--Correct--
+Anaphora: his
+Gold : general Soult
+Detected : general Soult
+--Wrong--
+Anaphora: His
+Gold : his
+Detected : general Soult
+--Correct--
+Anaphora: they
+Gold : Some of these troops
+Detected : Some
+--Wrong--
+Anaphora: his
+Gold : the brigadier
+Detected : Silveira
+--Correct--
+Anaphora: his
+Gold : Silveira
+Detected : Silveira
+--Wrong--
+Anaphora: he
+Gold : his
+Detected : Silveira
+--Correct--
+Anaphora: his
+Gold : Pizarro
+Detected : Pizarro
+--Wrong--
+Anaphora: his
+Gold : his
+Detected : Pizarro
+--Wrong--
+Anaphora: his
+Gold : his
+Detected : Pizarro
+--Wrong--
+Anaphora: his
+Gold : Soult
+Detected : Chaves
+--Wrong--
+Anaphora: his
+Gold : Marshal Soult
+Detected : These actions
+--Wrong--
+Anaphora: they
+Gold : those
+Detected : These actions
+--Correct--
+Anaphora: their
+Gold : the Portuguese forces
+Detected : the Portuguese forces
+--Correct--
+Anaphora: his
+Gold : Soult
+Detected : Soult
+--Wrong--
+Anaphora: He
+Gold : his
+Detected : Soult
+--Wrong--
+Anaphora: he
+Gold : He
+Detected : Soult
+--Correct--
+Anaphora: he
+Gold : Silveira
+Detected : Silveira
+--Wrong--
+Anaphora: its
+Gold : the main French army which was already on its way west
+Detected : Silveira
+--Wrong--
+Anaphora: he
+Gold : Messeger
+Detected : Silveira
+--Wrong--
+Anaphora: he
+Gold : Messenger
+Detected : Silveira
+--Wrong--
+Anaphora: he
+Gold : he
+Detected : Silveira
+--Correct--
+Anaphora: its
+Gold : the French army
+Detected : the French army
+--Correct--
+Anaphora: his
+Gold : Silveira
+Detected : Silveira
+
+-----------------------------------------EVALUATION END----------------------------------
+-----------------------------------------NEW EVALUATION----------------------------------
+********  Document:  Aberfoyle, Stirling  ********
+--Wrong--
+Anaphora: its
+Gold : The slate quarries
+Detected : It
+--Correct--
+Anaphora: itself
+Gold : Aberfoyle
+Detected : Aberfoyle
+--Wrong--
+Anaphora: his
+Gold : Robert Roy MacGregor
+Detected : Aberfoyle
+--Wrong--
+Anaphora: her
+Gold : Queen of Scots
+Detected : Mary , Queen
+--Wrong--
+Anaphora: She
+Gold : her
+Detected : Mary , Queen
+--Wrong--
+Anaphora: her
+Gold : She
+Detected : Mary , Queen
+--Wrong--
+Anaphora: she
+Gold : her
+Detected : Mary , Queen
+--Wrong--
+Anaphora: he
+Gold : the Rev. Kirk
+Detected : It
+--Correct--
+Anaphora: his
+Gold : he
+Detected : he
+--Wrong--
+Anaphora: he
+Gold : minister of Aberfoyle parish
+Detected : Kirk
+--Correct--
+Anaphora: his
+Gold : Kirk
+Detected : Kirk
+--Wrong--
+Anaphora: he
+Gold : the Rev. Kirk
+Detected : Kirk
+--Wrong--
+Anaphora: his
+Gold : the Rev. Kirk
+Detected : Kirk
+--Wrong--
+Anaphora: he
+Gold : his
+Detected : Kirk
+--Wrong--
+Anaphora: he
+Gold : he
+Detected : Kirk
+--Wrong--
+Anaphora: He
+Gold : he
+Detected : the Rev. Kirk
+--Correct--
+Anaphora: He
+Gold : He
+Detected : He
+--Correct--
+Anaphora: his
+Gold : He
+Detected : He
+--Wrong--
+Anaphora: his
+Gold : his
+Detected : the fairies
+--Correct--
+Anaphora: he
+Gold : the spectre of Kirk
+Detected : the spectre
+--Wrong--
+Anaphora: his
+Gold : him
+Detected : he
+--Wrong--
+Anaphora: he
+Gold : the spectre of Kirk
+Detected : he
+--Wrong--
+Anaphora: their
+Gold : visitors to Doon Hill
+Detected : Graham
+
+********  Document:  FedEx  ********
+--Wrong--
+Anaphora: its
+Gold : FDX Corporation
+Detected : FedEx
+--Wrong--
+Anaphora: their
+Gold : the packages
+Detected : FedEx
+--Wrong--
+Anaphora: its
+Gold : FDX Corporation
+Detected : FedEx
+--Correct--
+Anaphora: they
+Gold : FedEx
+Detected : FedEx
+--Wrong--
+Anaphora: its
+Gold : FedEx Ground Division
+Detected : FedEx
+--Wrong--
+Anaphora: its
+Gold : FedEx
+Detected : FedEx
+--Wrong--
+Anaphora: their
+Gold : its operatives
+Detected : FedEx
+--Wrong--
+Anaphora: they
+Gold : operatives claiming benefits
+Detected : FedEx
+--Wrong--
+Anaphora: its
+Gold : the Internal Revenue Service
+Detected : FedEx
+--Correct--
+Anaphora: its
+Gold : FedEx
+Detected : FedEx
+--Correct--
+Anaphora: its
+Gold : FedEx
+Detected : FedEx
+--Wrong--
+Anaphora: their
+Gold : its customers
+Detected : FedEx
+--Wrong--
+Anaphora: He
+Gold : Henry Maier
+Detected : FedEx
+--Wrong--
+Anaphora: its
+Gold : each
+Detected : FedEx
+--Wrong--
+Anaphora: their
+Gold : FedEx Express
+Detected : FedEx
+--Wrong--
+Anaphora: his
+Gold : John Moschitta , Jr.
+Detected : FedEx
+
+********  Document:  Robert Borden  ********
+--Correct--
+Anaphora: He
+Gold : a Canadian lawyer and politician
+Detected : a Canadian lawyer and politician
+--Wrong--
+Anaphora: he
+Gold : the third Nova Scotian
+Detected : He
+--Wrong--
+Anaphora: his
+Gold : Robert Laird Borden
+Detected : he
+--Wrong--
+Anaphora: his
+Gold : Perry
+Detected : he
+--Wrong--
+Anaphora: his
+Gold : Borden 's father Andrew Borden
+Detected : Robert Borden
+--Wrong--
+Anaphora: He
+Gold : a `` calm , contemplative and philosophical '' turn of mind
+Detected : Robert Borden
+--Wrong--
+Anaphora: His
+Gold : his son
+Detected : He
+--Wrong--
+Anaphora: Her
+Gold : His mother Eunice Jane Laird
+Detected : He
+--Wrong--
+Anaphora: her
+Gold : Her
+Detected : He
+--Wrong--
+Anaphora: himself
+Gold : her first-born child , who applied himself to his studies while assisting his parents with the farm work
+Detected : He
+--Wrong--
+Anaphora: his
+Gold : himself
+Detected : He
+--Wrong--
+Anaphora: his
+Gold : his
+Detected : He
+--Wrong--
+Anaphora: he
+Gold : his
+Detected : He
+--Correct--
+Anaphora: His
+Gold : he
+Detected : he
+--Wrong--
+Anaphora: he
+Gold : His
+Detected : he
+--Wrong--
+Anaphora: he
+Gold : a teacher
+Detected : he
+--Wrong--
+Anaphora: he
+Gold : the junior partner of the Conservative lawyer John P. Chipman
+Detected : Borden
+--Correct--
+Anaphora: he
+Gold : he
+Detected : he
+--Wrong--
+Anaphora: he
+Gold : the senior partner in fall 1889 when he was only 35 , following the departure of Graham and Tupper
+Detected : Borden
+--Correct--
+Anaphora: His
+Gold : he
+Detected : he
+--Wrong--
+Anaphora: he
+Gold : His
+Detected : he
+--Wrong--
+Anaphora: his
+Gold : Henry Borden
+Detected : Borden
+--Wrong--
+Anaphora: their
+Gold : Henry Borden , his wife Jean Borden
+Detected : Borden
+--Correct--
+Anaphora: he
+Gold : Borden
+Detected : Borden
+--Correct--
+Anaphora: he
+Gold : Borden
+Detected : Borden
+--Correct--
+Anaphora: He
+Gold : he
+Detected : he
+--Wrong--
+Anaphora: he
+Gold : President of the Nova Scotia Barristers ' Society in 1896
+Detected : He
+--Correct--
+Anaphora: he
+Gold : he
+Detected : he
+--Wrong--
+Anaphora: he
+Gold : a Liberal
+Detected : Borden
+--Correct--
+Anaphora: He
+Gold : he
+Detected : he
+--Wrong--
+Anaphora: He
+Gold : leader of the Conservative Party
+Detected : He
+--Correct--
+Anaphora: his
+Gold : He
+Detected : He
+--Wrong--
+Anaphora: he
+Gold : his
+Detected : He
+--Correct--
+Anaphora: he
+Gold : he
+Detected : he
+--Correct--
+Anaphora: his
+Gold : he
+Detected : he
+--Wrong--
+Anaphora: his
+Gold : his
+Detected : he
+--Correct--
+Anaphora: His
+Gold : his
+Detected : his party
+--Wrong--
+Anaphora: he
+Gold : Henri Bourassa
+Detected : Borden
+--Wrong--
+Anaphora: he
+Gold : Prime Minister of Canada during the First World War
+Detected : he
+--Correct--
+Anaphora: his
+Gold : he
+Detected : he
+--Wrong--
+Anaphora: himself
+Gold : Sir Robert Borden
+Detected : Borden
+--Wrong--
+Anaphora: his
+Gold : himself
+Detected : Sir Robert Borden
+--Wrong--
+Anaphora: he
+Gold : his
+Detected : Sir Robert Borden
+--Wrong--
+Anaphora: itself
+Gold : Canada
+Detected : he
+--Wrong--
+Anaphora: their
+Gold : Canadians
+Detected : Borden
+--Wrong--
+Anaphora: they
+Gold : the Canadian divisions
+Detected : Arthur Currie
+--Wrong--
+Anaphora: themselves
+Gold : Canadian troops
+Detected : Arthur Currie
+--Correct--
+Anaphora: its
+Gold : Canada
+Detected : Canada
+--Wrong--
+Anaphora: its
+Gold : each of the dominions
+Detected : Borden
+--Wrong--
+Anaphora: its
+Gold : the House of Commons
+Detected : Borden
+--Wrong--
+Anaphora: He
+Gold : Sir Robert Borden
+Detected : Borden
+--Wrong--
+Anaphora: he
+Gold : Borden
+Detected : Canada
+--Correct--
+Anaphora: his
+Gold : he
+Detected : he
+--Wrong--
+Anaphora: She
+Gold : Laura Bond , youngest daughter of the late T. H. Bond
+Detected : Borden
+--Wrong--
+Anaphora: her
+Gold : president of the Halifax Council of Women
+Detected : Borden
+--Wrong--
+Anaphora: She
+Gold : her
+Detected : Robert Laird Borden
+--Wrong--
+Anaphora: He
+Gold : Robert Laird Borden
+Detected : She
+
+-----------------------------------------EVALUATION END----------------------------------

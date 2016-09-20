@@ -20,56 +20,57 @@ public class FeatureVectorUtils {
 		}
 		
 		//Pronoun-Antecedent-Features (10)
-		addPA_SameSentence();
-		addPA_IntraSentenceDiff();
-		addPA_InPreviousSentence();
+	//	addPA_SameSentence(); 		
+		addPA_IntraSentenceDiff(); 
+		//addPA_InPreviousSentence();
 		addPA_InterSentenceDiff();
-		addPA_PrepositionalParallel();
-		addPA_ParentCatMatch();
-		addPA_ParentWordMatch();
+		//addPA_PrepositionalParallel();   //5
+		//addPA_ParentCatMatch();
+		//addPA_ParentWordMatch();
 		addPA_QuotationSituation();
-		addPA_SingularMatch();
-		addPA_PluralMatch();
+//->Auf head noun achten		addPA_SingularMatch();
+//->Auf head noun achten			addPA_PluralMatch();			//10
 		
 		//Antecedent Features (17)
+
 		addA_AntecedentFrequency();
 		addA_Subject();
 		addA_Object();
 		addA_Predicate();
-		addA_Pronominal();
-		addA_HeadWordEmphasis();
+		//addA_Pronominal();				//15
+		//addA_HeadWordEmphasis();
 		addA_Conjunction();
-		addA_PrenominalModifier();
+		//addA_PrenominalModifier();
 		addA_Org();
-		addA_Person();
-		addA_Time();
-		addA_Date();
-		addA_Money();
-		addA_Number();
-		addA_Definite();
-		addA_HisHer();
-		addA_HeHis();
-		
+		addA_Person();					//20
+		//addA_Time();
+		//addA_Date();
+		//addA_Money();
+		//addA_Number();
+		addA_Definite();				//25
+		//addA_HisHer();
+		//addA_HeHis();
+
 		//Pronoun Features (4)
 		addP_Masculine();
 		addP_Feminine();
-		addP_Neutral();
+		addP_Neutral();					//30
 		addP_Plural();
 		
 		//Gender Features (11)
-		/*
-		addG_StdGenderMatch();
-		addG_StdGenderMismatch();
-		addG_PronounMismatch();
-		addG_MasculineMean();
-		addG_MasculineVariance();
-		addG_FeminineMean();
-		addG_FeminineVariance();
-		addG_NeutralMean();
-		addG_NeutralVariance();
-		addG_PluralMean();
-		addG_PluralVariance();
-		*/
+		
+		//addG_StdGenderMatch();
+		//addG_StdGenderMismatch();
+	//	addG_PronounMismatch();
+	//	addG_MasculineMean();			//35
+	//	addG_MasculineVariance();
+	//	addG_FeminineMean();
+	//	addG_FeminineVariance();
+	//	addG_NeutralMean();
+		//addG_NeutralVariance();			//40
+	//	addG_PluralMean();
+	//	addG_PluralVariance();
+		
 		return currentFeatureVector;
 	}
 	

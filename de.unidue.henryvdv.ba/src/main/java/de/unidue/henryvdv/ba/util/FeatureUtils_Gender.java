@@ -132,6 +132,7 @@ public class FeatureUtils_Gender {
 	}
 	
 	public boolean pronounMismatch(Anaphora a){
+
 		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
 		PronounType antecedentType = PronounType.unknown;
 		
@@ -157,8 +158,10 @@ public class FeatureUtils_Gender {
 			}
 		}
 		
-		if(antecedentType == PronounType.unknown)
+		if(antecedentType == PronounType.unknown){
 			return false;
+		}
+
 		
 		PronounType anaphoraType = PronounType.unknown;
 		String anaphoraText = a.getCoveredText().toLowerCase();
@@ -177,9 +180,8 @@ public class FeatureUtils_Gender {
 		}
 				
 		if(anaphoraType != antecedentType){
-			return true;
+			return true; 
 		}
-		
 		return false;
 	}
 
