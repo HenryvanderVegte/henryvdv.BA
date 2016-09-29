@@ -180,8 +180,17 @@ public class FeatureUtils_Gender {
 		}
 				
 		if(anaphoraType != antecedentType){
+			if(!a.getHasCorrectAntecedent()){
+				//System.out.println("Pronoun Mismatch: ");
+				//System.out.println(a.getCoveredText() + " ----- " + a.getAntecedent().getCoveredText());
+			}
 			return true; 
 		}
+		if(!a.getHasCorrectAntecedent()){
+			//System.out.println("Pronoun match: ");
+			//System.out.println(a.getCoveredText() + " ----- " + a.getAntecedent().getCoveredText());
+		}
+		
 		return false;
 	}
 

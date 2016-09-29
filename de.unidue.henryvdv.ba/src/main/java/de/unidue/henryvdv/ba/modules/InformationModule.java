@@ -1,6 +1,8 @@
 package de.unidue.henryvdv.ba.modules;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
@@ -21,6 +23,7 @@ import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.DocumentInfo;
 import de.unidue.henryvdv.ba.type.MyCoreferenceChain;
 import de.unidue.henryvdv.ba.type.MyCoreferenceLink;
+import de.unidue.henryvdv.ba.util.AnnotationUtils;
 import edu.stanford.nlp.trees.Tree;
 
 public class InformationModule 
@@ -29,12 +32,15 @@ public class InformationModule
 
 	private JCas aJCas;
 	private FrequencyDistribution<Integer> sentenceDistanceFD;
+	private FrequencyDistribution<Integer> antecedentTokenSizeFD;
 	private Collection<Anaphora> anaphoras;
 	private Collection<Sentence> sentences;
+	private Collection<Token> tokens;
 	
 	public void initialize(UimaContext context) throws ResourceInitializationException{
 		super.initialize(context);
 		sentenceDistanceFD = new FrequencyDistribution<Integer>();
+		antecedentTokenSizeFD = new FrequencyDistribution<Integer>();
 	}
 	
 	@Override
@@ -42,6 +48,8 @@ public class InformationModule
 		this.aJCas = aJCas;
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
 		sentences = JCasUtil.select(aJCas, Sentence.class);
+		tokens = JCasUtil.select(aJCas, Token.class);
+		collectAntecedentTokenSize();
 	//	collectSentenceDistanceInfo();
 	//	printyMyCorefChains();
 		printInfos();
@@ -63,6 +71,34 @@ public class InformationModule
 			System.out.println("Sentence-distance: " + s);
 			System.out.println("Count: " + ((float)sentenceDistanceFD.getCount(s)/(float)sentenceDistanceFD.getN()*100f) + " %");
 		}*/
+		
+		int[] sortedList = new int[antecedentTokenSizeFD.getKeys().size()];
+		int j = 0;
+		for(Integer s : antecedentTokenSizeFD.getKeys()){
+			sortedList[j] = s;
+			j++;
+		}
+		
+		Arrays.sort(sortedList);
+		
+		float totalCount = 0.0f;
+		for(int i = 0; i < sortedList.length; i++){
+			System.out.println("Token Distance: " + sortedList[i]);
+			float currentCount = ((float)antecedentTokenSizeFD.getCount(sortedList[i])/(float)antecedentTokenSizeFD.getN()*100f);
+			//System.out.println("Count: " + ((float)antecedentTokenSizeFD.getCount(sortedList[i])/(float)antecedentTokenSizeFD.getN()*100f) + " %");
+			totalCount += currentCount;
+			System.out.println("Total: " + totalCount + " %");
+		}
+		
+	}
+	
+	private void collectAntecedentTokenSize(){
+		for(Anaphora anaphora : anaphoras){
+			if(anaphora.getHasCorrectAntecedent()){
+				List<Token> anteTokens = AnnotationUtils.getCoveredTokens(anaphora.getAntecedent(), tokens);
+				antecedentTokenSizeFD.inc(anteTokens.size());
+			}
+		}
 	}
 	
 	private void collectSentenceDistanceInfo(){

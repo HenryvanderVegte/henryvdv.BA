@@ -15,6 +15,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.type.Anaphora;
+import de.unidue.henryvdv.ba.type.Antecedent;
 import de.unidue.henryvdv.ba.type.Quotation;
 
 public class FeatureUtils_PronounAntecedent {
@@ -23,6 +24,10 @@ public class FeatureUtils_PronounAntecedent {
 	private Collection<Sentence> sentences;
 	private Collection<Dependency> dependencies;
 	private Collection<Quotation> quotes;
+	
+	public enum Number {
+	    singular, plural, unknown
+	}
 	
 	public FeatureUtils_PronounAntecedent(JCas aJCas){
 		sentences = JCasUtil.select(aJCas, Sentence.class);
@@ -50,9 +55,9 @@ public class FeatureUtils_PronounAntecedent {
 		//Quotation Situation
 		a.getPronounAntecedentFeatures().setP_A_QuotationSituation(quotationSituation(a));
 		//Singular Match
-		a.getPronounAntecedentFeatures().setP_A_SingularMatch(isBothSingular(a, a.getAntecedent()));
+		a.getPronounAntecedentFeatures().setP_A_SingularMatch(isBothSingular(a));
 		//Plural Match
-		a.getPronounAntecedentFeatures().setP_A_PluralMatch(isBothPlural(a, a.getAntecedent()));
+		a.getPronounAntecedentFeatures().setP_A_PluralMatch(isBothPlural(a));
 	}
 	
 	public boolean antecedentInSameSentence(Anaphora a){
@@ -68,7 +73,7 @@ public class FeatureUtils_PronounAntecedent {
 	public float interSentenceDiff(Anaphora a){
 		int anaphoraS = getSentenceNr(a.getBegin());
 		int antecedentS = getSentenceNr(a.getAntecedent().getBegin());
-		float value = (anaphoraS - antecedentS)/ 50.0f;
+		float value = (anaphoraS - antecedentS)/ 10.0f;
 		return value;
 	}
 	
@@ -78,7 +83,7 @@ public class FeatureUtils_PronounAntecedent {
 			if(t.getBegin() > a.getAntecedent().getBegin() && t.getBegin() < a.getBegin())
 				dist++;
 		}
-		float value = (float)dist / 50.0f;
+		float value = (float)dist / 100.0f;
 		return value;
 	}
 	
@@ -207,50 +212,66 @@ public class FeatureUtils_PronounAntecedent {
 		return value;
 	}
 	
-	//TODO: Only check the Head Noun
-	public boolean isBothSingular(Annotation anaphora, Annotation antecedent){
-		boolean isSingularA = true;
-		if(Arrays.asList(Parameters.pluralPronouns).contains(anaphora.getCoveredText().toLowerCase())){
-			isSingularA = false;
-		}
-		boolean isSingularB = false;
-		boolean valueSet = false;
-		List<Token> covTokens = getCoveredTokens(antecedent.getBegin(), antecedent.getEnd());
-		for(Token t : covTokens){
-			if(t.getPos().getPosValue().equalsIgnoreCase("NN") || t.getPos().getPosValue().equalsIgnoreCase("NNP")){
-				isSingularB = true;
-				valueSet = true;
-			}
-			if(t.getPos().getPosValue().equalsIgnoreCase("NNS") || t.getPos().getPosValue().equalsIgnoreCase("NNPS")){
-				valueSet = true;
-			}
-		}
-		if(isSingularA && isSingularB && valueSet)
-			return true;
+	public boolean isBothSingular(Anaphora anaphora){
+		Number anaphoraNumber = Number.unknown;
+		Number antecedentNumber = Number.unknown;
 		
+		if(Arrays.asList(Parameters.pluralPronouns).contains(anaphora.getCoveredText().toLowerCase())){
+			anaphoraNumber = Number.plural;
+		} else {
+			anaphoraNumber = Number.singular;
+		}
+		
+		if(Arrays.asList(Parameters.allPronouns).contains(anaphora.getAntecedent().getCoveredText().toLowerCase())){			
+			if(Arrays.asList(Parameters.pluralPronouns).contains(anaphora.getAntecedent().getCoveredText().toLowerCase())){
+				antecedentNumber = Number.plural;
+			} else {
+				antecedentNumber = Number.singular;
+			}
+		}
+		
+		if(antecedentNumber == Number.unknown){
+			antecedentNumber = getAntecedentNumber(anaphora.getAntecedent());
+		}
+		
+		if(anaphoraNumber == Number.singular && antecedentNumber == Number.singular){
+			return true;
+		}
+	
 		return false;
+
 	}
 	
-	public boolean isBothPlural(Annotation anaphora, Annotation antecedent){
-		boolean isSingularA = true;
-		if(Arrays.asList(Parameters.pluralPronouns).contains(anaphora.getCoveredText().toLowerCase())){
-			isSingularA = false;
-		}
-		boolean isSingularB = true;
-		boolean valueSet = false;
-		List<Token> covTokens = getCoveredTokens(antecedent.getBegin(), antecedent.getEnd());
-		for(Token t : covTokens){
-			if(t.getPos().getPosValue().equalsIgnoreCase("NNS") || t.getPos().getPosValue().equalsIgnoreCase("NNPS")){
-				isSingularB = false;
-				valueSet = true;
-			}
-			if(t.getPos().getPosValue().equalsIgnoreCase("NN") || t.getPos().getPosValue().equalsIgnoreCase("NNP")){
-				valueSet = true;
-			}
-		}
-		if(!isSingularA && !isSingularB && valueSet)
-			return true;
+	public boolean isBothPlural(Anaphora anaphora){
+		Number anaphoraNumber = Number.unknown;
+		Number antecedentNumber = Number.unknown;
 		
+		if(Arrays.asList(Parameters.pluralPronouns).contains(anaphora.getCoveredText().toLowerCase())){
+			anaphoraNumber = Number.plural;
+		} else {
+			anaphoraNumber = Number.singular;
+		}
+		
+		if(Arrays.asList(Parameters.allPronouns).contains(anaphora.getAntecedent().getCoveredText().toLowerCase())){			
+			if(Arrays.asList(Parameters.pluralPronouns).contains(anaphora.getAntecedent().getCoveredText().toLowerCase())){
+				antecedentNumber = Number.plural;
+			} else {
+				antecedentNumber = Number.singular;
+			}
+		}
+		
+		if(antecedentNumber == Number.unknown){
+			antecedentNumber = getAntecedentNumber(anaphora.getAntecedent());
+		}
+		
+		if(anaphoraNumber == Number.plural && antecedentNumber == Number.plural){
+			System.out.println("Both plural:");
+			System.out.println(anaphora.getCoveredText());
+			System.out.println(anaphora.getAntecedent().getCoveredText());
+			
+			return true;
+		}
+	
 		return false;
 	}
 	
@@ -262,5 +283,89 @@ public class FeatureUtils_PronounAntecedent {
 		return AnnotationUtils.getCoveredTokens(begin, end, tokens);
 	}
 	
+	public List<Token> getCoveredTokens(Annotation anno){
+		return AnnotationUtils.getCoveredTokens(anno.getBegin(), anno.getEnd(), tokens);
+	}
 	
+	public Number getAntecedentNumber(Antecedent antecedent){
+		Number returnNumber = Number.unknown;
+		
+		List<Token> anteTokens = getCoveredTokens(antecedent);
+		int nouns = 0;
+		for(Token t : anteTokens){
+			if(isNoun(t))
+				nouns++;
+		}
+		if(nouns == 0)
+			return Number.unknown;
+		
+		if(nouns == 1){
+			for(Token t : anteTokens){
+				if(isSingularNoun(t))
+					returnNumber = Number.singular;
+				if(isPluralNoun(t))
+					returnNumber = Number.plural;
+			}
+		} else {
+			Token relevantToken = null;
+			for(Token t : anteTokens){
+				if(isNoun(t)){
+					Token parent = AnnotationUtils.getParent(t, dependencies);
+					if(parent != null && isNoun(parent) && parent.getBegin() < antecedent.getEnd()){
+						relevantToken = parent;
+						break;
+					}
+				}
+			}
+			if(relevantToken == null){
+				for(Token t : anteTokens){
+					if(isNoun(t)){
+						relevantToken = t;
+					}
+				}
+			}		
+			if(relevantToken != null){
+				if(isSingularNoun(relevantToken))
+					returnNumber = Number.singular;
+				if(isPluralNoun(relevantToken))
+					returnNumber = Number.plural;
+			}
+			
+		}
+		return returnNumber;
+		
+	}
+	
+	
+	public boolean isNoun(Token token){
+		String posValue = token.getPos().getPosValue();
+		if(posValue.equalsIgnoreCase("NN") || 
+				posValue.equalsIgnoreCase("NNP") ||
+				posValue.equalsIgnoreCase("NNS") ||
+				posValue.equalsIgnoreCase("NNPS"))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isSingularNoun(Token token){
+		String posValue = token.getPos().getPosValue();
+		if(posValue.equalsIgnoreCase("NN") || 
+				posValue.equalsIgnoreCase("NNP"))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isPluralNoun(Token token){
+		String posValue = token.getPos().getPosValue();
+		if(posValue.equalsIgnoreCase("NNS") || 
+				posValue.equalsIgnoreCase("NNPS"))
+		{
+			return true;
+		}
+		return false;
+	}
 }

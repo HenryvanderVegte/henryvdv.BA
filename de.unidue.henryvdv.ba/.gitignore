@@ -1,1 +1,4 @@
 /target/
+/src/main/resources/output/
+/src/main/resources/svm/dat/
+/src/main/resources/gendercorpus/

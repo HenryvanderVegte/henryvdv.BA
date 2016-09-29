@@ -32,7 +32,6 @@ public class SVMTrainEvaluator {
 		try {
 			train = FileUtils.readLines(trainFile);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		List<Float> pos = new ArrayList<Float>();

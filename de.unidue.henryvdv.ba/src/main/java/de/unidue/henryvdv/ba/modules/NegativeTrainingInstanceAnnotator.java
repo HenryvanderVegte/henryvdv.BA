@@ -1,6 +1,7 @@
 package de.unidue.henryvdv.ba.modules;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -9,9 +10,12 @@ import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
+import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Antecedent;
+import de.unidue.henryvdv.ba.util.AnnotationUtils;
 
 public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 
@@ -19,12 +23,14 @@ public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 	
 	Collection<Anaphora> anaphoras;
 	Collection<NP> nps;
+	Collection<Token> tokens;
 	
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
 		nps = JCasUtil.select(aJCas, NP.class);
+		tokens = JCasUtil.select(aJCas, Token.class);
 		generateNegativeTrainingInstances();
 	}
 
@@ -33,11 +39,23 @@ public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 		for(Anaphora an : anaphoras){
 			for(NP np : getNPSBetween(an, an.getAntecedent())){
 				
-				Anaphora negInst = new Anaphora(aJCas, an.getBegin(), an.getEnd());				
-				Antecedent antecedent = new Antecedent(aJCas, np.getBegin(), np.getEnd());				
+				
+				Anaphora negInst = new Anaphora(aJCas, an.getBegin(), an.getEnd());	
+				Antecedent antecedent = new Antecedent(aJCas, np.getBegin(), np.getEnd());			
+				
+				List<Token> covTokens = AnnotationUtils.getCoveredTokens(np, tokens);
+				
+				for(Token t : covTokens){
+					if(Arrays.asList(Parameters.allPronouns).contains(t.getCoveredText().toLowerCase())){
+						antecedent = new Antecedent(aJCas, t.getBegin(),t.getEnd());
+						break;
+					}
+				}
+								
 				negInst.setAntecedent(antecedent);
 				negInst.setHasCorrectAntecedent(false);
 				negAnaphoras.add(negInst);
+							
 			}
 		}
 		for(Anaphora a : negAnaphoras){

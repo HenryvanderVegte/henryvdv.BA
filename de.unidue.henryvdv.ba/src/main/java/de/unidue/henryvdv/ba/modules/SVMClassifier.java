@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -116,6 +117,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	private List<NP> fixedNPs;
 	
 	private List<String> outputFileText;
+	private List<String> featureVectorsUsed;
 	private AnaphoraEvaluator eval;
 	
 	private JCas aJCas;
@@ -123,7 +125,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	public void initialize(UimaContext context) throws ResourceInitializationException{
 		super.initialize(context);
 		eval = new AnaphoraEvaluator();
-
+		featureVectorsUsed = new ArrayList<String>();
 		featureVectorUtil = new FeatureVectorUtils();
 
 		prepareFiles();
@@ -270,7 +272,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	
 	@Override
 	public void collectionProcessComplete(){
-		eval.printResults();
+		eval.printResults(featureVectorsUsed);
 	}
 	
 	
@@ -301,30 +303,49 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 			}		
 
 			int anaphoraSentenceNr = AnnotationUtils.getSentenceNr(anaphora.getBegin(), sentences);
-
+			System.out.println("-------------------------------------------------------");
+			System.out.println("Anaphora:  " + anaphora.getCoveredText());
+			System.out.println("Gold Antecedent:  " + anaphora.getAntecedent().getCoveredText());
 			LinkedHashMap<NP, Float> npValues = new LinkedHashMap<NP, Float>();
 			for(int i = anteNPnumber; i > 0; i--){
 				int anteSentenceNr = AnnotationUtils.getSentenceNr(fixedNPs.get(i).getBegin(), sentences);
 				if((anaphoraSentenceNr - anteSentenceNr) > MAX_SENTENCE_DIST){
 					break;
 				}
-				float outputValue = getOutputValue(anaphora, fixedNPs.get(i));
-				npValues.put(fixedNPs.get(i), outputValue);
+				
+				
+				
+				NP possibleAntecedent = new NP(aJCas, fixedNPs.get(i).getBegin(), fixedNPs.get(i).getEnd());
+				//TODO: Check if its working
+				List<Token> covTokens = AnnotationUtils.getCoveredTokens(fixedNPs.get(i), tokens);
+				for(Token t : covTokens){
+					if(Arrays.asList(Parameters.allPronouns).contains(t.getCoveredText().toLowerCase())){
+						possibleAntecedent = new NP(aJCas, t.getBegin(),t.getEnd());
+						break;
+					}
+				}
+				
+				
+				
+				float outputValue = getOutputValue(anaphora, possibleAntecedent);
+				npValues.put(possibleAntecedent, outputValue);
+				System.out.println("Ante: " + possibleAntecedent.getCoveredText() + "    " + outputValue);
+				
 			}
 			
 			boolean foundAntecedent = false;
 			float threshold = 1.0f;
-			
 			
 			for(NP np : npValues.keySet()){
 				if(npValues.get(np) > threshold){
 					foundAntecedent = true;
 					DetectedNP det = new DetectedNP(aJCas, np.getBegin(), np.getEnd());
 					detectedAntecedents.add(det);
+					System.out.println("Detected: " + det.getCoveredText());
 					break;
 				}
-			}
-			
+			} 
+						
 			if(!foundAntecedent){	
 				NP highestValue = npValues.keySet().iterator().next();
 				float value = npValues.get(highestValue);
@@ -338,8 +359,23 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 				foundAntecedent = true;
 				DetectedNP det = new DetectedNP(aJCas, highestValue.getBegin(), highestValue.getEnd());
 				detectedAntecedents.add(det);
+				System.out.println("Detected: " + det.getCoveredText());
 			}
-			
+			/*
+			while(!foundAntecedent){
+				for(NP np : npValues.keySet()){
+					if(npValues.get(np) > threshold){
+						foundAntecedent = true;
+						DetectedNP det = new DetectedNP(aJCas, np.getBegin(), np.getEnd());
+						detectedAntecedents.add(det);
+						System.out.println("Detected: " + det.getCoveredText());
+						break;
+					}
+				}	
+				threshold -= 0.1f;
+			}
+			*/
+			featureVectorsUsed.add(featureVector);
 		}
 	}
 	
@@ -385,6 +421,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 				}
 			}
 			frequencies.put(anaphora, acceptedNPs);
+			featureVectorsUsed.add(featureVector);
 		}
 		return frequencies;
 	}

@@ -117,25 +117,25 @@ public class AnaphoraEvaluator {
 		
 		for(int i = 0; i < goldAntecedents.size(); i++){
 			if(goldAntecedents.get(i) == null && detectedAntecedents.get(i) == null){
-				output.add("--Correct--");
-				output.add("Both are null");
+				output.add("->Correct:");
+				output.add("  Both are null");
 				
 				correct++;	
 				total++;
 				continue;
 			}
 			if(goldAntecedents.get(i) == null || detectedAntecedents.get(i) == null){
-				output.add("--Wrong--");
-				output.add("One is null");
+				output.add("-> Wrong:");
+				output.add("  One is null");
 				total++;
 				continue;
 			}		
 			if(goldAntecedents.get(i).getBegin() >= detectedAntecedents.get(i).getBegin() && 
 				goldAntecedents.get(i).getEnd() <= detectedAntecedents.get(i).getEnd()){
-				output.add("--Correct--");
-				output.add("Anaphora: " + anaphoras.get(i).getCoveredText());
-				output.add("Gold : " + goldAntecedents.get(i).getCoveredText());
-				output.add("Detected : " + detectedAntecedents.get(i).getCoveredText());
+				output.add("-> Correct:");
+				output.add("  Anaphora: " + anaphoras.get(i).getCoveredText());
+				output.add("  Gold : " + goldAntecedents.get(i).getCoveredText());
+				output.add("  Detected : " + detectedAntecedents.get(i).getCoveredText());
 				
 				
 				correct++;	
@@ -145,19 +145,19 @@ public class AnaphoraEvaluator {
 			
 			if(goldAntecedents.get(i).getBegin() <= detectedAntecedents.get(i).getBegin() && 
 				goldAntecedents.get(i).getEnd() >= detectedAntecedents.get(i).getEnd()){
-				output.add("--Correct--");
-				output.add("Anaphora: " + anaphoras.get(i).getCoveredText());
-				output.add("Gold : " + goldAntecedents.get(i).getCoveredText());
-				output.add("Detected : " + detectedAntecedents.get(i).getCoveredText());
+				output.add("->Correct:");
+				output.add("  Anaphora: " + anaphoras.get(i).getCoveredText());
+				output.add("  Gold : " + goldAntecedents.get(i).getCoveredText());
+				output.add("  Detected : " + detectedAntecedents.get(i).getCoveredText());
 				
 				correct++;		
 				total++;
 				continue;
 			}
-			output.add("--Wrong--");
-			output.add("Anaphora: " + anaphoras.get(i).getCoveredText());
-			output.add("Gold : " + goldAntecedents.get(i).getCoveredText());
-			output.add("Detected : " + detectedAntecedents.get(i).getCoveredText());
+			output.add("->Wrong:");
+			output.add("  Anaphora: " + anaphoras.get(i).getCoveredText());
+			output.add("  Gold : " + goldAntecedents.get(i).getCoveredText());
+			output.add("  Detected : " + detectedAntecedents.get(i).getCoveredText());
 			total++;
 			
 		}
@@ -254,5 +254,62 @@ public class AnaphoraEvaluator {
 			
 		}
 	}
-	
+
+	public void printResults(List<String> featureVectorsUsed){
+		output.add("-----------------------------------------EVALUATION END----------------------------------");
+		float rel = 0f;	
+		if(anaphorsTotal != 0){
+			rel = ((float)correctAnaphorsTotal / (float)anaphorsTotal) * 100f;
+		} 
+		System.out.println("Accuracy: " + rel + " % ");
+		if(PARAM_PRINTFILE){
+			
+			FileWriter fw = null;
+			BufferedWriter bw = null;
+			PrintWriter out = null;
+			try {
+
+				fw = new FileWriter(accuracyOutputFile, true);
+			    bw = new BufferedWriter(fw);
+			    out = new PrintWriter(bw);
+			    out.println("Correct: " + correctAnaphorsTotal + "  Total: " + anaphorsTotal + "  Accuracy: " + rel);
+			    out.close();
+			    
+			    fw = new FileWriter(outputFile, true);
+			    bw = new BufferedWriter(fw);
+			    out = new PrintWriter(bw);
+			    int i = 0;
+			    for(String s : output){
+				    if(s.length() > 1 && s.substring(0, 2).equals("->")){
+				    	out.println(featureVectorsUsed.get(i));
+					    i++;
+				    }
+			    	out.println(s);
+				    
+			    }
+			    out.close();
+			    
+			} catch (IOException e) {
+			    //exception handling left as an exercise for the reader
+			}
+			finally {
+			    if(out != null)
+				    out.close();
+			    try {
+			        if(bw != null)
+			            bw.close();
+			    } catch (IOException e) {
+			        //exception handling left as an exercise for the reader
+			    }
+			    try {
+			        if(fw != null)
+			            fw.close();
+			    } catch (IOException e) {
+			        //exception handling left as an exercise for the reader
+			    }
+			}
+			
+			
+		}
+	}
 }

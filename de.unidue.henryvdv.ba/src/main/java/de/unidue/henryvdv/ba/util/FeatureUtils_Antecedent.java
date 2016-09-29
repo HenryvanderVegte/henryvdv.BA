@@ -75,7 +75,8 @@ public class FeatureUtils_Antecedent {
 	public float antecedentFrequency(Anaphora a){
 		List<Token> covTokens = getCoveredTokens(a.getAntecedent());		
 		int count = getNrOfOccurences(covTokens);
-		return (float)count  / 10f;
+		//TODO: maybe change it back to /10f
+		return (float)count  / 100f;
 	}
 	
 	public boolean subject(Anaphora a){

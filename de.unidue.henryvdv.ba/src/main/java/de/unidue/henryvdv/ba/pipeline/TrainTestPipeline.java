@@ -34,14 +34,13 @@ public class TrainTestPipeline {
 	public static void main(String[] args)
 			  throws Exception {	
 
-		crossvalidation(10, 30, true);
-		
+		crossvalidation(10, 30, false);
+	
 		/*
 		Integer[] allDocs = new Integer[30];
 		for(int i = 0; i < 30; i++){
 			allDocs[i] = i;
 		}
-		
 		trainPipeline(allDocs);
 		*/
 		//baseline(allDocs);
@@ -83,23 +82,23 @@ public class TrainTestPipeline {
 			Integer[] trainOnArray = trainOnList.toArray(new Integer[trainOnList.size()]);
 			Integer[] testOnArray = foldsList.get(i).toArray(new Integer[foldsList.get(i).size()]);			
 			
-			System.out.print("Training - Fold nr " + i + "  (");
+			System.out.print("Training - Fold nr " + i + "  [");
 			for(Integer t : trainOnArray){
 				System.out.print("  " + t );
 			}
 			
-			System.out.println(")");
+			System.out.println(" ]");
 			trainPipeline(trainOnArray);
 			
 			SVMLearn svmLearn = new SVMLearn();
 			svmLearn.learn();
 			
-			System.out.print("Testing - Fold nr " + i + "  (");
+			System.out.print("Testing - Fold nr " + i + "  [");
 			for(Integer t : testOnArray){
 				System.out.print("  " + t );
 			}
 			
-			System.out.println(")");
+			System.out.println(" ]");
 			testPipeline(testOnArray);
 			
 		}
@@ -125,8 +124,6 @@ public class TrainTestPipeline {
 		        );
 	}
 	
-	private static void trainTest(){
-	}
 	
 	private static void trainPipeline(Integer[] _usedDocs) throws Exception{
 		SimplePipeline.runPipeline(	               
@@ -148,6 +145,7 @@ public class TrainTestPipeline {
 	        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_Pronoun.class), 
 	        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_Gender.class), 
 	        AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)
+	        
 	        );  
 	  }
 	  

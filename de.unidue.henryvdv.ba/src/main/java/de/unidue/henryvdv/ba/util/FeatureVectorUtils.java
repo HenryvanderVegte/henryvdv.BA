@@ -20,24 +20,24 @@ public class FeatureVectorUtils {
 		}
 		
 		//Pronoun-Antecedent-Features (10)
-	//	addPA_SameSentence(); 		
+		addPA_SameSentence(); 		
 		addPA_IntraSentenceDiff(); 
-		//addPA_InPreviousSentence();
+		addPA_InPreviousSentence();
 		addPA_InterSentenceDiff();
 		//addPA_PrepositionalParallel();   //5
-		//addPA_ParentCatMatch();
-		//addPA_ParentWordMatch();
+//->überarbeiten		addPA_ParentCatMatch(); 
+//->überarbeiten		addPA_ParentWordMatch();
 		addPA_QuotationSituation();
-//->Auf head noun achten		addPA_SingularMatch();
-//->Auf head noun achten			addPA_PluralMatch();			//10
+		addPA_SingularMatch();
+		addPA_PluralMatch();			//10
 		
 		//Antecedent Features (17)
 
-		addA_AntecedentFrequency();
+		//addA_AntecedentFrequency();
 		addA_Subject();
 		addA_Object();
 		addA_Predicate();
-		//addA_Pronominal();				//15
+		addA_Pronominal();				//15
 		//addA_HeadWordEmphasis();
 		addA_Conjunction();
 		//addA_PrenominalModifier();
@@ -48,8 +48,8 @@ public class FeatureVectorUtils {
 		//addA_Money();
 		//addA_Number();
 		addA_Definite();				//25
-		//addA_HisHer();
-		//addA_HeHis();
+		addA_HisHer();
+		addA_HeHis();
 
 		//Pronoun Features (4)
 		addP_Masculine();
@@ -61,14 +61,14 @@ public class FeatureVectorUtils {
 		
 		//addG_StdGenderMatch();
 		//addG_StdGenderMismatch();
-	//	addG_PronounMismatch();
-	//	addG_MasculineMean();			//35
+		addG_PronounMismatch();
+		addG_MasculineMean();			//35
 	//	addG_MasculineVariance();
-	//	addG_FeminineMean();
+		addG_FeminineMean();
 	//	addG_FeminineVariance();
-	//	addG_NeutralMean();
+		addG_NeutralMean();
 		//addG_NeutralVariance();			//40
-	//	addG_PluralMean();
+		addG_PluralMean();
 	//	addG_PluralVariance();
 		
 		return currentFeatureVector;
