@@ -1,7 +1,11 @@
 \chapter{Introduction}
 \label{sec:Introduction}
 
-Anaphora resolution describes the procedure of determining whether two expressions - commonly noun phrases -  refer to each other, meaning that they are instances of the same entity. The word to be resolved is termed anaphora, while its predecessor is called the antecedent. It differs from coreference resolution by only resolving words, which can only be interpreted through its antecedent (Recasens et al., 2007) (1), while all corefering expressions are considered in coreference resolution (2).
+\section{Background}
+
+In the last decades, the amount of textual information in media has increased severely, making automatic text comprehension indispensable. Since textual data found online is mostly unstructured, meaning that there is no formal structure in pre-defined manner, various information need to be added in order to make automatic understanding possible. For several natural language processing (NLP) tasks, referential relationships between words  in a document need to be set. 
+
+The procedure of determining whether two expressions  refer to each other, meaning that they are instances of the same entity, is called anaphora resolution. The word to be resolved is termed anaphora, while its predecessor is the antecedent. It differs from coreference resolution by only resolving words, which can only be interpreted through its antecedent (Recasens et al., 2007) (1), while all corefering expressions are considered in coreference resolution (2).
 
 (1) [Aberfoyle] describes [itself] as [The Gateway to [the Trossachs]]. \\
 (resolve "itself" to "Aberfoyle")
@@ -15,7 +19,7 @@ Information Extraction has set itself the objective of summarizing relevant info
 The Question Answering task described by Morton has the goal to find a 250 byte string excerpt out of a number of documents as the answer to a query. Annotated coreference chains were used to link all instances of the same entity in a document. Occurrences in an other sentence are given a lower weight for prediction. The use of annotated coreference chains improved the prediction slightly.\\
 Steinberger et al. figured out that the additional use of anaphoric information improved their performance score over solely Latent Semantic Analysis (LSA) summarization.
 
-A lot of different information need to be used since selecting a possible antecedent is a decision under high ambiguity. The decisive factor for determination might be for instance cases gender-, or grammatical number agreement . Sometimes there is no decisive factor at all. Examples for gender agreement are shown in (3) and (4), for number agreement in (5) and (6).
+A lot of different information need to be used since selecting a possible antecedent is a decision under high ambiguity. The decisive factor for determination might be for instance gender-, or grammatical number agreement . Sometimes there is no decisive factor at all. Examples for gender agreement are shown in (3) and (4), for number agreement in (5) and (6).
 
 (3) John and Jill had a date, but he didn't come. (resolve "he" to "John").
 
@@ -25,8 +29,11 @@ A lot of different information need to be used since selecting a possible antece
 
 (6) John loves his children. He is very nice. (resolve "he" to "John").
 
-There are several approaches for coreference and anaphora resolution. 
-In this work i will focus on pronominal anaphors, including reflexives, possessives, nominatives and predicates. 
+
+There are lots of different approaches for coreference and anaphora resolution, leading from rule-based techniques to machine learning. Recasens et al. indicated, that 
+
+\section{Motivation}
+
 
 Due to the difficulty of coreference and anaphora resolution, there are countless approaches, from rule-bases techniques to machine learning. 
 
@@ -40,4 +47,3 @@ establish your territory (say what the topic is about) and/or niche (show why th
 shortly introduce your research/what you will do in your thesis (make hypotheses; state the research questions)
 
 
-Anaphora resolution is an important and growing subtask in Natural Language Processing. In the last decades, its relevance increased due to the amount of textual information in media. 
