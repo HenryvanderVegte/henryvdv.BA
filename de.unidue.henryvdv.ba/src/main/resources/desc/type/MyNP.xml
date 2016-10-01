@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
+  <name>MyNP</name>
+  <description/>
+  <version/>
+  <vendor/>
   <types>
     <typeDescription>
-      <name>de.unidue.langtech.teaching.pp.type.MyType</name>
+      <name>de.unidue.henryvdv.ba.type.MyNP</name>
       <description/>
       <supertypeName>uima.tcas.Annotation</supertypeName>
     <features>
         <featureDescription>
-          <name>countLetterE</name>
+          <name>outputValue</name>
           <description/>
-          <rangeTypeName>uima.cas.Integer</rangeTypeName>
+          <rangeTypeName>uima.cas.Float</rangeTypeName>
         </featureDescription>
       <featureDescription>
-          <name>countLetterA</name>
+          <name>featureVector</name>
           <description/>
-          <rangeTypeName>uima.cas.Integer</rangeTypeName>
+          <rangeTypeName>uima.cas.String</rangeTypeName>
         </featureDescription>
       </features>
     </typeDescription>

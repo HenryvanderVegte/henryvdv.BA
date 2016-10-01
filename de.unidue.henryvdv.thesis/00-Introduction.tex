@@ -3,7 +3,7 @@
 
 \section{Background}
 
-In the last decades, the amount of textual information in media has increased severely, making automatic text comprehension indispensable. Since textual data found online is mostly unstructured, meaning that there is no formal structure in pre-defined manner, various information need to be added in order to make automatic understanding possible. For several natural language processing (NLP) tasks, referential relationships between words  in a document need to be set. 
+In the last decades, the amount of textual information in media has increased severely, making automatic text comprehension indispensable. Since textual data found online is mostly unstructured, which means that there is no formal structure in pre-defined manner, various information need to be added in order to make automatic understanding possible. For several natural language processing (NLP) tasks, referential relationships between words  in a document need to be set. 
 
 The procedure of determining whether two expressions  refer to each other, meaning that they are instances of the same entity, is called anaphora resolution. The word to be resolved is termed anaphora, while its predecessor is the antecedent. It differs from coreference resolution by only resolving words, which can only be interpreted through its antecedent (Recasens et al., 2007) (1), while all corefering expressions are considered in coreference resolution (2).
 
@@ -19,26 +19,27 @@ Information Extraction has set itself the objective of summarizing relevant info
 The Question Answering task described by Morton has the goal to find a 250 byte string excerpt out of a number of documents as the answer to a query. Annotated coreference chains were used to link all instances of the same entity in a document. Occurrences in an other sentence are given a lower weight for prediction. The use of annotated coreference chains improved the prediction slightly.\\
 Steinberger et al. figured out that the additional use of anaphoric information improved their performance score over solely Latent Semantic Analysis (LSA) summarization.
 
-A lot of different information need to be used since selecting a possible antecedent is a decision under high ambiguity. The decisive factor for determination might be for instance gender-, or grammatical number agreement . Sometimes there is no decisive factor at all. Examples for gender agreement are shown in (3) and (4), for number agreement in (5) and (6).
+A lot of different information sources including syntactic, semantic, and pragmatic knowledge is needed since selecting a possible antecedent is a decision under high ambiguity. The decisive factor for determination might be for instance gender agreement or the distance between antecedent and anaphora. Sometimes there is no decisive factor at all. Examples for the importance of gender agreement are shown in (3) and (4), the influence of word distance could simplified be described as it is more likely to find the antecedent in proximity to its anaphora.
 
 (3) John and Jill had a date, but he didn't come. (resolve "he" to "John").
 
 (4) John and Jill had a date, but she didn't come. (resolve "she" to "Jill").
 
-(5) John loves his children. They are very nice. (resolve "they" to "his children").
+Earlier anaphora resolution systems often used rule based techniques to determine the correct antecedent !!(Mitkov, 1998), but lack due to their limited generalisability. In particular, rule based techniques often require specific domain knowledge, which makes the development complex and time consuming. Furthermore, the assignment to other languages is hampered by rules.
 
-(6) John loves his children. He is very nice. (resolve "he" to "John").
-
-
-There are lots of different approaches for coreference and anaphora resolution, leading from rule-based techniques to machine learning. Recasens et al. indicated, that 
+However, machine learning could overcome these issues.
+\textcolor{red} {\textbf{!!}}  In machine learning, the system adapts and learns general principles from experience through training data. If domain specific data should be predicted, the algorithm should be trained on that domain.
 
 \section{Motivation}
+Significant factors of uncertainty are gender and number, because they are hard to determine. At first, information is needed whether a name is male or female. Honorifics like "Mr." and "Mrs." are gender indicators, but not sufficient due to their sparsity. Stereotypical occupations and gender indicating suffixes turned out to be no longer reliable (Evans and Orasan, 2000).  "SINGULAR PLURAL WORDS?"  For that reason, gender information needs to be learned 
+In this work i will present a machine learning approach to anaphora resolution, focusing on third-person pronominal anaphors.
+
+In 2005, Bergsma presented a machine learning approach for anaphora resolution, that automatically 
+In this work i will present a machine learning approach to anaphora resolution for third-person pronominal anaphors
 
 
-Due to the difficulty of coreference and anaphora resolution, there are countless approaches, from rule-bases techniques to machine learning. 
 
-In this work i will present a machine learning approach 
-Pronoun resolution was contemplated in the SemEval coreference resolution task. 
+
 
 
 

@@ -18,4 +18,6 @@ public class Parameters {
 	public static final String[] femaleDesignators = {"mrs","ms.","ms","mz","mz.","miss","lady","mrs.","madam","dame"};
 	
 	public static final String genderCorpusDirectory = "src/main/resources/gendercorpus";
+	
+	public static final float acceptAtThreshold = 1.0f;
 }

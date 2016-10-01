@@ -4,6 +4,7 @@ import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.apache.uima.fit.pipeline.SimplePipeline;
 
+import de.tudarmstadt.ukp.dkpro.core.corenlp.CoreNlpNamedEntityRecognizer;
 import de.tudarmstadt.ukp.dkpro.core.corenlp.CoreNlpParser;
 import de.tudarmstadt.ukp.dkpro.core.snowball.SnowballStemmer;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordLemmatizer;
@@ -14,6 +15,8 @@ import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordSegmenter;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordCoreferenceResolver;
 import de.unidue.henryvdv.ba.modules.Baseline_Evaluator;
 import de.unidue.henryvdv.ba.modules.FeatureAnnotator_Antecedent;
+import de.unidue.henryvdv.ba.modules.FeatureAnnotator_Gender;
+import de.unidue.henryvdv.ba.modules.FeatureAnnotator_Pronoun;
 import de.unidue.henryvdv.ba.modules.FeatureAnnotator_PronounAntecedent;
 import de.unidue.henryvdv.ba.modules.AnaphoraAnnotator;
 import de.unidue.henryvdv.ba.modules.InformationModule;
@@ -32,7 +35,7 @@ public class BasicPipeline {
 	  public static void main(String[] args)
 			  throws Exception {	
 
-     		runWikiCorefReader();
+     		runSimpleTextReader();
     		//  SVMLearn svmLearn = new SVMLearn();
     		//  svmLearn.learn();
 	  }
@@ -43,19 +46,21 @@ public class BasicPipeline {
 		  SimplePipeline.runPipeline(
 				  CollectionReaderFactory.createReader(
 						  				SimpleTextReader.class,
-						  				SimpleTextReader.PARAM_INPUT_DIRECTORY,"src/test/resources/prepositionTest"),
+						  				SimpleTextReader.PARAM_INPUT_DIRECTORY,"src/test/resources/testDocuments"),
 				  AnalysisEngineFactory.createEngineDescription(StanfordSegmenter.class),
 				  AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
-				  AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
-				  AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),
-				  AnalysisEngineFactory.createEngineDescription(StanfordParser.class, 
-	        													StanfordParser.PARAM_MODE,
-	        													StanfordParser.DependenciesMode.BASIC),
-	        	AnalysisEngineFactory.createEngineDescription(QuotationAnnotator.class),
-	        	AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
-	        	AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),  
-	        	AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_PronounAntecedent.class),
-	        	AnalysisEngineFactory.createEngineDescription(InformationModule.class)	        	
+			        AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
+			        AnalysisEngineFactory.createEngineDescription(CoreNlpNamedEntityRecognizer.class),
+			        AnalysisEngineFactory.createEngineDescription(CoreNlpParser.class,
+																	CoreNlpParser.PARAM_ORIGINAL_DEPENDENCIES,
+																	false),
+			        AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
+			        AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
+			        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_PronounAntecedent.class),
+			        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_Antecedent.class),    
+			        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_Pronoun.class), 
+			        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_Gender.class), 
+			        AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)        	
 				  );
 	  }
 	  

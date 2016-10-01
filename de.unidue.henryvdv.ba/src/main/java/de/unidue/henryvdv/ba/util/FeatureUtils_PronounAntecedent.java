@@ -12,6 +12,7 @@ import com.google.common.reflect.Parameter;
 
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.type.Anaphora;
@@ -24,6 +25,7 @@ public class FeatureUtils_PronounAntecedent {
 	private Collection<Sentence> sentences;
 	private Collection<Dependency> dependencies;
 	private Collection<Quotation> quotes;
+	private Collection<Constituent> constituents;
 	
 	public enum Number {
 	    singular, plural, unknown
@@ -34,10 +36,16 @@ public class FeatureUtils_PronounAntecedent {
 		dependencies = JCasUtil.select(aJCas, Dependency.class);
 		tokens = JCasUtil.select(aJCas, Token.class);
 		quotes = JCasUtil.select(aJCas, Quotation.class);
+		constituents = JCasUtil.select(aJCas, Constituent.class);
+
 	}
 	
 	
 	public void annotateFeatures(Anaphora a){
+
+		
+		//In Same Sentence:
+		a.getPronounAntecedentFeatures().setP_A_BindingTheory(bindingTheory(a));
 		//In Same Sentence:
 		a.getPronounAntecedentFeatures().setP_A_InSameSentence(antecedentInSameSentence(a));
 		//In Previous Sentence:
@@ -60,6 +68,27 @@ public class FeatureUtils_PronounAntecedent {
 		a.getPronounAntecedentFeatures().setP_A_PluralMatch(isBothPlural(a));
 	}
 	
+	//wenn P und A in unterschiedlichen Sätzen sind: falsch
+	// wenn Anapher subjekt ist: bindingDomain : kleinster S
+	// -> ansonsten: getBindingDomain von Anapher (kleinster S, wo NP eine Anapher c-commandet
+
+	// wenn Antecedent nicht in S : falsch, sonst:
+			// Gucken ob antecedent die anapher c-commandet:
+				// für jeden Parent vom Antecedent gucken:
+					//ist die Anapher irgendwo in den Subknoten enthalten?
+	
+	public boolean bindingTheory(Anaphora a){
+		if(getSentenceNr(a.getBegin()) != getSentenceNr(a.getAntecedent().getBegin()))
+				return true;
+		boolean anaphoraIsSubject = isSubject(AnnotationUtils.getCoveredToken(a, tokens));
+		
+		if(anaphoraIsSubject){
+			
+		}
+		
+		return true;
+	}
+	
 	public boolean antecedentInSameSentence(Anaphora a){
 		boolean value = (getSentenceNr(a.getBegin()) == getSentenceNr(a.getAntecedent().getBegin()));
 		return value;
@@ -73,7 +102,7 @@ public class FeatureUtils_PronounAntecedent {
 	public float interSentenceDiff(Anaphora a){
 		int anaphoraS = getSentenceNr(a.getBegin());
 		int antecedentS = getSentenceNr(a.getAntecedent().getBegin());
-		float value = (anaphoraS - antecedentS)/ 10.0f;
+		float value = (anaphoraS - antecedentS)/ 50.0f;
 		return value;
 	}
 	
@@ -83,7 +112,7 @@ public class FeatureUtils_PronounAntecedent {
 			if(t.getBegin() > a.getAntecedent().getBegin() && t.getBegin() < a.getBegin())
 				dist++;
 		}
-		float value = (float)dist / 100.0f;
+		float value = (float)dist / 50.0f;
 		return value;
 	}
 	
@@ -265,10 +294,6 @@ public class FeatureUtils_PronounAntecedent {
 		}
 		
 		if(anaphoraNumber == Number.plural && antecedentNumber == Number.plural){
-			System.out.println("Both plural:");
-			System.out.println(anaphora.getCoveredText());
-			System.out.println(anaphora.getAntecedent().getCoveredText());
-			
 			return true;
 		}
 	
@@ -366,6 +391,15 @@ public class FeatureUtils_PronounAntecedent {
 		{
 			return true;
 		}
+		return false;
+	}
+	
+	private boolean isSubject(Token token){
+		for(Dependency d : dependencies){
+			if(d.getDependent() == token && d.getDependencyType().contains("subj")){
+				return true;
+			}
+		}	
 		return false;
 	}
 }

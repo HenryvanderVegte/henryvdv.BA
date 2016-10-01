@@ -50,17 +50,77 @@ public class FeatureUtils_Gender {
 		a.getGenderFeatures().setG_PronounMismatch(pronounMismatch(a));
 		
 		// Mean & standard deviation of masculine Beta Distribution
-		setMasculineDistribution(a);
+		//setMasculineDistribution(a);
 		
 		// Mean & standard deviation of feminine Beta Distribution
-		setFeminineDistribution(a);
+		//setFeminineDistribution(a);
 		
 		// Mean & standard deviation of neutral Beta Distribution
-		setNeutralDistribution(a);
+		//setNeutralDistribution(a);
 		
 		// Mean & standard deviation of plural Beta Distribution
-		setPluralDistribution(a);
+		//setPluralDistribution(a);
+		
+		setHardConstraintGender(a);
 	}
+	
+	public void setHardConstraintGender(Anaphora a){
+		String ante = a.getAntecedent().getCoveredText().toLowerCase();
+		int mFreq = 0;
+		int fFreq = 0;
+		int nFreq = 0;
+		int pFreq = 0;
+		Integer[] freq = {0,0,0,0};
+		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
+		String person = null;
+		for(Token t : covTokens){
+			if(isPerson(t)){
+				//Only take the first name (e.g. token) of a person
+				person = t.getCoveredText();
+			}
+		}
+		
+		if(corpusFrequencies.containsKey(ante)){
+			freq = corpusFrequencies.get(ante);
+		} else if(person != null) {
+			if(corpusFrequencies.containsKey(person.toLowerCase())){
+				freq = corpusFrequencies.get(person.toLowerCase());
+			}
+
+		} else {
+			Token head = getHeadNoun(a.getAntecedent());
+			if(head != null && corpusFrequencies.containsKey(head.getCoveredText().toLowerCase())){
+				freq = corpusFrequencies.get(head.getCoveredText().toLowerCase());
+			} else {
+				for(Token t : covTokens){
+					if(t.getPos().getPosValue().contains("NN")){
+						if(corpusFrequencies.containsKey(t.getCoveredText().toLowerCase())){
+							freq = corpusFrequencies.get(t.getCoveredText().toLowerCase());
+							break;
+						}
+					}
+				}
+			}
+		}
+		if(freq[0] > freq[1] && freq[0] > freq[2] && freq[0] > freq[3])
+			mFreq = 1;
+		if(freq[1] > freq[0] && freq[1] > freq[2] && freq[1] > freq[3])
+			fFreq = 1;
+		if(freq[2] > freq[0] && freq[2] > freq[1] && freq[2] > freq[3])
+			nFreq = 1;
+		if(freq[3] > freq[0] && freq[3] > freq[1] && freq[3] > freq[2])
+			pFreq = 1;
+		
+		a.getGenderFeatures().setG_Masculine_Mean(mFreq);
+		a.getGenderFeatures().setG_Masculine_Variance(0f);
+		a.getGenderFeatures().setG_Feminine_Mean(fFreq);
+		a.getGenderFeatures().setG_Feminine_Variance(0f);
+		a.getGenderFeatures().setG_Neutral_Mean(nFreq);
+		a.getGenderFeatures().setG_Neutral_Variance(0f);
+		a.getGenderFeatures().setG_Plural_Mean(pFreq);
+		a.getGenderFeatures().setG_Plural_Variance(0f);
+	}
+	
 	
 	public boolean stdGenderMatch(Anaphora a){
 		Gender anteGender = Gender.unknown;
