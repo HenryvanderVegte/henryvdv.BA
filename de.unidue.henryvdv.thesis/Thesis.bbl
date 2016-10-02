@@ -1,0 +1,229 @@
+\begin{thebibliography}{}
+
+\bibitem [\protect \citeauthoryear {%
+Evans%
+\ \BBA {} Orasan%
+}{%
+Evans%
+\ \BBA {} Orasan%
+}{%
+{\protect \APACyear {2000}}%
+}]{%
+evans2000improving}
+\APACinsertmetastar {%
+evans2000improving}%
+\begin{APACrefauthors}%
+Evans, R.%
+\BCBT {}\ \BBA {} Orasan, C.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2000}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Improving anaphora resolution by identifying animate
+  entities in texts} {Improving anaphora resolution by identifying animate
+  entities in texts}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the Discourse Anaphora and Reference
+  Resolution Conference (DAARC2000)} {Proceedings of the discourse anaphora and
+  reference resolution conference (daarc2000)}\ (\BPGS\ 154--162).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+McCarthy%
+\ \BBA {} Lehnert%
+}{%
+McCarthy%
+\ \BBA {} Lehnert%
+}{%
+{\protect \APACyear {1995}}%
+}]{%
+mccarthy1995using}
+\APACinsertmetastar {%
+mccarthy1995using}%
+\begin{APACrefauthors}%
+McCarthy, J\BPBI F.%
+\BCBT {}\ \BBA {} Lehnert, W\BPBI G.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1995}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Using decision trees for coreference resolution} {Using
+  decision trees for coreference resolution}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint cmp-lg/9505043}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Mitkov%
+}{%
+Mitkov%
+}{%
+{\protect \APACyear {1998}}%
+}]{%
+mitkov1998robust}
+\APACinsertmetastar {%
+mitkov1998robust}%
+\begin{APACrefauthors}%
+Mitkov, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1998}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Robust pronoun resolution with limited knowledge}
+  {Robust pronoun resolution with limited knowledge}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 36th Annual Meeting of the
+  Association for Computational Linguistics and 17th International Conference
+  on Computational Linguistics-Volume 2} {Proceedings of the 36th annual
+  meeting of the association for computational linguistics and 17th
+  international conference on computational linguistics-volume 2}\ (\BPGS\
+  869--875).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Morton%
+}{%
+Morton%
+}{%
+{\protect \APACyear {2000}}%
+}]{%
+morton2000coreference}
+\APACinsertmetastar {%
+morton2000coreference}%
+\begin{APACrefauthors}%
+Morton, T\BPBI S.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2000}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Coreference for NLP applications} {Coreference for nlp
+  applications}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 38th Annual Meeting on Association
+  for Computational Linguistics} {Proceedings of the 38th annual meeting on
+  association for computational linguistics}\ (\BPGS\ 173--180).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Recasens%
+\ \protect \BOthers {.}}{%
+Recasens%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2010}}%
+}]{%
+recasens2010semeval}
+\APACinsertmetastar {%
+recasens2010semeval}%
+\begin{APACrefauthors}%
+Recasens, M.%
+, M{\`a}rquez, L.%
+, Sapena, E.%
+, Mart{\'\i}, M\BPBI A.%
+, Taul{\'e}, M.%
+, Hoste, V.%
+\BDBL {}Versley, Y.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2010}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Semeval-2010 task 1: Coreference resolution in multiple
+  languages} {Semeval-2010 task 1: Coreference resolution in multiple
+  languages}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 5th International Workshop on
+  Semantic Evaluation} {Proceedings of the 5th international workshop on
+  semantic evaluation}\ (\BPGS\ 1--8).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Recasens%
+, Marti%
+\BCBL {}\ \BBA {} Taul{\'e}%
+}{%
+Recasens%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2007}}%
+}]{%
+recasens2007anaphora}
+\APACinsertmetastar {%
+recasens2007anaphora}%
+\begin{APACrefauthors}%
+Recasens, M.%
+, Marti, M\BPBI A.%
+\BCBL {}\ \BBA {} Taul{\'e}, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2007}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Where anaphora and coreference meet. Annotation in the
+  Spanish CESS-ECE corpus} {Where anaphora and coreference meet. annotation in
+  the spanish cess-ece corpus}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of RANLP.} {Proceedings of ranlp.}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Soon%
+, Ng%
+\BCBL {}\ \BBA {} Lim%
+}{%
+Soon%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2001}}%
+}]{%
+soon2001machine}
+\APACinsertmetastar {%
+soon2001machine}%
+\begin{APACrefauthors}%
+Soon, W\BPBI M.%
+, Ng, H\BPBI T.%
+\BCBL {}\ \BBA {} Lim, D\BPBI C\BPBI Y.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2001}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A machine learning approach to coreference resolution of
+  noun phrases} {A machine learning approach to coreference resolution of noun
+  phrases}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Computational linguistics}{27}{4}{521--544}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Steinberger%
+, Poesio%
+, Kabadjov%
+\BCBL {}\ \BBA {} Je{\v{z}}ek%
+}{%
+Steinberger%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2007}}%
+}]{%
+steinberger2007two}
+\APACinsertmetastar {%
+steinberger2007two}%
+\begin{APACrefauthors}%
+Steinberger, J.%
+, Poesio, M.%
+, Kabadjov, M\BPBI A.%
+\BCBL {}\ \BBA {} Je{\v{z}}ek, K.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2007}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Two uses of anaphora resolution in summarization} {Two
+  uses of anaphora resolution in summarization}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Information Processing \&
+  Management}{43}{6}{1663--1680}.
+\PrintBackRefs{\CurrentBib}
+
+\end{thebibliography}

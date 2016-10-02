@@ -1,9 +1,30 @@
 \chapter{Related Work}
 \label{sec:Related Work}
 
+Anaphora resolution systems emerged into two different strategies. The first one are rule-based techniques, which focus more on theoretical considerations. The second strategy uses machine learning and is based on annotated data. In the following chapter i will briefly present both and discuss their advantages and disadvantages.
+
+\section{Rule-based techniques}
+
+Rule-based techniques rely on human understandment of syntactic and semantic principles of natural language. Clues that could be helpful for identifying the antecedent are manually implemented as rules. To identify relevant clues, prior knowledge about linguistic principles (such as binding principles) is necessary. Since rules might be domain-specific, the implementation would most likely be worse on other domains. Refinements for different domains would make the development even more complex and time-consuming.
+
+\subsection{Knowledge-poor anaphora resolution}
+
+A domain independent approach by \citep{mitkov1998robust}  tried to eliminate the disadvantages of previous rule-based systems. Mitkov renounced complex syntax and semantic analysis in order to keep the algorithm as less domain specific as possible. The algorithm was informally desribed by Mitkov in three steps:
+\begin{enumerate} 
+\item Examine the current sentence and the two preceding sentences (if available). Look for noun phrases only to the left of the anaphor
+\item Select from the noun phrases identified only those which agree in gender and number with the pronominal anaphor and group them as a set of potential candidates
+\item Apply the antecedent indicators to each potential candidate and assign scores; the candidate with the highest aggregate score is proposed as antecedent
+\end{enumerate}
+
+Antecedent indicators are features with a score of -1,0,1, or 2 and are for instance informations like Definiteness (whether the noun phrase contains a definite article) or 
+
 provide background information needed to understand your thesis
 assures your readers that you are familiar with the important research that has been carried out in your area
 establishes your research w.r.t. research in your field
+
+
+\section{Machine learning-based techniques}
+
 
 e.g.\
 \begin{itemize}
@@ -12,4 +33,4 @@ e.g.\
   \item different perspectives on your topic
 \end{itemize}
 
- \cite{EckartDeCastilho2014} 
+ a\cite{lin1973} ad

@@ -15,12 +15,18 @@ footsepline,
 cleardoubleplain,
 bibtotoc,
 liststotoc,
-pointlessnumbers
+pointlessnumbers,
+article,
+citestyle=authoryear 
 ]{scrreprt}
+
+
 
 %% +++++++++++++++++++++++++++++++++
 %% Einbinden von Paketen
 %% +++++++++++++++++++++++++++++++++
+\usepackage{apacite}
+
 \usepackage{istitle}
 \usepackage{geometry}
 \usepackage[utf8]{inputenc} 
@@ -44,6 +50,7 @@ pointlessnumbers
 \usepackage{placeins}
 \usepackage[font=small,labelfont=bf,labelsep=colon]{caption}
 \usepackage{natbib}
+
 %\bibliographystyle{abbrvnat}
 
 \input{pdf}
@@ -155,7 +162,7 @@ pointlessnumbers
 
 \logo{figures/logo_uni.png}
 \timeperiod{July 2016}{October 2016}
-\pagenumbering{alph}
+\pagenumbering{gobble}
 \maketitle
 
 % Erklärung
@@ -165,7 +172,8 @@ pointlessnumbers
 
 % Inhaltsverzeichnis
 \pagestyle{scrheadings}
-\setcounter{tocdepth}{2}
+%\setcounter{tocdepth}{2}
+\setcounter{page}{2}
 \tableofcontents
 
 % Text
@@ -195,8 +203,9 @@ pointlessnumbers
 \listoffigures
 \listoftables
 \lstlistoflistings
-\bibliographystyle{natdin_lat}
 \bibliography{literature}
+\bibliographystyle{apacite}
+
 
 
 
