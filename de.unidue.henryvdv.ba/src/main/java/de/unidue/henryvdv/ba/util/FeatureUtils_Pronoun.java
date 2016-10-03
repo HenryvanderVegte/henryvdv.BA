@@ -1,5 +1,7 @@
 package de.unidue.henryvdv.ba.util;
 
+import java.util.Arrays;
+
 import org.apache.uima.jcas.JCas;
 
 import de.unidue.henryvdv.ba.param.Parameters;
@@ -16,6 +18,15 @@ public class FeatureUtils_Pronoun {
 		a.getPronounFeatures().setP_Neutral(neutral(a));
 		// Plural
 		a.getPronounFeatures().setP_Plural(plural(a));	
+		
+		a.getPronounFeatures().setP_Reflexive(isReflexive(a));
+	}
+	
+	public boolean isReflexive(Anaphora a){
+		if(Arrays.asList(Parameters.reflexivePronouns).contains(a.getCoveredText().toLowerCase())){
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean masculine(Anaphora a){

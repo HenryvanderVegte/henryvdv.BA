@@ -25,18 +25,12 @@ A lot of different information sources including syntactic, semantic, and pragma
 
 (4) John and Jill had a date, but she didn't come. (resolve "she" to "Jill").
 
-\textcolor{red} {\textbf{!!}}
-Earlier anaphora resolution systems often used rule based techniques to determine the correct antecedent !!(Mitkov, 1998), but lack due to their limited generalisability. In particular, rule based techniques often require specific domain knowledge, which makes the development complex and time consuming. Furthermore, the assignment to other languages is hampered by rules.
-
-However, machine learning could overcome these issues.
-\textcolor{red} {\textbf{!!}}  In machine learning, the system adapts and learns general principles from experience through training data. If domain specific data should be predicted, the algorithm should be trained on that domain.
-
 \section{Motivation}
 Significant factors of uncertainty are gender and number, because they are hard to determine. At first, information is needed whether a noun is male, female, neutral, or plural. Honorifics like "Mr." and "Mrs." are gender indicators, but not sufficient due to their sparsity. Stereotypical occupations and gender indicating suffixes like policeman and policewoman turned out to be no longer reliable \citep{evans2000improving}. For that reason, gender and number information needs to be learned from an external source. 
 
 There are two different strategies for implementing reliable gender information: \\
-Firstly, gender can be treated as hard constraint. This means, that either the most likely gender is assigned or, in case of uncertainty, no assignment is made at all. The leading coreference resolution systems mostly use hard constraint gender information and yield accuracy similar to non-learning approaches \citep{soon2001machine}. Soon et al. obtained their gender information through WordNet. The gender of to the most frequent sense of a noun is assumed.\\
-Secondly, gender can be expressed through probabilities. If a noun is male in 70 of 100 cases, the probability for it to be male is 70 \% (note that this is simplified - the distribution will be smoothed to avoid 0-probabilities). In 2005, Bergsma obtained encouraging results with the use of gender probabilities. More precisely, adding corpus mined gender frequencies improved their accuracy by approximately 10 \%.
+Firstly, gender can be treated as hard constraint. This means, that either the most likely gender is assigned or, in case of uncertainty, no assignment is made at all. The leading coreference resolution systems mostly use hard constraint gender information \citep{soon2001machine}. The gender of to the most frequent sense of a noun is assumed.\\
+Secondly, gender can be expressed through probabilities. If a noun is male in 70 of 100 cases, the probability for it to be male is 70 \% (note that this is simplified - the distribution will be smoothed to avoid 0-probabilities). In \nocite{bergsma2005automatic} 2005, Bergsma obtained encouraging results with the use of gender probabilities. More precisely, adding corpus mined gender frequencies improved their accuracy by approximately 10 \%.
 
 In this work i will present a machine learning approach to anaphora resolution, focusing on third-person pronominal anaphors. The two main purposes are to determine the impact of gender probability and to compare it to gender information treated as hard constraint. First of all, it should be evaluated whether the improvement through gender frequencies can be replicated on different data sets. In a second step, the gender frequencies will be replaced by the assignment of the most frequent gender to examine the influence of nothing but the gender implementation strategy. This is necessary, as usage of different data sets and algorithms makes the comparison of papers inconclusive. Finally, it needs to be examined whether the hypothesis, that corpus based gender frequencies have a higher impact than gender constraints, can be confirmed.
 

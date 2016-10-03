@@ -57,6 +57,7 @@ public class FeatureVectorUtils {
 		addP_Feminine();
 		addP_Neutral();					//30
 		addP_Plural();
+//		addP_Reflexive();
 		
 		//Gender Features (11)
 	
@@ -64,13 +65,13 @@ public class FeatureVectorUtils {
 		addG_StdGenderMismatch();
 		addG_PronounMismatch();
 		addG_MasculineMean();			//35
-	//	addG_MasculineVariance();
+		addG_MasculineVariance();
 		addG_FeminineMean();
-	//	addG_FeminineVariance();
+		addG_FeminineVariance();
 		addG_NeutralMean();
-	//	addG_NeutralVariance();			//40
+		addG_NeutralVariance();			//40
 		addG_PluralMean();
-	//	addG_PluralVariance();
+		addG_PluralVariance();
 		
 		return currentFeatureVector;
 	}
@@ -198,6 +199,11 @@ public class FeatureVectorUtils {
 	private void addP_Plural(){
 		addBinarizedFeature(currentAnaphora.getPronounFeatures().getP_Plural());
 	}
+	
+	private void addP_Reflexive(){
+		addBinarizedFeature(currentAnaphora.getPronounFeatures().getP_Reflexive());
+	}
+	
 	
 	private void addG_StdGenderMatch(){
 		addBinarizedFeature(currentAnaphora.getGenderFeatures().getG_StdGenderMatch());

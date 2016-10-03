@@ -12,6 +12,7 @@ public class Parameters {
 	public final static String[] neutralPronouns = {"itself","its","it"};
 	public final static String[] pluralPronouns = {"themselves","their","they"};
 	
+	public final static String[] reflexivePronouns = {"themselves","himself","herself","itself"};
 	
 	public static final String[] maleDesignators = {"mr","mister","master","lord","mr.","sir"};
 	

@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Fri Sep 09 21:03:12 CEST 2016
+ * Updated by JCasGen Mon Oct 03 11:55:09 CEST 2016
  * @generated */
 public class PronounFeatures_Type extends Annotation_Type {
   /** @generated 
@@ -141,6 +141,30 @@ public class PronounFeatures_Type extends Annotation_Type {
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_Plural, v);}
     
   
+ 
+  /** @generated */
+  final Feature casFeat_p_Reflexive;
+  /** @generated */
+  final int     casFeatCode_p_Reflexive;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public boolean getP_Reflexive(int addr) {
+        if (featOkTst && casFeat_p_Reflexive == null)
+      jcas.throwFeatMissing("p_Reflexive", "de.unidue.henryvdv.ba.type.PronounFeatures");
+    return ll_cas.ll_getBooleanValue(addr, casFeatCode_p_Reflexive);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setP_Reflexive(int addr, boolean v) {
+        if (featOkTst && casFeat_p_Reflexive == null)
+      jcas.throwFeatMissing("p_Reflexive", "de.unidue.henryvdv.ba.type.PronounFeatures");
+    ll_cas.ll_setBooleanValue(addr, casFeatCode_p_Reflexive, v);}
+    
+  
 
 
 
@@ -168,6 +192,10 @@ public class PronounFeatures_Type extends Annotation_Type {
  
     casFeat_p_Plural = jcas.getRequiredFeatureDE(casType, "p_Plural", "uima.cas.Boolean", featOkTst);
     casFeatCode_p_Plural  = (null == casFeat_p_Plural) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_Plural).getCode();
+
+ 
+    casFeat_p_Reflexive = jcas.getRequiredFeatureDE(casType, "p_Reflexive", "uima.cas.Boolean", featOkTst);
+    casFeatCode_p_Reflexive  = (null == casFeat_p_Reflexive) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_Reflexive).getCode();
 
   }
 }

@@ -1,13 +1,13 @@
 \chapter{Related Work}
 \label{sec:Related Work}
 
-Anaphora resolution systems emerged into two different strategies. The first one are rule-based techniques, which focus more on theoretical considerations. The second strategy uses machine learning and is based on annotated data. In the following chapter i will briefly present both and discuss their advantages and disadvantages.
+Anaphora resolution systems emerged into two different strategies. The first one are rule-based techniques, which focus more on theoretical considerations. The second strategy uses machine learning and is based on annotated data. In the following chapter i will briefly present both and discuss their advantages and disadvantages, followed by exemplary realisations.
 
 \section{Rule-based techniques}
 
-Rule-based techniques rely on human understandment of syntactic and semantic principles of natural language. Clues that could be helpful for identifying the antecedent are manually implemented as rules. To identify relevant clues, prior knowledge about linguistic principles (such as binding principles) is necessary. Since rules might be domain-specific, the implementation would most likely be worse on other domains. Refinements for different domains would make the development even more complex and time-consuming.
+Rule-based techniques rely on human understandment of syntactic and semantic principles of natural language. Clues that could be helpful for identifying the antecedent are manually implemented as rules. To identify relevant clues, prior knowledge about linguistic principles (such as binding principles) is necessary. Since rules might be domain-specific, the implementation would most likely be worse on other domains. Refinements for different domains would make the development even more complex and time-consuming. Nevertheless, rule-based techniques are much more transparent in contrast to machine learning.
 
-\subsection{Knowledge-poor anaphora resolution}
+\subsection{Limited knowledge anaphora resolution}
 
 A domain independent approach by \citep{mitkov1998robust}  tried to eliminate the disadvantages of previous rule-based systems. Mitkov renounced complex syntax and semantic analysis in order to keep the algorithm as less domain specific as possible. The algorithm was informally desribed by Mitkov in three steps:
 \begin{enumerate} 
@@ -16,15 +16,56 @@ A domain independent approach by \citep{mitkov1998robust}  tried to eliminate th
 \item Apply the antecedent indicators to each potential candidate and assign scores; the candidate with the highest aggregate score is proposed as antecedent
 \end{enumerate}
 
-Antecedent indicators are features with a score of -1,0,1, or 2 and are for instance informations like Definiteness (whether the noun phrase contains a definite article) or 
+Antecedent indicators are for instance Definiteness (whether the noun phrase contains a definite article) or "Non-prepositional" noun phrases (whether the noun phrase is part of a prepositional phrase). A positive indicator score increases the likelihood that the selected noun phrase is the antecedent and vice versa.
+
+
+\subsection{CogNIAC}
+Another rule-based approach was presented by \citep{baldwin1997cogniac} with CogNIAC, a high precision pronoun resolution system. It only resolves pronouns when high confidence rules (shown in Table \ref{table:cogniacRules})  are satisfied in order to avoid decisions under ambiguity. For each pronoun, the rules are applied one by one. If the given rule has found a matching candidate, it will be accepted. Otherwise, the next rule will be applied. If none matches the candidates, it will be left unresolved. 
+
+
+\begin{center}
+\captionof{table}{CogNIAC core rules}
+    \begin{tabular}{| l |p{8cm} |}
+
+    \hline
+    Rule & Description \\ \hline
+\hline
+    1) Unique in Discourse & If there is a single possible antecedent PAi in the read-in portion of the entire discourse, then pick PAi as the antecedent. \\ \hline
+    2) Reflexive & Pick nearest possible antecedent in read-in portion of current sentence if the anaphor is a reflexive pronoun \\ \hline
+    3) Unique in Current + Prior & If there is a single possible antecedent i in the prior sentence and the read-in portion of the current sentence, then pick i as the antecedent: \\ \hline
+    4) Possessive Pro & If the anaphor is a possessive pronoun and there is a single exact string match i of the possessive in the prior sentence, then pick i as the antecedent:  \\ \hline
+    5) Unique Current Sentence & If there is a single possible antecedent in the read-in portion of the current sentence, then pick i as the antecedent  \\ \hline
+    6) Unique Subject/ Subject Pronoun & If the subject of the prior sentence contains a single possible antecedent i, and the anaphor is the subject of the current sentence, then pick i as the antecedent \\ \hline
+
+    \end{tabular}
+     \label{table:cogniacRules}
+\end{center}
+
+\subsection{Hobbs algorithm}
+The Hobbs algorithm described by \citep{hobbs1978resolving} relies on parsed syntax trees containing the grammatical structure. Simply put, the tree containing the anaphora is searched left-to-right with breadth-first search and the algorithm stops when a matching noun phrase is found. Noun phrases mismatching in gender or number are neglected. As long as no matching antecedent is found, the preceding sentence will be searched.
+
+\section{Machine learning-based techniques}
+
+In most machine learning-based techniques, principles are learned from annotated text corpora  \citep{soon2001machine, bergsma2005automatic}, which include the correct label for each instance. In this context, a label will contain the information whether a noun phrase is the antecedent. In machine learning, tend to have little information on linguistic principles, as the algorithm should learn autonomously. This causes the algorithm to be less domain specific, but increases the risk to miss relevant clues. However, top-performing machine learning approaches achieve accuracy scores comparable to state-of-the-art non-learning techniques \citep{soon2001machine}. \\
+Additionally, machine learning algorithms are usually more time-consuming due to the learning process.
+
+\subsection{Anaphors in coreference resolution}
+\label{soon2001traininginstances}
+In coreference resolution all noun phrases referring to the same entity in the real world are linked. The most common kind of storing coreferential information is through coreference chains, in which the current element always points towards the following same entity-element. Pronominal anaphors are included and can be extracted by choosing the previous entity of the same coreference chain. 
+A coreference resolution system proposed by \citep{soon2001machine} used a feature set of 12 different features. It covers, inter alia, a distance feature (standing for the distance in sentences between two elements), a gender agreement feature (whether the gender matches), and a number agreement feature (whether the number matches). To specify most of the features, several preprocessing steps, such as noun phrase identification and part-of-speech tagging,  need to be executed 
+
+In order to make machine learning possible, training instances need to be generated.\\
+To generate positive training instances, Soon et al. used every noun phrase in a coreference chain and its predecessor in the same chain. Each intervening noun phrase forms a negative instance with the considered noun phrase. 
+
+
+\citep{ng2002improving} extended their work and improved it through additional features, a different training set creation, and a clustering algorithm to find the noun phrase with the highest coreference likelihood. 
+
+\subsection{Bergsma}
+
 
 provide background information needed to understand your thesis
 assures your readers that you are familiar with the important research that has been carried out in your area
 establishes your research w.r.t. research in your field
-
-
-\section{Machine learning-based techniques}
-
 
 e.g.\
 \begin{itemize}
@@ -33,4 +74,4 @@ e.g.\
   \item different perspectives on your topic
 \end{itemize}
 
- a\cite{lin1973} ad
+ a

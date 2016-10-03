@@ -11,6 +11,7 @@ import org.apache.uima.jcas.cas.FSArray;
 
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.PennTree;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
@@ -48,7 +49,11 @@ public class FeatureAnnotator_PronounAntecedent extends JCasAnnotator_ImplBase {
 			
 			//System.out.println(c.getCoveredText() + "   " + c.getConstituentType());
 		}*/
-	
+		
+		Collection<NP> constituents = JCasUtil.select(aJCas, NP.class);
+		for(NP n : constituents){
+			System.out.println(n.getCoveredText());
+		}
 		for(Anaphora anaphora : anaphoras){
 			PronounAntecedentFeatures a = new PronounAntecedentFeatures(aJCas);
 			anaphora.setPronounAntecedentFeatures(a);

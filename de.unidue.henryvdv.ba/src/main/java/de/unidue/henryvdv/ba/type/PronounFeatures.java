@@ -11,8 +11,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Fri Sep 09 21:03:12 CEST 2016
- * XML source: C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/src/main/resources/desc/type/Anaphora.xml
+ * Updated by JCasGen Mon Oct 03 11:55:09 CEST 2016
+ * XML source: C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/src/main/resources/desc/type/PronounFeatures.xml
  * @generated */
 public class PronounFeatures extends Annotation {
   /** @generated
@@ -162,6 +162,28 @@ public class PronounFeatures extends Annotation {
     if (PronounFeatures_Type.featOkTst && ((PronounFeatures_Type)jcasType).casFeat_p_Plural == null)
       jcasType.jcas.throwFeatMissing("p_Plural", "de.unidue.henryvdv.ba.type.PronounFeatures");
     jcasType.ll_cas.ll_setBooleanValue(addr, ((PronounFeatures_Type)jcasType).casFeatCode_p_Plural, v);}    
+   
+    
+  //*--------------*
+  //* Feature: p_Reflexive
+
+  /** getter for p_Reflexive - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public boolean getP_Reflexive() {
+    if (PronounFeatures_Type.featOkTst && ((PronounFeatures_Type)jcasType).casFeat_p_Reflexive == null)
+      jcasType.jcas.throwFeatMissing("p_Reflexive", "de.unidue.henryvdv.ba.type.PronounFeatures");
+    return jcasType.ll_cas.ll_getBooleanValue(addr, ((PronounFeatures_Type)jcasType).casFeatCode_p_Reflexive);}
+    
+  /** setter for p_Reflexive - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setP_Reflexive(boolean v) {
+    if (PronounFeatures_Type.featOkTst && ((PronounFeatures_Type)jcasType).casFeat_p_Reflexive == null)
+      jcasType.jcas.throwFeatMissing("p_Reflexive", "de.unidue.henryvdv.ba.type.PronounFeatures");
+    jcasType.ll_cas.ll_setBooleanValue(addr, ((PronounFeatures_Type)jcasType).casFeatCode_p_Reflexive, v);}    
   }
 
     

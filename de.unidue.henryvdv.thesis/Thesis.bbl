@@ -1,6 +1,59 @@
 \begin{thebibliography}{}
 
 \bibitem [\protect \citeauthoryear {%
+Baldwin%
+}{%
+Baldwin%
+}{%
+{\protect \APACyear {1997}}%
+}]{%
+baldwin1997cogniac}
+\APACinsertmetastar {%
+baldwin1997cogniac}%
+\begin{APACrefauthors}%
+Baldwin, B.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1997}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {CogNIAC: high precision coreference with limited
+  knowledge and linguistic resources} {Cogniac: high precision coreference with
+  limited knowledge and linguistic resources}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of a Workshop on Operational Factors in
+  Practical, Robust Anaphora Resolution for Unrestricted Texts} {Proceedings of
+  a workshop on operational factors in practical, robust anaphora resolution
+  for unrestricted texts}\ (\BPGS\ 38--45).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Bergsma%
+}{%
+Bergsma%
+}{%
+{\protect \APACyear {2005}}%
+}]{%
+bergsma2005automatic}
+\APACinsertmetastar {%
+bergsma2005automatic}%
+\begin{APACrefauthors}%
+Bergsma, S.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2005}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Automatic acquisition of gender information for anaphora
+  resolution} {Automatic acquisition of gender information for anaphora
+  resolution}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Conference of the Canadian Society for Computational
+  Studies of Intelligence} {Conference of the canadian society for
+  computational studies of intelligence}\ (\BPGS\ 342--353).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Evans%
 \ \BBA {} Orasan%
 }{%
@@ -27,6 +80,29 @@ Evans, R.%
 \BIn{} \APACrefbtitle {Proceedings of the Discourse Anaphora and Reference
   Resolution Conference (DAARC2000)} {Proceedings of the discourse anaphora and
   reference resolution conference (daarc2000)}\ (\BPGS\ 154--162).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Hobbs%
+}{%
+Hobbs%
+}{%
+{\protect \APACyear {1978}}%
+}]{%
+hobbs1978resolving}
+\APACinsertmetastar {%
+hobbs1978resolving}%
+\begin{APACrefauthors}%
+Hobbs, J\BPBI R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1978}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Resolving pronoun references} {Resolving pronoun
+  references}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Lingua}{44}{4}{311--338}.
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -106,6 +182,35 @@ Morton, T\BPBI S.%
 \BIn{} \APACrefbtitle {Proceedings of the 38th Annual Meeting on Association
   for Computational Linguistics} {Proceedings of the 38th annual meeting on
   association for computational linguistics}\ (\BPGS\ 173--180).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Ng%
+\ \BBA {} Cardie%
+}{%
+Ng%
+\ \BBA {} Cardie%
+}{%
+{\protect \APACyear {2002}}%
+}]{%
+ng2002improving}
+\APACinsertmetastar {%
+ng2002improving}%
+\begin{APACrefauthors}%
+Ng, V.%
+\BCBT {}\ \BBA {} Cardie, C.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2002}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Improving machine learning approaches to coreference
+  resolution} {Improving machine learning approaches to coreference
+  resolution}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 40th Annual Meeting on Association
+  for Computational Linguistics} {Proceedings of the 40th annual meeting on
+  association for computational linguistics}\ (\BPGS\ 104--111).
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
