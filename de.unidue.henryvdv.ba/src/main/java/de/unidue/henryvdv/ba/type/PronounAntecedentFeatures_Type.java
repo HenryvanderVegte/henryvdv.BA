@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Fri Sep 09 21:03:12 CEST 2016
+ * Updated by JCasGen Wed Oct 05 14:47:10 CEST 2016
  * @generated */
 public class PronounAntecedentFeatures_Type extends Annotation_Type {
   /** @generated 
@@ -381,6 +381,30 @@ public class PronounAntecedentFeatures_Type extends Annotation_Type {
     ll_cas.ll_setBooleanValue(addr, casFeatCode_p_A_QuotationSituation, v);}
     
   
+ 
+  /** @generated */
+  final Feature casFeat_p_A_NPDistance;
+  /** @generated */
+  final int     casFeatCode_p_A_NPDistance;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public float getP_A_NPDistance(int addr) {
+        if (featOkTst && casFeat_p_A_NPDistance == null)
+      jcas.throwFeatMissing("p_A_NPDistance", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
+    return ll_cas.ll_getFloatValue(addr, casFeatCode_p_A_NPDistance);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setP_A_NPDistance(int addr, float v) {
+        if (featOkTst && casFeat_p_A_NPDistance == null)
+      jcas.throwFeatMissing("p_A_NPDistance", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
+    ll_cas.ll_setFloatValue(addr, casFeatCode_p_A_NPDistance, v);}
+    
+  
 
 
 
@@ -448,6 +472,10 @@ public class PronounAntecedentFeatures_Type extends Annotation_Type {
  
     casFeat_p_A_QuotationSituation = jcas.getRequiredFeatureDE(casType, "p_A_QuotationSituation", "uima.cas.Boolean", featOkTst);
     casFeatCode_p_A_QuotationSituation  = (null == casFeat_p_A_QuotationSituation) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_A_QuotationSituation).getCode();
+
+ 
+    casFeat_p_A_NPDistance = jcas.getRequiredFeatureDE(casType, "p_A_NPDistance", "uima.cas.Float", featOkTst);
+    casFeatCode_p_A_NPDistance  = (null == casFeat_p_A_NPDistance) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_A_NPDistance).getCode();
 
   }
 }

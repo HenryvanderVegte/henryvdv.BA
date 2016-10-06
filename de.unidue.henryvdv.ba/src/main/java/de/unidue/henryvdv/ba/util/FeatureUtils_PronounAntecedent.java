@@ -1,8 +1,11 @@
 package de.unidue.henryvdv.ba.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
@@ -10,13 +13,16 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 import com.google.common.reflect.Parameter;
 
+import de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Antecedent;
+import de.unidue.henryvdv.ba.type.MyNP;
 import de.unidue.henryvdv.ba.type.Quotation;
 
 public class FeatureUtils_PronounAntecedent {
@@ -26,24 +32,51 @@ public class FeatureUtils_PronounAntecedent {
 	private Collection<Dependency> dependencies;
 	private Collection<Quotation> quotes;
 	private Collection<Constituent> constituents;
+	private Collection<NP> nps;
+	private Collection<NamedEntity> namedEntities;
+	private JCas aJCas;
 	
 	public enum Number {
 	    singular, plural, unknown
 	}
 	
+	private int posTotal = 0;
+	private int posVal = 0;
+	private int negTotal = 0;
+	private int negVal = 0;
+	
 	public FeatureUtils_PronounAntecedent(JCas aJCas){
+		this.aJCas = aJCas;
 		sentences = JCasUtil.select(aJCas, Sentence.class);
 		dependencies = JCasUtil.select(aJCas, Dependency.class);
 		tokens = JCasUtil.select(aJCas, Token.class);
 		quotes = JCasUtil.select(aJCas, Quotation.class);
 		constituents = JCasUtil.select(aJCas, Constituent.class);
-
+		nps = JCasUtil.select(aJCas, NP.class);
+		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
+		
 	}
 	
 	
-	public void annotateFeatures(Anaphora a){
+	public void annotateFeatures(Anaphora a){	
+		if(getSentenceNr(a.getBegin()) == getSentenceNr(a.getAntecedent().getBegin())){
+			if(a.getHasCorrectAntecedent()){
+				if(!bindingTheory(a)){
+					posVal++;
+				}
+				posTotal++;
+			} else {
+				if(!bindingTheory(a)){
+					negVal++;
+				}
+				negTotal++;
+			}
+		}
 
 		
+		System.out.println("Pos: " + posVal + " of " + posTotal);
+		System.out.println("Neg: " + negVal + " of " + negTotal);
+		System.out.println("________");
 		//In Same Sentence:
 		a.getPronounAntecedentFeatures().setP_A_BindingTheory(bindingTheory(a));
 		//In Same Sentence:
@@ -66,6 +99,10 @@ public class FeatureUtils_PronounAntecedent {
 		a.getPronounAntecedentFeatures().setP_A_SingularMatch(isBothSingular(a));
 		//Plural Match
 		a.getPronounAntecedentFeatures().setP_A_PluralMatch(isBothPlural(a));
+
+		//My own features:
+		a.getPronounAntecedentFeatures().setP_A_NPDistance(npDistance(a));
+	
 	}
 	
 	//wenn P und A in unterschiedlichen Sätzen sind: falsch
@@ -77,17 +114,148 @@ public class FeatureUtils_PronounAntecedent {
 				// für jeden Parent vom Antecedent gucken:
 					//ist die Anapher irgendwo in den Subknoten enthalten?
 	
-	public boolean bindingTheory(Anaphora a){
-		if(getSentenceNr(a.getBegin()) != getSentenceNr(a.getAntecedent().getBegin()))
-				return true;
+	public boolean bindingTheory(Anaphora a){	
+		
+		if(getSentenceNr(a.getBegin()) == getSentenceNr(a.getAntecedent().getBegin())){
+			//only then the anaphora could be not free in its binding domain
+			if(getBindingDomain(a) != null){
+				Annotation bindingDomain = getBindingDomain(a);
+				Antecedent antecedent = a.getAntecedent();
+				if(antecedent.getBegin() >= bindingDomain.getBegin() && antecedent.getBegin() <= bindingDomain.getEnd()){
+					return false;
+				}
+				if(antecedent.getEnd() <= bindingDomain.getEnd() && antecedent.getEnd() >= bindingDomain.getBegin()){
+					return false;
+				}	
+			}
+		}
+		//Principle B is satisfied!
+		
+		//R-Expressions must be free (Person, Organization, NP with definite pronoun)
+		Antecedent ante = a.getAntecedent();
+		
+
+		return true;
+	}
+	
+	
+	public Annotation getBindingDomain(Anaphora a){
 		boolean anaphoraIsSubject = isSubject(AnnotationUtils.getCoveredToken(a, tokens));
 		
 		if(anaphoraIsSubject){
+			Annotation smallest = null;
+			int size = Integer.MAX_VALUE;
+			for(Constituent c : constituents){			
+				if(c.getConstituentType().equals("S") && c.getBegin() <= a.getBegin() && c.getEnd() >= a.getEnd()){
+					if((c.getEnd() - c.getBegin()) < size ){
+						size = c.getEnd() - c.getBegin();
+						smallest = new Annotation(aJCas, c.getBegin(), c.getEnd());
+					}
+				
+				}
+			}
+			return smallest;
+		}
+		//get smallest sentence with a NP c-commanding the anaphora
+		Sentence currentSentence = null;
+		for(Sentence s : sentences){
+			if(s.getBegin() <= a.getBegin() && s.getEnd() >= a.getEnd())
+				currentSentence = s;
+		}
+			
+		Map<Integer, Annotation> annotationSizes = new HashMap<Integer, Annotation>();	
+	
+		for(Constituent c : constituents){			
+			if(c.getConstituentType().equals("S") && currentSentence.getBegin() <= c.getBegin() && currentSentence.getEnd() >= c.getEnd()){
+				Integer size = c.getEnd() - c.getBegin();
+				Annotation anno = new Annotation(aJCas, c.getBegin(), c.getEnd());
+				annotationSizes.put(size, anno);
+			}
+		}
+		while(annotationSizes.size() != 0){
+			Integer smallest = Integer.MAX_VALUE;
+			for(Integer i : annotationSizes.keySet()){
+				if(i < smallest){
+					smallest = i;
+				}
+			}
+			if(containsCCommandingNP(annotationSizes.get(smallest), a)){
+				return annotationSizes.get(smallest);
+			} else {
+				annotationSizes.remove(smallest);
+			}
 			
 		}
 		
-		return true;
+		return null;
 	}
+	
+	public boolean containsCCommandingNP(Annotation anno, Anaphora a){
+		List<NP> containedNPs = new ArrayList<NP>();
+		for(NP  np : nps){
+			if(anno.getBegin() < np.getBegin() && anno.getEnd() >= np.getEnd()){
+				if(!(np.getBegin() <= a.getBegin() && np.getEnd() >= a.getEnd()))
+						containedNPs.add(np);
+			}
+		}
+		
+		for(NP np : containedNPs){
+			if(cCommands(np, a)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean cCommands(NP np, Anaphora a){
+		Sentence currentSentence = null;
+		for(Sentence s : sentences){
+			if(s.getBegin() <= a.getBegin() && s.getEnd() >= a.getEnd())
+				currentSentence = s;
+		}
+		Constituent alphaParent = getConstituent(np.getParent());
+		Constituent beta = getConstituent(a);
+		while(beta.getParent() != null){
+			if(beta.getParent().getBegin() == alphaParent.getBegin() && 
+					beta.getParent().getEnd() == alphaParent.getEnd()){
+				return true;
+			} else {
+				beta = getConstituent(beta.getParent());
+			}
+			if(beta.getBegin() == currentSentence.getBegin() && beta.getEnd() == currentSentence.getEnd())
+				break;
+		}
+		return false;
+	}
+	
+	public Constituent getConstituent(Annotation a){
+		Constituent smallest = null;
+		int size = Integer.MAX_VALUE;
+		for(Constituent c : constituents){			
+			if(c.getBegin() <= a.getBegin() && c.getEnd() >= a.getEnd()){
+				if((c.getEnd() - c.getBegin()) < size ){
+					size = c.getEnd() - c.getBegin();
+					smallest = c;
+				}		
+			}
+		}
+		return smallest;
+	}
+	
+	public float npDistance(Anaphora a){
+		int count = 0;
+		
+		for(NP np : nps){
+			if(np.getBegin() > a.getAntecedent().getBegin() && np.getEnd() < a.getEnd())
+				count++;
+		}
+		
+		
+		return (float)count / 10f;
+	}
+	
+	
 	
 	public boolean antecedentInSameSentence(Anaphora a){
 		boolean value = (getSentenceNr(a.getBegin()) == getSentenceNr(a.getAntecedent().getBegin()));
@@ -401,5 +569,49 @@ public class FeatureUtils_PronounAntecedent {
 			}
 		}	
 		return false;
+	}
+	
+	public boolean organization(Annotation annotation){
+		List<Token> covTokens = getCoveredTokens(annotation);
+		boolean value = false;			
+		for(Token t : covTokens){
+			String ne = getNamedEntityValue(t);
+			if(ne != null && ne.equals("ORGANIZATION")){
+				value = true;
+			}
+		}
+		return value;
+	}
+	
+	public boolean person(Annotation annotation){
+		List<Token> covTokens = getCoveredTokens(annotation);
+		boolean value = false;			
+		for(Token t : covTokens){
+			String ne = getNamedEntityValue(t);
+			if(ne != null && ne.equals("PERSON")){
+				value = true;
+			}
+		}
+		return value;
+	}
+	
+	public boolean definiteArticle(Annotation annotation){
+		List<Token> covTokens = getCoveredTokens(annotation);
+		boolean value = false;			
+		for(Token t : covTokens){
+			if(t.getCoveredText().equalsIgnoreCase("the")){
+				value = true;
+			}
+		}
+		return value;
+	}
+	
+	private String getNamedEntityValue(Token token){
+		for(NamedEntity n : namedEntities){
+			if(n.getBegin() <= token.getBegin() && n.getEnd() >= token.getEnd()){
+				return n.getValue();
+			}
+		}
+		return null;
 	}
 }

@@ -33,7 +33,7 @@ public class FeatureVectorUtils {
 		addPA_PluralMatch();			//10
 		
 		//Antecedent Features (17)
-		
+		/*
 		addA_AntecedentFrequency();
 		addA_Subject();
 		addA_Object();
@@ -51,16 +51,16 @@ public class FeatureVectorUtils {
 		addA_Definite();				//25
 		addA_HisHer();
 		addA_HeHis();
-
+*/
 		//Pronoun Features (4)
 		addP_Masculine();
 		addP_Feminine();
 		addP_Neutral();					//30
 		addP_Plural();
-//		addP_Reflexive();
+
 		
 		//Gender Features (11)
-	
+	/*
 		addG_StdGenderMatch();
 		addG_StdGenderMismatch();
 		addG_PronounMismatch();
@@ -72,6 +72,11 @@ public class FeatureVectorUtils {
 		addG_NeutralVariance();			//40
 		addG_PluralMean();
 		addG_PluralVariance();
+		*/
+		
+		//My own features:
+		//addP_Reflexive();
+		//addP_NpDistance();
 		
 		return currentFeatureVector;
 	}
@@ -246,6 +251,10 @@ public class FeatureVectorUtils {
 	private void addG_PluralVariance(){
 		addFloatFeature(currentAnaphora.getGenderFeatures().getG_Plural_Variance());
 	}	
+	
+	private void addP_NpDistance(){
+		addFloatFeature(currentAnaphora.getPronounAntecedentFeatures().getP_A_NPDistance());
+	}
 	
 	private void addBinarizedFeature(boolean value){
 		currentFeatureVector += " ";

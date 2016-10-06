@@ -420,34 +420,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		}
 		return frequencies;
 	}
-	
-	private Map<Anaphora, List<NP>> getallNPs(List<Anaphora> anaphorasList){
-		Map<Anaphora, List<NP>> freq_allNP = new HashMap<Anaphora, List<NP>>();
-		for(Anaphora anaphora : anaphorasList){
-			
-			int anteNPnumber = 0;
-			for(int i = 0; i < fixedNPs.size(); i++){
-				if(fixedNPs.get(i).getBegin() >= anaphora.getBegin()){
-					anteNPnumber = i - 1;
-					if(anteNPnumber < 0 )
-						System.out.println("!!!!!!!!!!!!!!");
-					break;
-				}
-			}	
-			int anaphoraSentenceNr = AnnotationUtils.getSentenceNr(anaphora.getBegin(), sentences);
-		
-			List<NP> allNPs = new ArrayList<NP>();
-			for(int i = anteNPnumber; i > 0; i--){
-				int anteSentenceNr = AnnotationUtils.getSentenceNr(fixedNPs.get(i).getBegin(), sentences);
-				if((anaphoraSentenceNr - anteSentenceNr) > MAX_SENTENCE_DIST){
-					break;
-				}
-				allNPs.add(fixedNPs.get(i));
-			}
-			freq_allNP.put(anaphora, allNPs);
-		}
-		return freq_allNP;
-	}
+
 	
 	private float getOutputValue(Anaphora a, NP n){
 		Anaphora possibleA = new Anaphora(aJCas, a.getBegin(), a.getEnd());

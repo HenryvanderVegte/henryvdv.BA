@@ -50,18 +50,18 @@ public class FeatureUtils_Gender {
 		a.getGenderFeatures().setG_PronounMismatch(pronounMismatch(a));
 		
 		// Mean & standard deviation of masculine Beta Distribution
-		//setMasculineDistribution(a);
+		setMasculineDistribution(a);
 		
 		// Mean & standard deviation of feminine Beta Distribution
-		//setFeminineDistribution(a);
+		setFeminineDistribution(a);
 		
 		// Mean & standard deviation of neutral Beta Distribution
-		//setNeutralDistribution(a);
+		setNeutralDistribution(a);
 		
 		// Mean & standard deviation of plural Beta Distribution
-		//setPluralDistribution(a);
+		setPluralDistribution(a);
 		
-		setHardConstraintGender(a);
+	//	setHardConstraintGender(a);
 	}
 	
 	public void setHardConstraintGender(Anaphora a){

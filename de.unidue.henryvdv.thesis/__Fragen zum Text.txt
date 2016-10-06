@@ -1,3 +1,5 @@
 1) Bei Baldwin CogNIAC alle Regeln nennen?
 
 2) Beim erklären des Ansatzes von Soon et al. schon den Algorithmus zur Generierung von Traininginstanzen nennen?
+
+3) Sachen wie precision und recall erklären?

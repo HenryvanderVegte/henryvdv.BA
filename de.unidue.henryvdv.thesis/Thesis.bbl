@@ -106,6 +106,35 @@ Hobbs, J\BPBI R.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Kennedy%
+\ \BBA {} Boguraev%
+}{%
+Kennedy%
+\ \BBA {} Boguraev%
+}{%
+{\protect \APACyear {1996}}%
+}]{%
+kennedy1996anaphora}
+\APACinsertmetastar {%
+kennedy1996anaphora}%
+\begin{APACrefauthors}%
+Kennedy, C.%
+\BCBT {}\ \BBA {} Boguraev, B.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1996}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Anaphora for everyone: pronominal anaphora resoluation
+  without a parser} {Anaphora for everyone: pronominal anaphora resoluation
+  without a parser}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 16th conference on Computational
+  linguistics-Volume 1} {Proceedings of the 16th conference on computational
+  linguistics-volume 1}\ (\BPGS\ 113--118).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 McCarthy%
 \ \BBA {} Lehnert%
 }{%
@@ -129,6 +158,31 @@ McCarthy, J\BPBI F.%
   decision trees for coreference resolution}.{\BBCQ}
 \newblock
 \APACjournalVolNumPages{arXiv preprint cmp-lg/9505043}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Mitkov%
+}{%
+Mitkov%
+}{%
+{\protect \APACyear {1994}}%
+}]{%
+mitkov1994integrated}
+\APACinsertmetastar {%
+mitkov1994integrated}%
+\begin{APACrefauthors}%
+Mitkov, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1994}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {An integrated model for anaphora resolution} {An
+  integrated model for anaphora resolution}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 15th conference on Computational
+  linguistics-Volume 2} {Proceedings of the 15th conference on computational
+  linguistics-volume 2}\ (\BPGS\ 1170--1176).
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
