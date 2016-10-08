@@ -56,7 +56,7 @@ extends JCasAnnotator_ImplBase{
 					token.getPos().getPosValue() == "PRP$" || 
 					token.getPos().getPosValue() == "WP$"
 			){
-				if(Arrays.asList(Parameters.allPronouns).contains(token.getCoveredText().toLowerCase())){
+				if(Arrays.asList(Parameters.resolvedPronouns).contains(token.getCoveredText().toLowerCase())){
 					Anaphora a = new Anaphora(aJCas, token.getBegin(), token.getEnd());
 					anaphoras.add(a);
 				}

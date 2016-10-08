@@ -236,13 +236,12 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		goldAntecedents = new ArrayList<GoldNP>();
 		detectedAntecedents = new ArrayList<DetectedNP>();
 		allNPs = JCasUtil.select(aJCas, NP.class);
-	
-		setFixedNPs();
+		setFixedNPs(); 
 		
 		
 		if(classificationMode == ClassificationMode.BERGSMA){
 			setGoldNPs();
-			setDetectedNPs();
+			//setDetectedNPs();
 			
 			List<Anaphora> anaphorasList = new ArrayList<Anaphora>();
 			for(Anaphora a : anaphoras){
@@ -265,7 +264,6 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 			
 			Map<Anaphora, List<MyNP>> allNPs = getAllNPs(anaphorasList);
 			eval.evaluate_last_n_sentences(allNPs, true);
-			
 		}
 
 	}
@@ -322,6 +320,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 				
 				NP possibleAntecedent = new NP(aJCas, fixedNPs.get(i).getBegin(), fixedNPs.get(i).getEnd());
 				//TODO: Check if its working
+				/*
 				List<Token> covTokens = AnnotationUtils.getCoveredTokens(fixedNPs.get(i), tokens);
 				for(Token t : covTokens){
 					if(Arrays.asList(Parameters.allPronouns).contains(t.getCoveredText().toLowerCase())){
@@ -329,7 +328,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 						break;
 					}
 				}
-				
+				*/
 				
 				
 				float outputValue = getOutputValue(anaphora, possibleAntecedent);
@@ -477,6 +476,8 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 			if(addIt){
 				fixedNPs.add(np1);
 			}
+
+
 		}
 	}
 	

@@ -34,7 +34,7 @@ public class TrainTestPipeline {
 	public static void main(String[] args)
 			  throws Exception {	
 
-		crossvalidation(30, 30, false);
+		crossvalidation(10, 30, false);
 	
 		/*
 		Integer[] allDocs = new Integer[30];

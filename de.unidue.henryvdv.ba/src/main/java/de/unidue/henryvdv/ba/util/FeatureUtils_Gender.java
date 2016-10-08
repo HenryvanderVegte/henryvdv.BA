@@ -142,6 +142,13 @@ public class FeatureUtils_Gender {
 			}
 		}
 		
+		if(Arrays.asList(Parameters.malePronouns).contains(a.getAntecedent().getCoveredText().toLowerCase())){
+			anteGender = Gender.male;
+		}
+		if(Arrays.asList(Parameters.femalePronouns).contains(a.getAntecedent().getCoveredText().toLowerCase())){
+			anteGender = Gender.female;
+		}
+		
 		Gender anaphoraGender = Gender.unknown;
 		if(Arrays.asList(Parameters.malePronouns).contains(a.getCoveredText().toLowerCase())){
 			anaphoraGender = Gender.male;
@@ -174,9 +181,16 @@ public class FeatureUtils_Gender {
 					return false;
 				anteGender = Gender.female;
 			}
+		}	
+		Gender anaphoraGender = Gender.unknown;
+		
+		if(Arrays.asList(Parameters.malePronouns).contains(a.getCoveredText().toLowerCase())){
+			anaphoraGender = Gender.male;
+		}
+		if(Arrays.asList(Parameters.femalePronouns).contains(a.getCoveredText().toLowerCase())){
+			anaphoraGender = Gender.female;
 		}
 		
-		Gender anaphoraGender = Gender.unknown;
 		if(Arrays.asList(Parameters.malePronouns).contains(a.getCoveredText().toLowerCase())){
 			anaphoraGender = Gender.male;
 		}

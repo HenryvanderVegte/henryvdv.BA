@@ -1,16 +1,36 @@
 package de.unidue.henryvdv.ba.param;
 
 public class Parameters {
-
-	public final static String[] allPronouns = {"himself","his","he",
-												"herself","her","she",
-												"itself","its", //"it",
-												"themselves","their","they"};
+	/*
+	public final static String[] resolvedPronouns = {"himself","his","he",
+			"herself","her","she",
+			"itself","its", //"it",
+			"themselves","their","they"};
+*/
+	public final static String[] resolvedPronouns = {"his","he",
+			"her","she",
+			"its", //"it",
+			"their","they"};
 	
-	public final static String[] malePronouns = {"himself","his","he"};
-	public final static String[] femalePronouns = {"herself","her","she"};
+	public final static String[] allPronouns = {
+			"i","me","my","mine","myself",
+			"you","your","yours","yourself",
+			"he","him","his","himself",
+			"she","her","hers","herself",
+			"it","its","itself",
+			"we","us","our","ours","ourselves",
+			"they","them","their","theirs","themselves"};
+	
+	public final static String[] thirdPersonPronouns = {
+			"himself","his","he","him",
+			"herself","her","she","hers",
+			"itself","its","it",
+			"themselves","their","they","them","theirs"};
+	
+	public final static String[] malePronouns = {"himself","his","he","him"};
+	public final static String[] femalePronouns = {"herself","her","she","hers"};
 	public final static String[] neutralPronouns = {"itself","its","it"};
-	public final static String[] pluralPronouns = {"themselves","their","they"};
+	public final static String[] pluralPronouns = {"themselves","their","they","them","theirs"};
 	
 	public final static String[] reflexivePronouns = {"themselves","himself","herself","itself"};
 	

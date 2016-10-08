@@ -3,33 +3,38 @@
 \BOOKMARK [1][-]{section.1.2}{Motivation}{chapter.1}% 3
 \BOOKMARK [0][-]{chapter.2}{Related Work}{}% 4
 \BOOKMARK [1][-]{section.2.1}{Rule-Based Techniques}{chapter.2}% 5
-\BOOKMARK [2][-]{subsection.2.1.1}{Anaphora Resolution with Limited Knowledge}{section.2.1}% 6
+\BOOKMARK [2][-]{subsection.2.1.1}{The Naive Hobbs algorithm}{section.2.1}% 6
 \BOOKMARK [2][-]{subsection.2.1.2}{CogNIAC}{section.2.1}% 7
-\BOOKMARK [2][-]{subsection.2.1.3}{Hobbs algorithm}{section.2.1}% 8
-\BOOKMARK [1][-]{section.2.2}{Machine Learning-Based Techniques}{chapter.2}% 9
-\BOOKMARK [2][-]{subsection.2.2.1}{Anaphors in Coreference Resolution}{section.2.2}% 10
-\BOOKMARK [2][-]{subsection.2.2.2}{Bergsma}{section.2.2}% 11
-\BOOKMARK [1][-]{section.2.3}{Compared Evaluation}{chapter.2}% 12
-\BOOKMARK [1][-]{section.2.4}{A Statistical Approach}{chapter.2}% 13
-\BOOKMARK [0][-]{chapter.3}{Data}{}% 14
-\BOOKMARK [1][-]{section.3.1}{Anaphora Corpus}{chapter.3}% 15
-\BOOKMARK [1][-]{section.3.2}{Gender Corpus}{chapter.3}% 16
-\BOOKMARK [0][-]{chapter.4}{Methodology}{}% 17
-\BOOKMARK [1][-]{section.4.1}{Featureset}{chapter.4}% 18
-\BOOKMARK [2][-]{subsection.4.1.1}{Pronoun Features}{section.4.1}% 19
-\BOOKMARK [2][-]{subsection.4.1.2}{Antecedent Features}{section.4.1}% 20
-\BOOKMARK [2][-]{subsection.4.1.3}{Pronoun-Antecedent Features}{section.4.1}% 21
-\BOOKMARK [2][-]{subsection.4.1.4}{Gender Features}{section.4.1}% 22
-\BOOKMARK [1][-]{section.4.2}{Generating Training Instances}{chapter.4}% 23
-\BOOKMARK [1][-]{section.4.3}{Baseline Approach}{chapter.4}% 24
-\BOOKMARK [1][-]{section.4.4}{SVM Classifier}{chapter.4}% 25
-\BOOKMARK [0][-]{chapter.5}{Evaluation}{}% 26
-\BOOKMARK [1][-]{section.5.1}{Learning curves}{chapter.5}% 27
-\BOOKMARK [1][-]{section.5.2}{Feature Contribution}{chapter.5}% 28
-\BOOKMARK [1][-]{section.5.3}{Error Analysis}{chapter.5}% 29
-\BOOKMARK [0][-]{chapter.6}{Conclusion}{}% 30
-\BOOKMARK [1][-]{section.6.1}{Summary}{chapter.6}% 31
-\BOOKMARK [1][-]{section.6.2}{Outlook}{chapter.6}% 32
-\BOOKMARK [0][-]{appendix*.4}{List of Figures}{}% 33
-\BOOKMARK [0][-]{appendix*.5}{List of Tables}{}% 34
-\BOOKMARK [0][-]{appendix*.6}{References}{}% 35
+\BOOKMARK [2][-]{subsection.2.1.3}{Anaphora Resolution with Limited Knowledge}{section.2.1}% 8
+\BOOKMARK [2][-]{subsection.2.1.4}{GuiTAR}{section.2.1}% 9
+\BOOKMARK [2][-]{subsection.2.1.5}{JavaRAP}{section.2.1}% 10
+\BOOKMARK [1][-]{section.2.2}{Machine Learning-Based Techniques}{chapter.2}% 11
+\BOOKMARK [2][-]{subsection.2.2.1}{Anaphors in Coreference Resolution}{section.2.2}% 12
+\BOOKMARK [2][-]{subsection.2.2.2}{BART}{section.2.2}% 13
+\BOOKMARK [2][-]{subsection.2.2.3}{Pronoun Resolution in Spoken Dialogue}{section.2.2}% 14
+\BOOKMARK [2][-]{subsection.2.2.4}{Bergsma}{section.2.2}% 15
+\BOOKMARK [1][-]{section.2.3}{Compared Evaluation}{chapter.2}% 16
+\BOOKMARK [1][-]{section.2.4}{Hybrid Approach}{chapter.2}% 17
+\BOOKMARK [1][-]{section.2.5}{A Statistical Approach}{chapter.2}% 18
+\BOOKMARK [0][-]{chapter.3}{Data}{}% 19
+\BOOKMARK [1][-]{section.3.1}{Anaphora Corpus}{chapter.3}% 20
+\BOOKMARK [1][-]{section.3.2}{Gender Corpus}{chapter.3}% 21
+\BOOKMARK [0][-]{chapter.4}{Methodology}{}% 22
+\BOOKMARK [1][-]{section.4.1}{Featureset}{chapter.4}% 23
+\BOOKMARK [2][-]{subsection.4.1.1}{Pronoun Features}{section.4.1}% 24
+\BOOKMARK [2][-]{subsection.4.1.2}{Antecedent Features}{section.4.1}% 25
+\BOOKMARK [2][-]{subsection.4.1.3}{Pronoun-Antecedent Features}{section.4.1}% 26
+\BOOKMARK [2][-]{subsection.4.1.4}{Gender Features}{section.4.1}% 27
+\BOOKMARK [1][-]{section.4.2}{Generating Training Instances}{chapter.4}% 28
+\BOOKMARK [1][-]{section.4.3}{Baseline Approach}{chapter.4}% 29
+\BOOKMARK [1][-]{section.4.4}{SVM Classifier}{chapter.4}% 30
+\BOOKMARK [0][-]{chapter.5}{Evaluation}{}% 31
+\BOOKMARK [1][-]{section.5.1}{Learning curves}{chapter.5}% 32
+\BOOKMARK [1][-]{section.5.2}{Feature Contribution}{chapter.5}% 33
+\BOOKMARK [1][-]{section.5.3}{Error Analysis}{chapter.5}% 34
+\BOOKMARK [0][-]{chapter.6}{Conclusion}{}% 35
+\BOOKMARK [1][-]{section.6.1}{Summary}{chapter.6}% 36
+\BOOKMARK [1][-]{section.6.2}{Outlook}{chapter.6}% 37
+\BOOKMARK [0][-]{appendix*.4}{List of Figures}{}% 38
+\BOOKMARK [0][-]{appendix*.5}{List of Tables}{}% 39
+\BOOKMARK [0][-]{appendix*.6}{References}{}% 40

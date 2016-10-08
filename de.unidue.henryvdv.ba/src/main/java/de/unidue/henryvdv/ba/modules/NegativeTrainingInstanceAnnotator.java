@@ -75,6 +75,7 @@ public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 				
 				}
 		}
+		
 		//Delete nps which cover other nps
 		List<NP> fixedNpsBetween = new ArrayList<NP>();
 		for(NP np1 : npsBetween){
@@ -90,7 +91,6 @@ public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 				fixedNpsBetween.add(np1);
 			}
 		}
-		
 		return fixedNpsBetween;
 	}
 	

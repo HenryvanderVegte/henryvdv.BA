@@ -1,6 +1,7 @@
 package de.unidue.henryvdv.ba.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.ner.type.Time;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
+import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Quotation;
 
@@ -231,13 +233,9 @@ public class FeatureUtils_Antecedent {
 	
 	public boolean definiteArticle(Anaphora a){
 		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
-		boolean value = false;			
-		for(Token t : covTokens){
-			if(t.getCoveredText().equalsIgnoreCase("the")){
-				value = true;
-			}
-		}
-		return value;
+		if(covTokens.get(0).getCoveredText().equalsIgnoreCase("the"))
+			return true;
+		return false;
 	}
 	
 	public boolean hisHerPattern(Anaphora a){
@@ -314,6 +312,10 @@ public class FeatureUtils_Antecedent {
 	}
 	
 	private boolean isPronoun(Token token){
+		if(Arrays.asList(Parameters.thirdPersonPronouns).contains(token.getCoveredText())){
+			return true;
+		}
+		
 		if(token.getPos().getPosValue().length() >= 3 && 
 				token.getPos().getPosValue().substring(0, 3).equals("PRP")) //TODO: Think about implementing WP & WP$		
 			return true;

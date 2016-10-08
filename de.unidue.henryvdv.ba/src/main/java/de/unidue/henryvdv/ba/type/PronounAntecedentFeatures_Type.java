@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Wed Oct 05 14:47:10 CEST 2016
+ * Updated by JCasGen Fri Oct 07 23:05:44 CEST 2016
  * @generated */
 public class PronounAntecedentFeatures_Type extends Annotation_Type {
   /** @generated 
@@ -405,6 +405,30 @@ public class PronounAntecedentFeatures_Type extends Annotation_Type {
     ll_cas.ll_setFloatValue(addr, casFeatCode_p_A_NPDistance, v);}
     
   
+ 
+  /** @generated */
+  final Feature casFeat_p_A_IntermediatePronoun;
+  /** @generated */
+  final int     casFeatCode_p_A_IntermediatePronoun;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public float getP_A_IntermediatePronoun(int addr) {
+        if (featOkTst && casFeat_p_A_IntermediatePronoun == null)
+      jcas.throwFeatMissing("p_A_IntermediatePronoun", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
+    return ll_cas.ll_getFloatValue(addr, casFeatCode_p_A_IntermediatePronoun);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setP_A_IntermediatePronoun(int addr, float v) {
+        if (featOkTst && casFeat_p_A_IntermediatePronoun == null)
+      jcas.throwFeatMissing("p_A_IntermediatePronoun", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
+    ll_cas.ll_setFloatValue(addr, casFeatCode_p_A_IntermediatePronoun, v);}
+    
+  
 
 
 
@@ -476,6 +500,10 @@ public class PronounAntecedentFeatures_Type extends Annotation_Type {
  
     casFeat_p_A_NPDistance = jcas.getRequiredFeatureDE(casType, "p_A_NPDistance", "uima.cas.Float", featOkTst);
     casFeatCode_p_A_NPDistance  = (null == casFeat_p_A_NPDistance) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_A_NPDistance).getCode();
+
+ 
+    casFeat_p_A_IntermediatePronoun = jcas.getRequiredFeatureDE(casType, "p_A_IntermediatePronoun", "uima.cas.Float", featOkTst);
+    casFeatCode_p_A_IntermediatePronoun  = (null == casFeat_p_A_IntermediatePronoun) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_p_A_IntermediatePronoun).getCode();
 
   }
 }

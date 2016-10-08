@@ -24,6 +24,7 @@ import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Antecedent;
 import de.unidue.henryvdv.ba.type.MyNP;
 import de.unidue.henryvdv.ba.type.Quotation;
+import de.unidue.henryvdv.ba.util.FeatureUtils_Gender.Gender;
 
 public class FeatureUtils_PronounAntecedent {
 	
@@ -40,11 +41,6 @@ public class FeatureUtils_PronounAntecedent {
 	    singular, plural, unknown
 	}
 	
-	private int posTotal = 0;
-	private int posVal = 0;
-	private int negTotal = 0;
-	private int negVal = 0;
-	
 	public FeatureUtils_PronounAntecedent(JCas aJCas){
 		this.aJCas = aJCas;
 		sentences = JCasUtil.select(aJCas, Sentence.class);
@@ -59,24 +55,6 @@ public class FeatureUtils_PronounAntecedent {
 	
 	
 	public void annotateFeatures(Anaphora a){	
-		if(getSentenceNr(a.getBegin()) == getSentenceNr(a.getAntecedent().getBegin())){
-			if(a.getHasCorrectAntecedent()){
-				if(!bindingTheory(a)){
-					posVal++;
-				}
-				posTotal++;
-			} else {
-				if(!bindingTheory(a)){
-					negVal++;
-				}
-				negTotal++;
-			}
-		}
-
-		
-		System.out.println("Pos: " + posVal + " of " + posTotal);
-		System.out.println("Neg: " + negVal + " of " + negTotal);
-		System.out.println("________");
 		//In Same Sentence:
 		a.getPronounAntecedentFeatures().setP_A_BindingTheory(bindingTheory(a));
 		//In Same Sentence:
@@ -102,47 +80,87 @@ public class FeatureUtils_PronounAntecedent {
 
 		//My own features:
 		a.getPronounAntecedentFeatures().setP_A_NPDistance(npDistance(a));
+		a.getPronounAntecedentFeatures().setP_A_IntermediatePronoun(intermediatePronouns(a));
 	
 	}
 	
-	//wenn P und A in unterschiedlichen Sätzen sind: falsch
-	// wenn Anapher subjekt ist: bindingDomain : kleinster S
-	// -> ansonsten: getBindingDomain von Anapher (kleinster S, wo NP eine Anapher c-commandet
+	public float intermediatePronouns(Anaphora a){
+		List<Token> intermediateTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent().getEnd() + 1, a.getBegin() - 1, tokens);
+		int i = 0;
+		if(Arrays.asList(Parameters.malePronouns).contains(a.getCoveredText().toLowerCase())){
+			for(Token t : intermediateTokens){
+				if(Arrays.asList(Parameters.malePronouns).contains(t.getCoveredText().toLowerCase()))
+					i++;
+			}
+		}
+		if(Arrays.asList(Parameters.femalePronouns).contains(a.getCoveredText().toLowerCase())){
+			for(Token t : intermediateTokens){
+				if(Arrays.asList(Parameters.femalePronouns).contains(t.getCoveredText().toLowerCase()))
+					i++;
+			}
+		}
+		if(Arrays.asList(Parameters.neutralPronouns).contains(a.getCoveredText().toLowerCase())){
+			for(Token t : intermediateTokens){
+				if(Arrays.asList(Parameters.neutralPronouns).contains(t.getCoveredText().toLowerCase()))
+					i++;
+			}
+		}
+		if(Arrays.asList(Parameters.pluralPronouns).contains(a.getCoveredText().toLowerCase())){
+			for(Token t : intermediateTokens){
+				if(Arrays.asList(Parameters.pluralPronouns).contains(t.getCoveredText().toLowerCase()))
+					i++;
+			}
+		}
 
-	// wenn Antecedent nicht in S : falsch, sonst:
-			// Gucken ob antecedent die anapher c-commandet:
-				// für jeden Parent vom Antecedent gucken:
-					//ist die Anapher irgendwo in den Subknoten enthalten?
+		return (float)i;
+	}
+	
 	
 	public boolean bindingTheory(Anaphora a){	
 		
-		if(getSentenceNr(a.getBegin()) == getSentenceNr(a.getAntecedent().getBegin())){
-			//only then the anaphora could be not free in its binding domain
-			if(getBindingDomain(a) != null){
-				Annotation bindingDomain = getBindingDomain(a);
-				Antecedent antecedent = a.getAntecedent();
-				if(antecedent.getBegin() >= bindingDomain.getBegin() && antecedent.getBegin() <= bindingDomain.getEnd()){
-					return false;
-				}
-				if(antecedent.getEnd() <= bindingDomain.getEnd() && antecedent.getEnd() >= bindingDomain.getBegin()){
-					return false;
-				}	
-			}
-		}
-		//Principle B is satisfied!
-		
-		//R-Expressions must be free (Person, Organization, NP with definite pronoun)
+		//If Principle B is satisfied:
+		if(!isFreeInBindingDomain(a, a.getAntecedent()))
+			return false;
+	
+		//If Principle C is satisfied:
 		Antecedent ante = a.getAntecedent();
-		
+		if(!person(ante) && !organization(ante) && !definiteArticle(ante)){
+			return true;
+		} else {
+			if(!isFreeInBindingDomain(ante, a))
+				return false;
+		}
 
 		return true;
 	}
 	
+	/**
+	 * 
+	 * @param alpha
+	 * @param beta
+	 * @return true if annotation alpha is free in its binding domain (e.g. not bound by beta)
+	 */
+	public boolean isFreeInBindingDomain(Annotation alpha, Annotation beta){
+		if(getSentenceNr(alpha.getBegin()) == getSentenceNr(beta.getBegin())){
+			//only then the anaphora could be not free in its binding domain
+			if(getBindingDomain(alpha) != null){
+				Annotation bindingDomain = getBindingDomain(alpha);
+				if(beta.getBegin() >= bindingDomain.getBegin() && beta.getBegin() <= bindingDomain.getEnd()){
+					return false;
+				}
+				if(beta.getEnd() <= bindingDomain.getEnd() && beta.getEnd() >= bindingDomain.getBegin()){
+					return false;
+				}	
+			}
+		}
+		return true;
+	}
 	
-	public Annotation getBindingDomain(Anaphora a){
-		boolean anaphoraIsSubject = isSubject(AnnotationUtils.getCoveredToken(a, tokens));
+	
+	public Annotation getBindingDomain(Annotation a){
+		boolean isSubject = isSubject(AnnotationUtils.getCoveredToken(a, tokens));
 		
-		if(anaphoraIsSubject){
+		if(isSubject){
 			Annotation smallest = null;
 			int size = Integer.MAX_VALUE;
 			for(Constituent c : constituents){			
@@ -190,7 +208,7 @@ public class FeatureUtils_PronounAntecedent {
 		return null;
 	}
 	
-	public boolean containsCCommandingNP(Annotation anno, Anaphora a){
+	public boolean containsCCommandingNP(Annotation anno, Annotation a){
 		List<NP> containedNPs = new ArrayList<NP>();
 		for(NP  np : nps){
 			if(anno.getBegin() < np.getBegin() && anno.getEnd() >= np.getEnd()){
@@ -208,7 +226,7 @@ public class FeatureUtils_PronounAntecedent {
 		return false;
 	}
 	
-	public boolean cCommands(NP np, Anaphora a){
+	public boolean cCommands(NP np, Annotation a){
 		Sentence currentSentence = null;
 		for(Sentence s : sentences){
 			if(s.getBegin() <= a.getBegin() && s.getEnd() >= a.getEnd())
@@ -216,6 +234,7 @@ public class FeatureUtils_PronounAntecedent {
 		}
 		Constituent alphaParent = getConstituent(np.getParent());
 		Constituent beta = getConstituent(a);
+		int i = 0;
 		while(beta.getParent() != null){
 			if(beta.getParent().getBegin() == alphaParent.getBegin() && 
 					beta.getParent().getEnd() == alphaParent.getEnd()){
@@ -223,8 +242,11 @@ public class FeatureUtils_PronounAntecedent {
 			} else {
 				beta = getConstituent(beta.getParent());
 			}
-			if(beta.getBegin() == currentSentence.getBegin() && beta.getEnd() == currentSentence.getEnd())
+			if(beta.getBegin() <= currentSentence.getBegin() && beta.getEnd() >= currentSentence.getEnd())
 				break;
+			if(getConstituent(beta) == getConstituent(beta.getParent()))
+				break;
+			
 		}
 		return false;
 	}
@@ -419,7 +441,7 @@ public class FeatureUtils_PronounAntecedent {
 			anaphoraNumber = Number.singular;
 		}
 		
-		if(Arrays.asList(Parameters.allPronouns).contains(anaphora.getAntecedent().getCoveredText().toLowerCase())){			
+		if(Arrays.asList(Parameters.thirdPersonPronouns).contains(anaphora.getAntecedent().getCoveredText().toLowerCase())){			
 			if(Arrays.asList(Parameters.pluralPronouns).contains(anaphora.getAntecedent().getCoveredText().toLowerCase())){
 				antecedentNumber = Number.plural;
 			} else {
@@ -449,7 +471,7 @@ public class FeatureUtils_PronounAntecedent {
 			anaphoraNumber = Number.singular;
 		}
 		
-		if(Arrays.asList(Parameters.allPronouns).contains(anaphora.getAntecedent().getCoveredText().toLowerCase())){			
+		if(Arrays.asList(Parameters.thirdPersonPronouns).contains(anaphora.getAntecedent().getCoveredText().toLowerCase())){			
 			if(Arrays.asList(Parameters.pluralPronouns).contains(anaphora.getAntecedent().getCoveredText().toLowerCase())){
 				antecedentNumber = Number.plural;
 			} else {

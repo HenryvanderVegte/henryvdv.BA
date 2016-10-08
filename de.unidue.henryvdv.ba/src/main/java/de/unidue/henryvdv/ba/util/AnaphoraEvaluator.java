@@ -182,9 +182,10 @@ public class AnaphoraEvaluator {
 		for(Anaphora anaphora : allNPs.keySet()){
 			int goldAntecedentBegin = anaphora.getAntecedent().getBegin();
 			int goldAntecedentEnd = anaphora.getAntecedent().getEnd();
-
+			System.out.println("++++ANAPHORA:  " + anaphora.getCoveredText() + "    +++++++");
+			System.out.println("++++GOLD ANTECEDENT:  " + anaphora.getAntecedent().getCoveredText() + "    +++++++");
 			for(MyNP np : allNPs.get(anaphora)){
-				
+				System.out.println(np.getCoveredText() + "   [ " + np.getOutputValue() + " ]" );
 				int npBegin = np.getBegin();
 				int npEnd = np.getEnd();
 				
@@ -206,6 +207,96 @@ public class AnaphoraEvaluator {
 			
 		}
 		
+		totalTP += currentTP;
+		totalFN += currentFN;
+		totalTN += currentTN;
+		totalFP += currentFP;
+	}
+
+	public void takeTheBest_last_n_sentences(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
+		int currentTN = 0;
+		int currentTP = 0;
+		int currentFP = 0;
+		int currentFN = 0;
+		for(Anaphora anaphora : allNPs.keySet()){
+			int goldAntecedentBegin = anaphora.getAntecedent().getBegin();
+			int goldAntecedentEnd = anaphora.getAntecedent().getEnd();
+
+			MyNP bestChoice = null;
+			float maxOutputValue = Float.MIN_VALUE;
+			for(MyNP np : allNPs.get(anaphora)){
+				if(np.getOutputValue() > maxOutputValue){
+					maxOutputValue = np.getOutputValue();
+					bestChoice = np;
+				}
+			}
+			
+			for(MyNP np : allNPs.get(anaphora)){
+				int npBegin = np.getBegin();
+				int npEnd = np.getEnd();
+				
+				if(np == bestChoice){
+					if((goldAntecedentBegin >= npBegin && goldAntecedentEnd <= npEnd) || goldAntecedentBegin <= npBegin && goldAntecedentEnd >= npEnd){
+						currentTP++;
+					} else{
+						currentFP++;
+					}
+					
+				}else {
+					if((goldAntecedentBegin >= npBegin && goldAntecedentEnd <= npEnd) || goldAntecedentBegin <= npBegin && goldAntecedentEnd >= npEnd){
+						currentFN++;
+					} else {
+						currentTN++;
+					}
+				}		
+			}	
+		}
+		
+		totalTP += currentTP;
+		totalFN += currentFN;
+		totalTN += currentTN;
+		totalFP += currentFP;
+	}
+	
+	public void baseline_last_n_sentences(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
+		int currentTN = 0;
+		int currentTP = 0;
+		int currentFP = 0;
+		int currentFN = 0;		
+		for(Anaphora anaphora : allNPs.keySet()){
+			int goldAntecedentBegin = anaphora.getAntecedent().getBegin();
+			int goldAntecedentEnd = anaphora.getAntecedent().getEnd();
+			
+			MyNP nearest = null;
+			int dist = Integer.MAX_VALUE;
+			for(MyNP np : allNPs.get(anaphora)){
+				if(anaphora.getBegin() - np.getBegin() < dist){
+					dist = anaphora.getBegin() - np.getBegin();
+					nearest = np;
+				}
+			}
+			
+			for(MyNP np : allNPs.get(anaphora)){
+				System.out.println(np.getCoveredText() + "   [ " + np.getOutputValue() + " ]" );
+				int npBegin = np.getBegin();
+				int npEnd = np.getEnd();
+				
+				if(np == nearest){
+					if((goldAntecedentBegin >= npBegin && goldAntecedentEnd <= npEnd) || goldAntecedentBegin <= npBegin && goldAntecedentEnd >= npEnd){
+						currentTP++;
+					} else{
+						currentFP++;
+					}
+					
+				}else {
+					if((goldAntecedentBegin >= npBegin && goldAntecedentEnd <= npEnd) || goldAntecedentBegin <= npBegin && goldAntecedentEnd >= npEnd){
+						currentFN++;
+					} else {
+						currentTN++;
+					}
+				}
+			}
+		}
 		totalTP += currentTP;
 		totalFN += currentFN;
 		totalTN += currentTN;

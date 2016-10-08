@@ -54,6 +54,127 @@ Bergsma, S.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Broscheit%
+, Poesio%
+\BCBL {}\ \protect \BOthers {.}}{%
+Broscheit%
+, Poesio%
+\BCBL {}\ \protect \BOthers {.}}{%
+{\protect \APACyear {2010}}%
+}]{%
+broscheit2010bart}
+\APACinsertmetastar {%
+broscheit2010bart}%
+\begin{APACrefauthors}%
+Broscheit, S.%
+, Poesio, M.%
+, Ponzetto, S\BPBI P.%
+, Rodriguez, K\BPBI J.%
+, Romano, L.%
+, Uryupina, O.%
+\BDBL {}Zanoli, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2010}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {BART: A multilingual anaphora resolution system} {Bart:
+  A multilingual anaphora resolution system}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 5th international workshop on
+  semantic evaluation} {Proceedings of the 5th international workshop on
+  semantic evaluation}\ (\BPGS\ 104--107).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Broscheit%
+, Ponzetto%
+, Versley%
+\BCBL {}\ \BBA {} Poesio%
+}{%
+Broscheit%
+, Ponzetto%
+\BCBL {}\ \protect \BOthers {.}}{%
+{\protect \APACyear {2010}}%
+}]{%
+broscheit2010extending}
+\APACinsertmetastar {%
+broscheit2010extending}%
+\begin{APACrefauthors}%
+Broscheit, S.%
+, Ponzetto, S\BPBI P.%
+, Versley, Y.%
+\BCBL {}\ \BBA {} Poesio, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2010}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Extending BART to Provide a Coreference Resolution
+  System for German.} {Extending bart to provide a coreference resolution
+  system for german.}{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {LREC.} {Lrec.}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Chinchor%
+\ \BBA {} Sundheim%
+}{%
+Chinchor%
+\ \BBA {} Sundheim%
+}{%
+{\protect \APACyear {1995}}%
+}]{%
+chinchor1995message}
+\APACinsertmetastar {%
+chinchor1995message}%
+\begin{APACrefauthors}%
+Chinchor, N\BPBI A.%
+\BCBT {}\ \BBA {} Sundheim, B.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1995}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Message Understanding Conference (MUC) tests of
+  discourse processing} {Message understanding conference (muc) tests of
+  discourse processing}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proc. AAAI Spring Symposium on Empirical Methods in
+  Discourse Interpretation and Generation} {Proc. aaai spring symposium on
+  empirical methods in discourse interpretation and generation}\ (\BPGS\
+  21--26).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Eckert%
+\ \BBA {} Strube%
+}{%
+Eckert%
+\ \BBA {} Strube%
+}{%
+{\protect \APACyear {2000}}%
+}]{%
+eckert2000dialogue}
+\APACinsertmetastar {%
+eckert2000dialogue}%
+\begin{APACrefauthors}%
+Eckert, M.%
+\BCBT {}\ \BBA {} Strube, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2000}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Dialogue acts, synchronizing units, and anaphora
+  resolution} {Dialogue acts, synchronizing units, and anaphora
+  resolution}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Journal of Semantics}{17}{1}{51--89}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Evans%
 \ \BBA {} Orasan%
 }{%
@@ -106,6 +227,34 @@ Hobbs, J\BPBI R.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Ingria%
+\ \BBA {} Stallard%
+}{%
+Ingria%
+\ \BBA {} Stallard%
+}{%
+{\protect \APACyear {1989}}%
+}]{%
+ingria1989computational}
+\APACinsertmetastar {%
+ingria1989computational}%
+\begin{APACrefauthors}%
+Ingria, R\BPBI J.%
+\BCBT {}\ \BBA {} Stallard, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1989}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A computational mechanism for pronominal reference} {A
+  computational mechanism for pronominal reference}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 27th annual meeting on Association
+  for Computational Linguistics} {Proceedings of the 27th annual meeting on
+  association for computational linguistics}\ (\BPGS\ 262--271).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Kennedy%
 \ \BBA {} Boguraev%
 }{%
@@ -132,6 +281,32 @@ Kennedy, C.%
 \BIn{} \APACrefbtitle {Proceedings of the 16th conference on Computational
   linguistics-Volume 1} {Proceedings of the 16th conference on computational
   linguistics-volume 1}\ (\BPGS\ 113--118).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Kopec%
+\ \BBA {} Ogrodniczuk%
+}{%
+Kopec%
+\ \BBA {} Ogrodniczuk%
+}{%
+{\protect \APACyear {2012}}%
+}]{%
+kopec2012creating}
+\APACinsertmetastar {%
+kopec2012creating}%
+\begin{APACrefauthors}%
+Kopec, M.%
+\BCBT {}\ \BBA {} Ogrodniczuk, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2012}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Creating a Coreference Resolution System for Polish.}
+  {Creating a coreference resolution system for polish.}{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {LREC} {Lrec}\ (\BPGS\ 192--195).
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -214,6 +389,92 @@ Mitkov, R.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Mitkov%
+, Belguith%
+\BCBL {}\ \BBA {} Stys%
+}{%
+Mitkov%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {1998}}%
+}]{%
+mitkov1998multilingual}
+\APACinsertmetastar {%
+mitkov1998multilingual}%
+\begin{APACrefauthors}%
+Mitkov, R.%
+, Belguith, L\BPBI H.%
+\BCBL {}\ \BBA {} Stys, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1998}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Multilingual Robust Anaphora Resolution.} {Multilingual
+  robust anaphora resolution.}{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {EMNLP} {Emnlp}\ (\BPGS\ 7--16).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Mitkov%
+, Evans%
+\BCBL {}\ \BBA {} Orasan%
+}{%
+Mitkov%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2002}}%
+}]{%
+mitkov2002new}
+\APACinsertmetastar {%
+mitkov2002new}%
+\begin{APACrefauthors}%
+Mitkov, R.%
+, Evans, R.%
+\BCBL {}\ \BBA {} Orasan, C.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2002}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A new, fully automatic version of Mitkov’s
+  knowledge-poor pronoun resolution method} {A new, fully automatic version of
+  mitkov’s knowledge-poor pronoun resolution method}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {International Conference on Intelligent Text Processing
+  and Computational Linguistics} {International conference on intelligent text
+  processing and computational linguistics}\ (\BPGS\ 168--186).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Mitkov%
+\ \BBA {} Stys%
+}{%
+Mitkov%
+\ \BBA {} Stys%
+}{%
+{\protect \APACyear {2000}}%
+}]{%
+mitkov2000robust}
+\APACinsertmetastar {%
+mitkov2000robust}%
+\begin{APACrefauthors}%
+Mitkov, R.%
+\BCBT {}\ \BBA {} Stys, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2000}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Robust reference resolution with limited knowledge: high
+  precision genre-specific approach for English and Polish} {Robust reference
+  resolution with limited knowledge: high precision genre-specific approach for
+  english and polish}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Amsterdam studies in the theory and history of
+  linguistic science series 4}{}{}{143--154}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Morton%
 }{%
 Morton%
@@ -265,6 +526,113 @@ Ng, V.%
 \BIn{} \APACrefbtitle {Proceedings of the 40th Annual Meeting on Association
   for Computational Linguistics} {Proceedings of the 40th annual meeting on
   association for computational linguistics}\ (\BPGS\ 104--111).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Poesio%
+}{%
+Poesio%
+}{%
+{\protect \APACyear {2004}}%
+}]{%
+poesio2004mate}
+\APACinsertmetastar {%
+poesio2004mate}%
+\begin{APACrefauthors}%
+Poesio, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2004}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {The MATE/GNOME annotation scheme for anaphora deixis,
+  revisited} {The mate/gnome annotation scheme for anaphora deixis,
+  revisited}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proc. of SIGDIAL.} {Proc. of sigdial.}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Poesio%
+\ \BBA {} Kabadjov%
+}{%
+Poesio%
+\ \BBA {} Kabadjov%
+}{%
+{\protect \APACyear {2004}}%
+}]{%
+poesio2004general}
+\APACinsertmetastar {%
+poesio2004general}%
+\begin{APACrefauthors}%
+Poesio, M.%
+\BCBT {}\ \BBA {} Kabadjov, M\BPBI A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2004}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A General-Purpose, Off-the-shelf Anaphora Resolution
+  Module: Implementation and Preliminary Evaluation.} {A general-purpose,
+  off-the-shelf anaphora resolution module: Implementation and preliminary
+  evaluation.}{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {LREC.} {Lrec.}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Poesio%
+, Uryupina%
+\BCBL {}\ \BBA {} Versley%
+}{%
+Poesio%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2010}}%
+}]{%
+poesio2010creating}
+\APACinsertmetastar {%
+poesio2010creating}%
+\begin{APACrefauthors}%
+Poesio, M.%
+, Uryupina, O.%
+\BCBL {}\ \BBA {} Versley, Y.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2010}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Creating a Coreference Resolution System for Italian.}
+  {Creating a coreference resolution system for italian.}{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {LREC.} {Lrec.}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Qiu%
+, Kan%
+\BCBL {}\ \BBA {} Chua%
+}{%
+Qiu%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2004}}%
+}]{%
+qiu2004public}
+\APACinsertmetastar {%
+qiu2004public}%
+\begin{APACrefauthors}%
+Qiu, L.%
+, Kan, M\BHBI Y.%
+\BCBL {}\ \BBA {} Chua, T\BHBI S.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2004}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A public reference implementation of the rap anaphora
+  resolution algorithm} {A public reference implementation of the rap anaphora
+  resolution algorithm}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint cs/0406031}{}{}{}.
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -328,6 +696,41 @@ Recasens, M.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Reiter%
+\ \protect \BOthers {.}}{%
+Reiter%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2011}}%
+}]{%
+reiteretal:2011b}
+\APACinsertmetastar {%
+reiteretal:2011b}%
+\begin{APACrefauthors}%
+Reiter, N.%
+, Hellwig, O.%
+, Frank, A.%
+, Gossmann, I.%
+, Larios, B.%
+, Rodrigues, J.%
+\BCBL {}\ \BBA {} Zeller, B.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2011}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {{Adapting NLP Tools and Frame-Semantic Resources for the
+  Semantic Analysis of Ritual Descriptions}} {{Adapting NLP Tools and
+  Frame-Semantic Resources for the Semantic Analysis of Ritual
+  Descriptions}}.{\BBCQ}
+\newblock
+\BIn{} C.~Sporleder, A.~{van den Bosch}\BCBL {}\ \BBA {} K.~Zervanou\ (\BEDS),
+  \APACrefbtitle {Language Technology for Cultural Heritage} {Language
+  technology for cultural heritage}\ (\BPGS\ 171--193).
+\newblock
+\APACaddressPublisher{}{Springer}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Soon%
 , Ng%
 \BCBL {}\ \BBA {} Lim%
@@ -356,33 +759,66 @@ Soon, W\BPBI M.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
-Steinberger%
-, Poesio%
-, Kabadjov%
-\BCBL {}\ \BBA {} Je{\v{z}}ek%
+Strube%
+\ \BBA {} M{\"u}ller%
 }{%
-Steinberger%
-\ \protect \BOthers {.}}{%
-{\protect \APACyear {2007}}%
+Strube%
+\ \BBA {} M{\"u}ller%
+}{%
+{\protect \APACyear {2003}}%
 }]{%
-steinberger2007two}
+strube2003machine}
 \APACinsertmetastar {%
-steinberger2007two}%
+strube2003machine}%
 \begin{APACrefauthors}%
-Steinberger, J.%
-, Poesio, M.%
-, Kabadjov, M\BPBI A.%
-\BCBL {}\ \BBA {} Je{\v{z}}ek, K.%
+Strube, M.%
+\BCBT {}\ \BBA {} M{\"u}ller, C.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
-\APACrefYearMonthDay{2007}{}{}.
+\APACrefYearMonthDay{2003}{}{}.
 \newblock
-{\BBOQ}\APACrefatitle {Two uses of anaphora resolution in summarization} {Two
-  uses of anaphora resolution in summarization}.{\BBCQ}
+{\BBOQ}\APACrefatitle {A machine learning approach to pronoun resolution in
+  spoken dialogue} {A machine learning approach to pronoun resolution in spoken
+  dialogue}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{Information Processing \&
-  Management}{43}{6}{1663--1680}.
+\BIn{} \APACrefbtitle {Proceedings of the 41st Annual Meeting on Association
+  for Computational Linguistics-Volume 1} {Proceedings of the 41st annual
+  meeting on association for computational linguistics-volume 1}\ (\BPGS\
+  168--175).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Versley%
+\ \protect \BOthers {.}}{%
+Versley%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2008}}%
+}]{%
+versley2008bart}
+\APACinsertmetastar {%
+versley2008bart}%
+\begin{APACrefauthors}%
+Versley, Y.%
+, Ponzetto, S\BPBI P.%
+, Poesio, M.%
+, Eidelman, V.%
+, Jern, A.%
+, Smith, J.%
+\BDBL {}Moschitti, A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2008}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {BART: A modular toolkit for coreference resolution}
+  {Bart: A modular toolkit for coreference resolution}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 46th Annual Meeting of the
+  Association for Computational Linguistics on Human Language Technologies:
+  Demo Session} {Proceedings of the 46th annual meeting of the association for
+  computational linguistics on human language technologies: Demo session}\
+  (\BPGS\ 9--12).
 \PrintBackRefs{\CurrentBib}
 
 \end{thebibliography}

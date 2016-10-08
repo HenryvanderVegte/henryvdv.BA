@@ -11,7 +11,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Wed Oct 05 14:47:10 CEST 2016
+ * Updated by JCasGen Fri Oct 07 23:05:44 CEST 2016
  * XML source: C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/src/main/resources/desc/type/PronounAntecedentFeatures.xml
  * @generated */
 public class PronounAntecedentFeatures extends Annotation {
@@ -404,6 +404,28 @@ public class PronounAntecedentFeatures extends Annotation {
     if (PronounAntecedentFeatures_Type.featOkTst && ((PronounAntecedentFeatures_Type)jcasType).casFeat_p_A_NPDistance == null)
       jcasType.jcas.throwFeatMissing("p_A_NPDistance", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
     jcasType.ll_cas.ll_setFloatValue(addr, ((PronounAntecedentFeatures_Type)jcasType).casFeatCode_p_A_NPDistance, v);}    
+   
+    
+  //*--------------*
+  //* Feature: p_A_IntermediatePronoun
+
+  /** getter for p_A_IntermediatePronoun - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public float getP_A_IntermediatePronoun() {
+    if (PronounAntecedentFeatures_Type.featOkTst && ((PronounAntecedentFeatures_Type)jcasType).casFeat_p_A_IntermediatePronoun == null)
+      jcasType.jcas.throwFeatMissing("p_A_IntermediatePronoun", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
+    return jcasType.ll_cas.ll_getFloatValue(addr, ((PronounAntecedentFeatures_Type)jcasType).casFeatCode_p_A_IntermediatePronoun);}
+    
+  /** setter for p_A_IntermediatePronoun - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setP_A_IntermediatePronoun(float v) {
+    if (PronounAntecedentFeatures_Type.featOkTst && ((PronounAntecedentFeatures_Type)jcasType).casFeat_p_A_IntermediatePronoun == null)
+      jcasType.jcas.throwFeatMissing("p_A_IntermediatePronoun", "de.unidue.henryvdv.ba.type.PronounAntecedentFeatures");
+    jcasType.ll_cas.ll_setFloatValue(addr, ((PronounAntecedentFeatures_Type)jcasType).casFeatCode_p_A_IntermediatePronoun, v);}    
   }
 
     

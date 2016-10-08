@@ -85,6 +85,11 @@
           <description/>
           <rangeTypeName>uima.cas.Float</rangeTypeName>
         </featureDescription>
+      <featureDescription>
+          <name>p_A_IntermediatePronoun</name>
+          <description/>
+          <rangeTypeName>uima.cas.Float</rangeTypeName>
+        </featureDescription>
       </features>
     </typeDescription>
   </types>

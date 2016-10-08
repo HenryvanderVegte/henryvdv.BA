@@ -21,11 +21,12 @@ public class FeatureVectorUtils {
 		
 		//Pronoun-Antecedent-Features (10)
 		
-		addPA_SameSentence(); 		
-		addPA_IntraSentenceDiff(); 
+		addPA_BindingTheory();
+		addPA_SameSentence();
+		addPA_IntraSentenceDiff(); 		
 		addPA_InPreviousSentence();
 		addPA_InterSentenceDiff();
-		addPA_PrepositionalParallel();   //5
+	 	addPA_PrepositionalParallel();   //5
 //->überarbeiten		addPA_ParentCatMatch(); 
 //->überarbeiten		addPA_ParentWordMatch();
 		addPA_QuotationSituation();
@@ -33,8 +34,9 @@ public class FeatureVectorUtils {
 		addPA_PluralMatch();			//10
 		
 		//Antecedent Features (17)
-		/*
+		
 		addA_AntecedentFrequency();
+		
 		addA_Subject();
 		addA_Object();
 		addA_Predicate();
@@ -51,7 +53,7 @@ public class FeatureVectorUtils {
 		addA_Definite();				//25
 		addA_HisHer();
 		addA_HeHis();
-*/
+
 		//Pronoun Features (4)
 		addP_Masculine();
 		addP_Feminine();
@@ -60,25 +62,29 @@ public class FeatureVectorUtils {
 
 		
 		//Gender Features (11)
-	/*
+	
 		addG_StdGenderMatch();
 		addG_StdGenderMismatch();
 		addG_PronounMismatch();
 		addG_MasculineMean();			//35
-		addG_MasculineVariance();
+//		addG_MasculineVariance();
 		addG_FeminineMean();
-		addG_FeminineVariance();
+//		addG_FeminineVariance();
 		addG_NeutralMean();
-		addG_NeutralVariance();			//40
+//		addG_NeutralVariance();			//40
 		addG_PluralMean();
-		addG_PluralVariance();
-		*/
+//		addG_PluralVariance();
+		
 		
 		//My own features:
-		//addP_Reflexive();
-		//addP_NpDistance();
-		
+	//	addP_Reflexive();
+	//	addP_NpDistance();
+	//	addPA_IntermediatePronoun();
 		return currentFeatureVector;
+	}
+	
+	private void addPA_BindingTheory(){
+		addBinarizedFeature(currentAnaphora.getPronounAntecedentFeatures().getP_A_BindingTheory());
 	}
 	
 	private void addPA_SameSentence(){
@@ -254,6 +260,10 @@ public class FeatureVectorUtils {
 	
 	private void addP_NpDistance(){
 		addFloatFeature(currentAnaphora.getPronounAntecedentFeatures().getP_A_NPDistance());
+	}
+	
+	private void addPA_IntermediatePronoun(){
+		addFloatFeature(currentAnaphora.getPronounAntecedentFeatures().getP_A_IntermediatePronoun());
 	}
 	
 	private void addBinarizedFeature(boolean value){
