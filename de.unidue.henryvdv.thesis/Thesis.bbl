@@ -1,6 +1,64 @@
 \begin{thebibliography}{}
 
 \bibitem [\protect \citeauthoryear {%
+Aone%
+\ \BBA {} Bennett%
+}{%
+Aone%
+\ \BBA {} Bennett%
+}{%
+{\protect \APACyear {1995}}%
+}]{%
+aone1995evaluating}
+\APACinsertmetastar {%
+aone1995evaluating}%
+\begin{APACrefauthors}%
+Aone, C.%
+\BCBT {}\ \BBA {} Bennett, S\BPBI W.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1995}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Evaluating automated and manual acquisition of anaphora
+  resolution strategies} {Evaluating automated and manual acquisition of
+  anaphora resolution strategies}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 33rd annual meeting on Association
+  for Computational Linguistics} {Proceedings of the 33rd annual meeting on
+  association for computational linguistics}\ (\BPGS\ 122--129).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Aone%
+\ \BBA {} McKee%
+}{%
+Aone%
+\ \BBA {} McKee%
+}{%
+{\protect \APACyear {1993}}%
+}]{%
+aone1993language}
+\APACinsertmetastar {%
+aone1993language}%
+\begin{APACrefauthors}%
+Aone, C.%
+\BCBT {}\ \BBA {} McKee, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1993}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A language-independent anaphora resolution system for
+  understanding multilingual texts} {A language-independent anaphora resolution
+  system for understanding multilingual texts}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 31st annual meeting on Association
+  for Computational Linguistics} {Proceedings of the 31st annual meeting on
+  association for computational linguistics}\ (\BPGS\ 156--163).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Baldwin%
 }{%
 Baldwin%
@@ -201,6 +259,29 @@ Evans, R.%
 \BIn{} \APACrefbtitle {Proceedings of the Discourse Anaphora and Reference
   Resolution Conference (DAARC2000)} {Proceedings of the discourse anaphora and
   reference resolution conference (daarc2000)}\ (\BPGS\ 154--162).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Graff%
+}{%
+Graff%
+}{%
+{\protect \APACyear {2002}}%
+}]{%
+graff2002aquaint}
+\APACinsertmetastar {%
+graff2002aquaint}%
+\begin{APACrefauthors}%
+Graff, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2002}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {The AQUAINT corpus of English news text} {The aquaint
+  corpus of english news text}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Linguistic Data Consortium, Philadelphia}{}{}{}.
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -636,6 +717,35 @@ Qiu, L.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Rahman%
+\ \BBA {} Ng%
+}{%
+Rahman%
+\ \BBA {} Ng%
+}{%
+{\protect \APACyear {2009}}%
+}]{%
+rahman2009supervised}
+\APACinsertmetastar {%
+rahman2009supervised}%
+\begin{APACrefauthors}%
+Rahman, A.%
+\BCBT {}\ \BBA {} Ng, V.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2009}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Supervised models for coreference resolution}
+  {Supervised models for coreference resolution}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 2009 Conference on Empirical Methods
+  in Natural Language Processing: Volume 2-Volume 2} {Proceedings of the 2009
+  conference on empirical methods in natural language processing: Volume
+  2-volume 2}\ (\BPGS\ 968--977).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Recasens%
 \ \protect \BOthers {.}}{%
 Recasens%
@@ -728,6 +838,34 @@ Reiter, N.%
   technology for cultural heritage}\ (\BPGS\ 171--193).
 \newblock
 \APACaddressPublisher{}{Springer}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Rose%
+, Stevenson%
+\BCBL {}\ \BBA {} Whitehead%
+}{%
+Rose%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2002}}%
+}]{%
+rose2002reuters}
+\APACinsertmetastar {%
+rose2002reuters}%
+\begin{APACrefauthors}%
+Rose, T.%
+, Stevenson, M.%
+\BCBL {}\ \BBA {} Whitehead, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2002}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {The Reuters Corpus Volume 1-from Yesterday's News to
+  Tomorrow's Language Resources.} {The reuters corpus volume 1-from yesterday's
+  news to tomorrow's language resources.}{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {LREC} {Lrec}\ (\BVOL~2, \BPGS\ 827--832).
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%

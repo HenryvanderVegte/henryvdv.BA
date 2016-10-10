@@ -11,8 +11,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Fri Sep 09 21:03:12 CEST 2016
- * XML source: C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/src/main/resources/desc/type/Anaphora.xml
+ * Updated by JCasGen Sun Oct 09 23:25:39 CEST 2016
+ * XML source: C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/src/main/resources/desc/type/AntecedentFeatures.xml
  * @generated */
 public class AntecedentFeatures extends Annotation {
   /** @generated
@@ -514,6 +514,28 @@ public class AntecedentFeatures extends Annotation {
     if (AntecedentFeatures_Type.featOkTst && ((AntecedentFeatures_Type)jcasType).casFeat_a_HeHis == null)
       jcasType.jcas.throwFeatMissing("a_HeHis", "de.unidue.henryvdv.ba.type.AntecedentFeatures");
     jcasType.ll_cas.ll_setBooleanValue(addr, ((AntecedentFeatures_Type)jcasType).casFeatCode_a_HeHis, v);}    
+   
+    
+  //*--------------*
+  //* Feature: a_CovTokens
+
+  /** getter for a_CovTokens - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public float getA_CovTokens() {
+    if (AntecedentFeatures_Type.featOkTst && ((AntecedentFeatures_Type)jcasType).casFeat_a_CovTokens == null)
+      jcasType.jcas.throwFeatMissing("a_CovTokens", "de.unidue.henryvdv.ba.type.AntecedentFeatures");
+    return jcasType.ll_cas.ll_getFloatValue(addr, ((AntecedentFeatures_Type)jcasType).casFeatCode_a_CovTokens);}
+    
+  /** setter for a_CovTokens - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setA_CovTokens(float v) {
+    if (AntecedentFeatures_Type.featOkTst && ((AntecedentFeatures_Type)jcasType).casFeat_a_CovTokens == null)
+      jcasType.jcas.throwFeatMissing("a_CovTokens", "de.unidue.henryvdv.ba.type.AntecedentFeatures");
+    jcasType.ll_cas.ll_setFloatValue(addr, ((AntecedentFeatures_Type)jcasType).casFeatCode_a_CovTokens, v);}    
   }
 
     

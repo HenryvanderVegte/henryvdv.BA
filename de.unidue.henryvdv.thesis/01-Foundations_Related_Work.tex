@@ -93,6 +93,17 @@ With additional language-dependent features, BART was successfully transferred t
 
 \citep{reiteretal:2011b} indicated that a great weakness of BART is the implementation of gender information as in their evaluation even noun phrases with explicit gender information were linked incorrectly.
 
+\subsection{Cluster-Based Coreference Resolution}
+The previously described machine learning approaches generate negative and positive training examples as pronoun-antecedent pairs. \cite{rahman2009supervised} pointed out several disadvantages of pairwise comparisons: First of all, each possible antecedents is considered on its own which makes a comparison between candidates impossible. For instance, if the first preceding candidate was accepted as the antecedent because it passed a defined threshold, no further candidate will be analysed even if it passed the threshold with a much higher value. Secondly, several contextual information might be missing as only the pronoun-antecedent pair is examined. Those contextual clues could inter alia give information on gender or number. 
+In order to solve those disadvantages \cite{rahman2009supervised} presented a cluster-ranking coreference module. A cluster ranker is trained to determine to which previous coreference cluster a coreference should be resolved. In contrast to rule-based approaches \citep{mitkov1998robust} no manual constraints restrict possible candidates. Instead, restrictions are learned through features automatically. \cite{rahman2009supervised} implemented three different classifiers baselines which represent previous learning-based approaches to coreference resolution. For instance, a mention-pair coreference model was implemented. This classifier learns from coreferent-anaphora-pairs which either conatin the correct or wrong antecedent (therefore this approach is similar to \cite{soon2001machine}). 
+The implemented cluster ranker!!!!!!!!!!!
+
+When evaluated on the ACE 2005
+coreference data sets, cluster rankers outperform
+three competing models — mention-pair, entitymention,
+and mention-ranking models — by a
+large margin.
+
 \subsection{Pronoun Resolution in Spoken Dialogue}
 As already mentioned, machine learning approaches are less domain-specific than rule-based systems. For that reason \citep{strube2003machine} presented an corpus-based approach for pronoun resolution in spoken language. Still, several extensions and adaptions had to be done as spoken dialogue differs from written texts gravely. Firstly, the number of pleonastic pronouns in spoken dialogue is substantially increased. Secondly, a not ignorable amount of anaphors in spoken dialogue dont have a clearly defined antecedent so that even humans cant determine them. \citep{eckert2000dialogue} called them vague anaphors and figured out that 13.2 \% of all anaphors in their examined corpus fall in that category.\\
 A corpus of twenty switchboard dialogues was used. In order to generate training data, a list of all potential anaphors was created. Potential anaphors are all non-definite noun phrases except for first and second person pronouns. Each element in the remaining list forms a pair with every preceding noun phrase that does not disagree in gender, number, or person. If the instances corefer they were labelled P, else N. For all anaphoras without explicit noun phrase antecedents other phrases (for instance verb phrases) in the current last two sentences were used to form pairs. \\
@@ -100,16 +111,94 @@ The feature set with a total of 25 features included noun-phrase features, coref
 A decision tree classifier with 20-fold crossvalidation was applied. \citep{strube2003machine} reported an F-measure of 47.42 \% for the full classifier, including all pronouns and all features. 
 
 
-\subsection{Bergsma}
+\subsection{Corpus- and Web-Mined Gender Information}
+\cite{bergsma2005automatic} presented a machine learning approach to anaphora resolution which treats gender information not as a hard constraint, but as a probability distribution of possible outcomes. A majority of previous approaches assigned either a specific gender and number (e.g. masculine, feminine, neutral, or plural) or, in case of uncertainty, no gender at all \citep{soon2001machine, broscheit2010bart}. Another motivation was that \cite{kennedy1996anaphora} reported to attribute 35 \% of their resolution errors to gender mismatch. Only third-person pronouns were considered.
 
+The gender information was derived of two sources: a text corpus and the web. 
+For the former, all occurences of nouns and pronouns in lexico-syntactic patterns are counted. Five different patterns for reflexives, possessives, nominatives, predicates, and designators were used (Table \ref{table:bergsma2004GenderTable}). A reflexive masculine occurence would be for instance "John likes himself". In this case, a counter for "John" with masculine gender and reflexive pronoun will be increased. This procedure was repeated for all other patterns and remaining genders and numbers (masculine, feminine, neutral, and plural).  \cite{bergsma2005automatic} applied lots of textual data in order to offset parser errors and other noise sources. The whole data set included the AQUAINT corpus \citep{graff2002aquaint} as well as the Reuters corpus \citep{rose2002reuters}. In total, a data set of approximately 6 gigabytes of text was used.
+
+\begin{center}
+\captionof{table}{Gender corpus patterns}
+    \begin{tabular}{| l | p{5cm} | p{5cm} |}
+    \hline
+    Gender Corpus Indicators & Contained Elements & Pattern \\ \hline
+\hline
+    1) Reflexive & himself, herself, itself, and themselves &  \textit{noun} + \textit{verb} + \textit{reflexive}\\ \hline
+    2) Possessive & his, her, its, and their & \textit{noun} + \textit{verb} + \textit{possessive} + \textit{noun} \\ \hline
+    3) Nominative & he, she, it, and they & \textit{noun} + \textit{verb} + \textit{nominative} +  \textit{verb} \\ \hline
+    4) Predicate & he, she, it, and they & \textit{pronoun} +  is/are [a] + \textit{noun}  \\ \hline
+    5) Designator & Mr. and Mrs. & \textit{designator} + \textit{noun}\\ \hline
+    \end{tabular}
+     \label{table:bergsma2004GenderTable}
+\end{center}
+
+Since a text corpus, no matter how big it is, cant contain all possible words and word combinations, the web was used as a second information source. The Google API was used to count the web pages that appear if a noun, the Google wildcard operator ("*"), and the gender indicator were searched. For instance, if the gender of "John" should be determined, a Google request will be sent with all gender indicating elements of Table \ref{table:bergsma2004GenderTable} ( John * himself, John * herself, John * itself, etc.).
+In the following step, the probabilities for each gender will be determined through the five corpus sources and the five web sources. The naive approach would be that the probability of the indicator to be masculine is the percentage of all cases in that the word occurs with its masculine indicator. For instance, in Table \ref{table:bergsma2004GenderFreqTable} the cumulated frequency of "alex" occuring with "himself" is 60. In total, "alex" was found 100 times with a reflexive pronoun. As a consequence, the probability for "alex" to be masculine would be estimated at 60 \% from reflexive indicators.
+This approach leads to three major problems. First of all, zero-probabilities would indicate that there is no possibility for noun to belong to that gender. This might be true - some words might never be part of a certain gender. On the other hand, however, it might just be a rare event and an occurrence would be found with a larger or different text corpus. Secondly, adding a further count could change the likelihood enormous for small frequencies. This leads to the third problem: a measure is needed to determine the certainty of a likelihood. A 70 \% probability of a word to be masculine is more meaningful if 1000 cases are considered rather than 10. 
+ 
+In order to solve those problems, \cite{bergsma2005automatic} treated the counts as a Beta distribution in a Bayesian approach. More precisely, two parameters named $\alpha$ and $\beta$ are considered. For each gender, $\alpha$ determines the count of the considered event plus one (in order to avoid zero-probabilities) while $\beta$ represents the count of all not considered events plus one. The $\alpha$ and $\beta$ values of the previous "alex" example with reflexive indicators for masculine gender would be $\alpha$ = 61 and $\beta$ = 41. The mean value of it is computed as:
+\begin{center}
+	 $\mu$ =  $\dfrac{\alpha }{\alpha + \beta}$  
+\end{center}
+
+A complete distribution is presented in Table \ref{table:bergsma2004GenderFreqTable}. Note that, unlike the naive approach, these values can only be partially compared to one another, as each of them represents a single distribution. Furthermore, the percentages dont even sum up to 100 \%.
+
+\begin{center}
+\captionof{table}{Gender Frequencies Example}
+    \renewcommand{\arraystretch}{2.0}
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+    Gender/Number & Occurences & Naive Approach & Bayesian Approach \\ \hline
+\hline
+    1) Masculine & 60 & $\dfrac{60}{100}$ = 60 \% &  $\dfrac{61}{102}$ $\approx$ 59.8 \% \\ \hline
+    2) Feminine & 30 &  $\dfrac{30}{100}$ = 30 \% &  $\dfrac{31}{102}$ $\approx$ 30.4 \% \\ \hline
+    3) Neutral & 10 & $\dfrac{10}{100}$ = 10 \% & $\dfrac{11}{102}$ $\approx$ 10.8 \%  \\ \hline
+    4) Plural & 0 &    $\dfrac{0}{100}$ =  0 \% &  $\dfrac{1}{102}$ $\approx$ 0.1 \% \\ \hline
+    \end{tabular}
+     \label{table:bergsma2004GenderFreqTable}
+\end{center}
+
+ \cite{bergsma2005automatic} expressed the certainty through the variance of Beta distributions:
+
+\begin{center}
+	$\sigma$\textsuperscript{2} =  $\dfrac{\alpha \beta }{(\alpha + \beta)\textsuperscript{2}(\alpha + \beta + 1)}$
+\end{center}
+
+In case of little or no counts at all, the variance will be approximately 1/12. The classifier should automatically learn that distributions with that variance wont be meaningful.
+
+
+In order to prove the accuracy of their gender classification, \cite{bergsma2005automatic} built several SVM-Classifiers. Overall, a set of 20 features was used: Each of the five gender indicators (reflexive, possessive, etc.) has its mean and its variance as features (in this case, the standard deviation was used which is the square root of the variance). Each of the gender indicators was implemented corpus-based as well as web-based. All features led to an F-measure of 92 \%. Seperate classifiers for either web-based or corpus-based information yielded to an F-measure of 85,4 \% for the corpus-based and 90,4 \% for the web-based approach.
+
+Various pronoun resolution classifiers were built in order to determine the influence of several aspects. In general, each classifier searches, beginning by the certain anaphora, the text backwards until a matching antecedent is found. The matching criteria vary depending on the complexity of the classifier. The search backwards of the more complex classifiers was limited so that only the current and the previous sentence was considered, because a corpus observation showed that more than 97 \% of all antecedents could be found in that range. If no accepted antecedent was found a threshold was reduced so that antecedents with lower likelihood might be accepted. This procedure was repeated until the first candidate exceed the threshold. 
+
+The first baseline approach was to always select the most recent noun phrase as antecedent. An accuracy of 26.0 \% was reported. \\
+A first improvement consisted of the use of only explicit gender indicators such as "Mr." and "Mrs." to determine the gender. The first previous antecedent that does not mismatch will be chosen. The accuracy was improved up to 30,8\%. 
+In a third baseline approach the previously mentioned gender SVM-classifiers were used to detect a gender match or mismatch. Underlining the importance of gender and number agreement, the accuracy rose up to 59,4 \%.
+
+The first machine learning approach included a feature set of 39 features, whereby most of the features were binarized. In order to apply those, the texts were tokenized, parsed, and noun phrases were linked. The training instance creation procedure was adopted by \cite{soon2001machine} and was previously described in Section \ref{soon2001traininginstances}. In total, 1251 positive and 2909 negative training instances were created. 
+
+The features can be seperated into three categories. First of all, there are pronoun-related features that determine the gender and number of the pronoun. Secondly, antecedent-related features which provide for instance information on the grammatical relation of the noun phrase or whether it is a person or an organization. The third group of features describes the relation of pronoun and antecedent and contains features that rely on linguistic principles (such as if binding principles are satisfied) as well as features that only require basic preprocessing steps (sentence and word distance for instance).
+
+The classifier reached a performance score of 62,3 \% which is above all previous approaches. The additional use of corpus and web frequency features and three other gender affecting features led to a performance score of 73,3 \%. 
 
 provide background information needed to understand your thesis
 assures your readers that you are familiar with the important research that has been carried out in your area
 establishes your research w.r.t. research in your field
 
 \section{Compared Evaluation}
-dsd
+\cite{aone1995evaluating} did a comparison of a previously build manually designed resolver (MDR) \citep{aone1993language} and their in 1995 introduced machine learning-based resolver (MLR). 
+
+The manually designed resolver was build to be language-independent, extensible, robust, and tunable for specific domains. The used information was derived through three different knowledge bases: the \textit{Discourse Knowledge Source}, the \textit{Discourse Phenomenon}, and the\textit{Discourse Domain}. 
+
+The former contains antecedent generators, a system to filter out unwanted antecedent candidates, and orderer to rank the candidates from higher to lower likelihood.
+
+ A module called Discourse Administrator was used to determine the application domain and, in a further step, to select and filter the knowledge bases in order to generate the best possible resolution system. 
+
+Domain KB)
+compared a machine learning approach to their previously build Manually-Designed Resolver (MDR).
 AoneBennettComparisonOfMLMD
+\citep{aone1993language}
+\citep{aone1995evaluating}
 
 \section{Hybrid Approach}
 

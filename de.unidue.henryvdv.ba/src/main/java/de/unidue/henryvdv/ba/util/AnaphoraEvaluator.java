@@ -113,63 +113,55 @@ public class AnaphoraEvaluator {
 		correctAnaphorsTotal += correct;
 	}
 	
-	public void evaluate_Bergsma(List<DetectedNP> detectedAntecedents, List<GoldNP> goldAntecedents, List<Anaphora> anaphoras, boolean printChoices, String documentName){
-		if(detectedAntecedents.size() != goldAntecedents.size() || detectedAntecedents.size() != anaphoras.size()){
-			System.out.println("Gold Antecedent List and Detected Antecedent List are not the same size - return");
-			return;
-		}
-		output.add("********  Document:  " + documentName + "  ********");
-		
+	public void evaluate_Bergsma(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
+		System.out.println("Anaphors: " + allNPs.keySet().size());
 		int correct = 0;
 		int total = 0;
-		
-		for(int i = 0; i < goldAntecedents.size(); i++){
-			if(goldAntecedents.get(i) == null && detectedAntecedents.get(i) == null){
-				output.add("->Correct:");
-				output.add("  Both are null");
-				
-				correct++;	
-				total++;
-				continue;
+		for(Anaphora anaphora : allNPs.keySet()){
+			int goldAntecedentBegin = anaphora.getAntecedent().getBegin();
+			int goldAntecedentEnd = anaphora.getAntecedent().getEnd();
+			List<MyNP> candidates = new ArrayList<MyNP>();
+			for(MyNP np : allNPs.get(anaphora)){
+				candidates.add(np);				
 			}
-			if(goldAntecedents.get(i) == null || detectedAntecedents.get(i) == null){
-				output.add("-> Wrong:");
-				output.add("  One is null");
-				total++;
-				continue;
-			}		
-			if(goldAntecedents.get(i).getBegin() >= detectedAntecedents.get(i).getBegin() && 
-				goldAntecedents.get(i).getEnd() <= detectedAntecedents.get(i).getEnd()){
-				output.add("-> Correct:");
-				output.add("  Anaphora: " + anaphoras.get(i).getCoveredText());
-				output.add("  Gold : " + goldAntecedents.get(i).getCoveredText());
-				output.add("  Detected : " + detectedAntecedents.get(i).getCoveredText());
-				
-				
-				correct++;	
-				total++;
+			boolean foundPossibleAntecedent = false;
+			float threshold = Parameters.acceptAtThreshold;
+			MyNP possibleAntecedent = null;
+			while(!foundPossibleAntecedent){
+				MyNP nearest = null;
+				int dist = Integer.MAX_VALUE;
+				for(MyNP np : candidates){
+					if(anaphora.getBegin() - np.getBegin() < dist){
+						nearest = np;
+						dist = anaphora.getBegin() - np.getBegin();
+					}
+				}
+				if(nearest.getOutputValue() > threshold){
+					foundPossibleAntecedent = true;
+					possibleAntecedent = nearest;
+				} else {
+					candidates.remove(nearest);
+					if(candidates.size() == 0){
+						for(MyNP np : allNPs.get(anaphora)){
+							candidates.add(np);				
+						}
+						threshold -= Parameters.lowerThresholdFactor;
+					}
+				}
+			}
+			if(possibleAntecedent == null){
+				System.out.println("Error: No possible antecedent available");
 				continue;
 			}
 			
-			if(goldAntecedents.get(i).getBegin() <= detectedAntecedents.get(i).getBegin() && 
-				goldAntecedents.get(i).getEnd() >= detectedAntecedents.get(i).getEnd()){
-				output.add("->Correct:");
-				output.add("  Anaphora: " + anaphoras.get(i).getCoveredText());
-				output.add("  Gold : " + goldAntecedents.get(i).getCoveredText());
-				output.add("  Detected : " + detectedAntecedents.get(i).getCoveredText());
-				
-				correct++;		
-				total++;
-				continue;
+			int npBegin = possibleAntecedent.getBegin();
+			int npEnd = possibleAntecedent.getEnd();
+			if((goldAntecedentBegin >= npBegin && goldAntecedentEnd <= npEnd) || goldAntecedentBegin <= npBegin && goldAntecedentEnd >= npEnd){
+				correct++;
 			}
-			output.add("->Wrong:");
-			output.add("  Anaphora: " + anaphoras.get(i).getCoveredText());
-			output.add("  Gold : " + goldAntecedents.get(i).getCoveredText());
-			output.add("  Detected : " + detectedAntecedents.get(i).getCoveredText());
 			total++;
-			
 		}
-		output.add("");
+
 		anaphorsTotal += total;
 		correctAnaphorsTotal += correct;
 	}
@@ -182,10 +174,17 @@ public class AnaphoraEvaluator {
 		for(Anaphora anaphora : allNPs.keySet()){
 			int goldAntecedentBegin = anaphora.getAntecedent().getBegin();
 			int goldAntecedentEnd = anaphora.getAntecedent().getEnd();
-			System.out.println("++++ANAPHORA:  " + anaphora.getCoveredText() + "    +++++++");
-			System.out.println("++++GOLD ANTECEDENT:  " + anaphora.getAntecedent().getCoveredText() + "    +++++++");
-			for(MyNP np : allNPs.get(anaphora)){
-				System.out.println(np.getCoveredText() + "   [ " + np.getOutputValue() + " ]" );
+			if(printChoices){
+				System.out.println("++++ANAPHORA:  " + anaphora.getCoveredText() + "    +++++++");
+				System.out.println("++++GOLD ANTECEDENT:  " + anaphora.getAntecedent().getCoveredText() + "    +++++++");	
+			}
+			
+			List<MyNP> sortedList = AnnotationUtils.sortMyNPList(allNPs.get(anaphora));
+			
+			for(MyNP np : sortedList){
+				if(printChoices){
+					System.out.println(np.getCoveredText() + "   [ " + np.getOutputValue() + " ]" );
+				}
 				int npBegin = np.getBegin();
 				int npEnd = np.getEnd();
 				
@@ -213,7 +212,7 @@ public class AnaphoraEvaluator {
 		totalFP += currentFP;
 	}
 
-	public void takeTheBest_last_n_sentences(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
+	public void last_n_sentences_takeTheBest(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
 		int currentTN = 0;
 		int currentTP = 0;
 		int currentFP = 0;
@@ -230,7 +229,6 @@ public class AnaphoraEvaluator {
 					bestChoice = np;
 				}
 			}
-			
 			for(MyNP np : allNPs.get(anaphora)){
 				int npBegin = np.getBegin();
 				int npEnd = np.getEnd();
@@ -258,7 +256,7 @@ public class AnaphoraEvaluator {
 		totalFP += currentFP;
 	}
 	
-	public void baseline_last_n_sentences(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
+	public void last_n_sentences_baseline(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
 		int currentTN = 0;
 		int currentTP = 0;
 		int currentFP = 0;
@@ -277,7 +275,6 @@ public class AnaphoraEvaluator {
 			}
 			
 			for(MyNP np : allNPs.get(anaphora)){
-				System.out.println(np.getCoveredText() + "   [ " + np.getOutputValue() + " ]" );
 				int npBegin = np.getBegin();
 				int npEnd = np.getEnd();
 				
@@ -301,6 +298,87 @@ public class AnaphoraEvaluator {
 		totalFN += currentFN;
 		totalTN += currentTN;
 		totalFP += currentFP;
+	}
+	
+	public void evaluate_last_n_sentences_sameEntity(Map<Anaphora, List<MyNP>> allNPs,Collection<MyCoreferenceChain> corefChains, boolean printChoices){
+		List<Anaphora> anaphoras = new ArrayList<Anaphora>();
+		for(Anaphora a :allNPs.keySet()){
+			anaphoras.add(a);
+		}
+		List<MyCoreferenceChain> anaphoraChains = new ArrayList<MyCoreferenceChain>();
+		for(int i = 0; i < anaphoras.size(); i++){
+			int anaphoraBegin = anaphoras.get(i).getBegin();
+			int anaphoraEnd = anaphoras.get(i).getEnd();	
+			boolean foundIt = false;
+			for(MyCoreferenceChain c : corefChains){
+				MyCoreferenceLink corefLinkOld = c.getFirst();			
+				if(corefLinkOld.getBegin() == anaphoraBegin && corefLinkOld.getEnd() == anaphoraEnd){
+					anaphoraChains.add(c);
+					break;
+				}
+				
+				while(corefLinkOld.getNext() != null){
+					MyCoreferenceLink corefLinkNew = corefLinkOld.getNext();
+					
+					if(corefLinkNew.getBegin() == anaphoraBegin && corefLinkNew.getEnd() == anaphoraEnd){					
+						anaphoraChains.add(c);
+						foundIt = true;
+						break;
+					}			
+					corefLinkOld = corefLinkNew;
+				}
+				if(foundIt)
+					break;
+			}
+		}
+		
+		int currentTN = 0;
+		int currentTP = 0;
+		int currentFP = 0;
+		int currentFN = 0;
+		for(int i = 0; i < anaphoras.size(); i++){			
+			if(anaphoras.size() != anaphoraChains.size())
+				System.out.println("Error here (1) ");
+			for(MyNP np : allNPs.get(anaphoras.get(i))){
+				int npBegin = np.getBegin();
+				int npEnd = np.getEnd();
+				
+				MyCoreferenceChain anaphoraCorefChain = anaphoraChains.get(i);
+				
+				MyCoreferenceLink corefLinkOld = anaphoraCorefChain.getFirst();	
+				boolean anteInChain = false;
+				if(corefLinkOld.getBegin() <= npBegin && corefLinkOld.getEnd() >= npEnd){
+					anteInChain = true;		
+				}
+				
+				while(!anteInChain && corefLinkOld.getNext() != null){
+					MyCoreferenceLink corefLinkNew = corefLinkOld.getNext();
+					
+					if(corefLinkNew.getBegin() <= npBegin && corefLinkNew.getEnd() >= npBegin){					
+						anteInChain = true;
+					}			
+					corefLinkOld = corefLinkNew;
+				}
+						
+				if(anteInChain){
+					if(np.getOutputValue() >= Parameters.acceptAtThreshold){
+						currentTP++;
+					} else {
+						currentFN++;
+					}
+				} else {
+					if(np.getOutputValue() < Parameters.acceptAtThreshold){
+						currentTN++;
+					} else {
+						currentFP++;
+					}
+				}
+			}
+		}
+		totalTP += currentTP;
+		totalFN += currentFN;
+		totalTN += currentTN;
+		totalFP += currentFP;	
 	}
 	
 	public void printResults_last_n_sentences(){
@@ -339,6 +417,17 @@ public class AnaphoraEvaluator {
 							"   FN: " + totalFN + 
 							"   SUM:" + (totalTP + totalFP + totalTN + totalFN));
 		System.out.println("*********************************");
+	}
+	
+	
+	public void printResults_bergsma(){
+		float rel = 0f;	
+		if(anaphorsTotal != 0){
+			rel = ((float)correctAnaphorsTotal / (float)anaphorsTotal) * 100f;
+		} 
+		System.out.println("Correct: " + correctAnaphorsTotal);
+		System.out.println("Total: " + anaphorsTotal);
+		System.out.println("Accuracy: " + rel + " % ");
 	}
 	
 	public void printResults(){

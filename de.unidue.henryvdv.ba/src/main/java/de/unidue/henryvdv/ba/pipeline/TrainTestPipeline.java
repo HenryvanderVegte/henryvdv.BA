@@ -33,8 +33,8 @@ public class TrainTestPipeline {
 
 	public static void main(String[] args)
 			  throws Exception {	
-
-		crossvalidation(10, 30, false);
+		
+		crossvalidation(10,30, false);
 	
 		/*
 		Integer[] allDocs = new Integer[30];
@@ -44,7 +44,7 @@ public class TrainTestPipeline {
 		trainPipeline(allDocs);
 		*/
 		//baseline(allDocs);
-	}
+	} //1218
 	
 	private static void crossvalidation(int folds, int docSize, boolean randomFolds) throws Exception{
 		List<Integer> allDocs = new ArrayList<Integer>();
@@ -82,23 +82,28 @@ public class TrainTestPipeline {
 			Integer[] trainOnArray = trainOnList.toArray(new Integer[trainOnList.size()]);
 			Integer[] testOnArray = foldsList.get(i).toArray(new Integer[foldsList.get(i).size()]);			
 			
-			System.out.print("Training - Fold nr " + i + "  [");
+			System.out.println("Fold nr " + i);
+			System.out.print("Training on  [");
 			for(Integer t : trainOnArray){
 				System.out.print("  " + t );
 			}
 			
-			System.out.println(" ]");
+			System.out.println("  ]");
+			
+			System.out.print("Testing  on  [");
+			for(Integer t : testOnArray){
+				System.out.print("  " + t );
+			}
+			
+			System.out.println("  ]");
+			
+			System.out.println("Train: ");
 			trainPipeline(trainOnArray);
 			
 			SVMLearn svmLearn = new SVMLearn();
 			svmLearn.learn();
 			
-			System.out.print("Testing - Fold nr " + i + "  [");
-			for(Integer t : testOnArray){
-				System.out.print("  " + t );
-			}
-			
-			System.out.println(" ]");
+			System.out.println("Test: ");
 			testPipeline(testOnArray);
 			
 		}

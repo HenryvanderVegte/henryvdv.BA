@@ -77,18 +77,40 @@ public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 		}
 		
 		//Delete nps which cover other nps
-		List<NP> fixedNpsBetween = new ArrayList<NP>();
-		for(NP np1 : npsBetween){
-			boolean addIt = true;
-			for(NP np2 : npsBetween){
-				if(np1 != np2){
-					if(np1.getBegin() <=  np2.getBegin() && np1.getEnd() >= np2.getEnd()){
-						addIt = false;
+		if(Parameters.removeCoveringNPs){
+			List<NP> fixedNpsBetween = new ArrayList<NP>();
+			for(NP np1 : npsBetween){
+				boolean addIt = true;
+				for(NP np2 : npsBetween){
+					if(np1 != np2){
+						if(np1.getBegin() <=  np2.getBegin() && np1.getEnd() >= np2.getEnd()){
+							addIt = false;
+						}
 					}
 				}
+				if(addIt){
+					fixedNpsBetween.add(np1);
+				}
 			}
-			if(addIt){
-				fixedNpsBetween.add(np1);
+			return fixedNpsBetween;
+		} 
+		
+		List<NP> fixedNpsBetween = new ArrayList<NP>();
+		for(NP np1 : npsBetween){
+			fixedNpsBetween.add(np1);
+		}
+		List<Token> covTokens = AnnotationUtils.getCoveredTokens(ant.getBegin() + 1, an.getBegin() - 1, tokens);
+		for(Token t : covTokens){
+			if(Arrays.asList(Parameters.allPronouns).contains(t.getCoveredText().toLowerCase())){
+				boolean alreadyContained = false;
+				for(NP np1 : npsBetween){
+					if(np1.getBegin() == t.getBegin() && np1.getEnd() == t.getEnd())
+						alreadyContained = true;
+				}
+				if(!alreadyContained){
+					NP np = new NP(aJCas, t.getBegin(), t.getEnd());
+					fixedNpsBetween.add(np);
+				}
 			}
 		}
 		return fixedNpsBetween;

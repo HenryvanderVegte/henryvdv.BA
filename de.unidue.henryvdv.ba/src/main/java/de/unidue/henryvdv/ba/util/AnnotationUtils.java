@@ -9,6 +9,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
+import de.unidue.henryvdv.ba.type.MyNP;
 
 public class AnnotationUtils {
 
@@ -102,6 +103,29 @@ public class AnnotationUtils {
 		return null;
 	}
 
-	
+	public static List<MyNP> sortMyNPList(List<MyNP> unsortedList){
+		List<MyNP> returnList = new ArrayList<MyNP>();
+		List<MyNP> helpList = new ArrayList<MyNP>();
+		for(MyNP np : unsortedList){
+			helpList.add(np);
+		}
+		int currentMaxValue = 0;
+		while(returnList.size() != unsortedList.size()){
+			currentMaxValue = 0;
+			for(MyNP np : helpList){
+				if(np.getEnd() > currentMaxValue){
+					currentMaxValue = np.getEnd();
+				}
+			}
+			for(MyNP np : unsortedList){
+				if(np.getEnd() == currentMaxValue){
+					returnList.add(np);
+					helpList.remove(np);
+				}
+			}
+		}		
+		return returnList;
+		
+	}
 	
 }

@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Fri Sep 09 21:03:12 CEST 2016
+ * Updated by JCasGen Sun Oct 09 23:25:39 CEST 2016
  * @generated */
 public class AntecedentFeatures_Type extends Annotation_Type {
   /** @generated 
@@ -525,6 +525,30 @@ public class AntecedentFeatures_Type extends Annotation_Type {
     ll_cas.ll_setBooleanValue(addr, casFeatCode_a_HeHis, v);}
     
   
+ 
+  /** @generated */
+  final Feature casFeat_a_CovTokens;
+  /** @generated */
+  final int     casFeatCode_a_CovTokens;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public float getA_CovTokens(int addr) {
+        if (featOkTst && casFeat_a_CovTokens == null)
+      jcas.throwFeatMissing("a_CovTokens", "de.unidue.henryvdv.ba.type.AntecedentFeatures");
+    return ll_cas.ll_getFloatValue(addr, casFeatCode_a_CovTokens);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setA_CovTokens(int addr, float v) {
+        if (featOkTst && casFeat_a_CovTokens == null)
+      jcas.throwFeatMissing("a_CovTokens", "de.unidue.henryvdv.ba.type.AntecedentFeatures");
+    ll_cas.ll_setFloatValue(addr, casFeatCode_a_CovTokens, v);}
+    
+  
 
 
 
@@ -616,6 +640,10 @@ public class AntecedentFeatures_Type extends Annotation_Type {
  
     casFeat_a_HeHis = jcas.getRequiredFeatureDE(casType, "a_HeHis", "uima.cas.Boolean", featOkTst);
     casFeatCode_a_HeHis  = (null == casFeat_a_HeHis) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_a_HeHis).getCode();
+
+ 
+    casFeat_a_CovTokens = jcas.getRequiredFeatureDE(casType, "a_CovTokens", "uima.cas.Float", featOkTst);
+    casFeatCode_a_CovTokens  = (null == casFeat_a_CovTokens) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_a_CovTokens).getCode();
 
   }
 }

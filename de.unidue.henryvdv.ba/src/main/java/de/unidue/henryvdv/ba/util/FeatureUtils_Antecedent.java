@@ -69,9 +69,15 @@ public class FeatureUtils_Antecedent {
 		a.getAntecedentFeatures().setA_HisHer(hisHerPattern(a));
 		// He/His
 		a.getAntecedentFeatures().setA_HeHis(heHisPattern(a));
+		
+		//My own features:
+		a.getAntecedentFeatures().setA_CovTokens(coveredTokens(a));
 	}
 	
-
+	public float coveredTokens(Anaphora a){
+		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+		return (float)covTokens.size() / 10f;
+	}
 	
 	
 	public float antecedentFrequency(Anaphora a){

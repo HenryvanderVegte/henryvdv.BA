@@ -21,44 +21,44 @@ public class FeatureVectorUtils {
 		
 		//Pronoun-Antecedent-Features (10)
 		
-		addPA_BindingTheory();
+		addPA_BindingTheory();//!
 		addPA_SameSentence();
 		addPA_IntraSentenceDiff(); 		
 		addPA_InPreviousSentence();
-		addPA_InterSentenceDiff();
-	 	addPA_PrepositionalParallel();   //5
-//->überarbeiten		addPA_ParentCatMatch(); 
-//->überarbeiten		addPA_ParentWordMatch();
+		addPA_InterSentenceDiff();		//5
+	 	addPA_PrepositionalParallel();   
 		addPA_QuotationSituation();
 		addPA_SingularMatch();
-		addPA_PluralMatch();			//10
+		addPA_PluralMatch();			
+		//->überarbeiten		addPA_ParentCatMatch(); 
+		//->überarbeiten		addPA_ParentWordMatch();
 		
 		//Antecedent Features (17)
 		
-		addA_AntecedentFrequency();
+		addA_AntecedentFrequency();		//10
 		
 		addA_Subject();
 		addA_Object();
 		addA_Predicate();
-		addA_Pronominal();				//15
-		addA_HeadWordEmphasis();
+		addA_Pronominal();				
+		addA_HeadWordEmphasis();		//15
 		addA_Conjunction();
 		addA_PrenominalModifier();
 		addA_Org();
-		addA_Person();					//20
-		addA_Time();
+		addA_Person();					
+		addA_Time();					//20
 		addA_Date();
 		addA_Money();
 		addA_Number();
-		addA_Definite();				//25
-		addA_HisHer();
+		addA_Definite();				
+		addA_HisHer();					//25
 		addA_HeHis();
 
 		//Pronoun Features (4)
 		addP_Masculine();
 		addP_Feminine();
-		addP_Neutral();					//30
-		addP_Plural();
+		addP_Neutral();					
+		addP_Plural();//30
 
 		
 		//Gender Features (11)
@@ -66,20 +66,21 @@ public class FeatureVectorUtils {
 		addG_StdGenderMatch();
 		addG_StdGenderMismatch();
 		addG_PronounMismatch();
-		addG_MasculineMean();			//35
+		addG_MasculineMean();			
 //		addG_MasculineVariance();
-		addG_FeminineMean();
+		addG_FeminineMean();		//35
 //		addG_FeminineVariance();
 		addG_NeutralMean();
-//		addG_NeutralVariance();			//40
+//		addG_NeutralVariance();			
 		addG_PluralMean();
 //		addG_PluralVariance();
 		
-		
+									//40
 		//My own features:
 	//	addP_Reflexive();
 	//	addP_NpDistance();
 	//	addPA_IntermediatePronoun();
+		addA_CoveredTokens();
 		return currentFeatureVector;
 	}
 	
@@ -264,6 +265,10 @@ public class FeatureVectorUtils {
 	
 	private void addPA_IntermediatePronoun(){
 		addFloatFeature(currentAnaphora.getPronounAntecedentFeatures().getP_A_IntermediatePronoun());
+	}
+	
+	private void addA_CoveredTokens(){
+		addFloatFeature(currentAnaphora.getAntecedentFeatures().getA_CovTokens());
 	}
 	
 	private void addBinarizedFeature(boolean value){

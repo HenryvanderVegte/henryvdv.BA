@@ -59,7 +59,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		
 		/**
          * Uses the method of Bergsma
-         * -> searching backwards for the last 2 (/3) sentences
+         * -> searching backwards for the last 1 (/2) sentences
          *    until an antecedent is found - if not, lower the threshold and repeat
          */
 		BERGSMA,
@@ -72,7 +72,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		
 	}
 	
-    private static final ClassificationMode classificationMode = ClassificationMode.LAST_N_SENTENCES;
+
 	
 	private static final String BINARIES_BASE_LOCATION = "src/main/resources/svm/bin";
 
@@ -88,8 +88,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 
 	private static final String PREDICTION_DIRECTORY = "src/main/resources/svm/dat";
 	
-	
-	private static final int MAX_SENTENCE_DIST = 2;
+
 	
 	
 	private Collection<Anaphora> anaphoras;
@@ -238,148 +237,32 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		allNPs = JCasUtil.select(aJCas, NP.class);
 		setFixedNPs(); 
 		
-		
-		if(classificationMode == ClassificationMode.BERGSMA){
-			setGoldNPs();
-			//setDetectedNPs();
-			
-			List<Anaphora> anaphorasList = new ArrayList<Anaphora>();
-			for(Anaphora a : anaphoras){
-				if(a.getHasCorrectAntecedent()){
-					anaphorasList.add(a);
-				}
+		List<Anaphora> anaphorasList = new ArrayList<Anaphora>();
+		for(Anaphora a : anaphoras){
+			if(a.getHasCorrectAntecedent()){
+				anaphorasList.add(a);
 			}
-			
-			eval.evaluate_Bergsma(detectedAntecedents, goldAntecedents, anaphorasList, false, docName);
-			
+		}
+		Map<Anaphora, List<MyNP>> allAnaphors = getAllAnaphors(anaphorasList);
+		
+		if(Parameters.classificationMode == ClassificationMode.BERGSMA){
+			eval.evaluate_Bergsma(allAnaphors, false);	
 		}		
 		
-		if(classificationMode == ClassificationMode.LAST_N_SENTENCES){
-			List<Anaphora> anaphorasList = new ArrayList<Anaphora>();
-			for(Anaphora a : anaphoras){
-				if(a.getHasCorrectAntecedent()){
-					anaphorasList.add(a);
-				}
-			}
-			
-			Map<Anaphora, List<MyNP>> allNPs = getAllNPs(anaphorasList);
-			eval.evaluate_last_n_sentences(allNPs, true);
+		if(Parameters.classificationMode == ClassificationMode.LAST_N_SENTENCES){
+			eval.evaluate_last_n_sentences(allAnaphors, true);
+			//eval.evaluate_last_n_sentences_sameEntity(allAnaphors, corefChains, false);
 		}
 
 	}
 	
 	@Override
 	public void collectionProcessComplete(){
-		if(classificationMode == ClassificationMode.LAST_N_SENTENCES){
+		if(Parameters.classificationMode == ClassificationMode.LAST_N_SENTENCES){
 			eval.printResults_last_n_sentences();
 		}
-		if(classificationMode == ClassificationMode.BERGSMA){
-			eval.printResults();
-		}
-	}
-	
-	
-	private void setGoldNPs(){
-		for(Anaphora anaphora : anaphoras){
-			if(!anaphora.getHasCorrectAntecedent())
-				continue;
-			GoldNP np = new GoldNP(aJCas, anaphora.getAntecedent().getBegin(), anaphora.getAntecedent().getEnd());
-			goldAntecedents.add(np);
-		}
-	}
-	
-	private void setDetectedNPs(){
-		int count = 1;
-		for(Anaphora anaphora : anaphoras){
-			//System.out.println("Nr." + count + " of " + anaphoras.size());
-			count++;
-			if(!anaphora.getHasCorrectAntecedent())
-				continue;
-			int anteNPnumber = 0;
-			for(int i = 0; i < fixedNPs.size(); i++){
-				if(fixedNPs.get(i).getBegin() >= anaphora.getBegin()){
-					anteNPnumber = i - 1;
-					if(anteNPnumber < 0 )
-						System.out.println("!!!!!!!!!!!!!!");
-					break;
-				}
-			}		
-
-			int anaphoraSentenceNr = AnnotationUtils.getSentenceNr(anaphora.getBegin(), sentences);
-			System.out.println("-------------------------------------------------------");
-			System.out.println("Anaphora:  " + anaphora.getCoveredText());
-			System.out.println("Gold Antecedent:  " + anaphora.getAntecedent().getCoveredText());
-			LinkedHashMap<NP, Float> npValues = new LinkedHashMap<NP, Float>();
-			for(int i = anteNPnumber; i > 0; i--){
-				int anteSentenceNr = AnnotationUtils.getSentenceNr(fixedNPs.get(i).getBegin(), sentences);
-				if((anaphoraSentenceNr - anteSentenceNr) > MAX_SENTENCE_DIST){
-					break;
-				}
-				
-				
-				
-				NP possibleAntecedent = new NP(aJCas, fixedNPs.get(i).getBegin(), fixedNPs.get(i).getEnd());
-				//TODO: Check if its working
-				/*
-				List<Token> covTokens = AnnotationUtils.getCoveredTokens(fixedNPs.get(i), tokens);
-				for(Token t : covTokens){
-					if(Arrays.asList(Parameters.allPronouns).contains(t.getCoveredText().toLowerCase())){
-						possibleAntecedent = new NP(aJCas, t.getBegin(),t.getEnd());
-						break;
-					}
-				}
-				*/
-				
-				
-				float outputValue = getOutputValue(anaphora, possibleAntecedent);
-				npValues.put(possibleAntecedent, outputValue);
-				System.out.println("Ante: " + possibleAntecedent.getCoveredText() + "    " + outputValue);
-				
-			}
-			
-			boolean foundAntecedent = false;
-			float threshold = 1.0f;
-			
-			for(NP np : npValues.keySet()){
-				if(npValues.get(np) > threshold){
-					foundAntecedent = true;
-					DetectedNP det = new DetectedNP(aJCas, np.getBegin(), np.getEnd());
-					detectedAntecedents.add(det);
-					System.out.println("Detected: " + det.getCoveredText());
-					break;
-				}
-			} 
-						
-			if(!foundAntecedent){	
-				NP highestValue = npValues.keySet().iterator().next();
-				float value = npValues.get(highestValue);
-
-				for(NP np : npValues.keySet()){
-					if(npValues.get(np) > value){
-						highestValue = np;
-						value = npValues.get(np);
-					}
-				}
-				foundAntecedent = true;
-				DetectedNP det = new DetectedNP(aJCas, highestValue.getBegin(), highestValue.getEnd());
-				detectedAntecedents.add(det);
-				System.out.println("Detected: " + det.getCoveredText());
-			}
-			/*
-			while(!foundAntecedent){
-				for(NP np : npValues.keySet()){
-					if(npValues.get(np) > threshold){
-						foundAntecedent = true;
-						DetectedNP det = new DetectedNP(aJCas, np.getBegin(), np.getEnd());
-						detectedAntecedents.add(det);
-						System.out.println("Detected: " + det.getCoveredText());
-						break;
-					}
-				}	
-				threshold -= 0.1f;
-			}
-			*/
-			featureVectorsUsed.add(featureVector);
+		if(Parameters.classificationMode == ClassificationMode.BERGSMA){
+			eval.printResults_bergsma();
 		}
 	}
 	
@@ -388,34 +271,25 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	 * the last n sentences
 	 * 
 	 */
-	private Map<Anaphora, List<MyNP>> getAllNPs(List<Anaphora> anaphorasList){
+	private Map<Anaphora, List<MyNP>> getAllAnaphors(List<Anaphora> anaphorasList){
 		Map<Anaphora, List<MyNP>> frequencies = new HashMap<Anaphora, List<MyNP>>();	
-		for(Anaphora anaphora : anaphorasList){		
-			int anteNPnumber = 0;
-			for(int i = 0; i < fixedNPs.size(); i++){
-				if(fixedNPs.get(i).getBegin() >= anaphora.getBegin()){
-					anteNPnumber = i - 1;
-					if(anteNPnumber < 0 )
-						System.out.println("!!!!!!!!!!!!!!");
-					break;
-				}
-			}		
-
+		for(Anaphora anaphora : anaphorasList){
 			int anaphoraSentenceNr = AnnotationUtils.getSentenceNr(anaphora.getBegin(), sentences);
-
-			List<MyNP> allNPs = new ArrayList<MyNP>();
-			for(int i = anteNPnumber; i > 0; i--){
-				int anteSentenceNr = AnnotationUtils.getSentenceNr(fixedNPs.get(i).getBegin(), sentences);
-				if((anaphoraSentenceNr - anteSentenceNr) > MAX_SENTENCE_DIST){
-					break;
-				}
-				float outputValue = getOutputValue(anaphora, fixedNPs.get(i));
-				MyNP myNP = new MyNP(aJCas, fixedNPs.get(i).getBegin(), fixedNPs.get(i).getEnd());
+			int maxAntentenceNr = anaphoraSentenceNr - Parameters.MAX_SENTENCE_DIST;
+			if(maxAntentenceNr < 0)
+				maxAntentenceNr = 0;	
+			List<MyNP> consideredNPs = new ArrayList<MyNP>();
+			for(NP np : fixedNPs){
+				int anteSentenceNr = AnnotationUtils.getSentenceNr(np.getBegin(), sentences);
+				if(anteSentenceNr < maxAntentenceNr || np.getEnd() >= anaphora.getBegin())
+					continue;
+				float outputValue = getOutputValue(anaphora, np);
+				MyNP myNP = new MyNP(aJCas, np.getBegin(), np.getEnd());
 				myNP.setOutputValue(outputValue);
 				myNP.setFeatureVector(featureVector);
-				allNPs.add(myNP);
-			}			
-			frequencies.put(anaphora, allNPs);
+				consideredNPs.add(myNP);			
+			}
+			frequencies.put(anaphora, consideredNPs);
 		}
 		return frequencies;
 	}
@@ -462,22 +336,57 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	 *  This method removes the possibility of discovering noun phrases in noun phrases
 	 * 
 	 **/
-	private void setFixedNPs(){	
+	private void setFixedNPs(){		
 		fixedNPs = new ArrayList<NP>();
-		for(NP np1 : allNPs){
-			boolean addIt = true;
-			for(NP np2 : allNPs){
-				if(np1 != np2){
-					if(np1.getBegin() <=  np2.getBegin() && np1.getEnd() >= np2.getEnd()){
-						addIt = false;
+		if(Parameters.removeCoveringNPs){			
+			for(NP np1 : allNPs){
+				boolean addIt = true;
+				for(NP np2 : allNPs){
+					if(np1 != np2){
+						if(np1.getBegin() <=  np2.getBegin() && np1.getEnd() >= np2.getEnd()){
+							addIt = false;
+						}
+					}
+				}
+				if(addIt){
+					fixedNPs.add(np1);
+				}
+			}
+		} else {
+			for(NP np1 : allNPs){
+				fixedNPs.add(np1);
+			}
+			for(Token t : tokens){
+				if(Arrays.asList(Parameters.allPronouns).contains(t.getCoveredText().toLowerCase())){
+					boolean alreadyContained = false;
+					for(NP np1 : fixedNPs){
+						if(np1.getBegin() == t.getBegin() && np1.getEnd() == t.getEnd())
+							alreadyContained = true;
+					}
+					if(!alreadyContained){
+						NP np = new NP(aJCas, t.getBegin(), t.getEnd());
+						fixedNPs.add(np);
 					}
 				}
 			}
-			if(addIt){
-				fixedNPs.add(np1);
+		}
+		
+		//TODO: Check for improvement?
+		for(Anaphora a : anaphoras){
+			if(!a.getHasCorrectAntecedent())
+				continue;
+			int anteBegin = a.getAntecedent().getBegin();
+			int anteEnd = a.getAntecedent().getEnd();
+			boolean alreadyContained = false;
+			for(NP np : fixedNPs){
+				if(np.getBegin() == anteBegin && np.getEnd() == anteEnd){
+					alreadyContained = true;
+				}
 			}
-
-
+			if(!alreadyContained){
+				NP np = new NP(aJCas, anteBegin, anteEnd);
+				fixedNPs.add(np);
+			}
 		}
 	}
 	

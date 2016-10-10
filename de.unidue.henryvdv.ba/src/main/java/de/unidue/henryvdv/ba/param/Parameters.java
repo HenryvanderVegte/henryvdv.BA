@@ -1,17 +1,14 @@
 package de.unidue.henryvdv.ba.param;
 
+import de.unidue.henryvdv.ba.modules.SVMClassifier.ClassificationMode;
+
 public class Parameters {
-	/*
+	
 	public final static String[] resolvedPronouns = {"himself","his","he",
 			"herself","her","she",
 			"itself","its", //"it",
 			"themselves","their","they"};
-*/
-	public final static String[] resolvedPronouns = {"his","he",
-			"her","she",
-			"its", //"it",
-			"their","they"};
-	
+
 	public final static String[] allPronouns = {
 			"i","me","my","mine","myself",
 			"you","your","yours","yourself",
@@ -39,6 +36,14 @@ public class Parameters {
 	public static final String[] femaleDesignators = {"mrs","ms.","ms","mz","mz.","miss","lady","mrs.","madam","dame"};
 	
 	public static final String genderCorpusDirectory = "src/main/resources/gendercorpus";
+		
+	public static final boolean removeCoveringNPs = false;
 	
+    public static final ClassificationMode classificationMode = ClassificationMode.LAST_N_SENTENCES;
+    
+	public static final int MAX_SENTENCE_DIST = 1;
+    
 	public static final float acceptAtThreshold = 1.0f;
+	
+	public static final float lowerThresholdFactor = 0.1f;
 }
