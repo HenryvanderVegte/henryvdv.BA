@@ -61,7 +61,7 @@ public class FeatureUtils_Antecedent {
 		a.getAntecedentFeatures().setA_Date(date(a));
 		//Money
 		a.getAntecedentFeatures().setA_Money(money(a));
-		//Money
+		//Number
 		a.getAntecedentFeatures().setA_Number(number(a));
 		//Definite Article
 		a.getAntecedentFeatures().setA_Definite(definiteArticle(a));

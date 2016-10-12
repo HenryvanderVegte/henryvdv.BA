@@ -7,35 +7,35 @@
 \contentsline {subsection}{\numberline {2.1.2}CogNIAC}{5}{subsection.2.1.2}
 \contentsline {subsection}{\numberline {2.1.3}Anaphora Resolution with Limited Knowledge}{6}{subsection.2.1.3}
 \contentsline {subsection}{\numberline {2.1.4}GuiTAR}{7}{subsection.2.1.4}
-\contentsline {subsection}{\numberline {2.1.5}JavaRAP}{8}{subsection.2.1.5}
 \contentsline {section}{\numberline {2.2}Machine Learning-Based Techniques}{8}{section.2.2}
-\contentsline {subsection}{\numberline {2.2.1}Anaphors in Coreference Resolution}{8}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.1}Anaphoras in Coreference Resolution}{8}{subsection.2.2.1}
 \contentsline {subsection}{\numberline {2.2.2}BART}{9}{subsection.2.2.2}
 \contentsline {subsection}{\numberline {2.2.3}Cluster-Based Coreference Resolution}{10}{subsection.2.2.3}
 \contentsline {subsection}{\numberline {2.2.4}Pronoun Resolution in Spoken Dialogue}{10}{subsection.2.2.4}
 \contentsline {subsection}{\numberline {2.2.5}Corpus- and Web-Mined Gender Information}{11}{subsection.2.2.5}
-\contentsline {section}{\numberline {2.3}Compared Evaluation}{14}{section.2.3}
-\contentsline {section}{\numberline {2.4}Hybrid Approach}{15}{section.2.4}
-\contentsline {section}{\numberline {2.5}A Statistical Approach}{15}{section.2.5}
-\contentsline {chapter}{\numberline {3}Data}{16}{chapter.3}
-\contentsline {section}{\numberline {3.1}Anaphora Corpus}{16}{section.3.1}
-\contentsline {section}{\numberline {3.2}Gender Corpus}{16}{section.3.2}
-\contentsline {chapter}{\numberline {4}Methodology}{17}{chapter.4}
-\contentsline {section}{\numberline {4.1}Featureset}{17}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Pronoun Features}{17}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}Antecedent Features}{17}{subsection.4.1.2}
-\contentsline {subsection}{\numberline {4.1.3}Pronoun-Antecedent Features}{17}{subsection.4.1.3}
-\contentsline {subsection}{\numberline {4.1.4}Gender Features}{17}{subsection.4.1.4}
-\contentsline {section}{\numberline {4.2}Generating Training Instances}{17}{section.4.2}
-\contentsline {section}{\numberline {4.3}Baseline Approach}{17}{section.4.3}
-\contentsline {section}{\numberline {4.4}SVM Classifier}{17}{section.4.4}
-\contentsline {chapter}{\numberline {5}Evaluation}{18}{chapter.5}
-\contentsline {section}{\numberline {5.1}Learning curves}{18}{section.5.1}
-\contentsline {section}{\numberline {5.2}Feature Contribution}{18}{section.5.2}
-\contentsline {section}{\numberline {5.3}Error Analysis}{18}{section.5.3}
-\contentsline {chapter}{\numberline {6}Conclusion}{19}{chapter.6}
-\contentsline {section}{\numberline {6.1}Summary}{19}{section.6.1}
-\contentsline {section}{\numberline {6.2}Outlook}{19}{section.6.2}
-\contentsline {chapter}{\nonumberline List of Figures}{22}{appendix*.4}
-\contentsline {chapter}{\nonumberline List of Tables}{23}{appendix*.5}
-\contentsline {chapter}{\nonumberline References}{24}{appendix*.6}
+\contentsline {section}{\numberline {2.3}A Comparison of Both Strategies}{14}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}A Manually Designed Resolver (MDR)}{14}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}A Machine Learning-Based Resolver (MLR)}{15}{subsection.2.3.2}
+\contentsline {subsection}{\numberline {2.3.3}Evaluation}{16}{subsection.2.3.3}
+\contentsline {chapter}{\numberline {3}Data}{17}{chapter.3}
+\contentsline {section}{\numberline {3.1}Anaphora-annotated Corpus}{17}{section.3.1}
+\contentsline {section}{\numberline {3.2}Gender Corpus}{17}{section.3.2}
+\contentsline {chapter}{\numberline {4}Methodology}{18}{chapter.4}
+\contentsline {section}{\numberline {4.1}Featureset}{18}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Pronoun Features}{18}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Antecedent Features}{18}{subsection.4.1.2}
+\contentsline {subsection}{\numberline {4.1.3}Pronoun-Antecedent Features}{18}{subsection.4.1.3}
+\contentsline {subsection}{\numberline {4.1.4}Gender Features}{18}{subsection.4.1.4}
+\contentsline {section}{\numberline {4.2}Generating Training Instances}{18}{section.4.2}
+\contentsline {section}{\numberline {4.3}Baseline Approach}{18}{section.4.3}
+\contentsline {section}{\numberline {4.4}SVM Classifier}{18}{section.4.4}
+\contentsline {chapter}{\numberline {5}Evaluation}{19}{chapter.5}
+\contentsline {section}{\numberline {5.1}Learning curves}{19}{section.5.1}
+\contentsline {section}{\numberline {5.2}Feature Contribution}{19}{section.5.2}
+\contentsline {section}{\numberline {5.3}Error Analysis}{19}{section.5.3}
+\contentsline {chapter}{\numberline {6}Conclusion}{20}{chapter.6}
+\contentsline {section}{\numberline {6.1}Summary}{20}{section.6.1}
+\contentsline {section}{\numberline {6.2}Outlook}{20}{section.6.2}
+\contentsline {chapter}{\nonumberline List of Figures}{23}{appendix*.4}
+\contentsline {chapter}{\nonumberline List of Tables}{24}{appendix*.5}
+\contentsline {chapter}{\nonumberline References}{25}{appendix*.6}

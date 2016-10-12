@@ -29,23 +29,26 @@ import de.unidue.henryvdv.ba.modules.SVMTrainingInstanceCreator;
 import de.unidue.henryvdv.ba.reader.WikiCoref_Reader;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * The main file in order to perform the complete evaluation.
+ * @author Henry
+ *
+ */
 public class TrainTestPipeline {
 
 	public static void main(String[] args)
 			  throws Exception {	
 		
 		crossvalidation(10,30, false);
+	}
 	
-		/*
-		Integer[] allDocs = new Integer[30];
-		for(int i = 0; i < 30; i++){
-			allDocs[i] = i;
-		}
-		trainPipeline(allDocs);
-		*/
-		//baseline(allDocs);
-	} //1218
-	
+	/**
+	 * Performs a crossvalidation. Results will be written into the console
+	 * @param folds the amount of folds used in crossvalidation
+	 * @param docSize on how many documents the crossvalidation will be performed
+	 * @param randomFolds if true, the documents will be randomly split on all folds
+	 * @throws Exception
+	 */
 	private static void crossvalidation(int folds, int docSize, boolean randomFolds) throws Exception{
 		List<Integer> allDocs = new ArrayList<Integer>();
 		for(int i = 0; i < docSize; i++){
@@ -109,13 +112,17 @@ public class TrainTestPipeline {
 		}
 	}
 	
-	private static void baseline(Integer[] _usedDocs) throws Exception{
-		SimplePipeline.runPipeline(	               
-        		
+	/**
+	 * The baseline classifier (see Baseline_Evaluator.class for further information)
+	 * @param _usedDocs the documents used, each cell in the array contains the number of a document
+	 * @throws Exception
+	 */
+	private static void baseline(Integer[] usedDocs) throws Exception{
+		SimplePipeline.runPipeline(    		
 		        CollectionReaderFactory.createReader(
 		                      WikiCoref_Reader.class,
 		                      WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
-		                      WikiCoref_Reader.PARAM_USED_DOCUMENT_NUMBERS, _usedDocs),			   
+		                      WikiCoref_Reader.PARAM_USED_DOCUMENT_NUMBERS, usedDocs),			   
 		        AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
 		        AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
 		        AnalysisEngineFactory.createEngineDescription(CoreNlpNamedEntityRecognizer.class),
@@ -129,14 +136,17 @@ public class TrainTestPipeline {
 		        );
 	}
 	
-	
-	private static void trainPipeline(Integer[] _usedDocs) throws Exception{
-		SimplePipeline.runPipeline(	               
-	        		
+	/**
+	 * Creates the modelfile with all features used - training performed on all usedDocs - documents
+	 * @param _usedDocs the documents used, each cell in the array contains the number of a document
+	 * @throws Exception
+	 */
+	private static void trainPipeline(Integer[] usedDocs) throws Exception{
+		SimplePipeline.runPipeline(	                       		
 	        CollectionReaderFactory.createReader(
 	                      WikiCoref_Reader.class,
 	                      WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
-	                      WikiCoref_Reader.PARAM_USED_DOCUMENT_NUMBERS, _usedDocs),			   
+	                      WikiCoref_Reader.PARAM_USED_DOCUMENT_NUMBERS, usedDocs),			   
 	        AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
 	        AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
 	        AnalysisEngineFactory.createEngineDescription(CoreNlpNamedEntityRecognizer.class),
@@ -153,13 +163,18 @@ public class TrainTestPipeline {
 	        
 	        );  
 	  }
-	  
-	  private static void testPipeline(Integer[] _usedDocs) throws Exception{
+	
+	  /**
+	   * Classifies all anaphors found in the usedDocs - documents
+	   * @param _usedDocs the documents used, each cell in the array contains the number of a document
+	   * @throws Exception
+	   */
+	  private static void testPipeline(Integer[] usedDocs) throws Exception{
 		  SimplePipeline.runPipeline(	        		
 	        		CollectionReaderFactory.createReader(
 	                        WikiCoref_Reader.class,
 	                        WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
-	                        WikiCoref_Reader.PARAM_USED_DOCUMENT_NUMBERS, _usedDocs),	   
+	                        WikiCoref_Reader.PARAM_USED_DOCUMENT_NUMBERS, usedDocs),	   
 	        		AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
 	        		AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
 	        		AnalysisEngineFactory.createEngineDescription(CoreNlpNamedEntityRecognizer.class),

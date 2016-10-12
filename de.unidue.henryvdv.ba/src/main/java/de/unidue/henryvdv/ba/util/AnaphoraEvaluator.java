@@ -156,9 +156,16 @@ public class AnaphoraEvaluator {
 			
 			int npBegin = possibleAntecedent.getBegin();
 			int npEnd = possibleAntecedent.getEnd();
-			if((goldAntecedentBegin >= npBegin && goldAntecedentEnd <= npEnd) || goldAntecedentBegin <= npBegin && goldAntecedentEnd >= npEnd){
-				correct++;
+			if(Parameters.exactBoundMatch){
+				if(goldAntecedentBegin == npBegin && goldAntecedentEnd == npEnd){
+					correct++;
+				}
+			} else {
+				if((goldAntecedentBegin >= npBegin && goldAntecedentEnd <= npEnd) || goldAntecedentBegin <= npBegin && goldAntecedentEnd >= npEnd){
+					correct++;
+				}
 			}
+
 			total++;
 		}
 
@@ -188,8 +195,19 @@ public class AnaphoraEvaluator {
 				int npBegin = np.getBegin();
 				int npEnd = np.getEnd();
 				
+				boolean isGoldAnte = false;
 				
-				if((goldAntecedentBegin >= npBegin && goldAntecedentEnd <= npEnd) || goldAntecedentBegin <= npBegin && goldAntecedentEnd >= npEnd){
+				if(Parameters.exactBoundMatch){
+					if(goldAntecedentBegin == npBegin && goldAntecedentEnd == npEnd){
+						isGoldAnte = true;
+					}
+				} else {
+					if((goldAntecedentBegin >= npBegin && goldAntecedentEnd <= npEnd) || goldAntecedentBegin <= npBegin && goldAntecedentEnd >= npEnd){
+						isGoldAnte = true;
+					}
+				}
+				
+				if(isGoldAnte){
 					if(np.getOutputValue() >= Parameters.acceptAtThreshold){
 						currentTP++;
 					} else {

@@ -112,6 +112,36 @@ Bergsma, S.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Bergsma%
+\ \BBA {} Lin%
+}{%
+Bergsma%
+\ \BBA {} Lin%
+}{%
+{\protect \APACyear {2006}}%
+}]{%
+bergsma2006bootstrapping}
+\APACinsertmetastar {%
+bergsma2006bootstrapping}%
+\begin{APACrefauthors}%
+Bergsma, S.%
+\BCBT {}\ \BBA {} Lin, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2006}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Bootstrapping path-based pronoun resolution}
+  {Bootstrapping path-based pronoun resolution}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 21st International Conference on
+  Computational Linguistics and the 44th annual meeting of the Association for
+  Computational Linguistics} {Proceedings of the 21st international conference
+  on computational linguistics and the 44th annual meeting of the association
+  for computational linguistics}\ (\BPGS\ 33--40).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Broscheit%
 , Poesio%
 \BCBL {}\ \protect \BOthers {.}}{%
@@ -259,6 +289,38 @@ Evans, R.%
 \BIn{} \APACrefbtitle {Proceedings of the Discourse Anaphora and Reference
   Resolution Conference (DAARC2000)} {Proceedings of the discourse anaphora and
   reference resolution conference (daarc2000)}\ (\BPGS\ 154--162).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Ghaddar%
+\ \BBA {} Langlais%
+}{%
+Ghaddar%
+\ \BBA {} Langlais%
+}{%
+{\protect \APACyear {2016}}%
+}]{%
+wikicoref2016}
+\APACinsertmetastar {%
+wikicoref2016}%
+\begin{APACrefauthors}%
+Ghaddar, A.%
+\BCBT {}\ \BBA {} Langlais, P.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2016}{05/2016}{}.
+\newblock
+{\BBOQ}\APACrefatitle {WikiCoref: An English Coreference-annotated Corpus of
+  Wikipedia Articles} {Wikicoref: An english coreference-annotated corpus of
+  wikipedia articles}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the Tenth International Conference on
+  Language Resources and Evaluation (LREC 2016).} {Proceedings of the tenth
+  international conference on language resources and evaluation (lrec 2016).}
+\newblock
+\APACaddressPublisher{Portoro{\v z}, Slovenia}{European Language Resources
+  Association (ELRA)}.
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -686,34 +748,6 @@ Poesio, M.%
   {Creating a coreference resolution system for italian.}{\BBCQ}
 \newblock
 \BIn{} \APACrefbtitle {LREC.} {Lrec.}
-\PrintBackRefs{\CurrentBib}
-
-\bibitem [\protect \citeauthoryear {%
-Qiu%
-, Kan%
-\BCBL {}\ \BBA {} Chua%
-}{%
-Qiu%
-\ \protect \BOthers {.}}{%
-{\protect \APACyear {2004}}%
-}]{%
-qiu2004public}
-\APACinsertmetastar {%
-qiu2004public}%
-\begin{APACrefauthors}%
-Qiu, L.%
-, Kan, M\BHBI Y.%
-\BCBL {}\ \BBA {} Chua, T\BHBI S.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{2004}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {A public reference implementation of the rap anaphora
-  resolution algorithm} {A public reference implementation of the rap anaphora
-  resolution algorithm}.{\BBCQ}
-\newblock
-\APACjournalVolNumPages{arXiv preprint cs/0406031}{}{}{}.
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%

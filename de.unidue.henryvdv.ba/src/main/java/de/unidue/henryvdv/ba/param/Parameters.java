@@ -37,13 +37,15 @@ public class Parameters {
 	
 	public static final String genderCorpusDirectory = "src/main/resources/gendercorpus";
 		
-	public static final boolean removeCoveringNPs = false;
+	public static final boolean removeCoveringNPs = true;
 	
-    public static final ClassificationMode classificationMode = ClassificationMode.LAST_N_SENTENCES;
+	public static final boolean exactBoundMatch = true;
+	
+    public static final ClassificationMode classificationMode = ClassificationMode.BERGSMA;
     
 	public static final int MAX_SENTENCE_DIST = 1;
     
-	public static final float acceptAtThreshold = 1.0f;
+	public static final float acceptAtThreshold = 0f;
 	
 	public static final float lowerThresholdFactor = 0.1f;
 }

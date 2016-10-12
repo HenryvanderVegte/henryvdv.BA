@@ -7,18 +7,18 @@
 \BOOKMARK [2][-]{subsection.2.1.2}{CogNIAC}{section.2.1}% 7
 \BOOKMARK [2][-]{subsection.2.1.3}{Anaphora Resolution with Limited Knowledge}{section.2.1}% 8
 \BOOKMARK [2][-]{subsection.2.1.4}{GuiTAR}{section.2.1}% 9
-\BOOKMARK [2][-]{subsection.2.1.5}{JavaRAP}{section.2.1}% 10
-\BOOKMARK [1][-]{section.2.2}{Machine Learning-Based Techniques}{chapter.2}% 11
-\BOOKMARK [2][-]{subsection.2.2.1}{Anaphors in Coreference Resolution}{section.2.2}% 12
-\BOOKMARK [2][-]{subsection.2.2.2}{BART}{section.2.2}% 13
-\BOOKMARK [2][-]{subsection.2.2.3}{Cluster-Based Coreference Resolution}{section.2.2}% 14
-\BOOKMARK [2][-]{subsection.2.2.4}{Pronoun Resolution in Spoken Dialogue}{section.2.2}% 15
-\BOOKMARK [2][-]{subsection.2.2.5}{Corpus- and Web-Mined Gender Information}{section.2.2}% 16
-\BOOKMARK [1][-]{section.2.3}{Compared Evaluation}{chapter.2}% 17
-\BOOKMARK [1][-]{section.2.4}{Hybrid Approach}{chapter.2}% 18
-\BOOKMARK [1][-]{section.2.5}{A Statistical Approach}{chapter.2}% 19
+\BOOKMARK [1][-]{section.2.2}{Machine Learning-Based Techniques}{chapter.2}% 10
+\BOOKMARK [2][-]{subsection.2.2.1}{Anaphoras in Coreference Resolution}{section.2.2}% 11
+\BOOKMARK [2][-]{subsection.2.2.2}{BART}{section.2.2}% 12
+\BOOKMARK [2][-]{subsection.2.2.3}{Cluster-Based Coreference Resolution}{section.2.2}% 13
+\BOOKMARK [2][-]{subsection.2.2.4}{Pronoun Resolution in Spoken Dialogue}{section.2.2}% 14
+\BOOKMARK [2][-]{subsection.2.2.5}{Corpus- and Web-Mined Gender Information}{section.2.2}% 15
+\BOOKMARK [1][-]{section.2.3}{A Comparison of Both Strategies}{chapter.2}% 16
+\BOOKMARK [2][-]{subsection.2.3.1}{A Manually Designed Resolver \(MDR\)}{section.2.3}% 17
+\BOOKMARK [2][-]{subsection.2.3.2}{A Machine Learning-Based Resolver \(MLR\)}{section.2.3}% 18
+\BOOKMARK [2][-]{subsection.2.3.3}{Evaluation}{section.2.3}% 19
 \BOOKMARK [0][-]{chapter.3}{Data}{}% 20
-\BOOKMARK [1][-]{section.3.1}{Anaphora Corpus}{chapter.3}% 21
+\BOOKMARK [1][-]{section.3.1}{Anaphora-annotated Corpus}{chapter.3}% 21
 \BOOKMARK [1][-]{section.3.2}{Gender Corpus}{chapter.3}% 22
 \BOOKMARK [0][-]{chapter.4}{Methodology}{}% 23
 \BOOKMARK [1][-]{section.4.1}{Featureset}{chapter.4}% 24

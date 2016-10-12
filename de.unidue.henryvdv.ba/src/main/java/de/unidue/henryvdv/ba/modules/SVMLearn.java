@@ -16,10 +16,20 @@ import org.dkpro.tc.core.Constants;
 
 import de.tudarmstadt.ukp.dkpro.core.api.resources.RuntimeProvider;
 
+/** 
+ * 	Use this class in order to execute the SVM-learn-process
+ *  The required information will be derived from the train.dat file
+ *  (containing all positive and negative feature vectors).
+ *   The modelfile is the output
+ *   
+ * @author Henry
+ */
 public class SVMLearn implements Constants {
 
+	/**
+	 * The direction of all svm data
+	 */
 	private static final String BINARIES_BASE_LOCATION = "src/main/resources/svm/bin";
-	//private static final String BINARIES_BASE_LOCATION = "C:/Users/Henry/workspace(x86)/dkpro-tc-dkpro-tc-0.8.0/dkpro-tc-ml-svmhmm/target/model-staging/org/dkpro/tc/svmhmm/";
 
 	/**
 	 * Learning mode discriminators; Only Constants.LM_SINGLE_LABEL is allowed
@@ -105,24 +115,35 @@ public class SVMLearn implements Constants {
 	@Discriminator
 	private double paramM = 40.0;
 
-	// where the trained model is stored
+	/**
+	 * The name of the modelfile
+	 */
 	private static final String MODEL_NAME = "svm_light.model";
-
+	/**
+	 * The direction of the modelfile
+	 */
 	private static final String MODEL_DIRECTORY = "src/main/resources/svm/dat";
 	
+	/**
+	 * The name of the trainfile
+	 */
 	private static final String TRAIN_NAME = "train.dat";
-
+	/**
+	 * The direction of the trainfile
+	 */
 	private static final String TRAIN_DIRECTORY = "src/main/resources/svm/dat";
 	
-	public void learn(){
-		
+	/**
+	 * Runs the svm_learn.exe - 
+	 * The input is the train-file (train.dat)
+	 * The output is the modelfile (svm_light.model)
+	 */
+	public void learn(){	
 		String modelFilePath = MODEL_DIRECTORY + "/" + MODEL_NAME;
-		File modelFile = new File(modelFilePath);
-		
+		File modelFile = new File(modelFilePath);	
 		if(modelFile.isFile()){
 			modelFile.delete();
-		}		
-		
+		}			
 		try {
 			modelFile.getParentFile().mkdirs();
 			modelFile.createNewFile();
@@ -144,12 +165,14 @@ public class SVMLearn implements Constants {
 		}
 	}
 	
+	/**
+	 * Returns the command with all parameters that svmlight requires
+	 */
 	private List<String> buildTrainCommand(File trainingFile, String targetModelLocation) {
 		List<String> result = new ArrayList<String>();
 		result.add(BINARIES_BASE_LOCATION + "/svm_learn.exe");
 
 		// svm light struct params
-		
 		result.add("-z");
 		result.add(paramZ + "");
 		result.add("-j");
@@ -176,15 +199,14 @@ public class SVMLearn implements Constants {
 		return result;
 	}
 
-	
-	private static void runCommand(List<String> command) throws Exception {
-		
+	/**
+	 * Executes the learning process
+	 * @param command the whole command containing directions and parameters
+	 * @throws Exception
+	 */
+	private static void runCommand(List<String> command) throws Exception {	
 		Process process = new ProcessBuilder().inheritIO().command(command).start();
 		process.waitFor();
-		/*
-		Process process = new ProcessBuilder().command(command).start();
-		process.waitFor();
-		*/
 	}
 
 

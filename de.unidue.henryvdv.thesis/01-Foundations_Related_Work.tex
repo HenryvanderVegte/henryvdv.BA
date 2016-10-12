@@ -4,20 +4,20 @@
 Anaphora resolution systems emerged into two different strategies. First of all, there are rule-based techniques which focus more on theoretical considerations. The second strategy uses machine learning and is based on annotated data. The following chapter will briefly present both and discuss their advantages and disadvantages, followed by exemplary realisations.
 
 \section{Rule-Based Techniques}
-Rule-based techniques rely on manual understanding and implementation of syntactic and semantic principles in natural language \citep{kennedy1996anaphora,mitkov1994integrated,ingria1989computational}. Clues that could be helpful for antecedent identification are manually implemented as rules. To identify relevant clues, prior knowledge about linguistic principles (such as binding principles) is necessary. Since rules might be domain-specific, the implementation would most likely be worse on other domains. Refinements for different domains would make the development even more complex and time-consuming. Nevertheless, rule-based techniques are much more transparent in contrast to machine learning.
+Rule-based techniques rely on manual understanding and implementation of syntactic and semantic principles in natural language \citep{kennedy1996anaphora,mitkov1994integrated,ingria1989computational}. Clues that could be helpful for antecedent identification are manually implemented as rules. To identify relevant clues, prior knowledge about linguistic principles (such as binding principles) is necessary. Since rules might be domain-specific, the implementation would most likely be worse on other domains. Refinements for different domains would make the development even more complex and time-consuming. Nevertheless, rule-based techniques are much more transparent in contrast to machine learning. In the last section, a comparing evaluation of both techniques will be presented.
 
 
 
 \subsection{The Naive Hobbs algorithm}
 The Naive Hobbs algorithm described by \citep{hobbs1978resolving} relies on parsed syntax trees containing the grammatical structure. Put simply, the tree containing the anaphora is searched left-to-right with breadth-first search and the algorithm stops when a matching noun phrase is found. Noun phrases mismatching in gender or number are neglected. The algorithm also limits the list of possible antecedents, as for instance the antecedent can not occur in the same non-dividable noun phrase. As long as no matching antecedent is found, the preceding sentence will be searched successively. \\
-Hobbs reported an accuracy score of 88,3 \% on the pronouns "he","she","it", and "them" with only using the algorithmic approach. The usage of additional constraints improved the accuracy to 91.7 \%.
+Hobbs reported an accuracy score of 88.3 \% on the pronouns “he",“she",“it", and “them" with only using the algorithmic approach. The usage of additional constraints improved the accuracy to 91.7 \%.
 
 \subsection{CogNIAC}
 Another rule-based approach was presented by \citep{baldwin1997cogniac} with CogNIAC, a high precision pronoun resolution system. It only resolves pronouns when high confidence rules (shown in Table \ref{table:cogniacRules}) are satisfied in order to avoid decisions under ambiguity and to ensure that only very likely antecedents are attached (high precision). This might lead to a neglect of less likely but still correct antecedents and lower the recall score. 
 \\
 For each pronoun the rules are applied one by one. If the given rule has found a matching candidate it will be accepted. Otherwise the next rule will be applied. If none matches the candidates it will be left unresolved as this implicates a higher ambiguity. In order to apply Baldwins high confidence rules, information on sentences, part-of-speech, and noun phrases is required and therefore annotated. Semantic category information such as gender and number is determined through various databases. Confirming their prediction, \citep{baldwin1997cogniac} reported a high precision score (97 \%), but lower recall (60 \%) on their training data consisting of 198 pronouns.\\
 As can be seen the order of rules lead from higher to lower precision: if only one possible antecedent can be found (rule 1) it is most likely the correct antecedent while rule 6 indicates more ambiguity as it relies on more content-related information. Human understanding of syntax and semantics is needed to determine a specific order of rules. Therefore, adding new rules might not improve the performance even though those rules are reasonable in itself. Most rule-based systems struggle with that problem.\\
-In a second evaluation, CogNIAC was compared to the Hobbs Algorithm \citep{baldwin1997cogniac,hobbs1978resolving} on singular third-person pronoun resolution. In order to maximize the ambiguity, the training data texts were narrations about same gender characters. To make accuracy scores comparable, \cite{baldwin1997cogniac} added lower precision rules, such as the most recent antecedent should be picked if no other rule found a matching noun phrase. The Accuracy scores reported were nearly equal (78,8\% on the Hobbs Algorithm, 77,9\% on CogNIAC), underlining the reason of existence of various approaches.
+In a second evaluation, CogNIAC was compared to the Hobbs Algorithm \citep{baldwin1997cogniac,hobbs1978resolving} on singular third-person pronoun resolution. In order to maximize the ambiguity, the training data texts were narrations about same gender characters. To make accuracy scores comparable, \cite{baldwin1997cogniac} added lower precision rules, such as the most recent antecedent should be picked if no other rule found a matching noun phrase. The Accuracy scores reported were nearly equal (78.8\% on the Hobbs Algorithm, 77.9\% on CogNIAC), underlining the reason of existence of various approaches.
 \begin{center}
 \captionof{table}{CogNIAC core rules}
     \begin{tabular}{| l |p{8cm} |}
@@ -27,11 +27,11 @@ In a second evaluation, CogNIAC was compared to the Hobbs Algorithm \citep{baldw
     Rule & Description \\ \hline
 \hline
     1) Unique in Discourse & If there is a single possible antecedent PAi in the read-in portion of the entire discourse, then pick PAi as the antecedent. \\ \hline
-    2) Reflexive & Pick nearest possible antecedent in read-in portion of current sentence if the anaphor is a reflexive pronoun \\ \hline
+    2) Reflexive & Pick nearest possible antecedent in read-in portion of current sentence if the anaphora is a reflexive pronoun \\ \hline
     3) Unique in Current + Prior & If there is a single possible antecedent i in the prior sentence and the read-in portion of the current sentence, then pick i as the antecedent: \\ \hline
-    4) Possessive Pro & If the anaphor is a possessive pronoun and there is a single exact string match i of the possessive in the prior sentence, then pick i as the antecedent:  \\ \hline
+    4) Possessive Pro & If the anaphora is a possessive pronoun and there is a single exact string match i of the possessive in the prior sentence, then pick i as the antecedent:  \\ \hline
     5) Unique Current Sentence & If there is a single possible antecedent in the read-in portion of the current sentence, then pick i as the antecedent  \\ \hline
-    6) Unique Subject/ Subject Pronoun & If the subject of the prior sentence contains a single possible antecedent i, and the anaphor is the subject of the current sentence, then pick i as the antecedent \\ \hline
+    6) Unique Subject/ Subject Pronoun & If the subject of the prior sentence contains a single possible antecedent i, and the anaphora is the subject of the current sentence, then pick i as the antecedent \\ \hline
 
     \end{tabular}
      \label{table:cogniacRules}
@@ -42,27 +42,23 @@ In a second evaluation, CogNIAC was compared to the Hobbs Algorithm \citep{baldw
 
 A domain independent approach by \cite{mitkov1998robust} tried to eliminate the disadvantages of previous rule-based systems. Mitkov renounced complex syntax and semantic analysis in order to keep the algorithm as less domain specific as possible. Only a part-of-speech tagger and a simple noun phrase identifitcation module were applied. The algorithm was informally described by Mitkov in three steps:
 \begin{enumerate} 
-\item Examine the current sentence and the two preceding sentences (if available). Look for noun phrases only to the left of the anaphor
-\item Select from the noun phrases identified only those which agree in gender and number with the pronominal anaphor and group them as a set of potential candidates
+\item Examine the current sentence and the two preceding sentences (if available). Look for noun phrases only to the left of the anaphora
+\item Select from the noun phrases identified only those which agree in gender and number with the pronominal anaphora and group them as a set of potential candidates
 \item Apply the antecedent indicators to each potential candidate and assign scores; the candidate with the highest aggregate score is proposed as antecedent
 \end{enumerate}
 
 Overall, a set of 10 antecedent indicators were used which indicate either a high or a low likelihood for the noun phrase to be the antecedent. Negative indicators such as definiteness (whether the noun phrase contains a definite article, whereby indefinite phrases decrease the likelihood) and positive indicators like term preference (if the noun phrase is a term in the field, the likelihood is increased). The score values are integers from -1 to 2. \\
-Mitkov reported a success rate of 89,7 \% on random sample texts of technical manuals. A modified approach could also be applied for polish \citep{mitkov2000robust} and arabic \citep{mitkov1998multilingual} with similar success rates.
+Mitkov reported a success rate of 89.7 \% on random sample texts of technical manuals. A modified approach could also be applied for polish \citep{mitkov2000robust} and arabic \citep{mitkov1998multilingual} with similar success rates.
 A comparing evaluation to Baldwins CogNIAC \citep{baldwin1997cogniac} indicated a superiority of Mitkovs approach \citep{mitkov1998robust} as CogNIAC had a lower success rate of approximately 15 \% on the previously described data set. The stated reason for the comparison was that the approaches showed several similarities as both require few preprocessing and gain their information mostly from part-of-speech tags and noun phrases.\\
 The superiority of \citep{mitkov1998robust} could be explained by its handling of uncertainty as the antecedent indicators are not implemented as hard constraints. Basically, Mitkovs anaphora resolution system can be described as a combination between rule-based and statistical techniques in order to use the best of both worlds.
 
 In 2002, a revised version of the original approach by Mitkov was presented \citep{mitkov2002new}. The improved version of the original algorithm called MARS had some smaller and greater changes:\\
-First of all, three new antecedent indicators and a module for identification of pleonastic pronouns\footnote{A pleonastic pronoun is non-referential. For example the \textit{it} in "it is raining" } and non-nominal pronominal anaphors were added. Additionaly, the implementation of some previous features was changed as other preprocessing tools were used.
+First of all, three new antecedent indicators and a module for identification of pleonastic pronouns\footnote{A pleonastic pronoun is non-referential. For example the \textit{it} in “it is raining" } and non-nominal pronominal anaphoras were added. Additionaly, the implementation of some previous features was changed as other preprocessing tools were used.
 
 \subsection{GuiTAR}
 With GuiTAR, a modular anaphora resolution tool was developed \citep{poesio2004general}. It was designed to be domain-unspecific and usable off-the-shelf which means that preprocessing steps such as part-of-speech tagging and named entity recognition will be added on itself. Either raw text data or XML files can be used as the input. In case of raw text data, XML files with annotated part-of-speech tags, noun phrase boundaries, pronoun categories etc. will be created. The anaphora resolution system relies on Mitkovs MARS-algorithm \citep{mitkov2002new}, which was introduced in section \ref{anaphoraLimitedKnowledgeSection}. 
 
-\citep{poesio2004mate} reported an F-measure of 64,2 \% for personal pronouns on raw text data of the GNOME corpus \citep{poesio2004general}. In comparison, the baseline approach (choosing the most recent antecedent) achieved an F-measure of 50,5 \% on the same data.
-
-
-\subsection{JavaRAP}
-The JavaRAP algorithm is a anaphora resolution system by \citep{qiu2004public}. It identifies third person pronouns (nominative, accusative or possessive) and lexical anaphors, such as "himself" or "myself".
+\citep{poesio2004mate} reported an F-measure of 64.2 \% for personal pronouns on raw text data of the GNOME corpus \citep{poesio2004general}. In comparison, the baseline approach (choosing the most recent antecedent) achieved an F-measure of 50.5 \% on the same data.
 
 %vllt noch ergänzen für andere Sprachen
 \section{Machine Learning-Based Techniques}
@@ -70,16 +66,16 @@ The JavaRAP algorithm is a anaphora resolution system by \citep{qiu2004public}. 
 Most machine learning-based techniques learn principles from annotated text corpora \citep{soon2001machine, bergsma2005automatic} which include the correct label for each instance. In this context, a label will contain the information whether a noun phrase is the antecedent. A decisive factor of machine learning is that irrelevant information (presented through features) has a lower impact on success factors (the accuracy for instance) compared to rule-based techniques, as the algorithm automatically learns to rate those as irrelevant and vice versa. Therefore, machine learning approaches tend to have little information on linguistic principles as the algorithm should learn those autonomously. This causes the algorithm to be less domain specific, but increases the risk to miss relevant clues. However, top-performing machine learning approaches achieve accuracy scores comparable to best non-learning techniques \citep{soon2001machine}. \\
 Additionally, machine learning algorithms are usually more time-consuming due to the learning process.
 
-\subsection{Anaphors in Coreference Resolution}
+\subsection{Anaphoras in Coreference Resolution}
 \label{soon2001traininginstances} %falls später darauf verwiesen werden soll wie die Instanzen erstellt werden
 
-As already stated, coreference resolution aims for linking all noun phrases referring to the same entity in the real world in a document. The most common kind of storing coreferential information is through coreference chains, in which the current element always points towards the following same entity-element. Pronominal anaphors are included and can be extracted by choosing the previous entity of the same coreference chain. Another way of storing coreferences is to define a unique ID for each real-life entity. All occurences in the text will be assigned to their belonging IDs.
+As already stated, coreference resolution aims for linking all noun phrases referring to the same entity in the real world in a document. The most common kind of storing coreferential information is through coreference chains, in which the current element always points towards the following same entity-element. Pronominal anaphoras are included and can be extracted by choosing the previous entity of the same coreference chain. Another way of storing coreferences is to define a unique ID for each real-life entity. All occurences in the text will be assigned to their belonging IDs.
 
-An often quoted coreference resolution system using machine learning was proposed by \cite{soon2001machine}. In this case decision trees was chosen as a classifier. A natural language processing pipeline was used for the identification of markables. The pipeline identified amongst others part-of-speech tags, noun phrases, named entities, and semantic classes. A high value was placed on designing generic features to make them domain-independent. In total, a set of 12 different features was used. It covers inter alia a distance feature (standing for the distance in sentences between two elements), a gender agreement feature (whether the gender matches), and a number agreement feature (whether the number matches). Deriving gender information of a noun requires information of their semantic classes. \cite{soon2001machine} worked with the simplified assumption that the semantic class of a noun phrase is the semantic class of the most frequent sense of the considered noun in WordNet. Gender agreement was assumed if both phrases got the same semantic class (for example "male") or if one is the parent of the other (such as phrase one is considered as "person" and phrase two as "male"). 
+An often quoted coreference resolution system using machine learning was proposed by \cite{soon2001machine}. In this case decision trees was chosen as a classifier. A natural language processing pipeline was used for the identification of markables. The pipeline identified amongst others part-of-speech tags, noun phrases, named entities, and semantic classes. A high value was placed on designing generic features to make them domain-independent. In total, a set of 12 different features was used. It covers inter alia a distance feature (standing for the distance in sentences between two elements), a gender agreement feature (whether the gender matches), and a number agreement feature (whether the number matches). Deriving gender information of a noun requires information of their semantic classes. \cite{soon2001machine} worked with the simplified assumption that the semantic class of a noun phrase is the semantic class of the most frequent sense of the considered noun in WordNet. Gender agreement was assumed if both phrases got the same semantic class (for example “male") or if one is the parent of the other (such as phrase one is considered as “person" and phrase two as “male"). 
 In order to make machine learning possible, training instances need to be generated.\\
 To generate positive training instances \cite{soon2001machine}. used every noun phrase in a coreference chain and its predecessor in the same chain. Each intervening noun phrase forms a negative instance with the considered noun phrase. 
 
-The researchers reported an F-measure of 62,6 \% on the MUC-6 data and comparable results on the MUC-7 data. A comparison with official MUC-scores indicated, that their system performed at the upper bound of the considered systems. Those values and the used feature set are often referred as baseline for further systems \citep{versley2008bart}.
+The researchers reported an F-measure of 62.6 \% on the MUC-6 data and comparable results on the MUC-7 data. A comparison with official MUC-scores indicated, that their system performed at the upper bound of the considered systems. Those values and the used feature set are often referred as baseline for further systems \citep{versley2008bart}.
 
 \citep{ng2002improving} extended their work and improved it through additional features, a different training set creation, and a clustering algorithm to find the noun phrase with the highest likelihood of coreference. The majority of the new features is based on syntactical principles. For instance, binding constraints must be fulfilled and one phrase is not allowed to span another. Positive training instances are not created through their preceding antecedent, but through their most confident one. In addition, they started to search for a related antecedent from right-to-left for a highly likely antecedent (in contrast to starting the right-to-left search for the first previous noun phrase). Ng and Cardie reported a significant increase in precision and F-measure compared to the initial approach by \citep{soon2001machine}.
 
@@ -88,7 +84,7 @@ The researchers reported an F-measure of 62,6 \% on the MUC-6 data and comparabl
 In 2008, Versley et al. introduced a coreference resolution system for raw text data which extended the previously described approach by \cite{soon2001machine}. The ambition for BART was to keep it as modular as possible so that it could be applied to many different subtasks of coreference resolution. BART consists of a preprocessing pipeline for parsing, part-of-speech tagging, and further basic information and a mention factory for mainly gender and number identification. Additionaly, a feature extraction module and therefore a matching decoder and encoder is included. The decoder generates the training data while the encoder prepares the testing data. Similar to \citep{soon2001machine} the feature labels are binarized which means that an anaphora either contains the correct or wrong antecedent. Accordingly, the feature labels are either true or false. \\
 A subsequent approach on multiple languages with BART \citep{broscheit2010bart} used a feature set of seven features for all classification types, including a gender agreement, number agreement, string match, and distance feature. The procedure of gaining gender and number information was adopted by \cite{soon2001machine}. 
 
-An F-measure of approximately 55,6 \% on Bnews articles of the ACE-2 corpora was reported with the usage of the basic feature set \citep{versley2008bart}. 
+An F-measure of approximately 55.6 \% on Bnews articles of the ACE-2 corpora was reported with the usage of the basic feature set \citep{versley2008bart}. 
 With additional language-dependent features, BART was successfully transferred to german \citep{broscheit2010extending}, polish \citep{kopec2012creating}, and italian \citep{poesio2010creating}.
 
 \citep{reiteretal:2011b} indicated that a great weakness of BART is the implementation of gender information as in their evaluation even noun phrases with explicit gender information were linked incorrectly.
@@ -105,8 +101,8 @@ and mention-ranking models — by a
 large margin.
 
 \subsection{Pronoun Resolution in Spoken Dialogue}
-As already mentioned, machine learning approaches are less domain-specific than rule-based systems. For that reason \citep{strube2003machine} presented an corpus-based approach for pronoun resolution in spoken language. Still, several extensions and adaptions had to be done as spoken dialogue differs from written texts gravely. Firstly, the number of pleonastic pronouns in spoken dialogue is substantially increased. Secondly, a not ignorable amount of anaphors in spoken dialogue dont have a clearly defined antecedent so that even humans cant determine them. \citep{eckert2000dialogue} called them vague anaphors and figured out that 13.2 \% of all anaphors in their examined corpus fall in that category.\\
-A corpus of twenty switchboard dialogues was used. In order to generate training data, a list of all potential anaphors was created. Potential anaphors are all non-definite noun phrases except for first and second person pronouns. Each element in the remaining list forms a pair with every preceding noun phrase that does not disagree in gender, number, or person. If the instances corefer they were labelled P, else N. For all anaphoras without explicit noun phrase antecedents other phrases (for instance verb phrases) in the current last two sentences were used to form pairs. \\
+As already mentioned, machine learning approaches are less domain-specific than rule-based systems. For that reason \citep{strube2003machine} presented an corpus-based approach for pronoun resolution in spoken language. Still, several extensions and adaptions had to be done as spoken dialogue differs from written texts gravely. Firstly, the number of pleonastic pronouns in spoken dialogue is substantially increased. Secondly, a not ignorable amount of anaphoras in spoken dialogue dont have a clearly defined antecedent so that even humans cant determine them. \citep{eckert2000dialogue} called them vague anaphoras and figured out that 13.2 \% of all anaphoras in their examined corpus fall in that category.\\
+A corpus of twenty switchboard dialogues was used. In order to generate training data, a list of all potential anaphoras was created. Potential anaphoras are all non-definite noun phrases except for first and second person pronouns. Each element in the remaining list forms a pair with every preceding noun phrase that does not disagree in gender, number, or person. If the instances corefer they were labelled P, else N. For all anaphoras without explicit noun phrase antecedents other phrases (for instance verb phrases) in the current last two sentences were used to form pairs. \\
 The feature set with a total of 25 features included noun-phrase features, coreference-level features and spoken dialogue features. Noun-phrase features rely on further preprocessing such as gender, number, or the grammatical function of the anaphora or the antecedent. Coreference-level features could be described as low-level preprocessing features. Those features mainly describe the distance between the antecedent and the anaphora, for instance in words or sentences. The features especially for spoken dialogue contain for instance information on how many noun phrases are located between anaphora and antecedent.
 A decision tree classifier with 20-fold crossvalidation was applied. \citep{strube2003machine} reported an F-measure of 47.42 \% for the full classifier, including all pronouns and all features. 
 
@@ -115,10 +111,10 @@ A decision tree classifier with 20-fold crossvalidation was applied. \citep{stru
 \cite{bergsma2005automatic} presented a machine learning approach to anaphora resolution which treats gender information not as a hard constraint, but as a probability distribution of possible outcomes. A majority of previous approaches assigned either a specific gender and number (e.g. masculine, feminine, neutral, or plural) or, in case of uncertainty, no gender at all \citep{soon2001machine, broscheit2010bart}. Another motivation was that \cite{kennedy1996anaphora} reported to attribute 35 \% of their resolution errors to gender mismatch. Only third-person pronouns were considered.
 
 The gender information was derived of two sources: a text corpus and the web. 
-For the former, all occurences of nouns and pronouns in lexico-syntactic patterns are counted. Five different patterns for reflexives, possessives, nominatives, predicates, and designators were used (Table \ref{table:bergsma2004GenderTable}). A reflexive masculine occurence would be for instance "John likes himself". In this case, a counter for "John" with masculine gender and reflexive pronoun will be increased. This procedure was repeated for all other patterns and remaining genders and numbers (masculine, feminine, neutral, and plural).  \cite{bergsma2005automatic} applied lots of textual data in order to offset parser errors and other noise sources. The whole data set included the AQUAINT corpus \citep{graff2002aquaint} as well as the Reuters corpus \citep{rose2002reuters}. In total, a data set of approximately 6 gigabytes of text was used.
+For the former, all occurences of nouns and pronouns in lexico-syntactic patterns are counted. Five different patterns for reflexives, possessives, nominatives, predicates, and designators were used (Table \ref{table:bergsma2004GenderTable}). A reflexive masculine occurence would be for instance “John likes himself". In this case, a counter for “John" with masculine gender and reflexive pronoun will be increased. This procedure was repeated for all other patterns and remaining genders and numbers (masculine, feminine, neutral, and plural). \cite{bergsma2005automatic} applied lots of textual data in order to offset parser errors and other noise sources. The whole data set included the AQUAINT corpus \citep{graff2002aquaint} as well as the Reuters corpus \citep{rose2002reuters}. In total, a data set of approximately 6 gigabytes of text was used.
 
 \begin{center}
-\captionof{table}{Gender corpus patterns}
+\captionof{table}{Gender Corpus Patterns}
     \begin{tabular}{| l | p{5cm} | p{5cm} |}
     \hline
     Gender Corpus Indicators & Contained Elements & Pattern \\ \hline
@@ -126,17 +122,17 @@ For the former, all occurences of nouns and pronouns in lexico-syntactic pattern
     1) Reflexive & himself, herself, itself, and themselves &  \textit{noun} + \textit{verb} + \textit{reflexive}\\ \hline
     2) Possessive & his, her, its, and their & \textit{noun} + \textit{verb} + \textit{possessive} + \textit{noun} \\ \hline
     3) Nominative & he, she, it, and they & \textit{noun} + \textit{verb} + \textit{nominative} +  \textit{verb} \\ \hline
-    4) Predicate & he, she, it, and they & \textit{pronoun} +  is/are [a] + \textit{noun}  \\ \hline
+    4) Predicate & he, she, it, and they & \textit{pronoun} + is/are [a] + \textit{noun}  \\ \hline
     5) Designator & Mr. and Mrs. & \textit{designator} + \textit{noun}\\ \hline
     \end{tabular}
      \label{table:bergsma2004GenderTable}
 \end{center}
 
-Since a text corpus, no matter how big it is, cant contain all possible words and word combinations, the web was used as a second information source. The Google API was used to count the web pages that appear if a noun, the Google wildcard operator ("*"), and the gender indicator were searched. For instance, if the gender of "John" should be determined, a Google request will be sent with all gender indicating elements of Table \ref{table:bergsma2004GenderTable} ( John * himself, John * herself, John * itself, etc.).
-In the following step, the probabilities for each gender will be determined through the five corpus sources and the five web sources. The naive approach would be that the probability of the indicator to be masculine is the percentage of all cases in that the word occurs with its masculine indicator. For instance, in Table \ref{table:bergsma2004GenderFreqTable} the cumulated frequency of "alex" occuring with "himself" is 60. In total, "alex" was found 100 times with a reflexive pronoun. As a consequence, the probability for "alex" to be masculine would be estimated at 60 \% from reflexive indicators.
+Since a text corpus, no matter how big it is, cant contain all possible words and word combinations, the web was used as a second information source. The Google API was used to count the web pages that appear if a noun, the Google wildcard operator (“*"), and the gender indicator were searched. For instance, if the gender of “John" should be determined, a Google request will be sent with all gender indicating elements of Table \ref{table:bergsma2004GenderTable} ( John * himself, John * herself, John * itself, etc.).
+In the following step, the probabilities for each gender will be determined through the five corpus sources and the five web sources. The naive approach would be that the probability of the indicator to be masculine is the percentage of all cases in that the word occurs with its masculine indicator. For instance, in Table \ref{table:bergsma2004GenderFreqTable} the cumulated frequency of "Alex" occuring with “himself" is 60. In total, “Alex" was found 100 times with a reflexive pronoun. As a consequence, the probability for “Alex" to be masculine would be estimated at 60 \% from reflexive indicators.
 This approach leads to three major problems. First of all, zero-probabilities would indicate that there is no possibility for noun to belong to that gender. This might be true - some words might never be part of a certain gender. On the other hand, however, it might just be a rare event and an occurrence would be found with a larger or different text corpus. Secondly, adding a further count could change the likelihood enormous for small frequencies. This leads to the third problem: a measure is needed to determine the certainty of a likelihood. A 70 \% probability of a word to be masculine is more meaningful if 1000 cases are considered rather than 10. 
  
-In order to solve those problems, \cite{bergsma2005automatic} treated the counts as a Beta distribution in a Bayesian approach. More precisely, two parameters named $\alpha$ and $\beta$ are considered. For each gender, $\alpha$ determines the count of the considered event plus one (in order to avoid zero-probabilities) while $\beta$ represents the count of all not considered events plus one. The $\alpha$ and $\beta$ values of the previous "alex" example with reflexive indicators for masculine gender would be $\alpha$ = 61 and $\beta$ = 41. The mean value of it is computed as:
+In order to solve those problems, \cite{bergsma2005automatic} treated the counts as a Beta distribution in a Bayesian approach. More precisely, two parameters named $\alpha$ and $\beta$ are considered. For each gender, $\alpha$ determines the count of the considered event plus one (in order to avoid zero-probabilities) while $\beta$ represents the count of all not considered events plus one. The $\alpha$ and $\beta$ values of the previous “Alex" example with reflexive indicators for masculine gender would be $\alpha$ = 61 and $\beta$ = 41. The mean value of it is computed as:
 \begin{center}
 	 $\mu$ =  $\dfrac{\alpha }{\alpha + \beta}$  
 \end{center}
@@ -166,49 +162,58 @@ A complete distribution is presented in Table \ref{table:bergsma2004GenderFreqTa
 
 In case of little or no counts at all, the variance will be approximately 1/12. The classifier should automatically learn that distributions with that variance wont be meaningful.
 
-
-In order to prove the accuracy of their gender classification, \cite{bergsma2005automatic} built several SVM-Classifiers. Overall, a set of 20 features was used: Each of the five gender indicators (reflexive, possessive, etc.) has its mean and its variance as features (in this case, the standard deviation was used which is the square root of the variance). Each of the gender indicators was implemented corpus-based as well as web-based. All features led to an F-measure of 92 \%. Seperate classifiers for either web-based or corpus-based information yielded to an F-measure of 85,4 \% for the corpus-based and 90,4 \% for the web-based approach.
+In order to prove the accuracy of their gender classification, \cite{bergsma2005automatic} built several SVM-Classifiers. Overall, a set of 20 features was used: Each of the five gender indicators (reflexive, possessive, etc.) has its mean and its variance as features (in this case, the standard deviation was used which is the square root of the variance). Each of the gender indicators was implemented corpus-based as well as web-based. All features led to an F-measure of 92 \%. Seperate classifiers for either web-based or corpus-based information yielded to an F-measure of 85.4 \% for the corpus-based and 90.4 \% for the web-based approach.
 
 Various pronoun resolution classifiers were built in order to determine the influence of several aspects. In general, each classifier searches, beginning by the certain anaphora, the text backwards until a matching antecedent is found. The matching criteria vary depending on the complexity of the classifier. The search backwards of the more complex classifiers was limited so that only the current and the previous sentence was considered, because a corpus observation showed that more than 97 \% of all antecedents could be found in that range. If no accepted antecedent was found a threshold was reduced so that antecedents with lower likelihood might be accepted. This procedure was repeated until the first candidate exceed the threshold. 
 
 The first baseline approach was to always select the most recent noun phrase as antecedent. An accuracy of 26.0 \% was reported. \\
-A first improvement consisted of the use of only explicit gender indicators such as "Mr." and "Mrs." to determine the gender. The first previous antecedent that does not mismatch will be chosen. The accuracy was improved up to 30,8\%. 
-In a third baseline approach the previously mentioned gender SVM-classifiers were used to detect a gender match or mismatch. Underlining the importance of gender and number agreement, the accuracy rose up to 59,4 \%.
+A first improvement consisted of the use of only explicit gender indicators such as “Mr." and “Mrs." to determine the gender. The first previous antecedent that does not mismatch will be chosen. The accuracy was improved up to 30.8\%. 
+In a third baseline approach the previously mentioned gender SVM-classifiers were used to detect a gender match or mismatch. Underlining the importance of gender and number agreement, the accuracy rose up to 59.4 \%.
 
-The first machine learning approach included a feature set of 39 features, whereby most of the features were binarized. In order to apply those, the texts were tokenized, parsed, and noun phrases were linked. The training instance creation procedure was adopted by \cite{soon2001machine} and was previously described in Section \ref{soon2001traininginstances}. In total, 1251 positive and 2909 negative training instances were created. 
+The first machine learning approach included a feature set of 39 features, whereby most of the features were binarized. The features can be seperated into three categories. First of all, there are pronoun-related features that determine the gender and number of the pronoun. Secondly, antecedent-related features which provide for instance information on the grammatical relation of the noun phrase or whether it is a person or an organization. The third group of features describes the relation of pronoun and antecedent and contains features that rely on linguistic principles (such as if binding principles are satisfied) as well as features that only require basic preprocessing steps (sentence and word distance for instance). In order to apply those, the texts were tokenized, parsed, and noun phrases were linked. The training instance creation procedure was adopted by \cite{soon2001machine} and was previously described in Section \ref{soon2001traininginstances}. In total, 1251 positive and 2909 negative training instances were created. 
 
-The features can be seperated into three categories. First of all, there are pronoun-related features that determine the gender and number of the pronoun. Secondly, antecedent-related features which provide for instance information on the grammatical relation of the noun phrase or whether it is a person or an organization. The third group of features describes the relation of pronoun and antecedent and contains features that rely on linguistic principles (such as if binding principles are satisfied) as well as features that only require basic preprocessing steps (sentence and word distance for instance).
+The classifier reached a performance score of 62.3 \% which is above all previous approaches. The additional use of corpus and web frequency features and three other gender affecting features led to a performance score of 73.3 \%. 
 
-The classifier reached a performance score of 62,3 \% which is above all previous approaches. The additional use of corpus and web frequency features and three other gender affecting features led to a performance score of 73,3 \%. 
 
-provide background information needed to understand your thesis
-assures your readers that you are familiar with the important research that has been carried out in your area
-establishes your research w.r.t. research in your field
+\section{A Comparison of Both Strategies}
+\cite{aone1995evaluating} did a comparison of a previously build manually designed resolver (MDR) \citep{aone1993language} and their in 1995 introduced machine learning-based resolver (MLR).\\
+This section will briefly explain both implementations in order draw an appropriate conclusion of the comparison. % // to make the comparison more interpretable y comparison //illustrate //allow room for interpretation
 
-\section{Compared Evaluation}
-\cite{aone1995evaluating} did a comparison of a previously build manually designed resolver (MDR) \citep{aone1993language} and their in 1995 introduced machine learning-based resolver (MLR). 
+\subsection{A Manually Designed Resolver (MDR)}
+The manually designed resolver was build to be language-independent, extensible, robust, and tunable for specific domains. The used information was derived through three different knowledge bases: the \textit{Discourse Knowledge Source}, the \textit{Discourse Phenomenon}, and the \textit{Discourse Domain}. \\
+The former contains antecedent generators to determine all possible antecedents, a system to filter out unwanted antecedent candidates, and an orderer to rank the candidates from highest to lowest likelihood. All of these components rely on specific rules and functions. For instance, the filter removes candidates of mismatching gender. Even though some the rules are only applied on specific languages, \citep{aone1993language} reported that most of them are language-independent.\\
+The \textit{Discourse Phenomenon} contains all possible part-of-speech categories in which the anaphora could occur in a hierarchical order. For instance, “third-person" pronoun is a subclass of “pronoun". Each class includes its definition, two resolution strategies (a second one is needed if the main strategy fails), and specific language information if a category only exists in a certain language.\\
+The third knowledge base is responsible for domain-specific information. 
 
-The manually designed resolver was build to be language-independent, extensible, robust, and tunable for specific domains. The used information was derived through three different knowledge bases: the \textit{Discourse Knowledge Source}, the \textit{Discourse Phenomenon}, and the\textit{Discourse Domain}. 
+A module called \textit{Discourse Administrator} was used to determine the application domain and in a further step to select and filter the knowledge bases in order to generate the best possible resolution system. Therefore, the information stored in each knowledge base is heavily dependent on the considered language and domain. The general resolution process is as follows: The discourse phenomena are used to determine all anaphoras. In a second step, the discourse knowledge sources are applied in order to generate and filter all possible candidates. If only one remains, it will be chosen as antecedent. Otherwise, one or more orderers are applied and the best candidate will be chosen by order. If no candidate was found at all, the second strategy specified in the discourse phenomenon will be applied.
 
-The former contains antecedent generators, a system to filter out unwanted antecedent candidates, and orderer to rank the candidates from higher to lower likelihood.
 
- A module called Discourse Administrator was used to determine the application domain and, in a further step, to select and filter the knowledge bases in order to generate the best possible resolution system. 
+\subsection{A Machine Learning-Based Resolver (MLR)}
+The machine learning-based resolver presented by \cite{aone1995evaluating} used pairwise training examples containing information on the anaphora and its possible antecedent. A whole set of 66 features was used. \cite{aone1995evaluating} divided most of them into one of four subcategories, namely lexical, syntactic, semantic, and positional. The feature selection inspired by the manually designed resolver \citep{aone1993language}, but were generalized and changed in order to be domain- and language independent.
 
-Domain KB)
-compared a machine learning approach to their previously build Manually-Designed Resolver (MDR).
-AoneBennettComparisonOfMLMD
-\citep{aone1993language}
-\citep{aone1995evaluating}
+In total, six different classifiers depending on three parameters were trained. The first parameter was called anaphoric chain. If its value is true, a correct antecedent is detected if the candidate is part of the same anaphoric chains which means that both refer to the same real-world entity. Otherwise, just the preceding same-world entity will be accepted as correct antecedent. This parameter also affects the training instance generation. In case of anaphoric chains, all co-refering phrases will form positive training instances with its anaphora. In the other case, just the preceding co-refering phrase will be used for positive instances. In both cases, the remaining phrases will form negative training instances with the anaphora. The second parameter determines whether the decision tree will use further information of the anaphoric type (for instance whether the real-world entity of the anaphora is a proper name). A third parameter determines the pruning-factor of its decision tree. A high pruning-factor indicates a higher generalization while decision trees with a lower factor tend to overfit. 
 
-\section{Hybrid Approach}
+\subsection{Evaluation}
+The comparison was evaluated on japanese newspaper articles. In total, 1271 anaphoras were used. As it can be seen in Table \ref{table:aone1995evals}, all machine learning approaches using anaphoric chains outperformed the manual approach independent of their pruning-factor, while the approach without the usage of anaphoric chains performed slightly worse. The different pruning factors seemed to have a rather low impact on the performance.
 
-\section{A Statistical Approach}
+As the manually designed resolver also detects only the preceding same-world entity, it would be most reasonable to compare it to the MLR-6. Even though the manual approach performed better, no language specific information or relevance of features need to be determined as the algorithm learned it autonomously \citep{aone1995evaluating}. \cite{aone1995evaluating} interpreted the results as optimistic for machine learning techniques.
 
-e.g.\
-\begin{itemize}
-  \item conceptual framework
-  \item structured overview on comparable approaches
-  \item different perspectives on your topic
-\end{itemize}
+\begin{center}
+\captionof{table}{Aone \& Bennett Evaluation}
+\begin{tabular}{|c|c|c|c|c|}
+	\cline{1-5}
+	Algorithm & Anaphoric Chains & Anaphoric Type& Confidence & F-measure \\ \cline{1-5}
+	\cline{1-5}
+	MLR-1 & yes & no & 100 \% &  76.27 \\ \cline{1-5}
+	MLR-2 & yes & no & 75 \% & 77.30 \\ \cline{1-5}
+	MLR-3 & yes & no & 50 \% & 76.43 \\ \cline{1-5}
+	MLR-4 & yes & no & 25 \% & 77.28 \\ \cline{1-5}
+	MLR-5 & yes & yes & 75 \% & 74.54 \\ \cline{1-5}
+	MLR-6 & no & no & 75 \% & 67.03 \\ \cline{1-5}
+	\multicolumn{5}{r}{}\\ \cline{4-5}
+	\multicolumn{2}{r}{} & &  MDR & 69.57 \\
+\cline{4-5}
+	\end{tabular}
+ \label{table:aone1995evals}
+\end{center}
 
- a
