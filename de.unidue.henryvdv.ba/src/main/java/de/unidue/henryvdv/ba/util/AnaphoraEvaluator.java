@@ -1,7 +1,9 @@
 package de.unidue.henryvdv.ba.util;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,15 +30,16 @@ public class AnaphoraEvaluator {
 	private static final String PRINT_FILE_DIRECTORY = "src/main/resources/output";
 	
 	public static final boolean PARAM_PRINTFILE = true;
-
-	private int anaphorsTotal = 0;
-	private int correctAnaphorsTotal = 0;
 	
-	private int totalTN = 0;
-	private int totalTP = 0;
-	private int totalFP = 0;
-	private int totalFN = 0;
-	
+	/**
+	 * Order: [0]=TP, [1]=TN, [2]=FP, [3]=FN
+	 */
+	private int[] bergsmaLowerThreshold;
+	private int[] bergsmaKeepThreshold;
+	private int[] lastNSentences;
+	private int[] lastNSentences_takeTheBest;
+	private int[] lastNSentences_baseline;
+	private int[] lastNSentences_sameEntity;
 	
 	private File accuracyOutputFile;
 	private File outputFile;
@@ -46,13 +49,11 @@ public class AnaphoraEvaluator {
 		super();
 		accuracyOutputFile = new File(PRINT_FILE_DIRECTORY + "/" + ACCURACY_FILE_NAME);
 		outputFile = new File(PRINT_FILE_DIRECTORY + "/" + OUTPUT_FILE_NAME);
-		
 		output = new ArrayList<String>();
-		output.add("-----------------------------------------NEW EVALUATION----------------------------------");
 	}
 	
-	public void evaluateSameEntity_Bergsma(List<DetectedNP> detectedAntecedents, List<Anaphora> anaphoras, Collection<MyCoreferenceChain> corefChains, boolean printChoices, String documentName){
-
+	public void evaluateBergsma_SameEntity(List<DetectedNP> detectedAntecedents, List<Anaphora> anaphoras, Collection<MyCoreferenceChain> corefChains, boolean printChoices, String documentName){
+		//TODO: Fix
 		List<MyCoreferenceChain> anaphoraChains = new ArrayList<MyCoreferenceChain>();
 		for(int i = 0; i < anaphoras.size(); i++){
 			int anaphoraBegin = anaphoras.get(i).getBegin();
@@ -109,14 +110,17 @@ public class AnaphoraEvaluator {
 				correct++;
 			total++;
 		}
-		anaphorsTotal += total;
-		correctAnaphorsTotal += correct;
+	//	anaphorsTotal += total;
+	//	correctAnaphorsTotal += correct;
 	}
 	
-	public void evaluate_Bergsma(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
+	public void evaluateBergsma_LowerThreshold(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
+		if(bergsmaLowerThreshold == null)
+			bergsmaLowerThreshold = new int[]{0,0,0,0};
+		
 		System.out.println("Anaphors: " + allNPs.keySet().size());
-		int correct = 0;
-		int total = 0;
+		int TP = 0;
+		int FP = 0;
 		for(Anaphora anaphora : allNPs.keySet()){
 			int goldAntecedentBegin = anaphora.getAntecedent().getBegin();
 			int goldAntecedentEnd = anaphora.getAntecedent().getEnd();
@@ -130,10 +134,16 @@ public class AnaphoraEvaluator {
 			while(!foundPossibleAntecedent){
 				MyNP nearest = null;
 				int dist = Integer.MAX_VALUE;
+				int size = Integer.MAX_VALUE;
 				for(MyNP np : candidates){
 					if(anaphora.getBegin() - np.getBegin() < dist){
 						nearest = np;
 						dist = anaphora.getBegin() - np.getBegin();
+						size = np.getEnd() - np.getBegin();
+					} else if((anaphora.getBegin() - np.getBegin() == dist) && (np.getEnd() - np.getBegin()) < size){
+						nearest = np;
+						dist = anaphora.getBegin() - np.getBegin();
+						size = np.getEnd() - np.getBegin();
 					}
 				}
 				if(nearest.getOutputValue() > threshold){
@@ -158,22 +168,95 @@ public class AnaphoraEvaluator {
 			int npEnd = possibleAntecedent.getEnd();
 			if(Parameters.exactBoundMatch){
 				if(goldAntecedentBegin == npBegin && goldAntecedentEnd == npEnd){
-					correct++;
+					TP++;
+				} else {
+					FP++;
 				}
 			} else {
 				if((goldAntecedentBegin >= npBegin && goldAntecedentEnd <= npEnd) || goldAntecedentBegin <= npBegin && goldAntecedentEnd >= npEnd){
-					correct++;
+					TP++;
+				} else {
+					FP++;
 				}
 			}
-
-			total++;
 		}
-
-		anaphorsTotal += total;
-		correctAnaphorsTotal += correct;
+		bergsmaLowerThreshold[0] += TP;
+		bergsmaLowerThreshold[2] += FP;
 	}
 	
+	public void evaluateBergsma_KeepThreshold(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
+		if(bergsmaKeepThreshold == null)
+			bergsmaKeepThreshold = new int[]{0,0,0,0};
+		int TP = 0;
+		int FP = 0;
+		int FN = 0;
+		for(Anaphora anaphora : allNPs.keySet()){
+			int goldAntecedentBegin = anaphora.getAntecedent().getBegin();
+			int goldAntecedentEnd = anaphora.getAntecedent().getEnd();
+			List<MyNP> candidates = new ArrayList<MyNP>();
+			for(MyNP np : allNPs.get(anaphora)){
+				candidates.add(np);				
+			}
+			boolean foundPossibleAntecedent = false;
+			float threshold = Parameters.acceptAtThreshold;
+			MyNP possibleAntecedent = null;
+			while(!foundPossibleAntecedent){
+				MyNP nearest = null;
+				int dist = Integer.MAX_VALUE;
+				int size = Integer.MAX_VALUE;
+				for(MyNP np : candidates){
+					if(anaphora.getBegin() - np.getBegin() < dist){
+						nearest = np;
+						dist = anaphora.getBegin() - np.getBegin();
+						size = np.getEnd() - np.getBegin();
+					} else if((anaphora.getBegin() - np.getBegin() == dist) && (np.getEnd() - np.getBegin()) < size){
+						nearest = np;
+						dist = anaphora.getBegin() - np.getBegin();
+						size = np.getEnd() - np.getBegin();
+					}
+				}
+				if(nearest.getOutputValue() > threshold){
+					foundPossibleAntecedent = true;
+					possibleAntecedent = nearest;
+				} else {
+					candidates.remove(nearest);
+					if(candidates.size() == 0){
+						break;
+					}
+				}
+			}
+			if(possibleAntecedent == null){
+				FN++;
+				continue;
+			}
+			
+			int npBegin = possibleAntecedent.getBegin();
+			int npEnd = possibleAntecedent.getEnd();
+			if(Parameters.exactBoundMatch){
+				if(goldAntecedentBegin == npBegin && goldAntecedentEnd == npEnd){
+					TP++;
+				} else {
+					FP++;
+				}
+			} else {
+				if((goldAntecedentBegin >= npBegin && goldAntecedentEnd <= npEnd) || goldAntecedentBegin <= npBegin && goldAntecedentEnd >= npEnd){
+					TP++;
+				} else {
+					FP++;	
+				}
+			}		
+		}
+
+		bergsmaKeepThreshold[0] += TP;
+		bergsmaKeepThreshold[2] += FP;
+		bergsmaKeepThreshold[3] += FN;
+
+	}
+	
+	
 	public void evaluate_last_n_sentences(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
+		if(lastNSentences == null)
+			lastNSentences = new int[]{0,0,0,0};
 		int currentTN = 0;
 		int currentTP = 0;
 		int currentFP = 0;
@@ -223,14 +306,16 @@ public class AnaphoraEvaluator {
 			}
 			
 		}
-		
-		totalTP += currentTP;
-		totalFN += currentFN;
-		totalTN += currentTN;
-		totalFP += currentFP;
+		lastNSentences[0] += currentTP;
+		lastNSentences[1] += currentTN;
+		lastNSentences[2] += currentFP;
+		lastNSentences[3] += currentFN;	
 	}
 
 	public void last_n_sentences_takeTheBest(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
+		if(lastNSentences_takeTheBest == null)
+			lastNSentences_takeTheBest = new int[]{0,0,0,0};
+		
 		int currentTN = 0;
 		int currentTP = 0;
 		int currentFP = 0;
@@ -267,14 +352,16 @@ public class AnaphoraEvaluator {
 				}		
 			}	
 		}
-		
-		totalTP += currentTP;
-		totalFN += currentFN;
-		totalTN += currentTN;
-		totalFP += currentFP;
+		lastNSentences_takeTheBest[0] += currentTP;
+		lastNSentences_takeTheBest[1] += currentTN;
+		lastNSentences_takeTheBest[2] += currentFP;
+		lastNSentences_takeTheBest[3] += currentFN;	
 	}
 	
 	public void last_n_sentences_baseline(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
+		if(lastNSentences_baseline == null)
+			lastNSentences_baseline = new int[]{0,0,0,0};
+		
 		int currentTN = 0;
 		int currentTP = 0;
 		int currentFP = 0;
@@ -312,13 +399,16 @@ public class AnaphoraEvaluator {
 				}
 			}
 		}
-		totalTP += currentTP;
-		totalFN += currentFN;
-		totalTN += currentTN;
-		totalFP += currentFP;
+		lastNSentences_baseline[0] += currentTP;
+		lastNSentences_baseline[1] += currentTN;
+		lastNSentences_baseline[2] += currentFP;
+		lastNSentences_baseline[3] += currentFN;
 	}
 	
 	public void evaluate_last_n_sentences_sameEntity(Map<Anaphora, List<MyNP>> allNPs,Collection<MyCoreferenceChain> corefChains, boolean printChoices){
+		if(lastNSentences_sameEntity == null)
+			lastNSentences_sameEntity = new int[]{0,0,0,0};
+		
 		List<Anaphora> anaphoras = new ArrayList<Anaphora>();
 		for(Anaphora a :allNPs.keySet()){
 			anaphoras.add(a);
@@ -393,112 +483,152 @@ public class AnaphoraEvaluator {
 				}
 			}
 		}
-		totalTP += currentTP;
-		totalFN += currentFN;
-		totalTN += currentTN;
-		totalFP += currentFP;	
-	}
-	
-	public void printResults_last_n_sentences(){
-		int correct = totalTP + totalTN;
-		int total = totalTP + totalTN + totalFN + totalFP;
-		float accuracy = 0f;
-		if(total != 0){
-			accuracy = ((float)correct / (float)total) * 100f;
-		}
+		lastNSentences_sameEntity[0] += currentTP;
+		lastNSentences_sameEntity[1] += currentTN;
+		lastNSentences_sameEntity[2] += currentFP;
+		lastNSentences_sameEntity[3] += currentFN;
+	}	
 
-		
-		int totalTPFP = totalTP + totalFP;
-		int totalTPFN = totalTP + totalFN;
-		
-		float precision = 0f;
-		float recall = 0f;
-		float fMeasure = 0f;
-		if(totalTPFP != 0){
-			recall = (float)totalTP / (float)totalTPFP;
-		}
-		if(totalTPFN != 0){
-			precision = (float)totalTP / (float)totalTPFN;
-		}
-		if(precision != 0f || recall != 0f){
-			fMeasure = (2f * precision * recall) / (precision + recall);
-		}
-		
-		System.out.println("*********************************");
-		System.out.println("Accuracy: " + accuracy + " % ");
-		System.out.println("Precision: " + precision);
-		System.out.println("Recall: " + recall);
-		System.out.println("F1-Measure: " + fMeasure);
-		System.out.println("TP: " + totalTP +
-							"   FP:" + totalFP + 
-							"   TN: " + totalTN + 
-							"   FN: " + totalFN + 
-							"   SUM:" + (totalTP + totalFP + totalTN + totalFN));
-		System.out.println("*********************************");
-	}
-	
-	
-	public void printResults_bergsma(){
-		float rel = 0f;	
-		if(anaphorsTotal != 0){
-			rel = ((float)correctAnaphorsTotal / (float)anaphorsTotal) * 100f;
-		} 
-		System.out.println("Correct: " + correctAnaphorsTotal);
-		System.out.println("Total: " + anaphorsTotal);
-		System.out.println("Accuracy: " + rel + " % ");
-	}
 	
 	public void printResults(){
-		output.add("-----------------------------------------EVALUATION END----------------------------------");
-		float rel = 0f;	
-		if(anaphorsTotal != 0){
-			rel = ((float)correctAnaphorsTotal / (float)anaphorsTotal) * 100f;
-		} 
-		System.out.println("Accuracy: " + rel + " % ");
-		if(PARAM_PRINTFILE){
-			
+		
+		boolean isEmptyFile = false;
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(accuracyOutputFile));     
+			if (br.readLine() == null) {
+			    isEmptyFile = true;
+			}
+			br.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		if(PARAM_PRINTFILE){		
 			FileWriter fw = null;
 			BufferedWriter bw = null;
 			PrintWriter out = null;
 			try {
-
 				fw = new FileWriter(accuracyOutputFile, true);
 			    bw = new BufferedWriter(fw);
-			    out = new PrintWriter(bw);
-			    out.println("Correct: " + correctAnaphorsTotal + "  Total: " + anaphorsTotal + "  Accuracy: " + rel);
-			    out.close();
+			    out = new PrintWriter(bw);			    
 			    
-			    fw = new FileWriter(outputFile, true);
-			    bw = new BufferedWriter(fw);
-			    out = new PrintWriter(bw);
+			    if(isEmptyFile){
+			    	createCaptions();
+			    }
+			    createOutput();
 			    for(String s : output){
-				    out.println(s);
+			    	out.println(s);
 			    }
 			    out.close();
-			    
+			    bw.close();
+			    fw.close();
+			   	 
 			} catch (IOException e) {
 			    //exception handling left as an exercise for the reader
 			}
-			finally {
-			    if(out != null)
-				    out.close();
-			    try {
-			        if(bw != null)
-			            bw.close();
-			    } catch (IOException e) {
-			        //exception handling left as an exercise for the reader
-			    }
-			    try {
-			        if(fw != null)
-			            fw.close();
-			    } catch (IOException e) {
-			        //exception handling left as an exercise for the reader
-			    }
-			}
-			
 			
 		}
 	}
+	
+	private void createOutput(){
+		String values = "";
+		if(bergsmaLowerThreshold != null){
+			values += returnAllValues(bergsmaLowerThreshold);
+		}
+		if(bergsmaKeepThreshold != null){
+			values += returnAllValues(bergsmaKeepThreshold);
+		}
+		if(lastNSentences != null){
+			values += returnAllValues(lastNSentences);
+		}
+		if(lastNSentences_takeTheBest != null){
+			values += returnAllValues(lastNSentences_takeTheBest);
+		}
+		if(lastNSentences_baseline != null){
+			values += returnAllValues(lastNSentences_baseline);
+		}
+		if(lastNSentences_sameEntity != null){
+			values += returnAllValues(lastNSentences_sameEntity);
+		}
 
+		output.add(values);	
+	}
+	
+	private void createCaptions(){
+		String caption = "";
+		String semi = ";;;;;;;;;";
+		String varNames = "";
+		String template = "TP;TN;FP;FN;;;;;;";
+		if(bergsmaLowerThreshold != null){
+			caption += "bergsmaLowerThreshold" + semi;
+			varNames += template;
+		}
+		if(bergsmaKeepThreshold != null){
+			caption += "bergsmaKeepThreshold" + semi;
+			varNames += template;
+		}
+		if(lastNSentences != null){
+			caption += "lastNSentences" + semi;
+			varNames += template;
+		}
+		if(lastNSentences_takeTheBest != null){
+			caption += "lastNSentences_takeTheBest" + semi;
+			varNames += template;
+		}
+		if(lastNSentences_baseline != null){
+			caption += "lastNSentences_baseline" + semi;
+			varNames += template;
+		}
+		if(lastNSentences_sameEntity != null){
+			caption += "lastNSentences_sameEntity" + semi;
+			varNames += template;
+		}
+		output.add(caption);
+		output.add(varNames);
+	}
+	
+	private String returnAllValues(int[] input){
+		String returnString = "";
+		returnString += input[0] + ";" + input[1] + ";"
+						+ input[2] + ";" + input[3] + ";";
+		return returnString + ";;;;;";
+	}
+	
+	private float getFmeasure(int[] input){
+		float precision = getPrecision(input);
+		float recall = getRecall(input);
+		float fMeasure = 0f;
+		if(precision != 0f || recall != 0f){
+			fMeasure = (2f * precision * recall) / (precision + recall);
+		}
+		return fMeasure;	
+	}
+	
+	private float getPrecision(int[] input){
+		int totalTPFN = input[0] + input[3];	
+		float precision = 0f;
+		if(totalTPFN != 0){
+			precision = ((float)input[0] / (float)totalTPFN)*100f;
+		}
+		return precision;
+	}
+	
+	private float getRecall(int[] input){
+		int totalTPFP = input[0] + input[2];	
+		float recall = 0f;
+		if(totalTPFP != 0){
+			recall = ((float)input[0] / (float)totalTPFP)*100f;
+		}
+		return recall;
+	}
+
+	private float getAccuracy(int[] input){
+		int correct = input[0] + input[1];
+		int total = input[0] + input[1] + input[2] + input[3];
+		float accuracy = 0f;
+		if(total != 0){
+			accuracy = ((float)correct / (float)total) * 100f;
+		}
+		return accuracy;
+	}
 	
 }

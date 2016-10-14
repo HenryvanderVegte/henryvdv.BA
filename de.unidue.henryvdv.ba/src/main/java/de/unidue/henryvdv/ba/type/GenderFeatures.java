@@ -11,7 +11,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Sun Sep 11 23:43:22 CEST 2016
+ * Updated by JCasGen Thu Oct 13 22:34:10 CEST 2016
  * XML source: C:/Users/Henry/Documents/henryvdv.BA/de.unidue.henryvdv.ba/src/main/resources/desc/type/GenderFeatures.xml
  * @generated */
 public class GenderFeatures extends Annotation {
@@ -316,6 +316,94 @@ public class GenderFeatures extends Annotation {
     if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Plural_Variance == null)
       jcasType.jcas.throwFeatMissing("g_Plural_Variance", "de.unidue.henryvdv.ba.type.GenderFeatures");
     jcasType.ll_cas.ll_setFloatValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Plural_Variance, v);}    
+   
+    
+  //*--------------*
+  //* Feature: g_Masculine_HardConstraint
+
+  /** getter for g_Masculine_HardConstraint - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public boolean getG_Masculine_HardConstraint() {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Masculine_HardConstraint == null)
+      jcasType.jcas.throwFeatMissing("g_Masculine_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    return jcasType.ll_cas.ll_getBooleanValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Masculine_HardConstraint);}
+    
+  /** setter for g_Masculine_HardConstraint - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setG_Masculine_HardConstraint(boolean v) {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Masculine_HardConstraint == null)
+      jcasType.jcas.throwFeatMissing("g_Masculine_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    jcasType.ll_cas.ll_setBooleanValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Masculine_HardConstraint, v);}    
+   
+    
+  //*--------------*
+  //* Feature: g_Feminine_HardConstraint
+
+  /** getter for g_Feminine_HardConstraint - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public boolean getG_Feminine_HardConstraint() {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Feminine_HardConstraint == null)
+      jcasType.jcas.throwFeatMissing("g_Feminine_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    return jcasType.ll_cas.ll_getBooleanValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Feminine_HardConstraint);}
+    
+  /** setter for g_Feminine_HardConstraint - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setG_Feminine_HardConstraint(boolean v) {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Feminine_HardConstraint == null)
+      jcasType.jcas.throwFeatMissing("g_Feminine_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    jcasType.ll_cas.ll_setBooleanValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Feminine_HardConstraint, v);}    
+   
+    
+  //*--------------*
+  //* Feature: g_Neutral_HardConstraint
+
+  /** getter for g_Neutral_HardConstraint - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public boolean getG_Neutral_HardConstraint() {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Neutral_HardConstraint == null)
+      jcasType.jcas.throwFeatMissing("g_Neutral_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    return jcasType.ll_cas.ll_getBooleanValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Neutral_HardConstraint);}
+    
+  /** setter for g_Neutral_HardConstraint - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setG_Neutral_HardConstraint(boolean v) {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Neutral_HardConstraint == null)
+      jcasType.jcas.throwFeatMissing("g_Neutral_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    jcasType.ll_cas.ll_setBooleanValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Neutral_HardConstraint, v);}    
+   
+    
+  //*--------------*
+  //* Feature: g_Plural_HardConstraint
+
+  /** getter for g_Plural_HardConstraint - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public boolean getG_Plural_HardConstraint() {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Plural_HardConstraint == null)
+      jcasType.jcas.throwFeatMissing("g_Plural_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    return jcasType.ll_cas.ll_getBooleanValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Plural_HardConstraint);}
+    
+  /** setter for g_Plural_HardConstraint - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setG_Plural_HardConstraint(boolean v) {
+    if (GenderFeatures_Type.featOkTst && ((GenderFeatures_Type)jcasType).casFeat_g_Plural_HardConstraint == null)
+      jcasType.jcas.throwFeatMissing("g_Plural_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    jcasType.ll_cas.ll_setBooleanValue(addr, ((GenderFeatures_Type)jcasType).casFeatCode_g_Plural_HardConstraint, v);}    
   }
 
     

@@ -61,15 +61,16 @@ public class FeatureUtils_Gender {
 		// Mean & standard deviation of plural Beta Distribution
 		setPluralDistribution(a);
 		
-	//	setHardConstraintGender(a);
+		setHardConstraintGender(a);
 	}
 	
 	public void setHardConstraintGender(Anaphora a){
 		String ante = a.getAntecedent().getCoveredText().toLowerCase();
-		int mFreq = 0;
-		int fFreq = 0;
-		int nFreq = 0;
-		int pFreq = 0;
+		boolean masculine = false;
+		boolean feminine = false;
+		boolean neutral = false;
+		boolean plural = false;
+
 		Integer[] freq = {0,0,0,0};
 		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
 		String person = null;
@@ -103,22 +104,18 @@ public class FeatureUtils_Gender {
 			}
 		}
 		if(freq[0] > freq[1] && freq[0] > freq[2] && freq[0] > freq[3])
-			mFreq = 1;
+			masculine = true;
 		if(freq[1] > freq[0] && freq[1] > freq[2] && freq[1] > freq[3])
-			fFreq = 1;
+			feminine = true;
 		if(freq[2] > freq[0] && freq[2] > freq[1] && freq[2] > freq[3])
-			nFreq = 1;
+			neutral = true;
 		if(freq[3] > freq[0] && freq[3] > freq[1] && freq[3] > freq[2])
-			pFreq = 1;
+			plural = true;
 		
-		a.getGenderFeatures().setG_Masculine_Mean(mFreq);
-		a.getGenderFeatures().setG_Masculine_Variance(0f);
-		a.getGenderFeatures().setG_Feminine_Mean(fFreq);
-		a.getGenderFeatures().setG_Feminine_Variance(0f);
-		a.getGenderFeatures().setG_Neutral_Mean(nFreq);
-		a.getGenderFeatures().setG_Neutral_Variance(0f);
-		a.getGenderFeatures().setG_Plural_Mean(pFreq);
-		a.getGenderFeatures().setG_Plural_Variance(0f);
+		a.getGenderFeatures().setG_Masculine_HardConstraint(masculine);
+		a.getGenderFeatures().setG_Feminine_HardConstraint(feminine);
+		a.getGenderFeatures().setG_Neutral_HardConstraint(neutral);
+		a.getGenderFeatures().setG_Plural_HardConstraint(plural);
 	}
 	
 	

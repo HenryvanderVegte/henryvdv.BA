@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Sun Sep 11 23:43:22 CEST 2016
+ * Updated by JCasGen Thu Oct 13 22:34:10 CEST 2016
  * @generated */
 public class GenderFeatures_Type extends Annotation_Type {
   /** @generated 
@@ -309,6 +309,102 @@ public class GenderFeatures_Type extends Annotation_Type {
     ll_cas.ll_setFloatValue(addr, casFeatCode_g_Plural_Variance, v);}
     
   
+ 
+  /** @generated */
+  final Feature casFeat_g_Masculine_HardConstraint;
+  /** @generated */
+  final int     casFeatCode_g_Masculine_HardConstraint;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public boolean getG_Masculine_HardConstraint(int addr) {
+        if (featOkTst && casFeat_g_Masculine_HardConstraint == null)
+      jcas.throwFeatMissing("g_Masculine_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    return ll_cas.ll_getBooleanValue(addr, casFeatCode_g_Masculine_HardConstraint);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setG_Masculine_HardConstraint(int addr, boolean v) {
+        if (featOkTst && casFeat_g_Masculine_HardConstraint == null)
+      jcas.throwFeatMissing("g_Masculine_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    ll_cas.ll_setBooleanValue(addr, casFeatCode_g_Masculine_HardConstraint, v);}
+    
+  
+ 
+  /** @generated */
+  final Feature casFeat_g_Feminine_HardConstraint;
+  /** @generated */
+  final int     casFeatCode_g_Feminine_HardConstraint;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public boolean getG_Feminine_HardConstraint(int addr) {
+        if (featOkTst && casFeat_g_Feminine_HardConstraint == null)
+      jcas.throwFeatMissing("g_Feminine_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    return ll_cas.ll_getBooleanValue(addr, casFeatCode_g_Feminine_HardConstraint);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setG_Feminine_HardConstraint(int addr, boolean v) {
+        if (featOkTst && casFeat_g_Feminine_HardConstraint == null)
+      jcas.throwFeatMissing("g_Feminine_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    ll_cas.ll_setBooleanValue(addr, casFeatCode_g_Feminine_HardConstraint, v);}
+    
+  
+ 
+  /** @generated */
+  final Feature casFeat_g_Neutral_HardConstraint;
+  /** @generated */
+  final int     casFeatCode_g_Neutral_HardConstraint;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public boolean getG_Neutral_HardConstraint(int addr) {
+        if (featOkTst && casFeat_g_Neutral_HardConstraint == null)
+      jcas.throwFeatMissing("g_Neutral_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    return ll_cas.ll_getBooleanValue(addr, casFeatCode_g_Neutral_HardConstraint);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setG_Neutral_HardConstraint(int addr, boolean v) {
+        if (featOkTst && casFeat_g_Neutral_HardConstraint == null)
+      jcas.throwFeatMissing("g_Neutral_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    ll_cas.ll_setBooleanValue(addr, casFeatCode_g_Neutral_HardConstraint, v);}
+    
+  
+ 
+  /** @generated */
+  final Feature casFeat_g_Plural_HardConstraint;
+  /** @generated */
+  final int     casFeatCode_g_Plural_HardConstraint;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public boolean getG_Plural_HardConstraint(int addr) {
+        if (featOkTst && casFeat_g_Plural_HardConstraint == null)
+      jcas.throwFeatMissing("g_Plural_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    return ll_cas.ll_getBooleanValue(addr, casFeatCode_g_Plural_HardConstraint);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setG_Plural_HardConstraint(int addr, boolean v) {
+        if (featOkTst && casFeat_g_Plural_HardConstraint == null)
+      jcas.throwFeatMissing("g_Plural_HardConstraint", "de.unidue.henryvdv.ba.type.GenderFeatures");
+    ll_cas.ll_setBooleanValue(addr, casFeatCode_g_Plural_HardConstraint, v);}
+    
+  
 
 
 
@@ -364,6 +460,22 @@ public class GenderFeatures_Type extends Annotation_Type {
  
     casFeat_g_Plural_Variance = jcas.getRequiredFeatureDE(casType, "g_Plural_Variance", "uima.cas.Float", featOkTst);
     casFeatCode_g_Plural_Variance  = (null == casFeat_g_Plural_Variance) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_g_Plural_Variance).getCode();
+
+ 
+    casFeat_g_Masculine_HardConstraint = jcas.getRequiredFeatureDE(casType, "g_Masculine_HardConstraint", "uima.cas.Boolean", featOkTst);
+    casFeatCode_g_Masculine_HardConstraint  = (null == casFeat_g_Masculine_HardConstraint) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_g_Masculine_HardConstraint).getCode();
+
+ 
+    casFeat_g_Feminine_HardConstraint = jcas.getRequiredFeatureDE(casType, "g_Feminine_HardConstraint", "uima.cas.Boolean", featOkTst);
+    casFeatCode_g_Feminine_HardConstraint  = (null == casFeat_g_Feminine_HardConstraint) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_g_Feminine_HardConstraint).getCode();
+
+ 
+    casFeat_g_Neutral_HardConstraint = jcas.getRequiredFeatureDE(casType, "g_Neutral_HardConstraint", "uima.cas.Boolean", featOkTst);
+    casFeatCode_g_Neutral_HardConstraint  = (null == casFeat_g_Neutral_HardConstraint) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_g_Neutral_HardConstraint).getCode();
+
+ 
+    casFeat_g_Plural_HardConstraint = jcas.getRequiredFeatureDE(casType, "g_Plural_HardConstraint", "uima.cas.Boolean", featOkTst);
+    casFeatCode_g_Plural_HardConstraint  = (null == casFeat_g_Plural_HardConstraint) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_g_Plural_HardConstraint).getCode();
 
   }
 }

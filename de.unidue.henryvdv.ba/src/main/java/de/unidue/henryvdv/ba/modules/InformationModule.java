@@ -14,6 +14,8 @@ import org.apache.uima.resource.ResourceInitializationException;
 import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceChain;
 import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceLink;
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
+import de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity;
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
@@ -36,6 +38,10 @@ public class InformationModule
 	private Collection<Anaphora> anaphoras;
 	private Collection<Sentence> sentences;
 	private Collection<Token> tokens;
+	private Collection<Lemma> lemmata;
+	private Collection<NamedEntity> namedEntities;
+	private Collection<Constituent> constituents;
+	private Collection<Dependency> dependencies;
 	
 	public void initialize(UimaContext context) throws ResourceInitializationException{
 		super.initialize(context);
@@ -49,10 +55,44 @@ public class InformationModule
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
 		sentences = JCasUtil.select(aJCas, Sentence.class);
 		tokens = JCasUtil.select(aJCas, Token.class);
-		collectAntecedentTokenSize();
+		lemmata = JCasUtil.select(aJCas, Lemma.class);
+		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
+		constituents = JCasUtil.select(aJCas, Constituent.class);
+		dependencies = JCasUtil.select(aJCas, Dependency.class);
+		
+		System.out.println("Sentences: ");
+		for(Sentence s : sentences){
+			System.out.println(s.getCoveredText());
+		}
+		System.out.println(" ");
+		System.out.println("Tokens: ");
+		for(Token t : tokens){
+			System.out.println(t.getCoveredText() + " -- " + t.getPos().getPosValue());
+		}
+		System.out.println(" ");
+		System.out.println("Lemmata: ");
+		for(Lemma l : lemmata){
+			System.out.println(l.getCoveredText() + " -- " + l.getValue());
+		}
+		System.out.println(" ");
+		System.out.println("Named Entities: ");
+		for(NamedEntity n : namedEntities){
+			System.out.println(n.getCoveredText() + " -- " + n.getValue());
+		}
+		System.out.println(" ");
+		System.out.println("Constituents: ");
+		for(Constituent c : constituents){
+			System.out.println(c.getCoveredText() + "  " + c.getConstituentType());
+		}
+		System.out.println(" ");
+		System.out.println("Dependencies: ");
+		for(Dependency d : dependencies){
+			System.out.println(d.getCoveredText() + " " + d.getDependencyType() + " " + d.getGovernor().getCoveredText());
+		}
+	//	collectAntecedentTokenSize();
 	//	collectSentenceDistanceInfo();
 	//	printyMyCorefChains();
-		printInfos();
+	//	printInfos();
 	//	printNounPhrases();
 	//	printDependencies();
 	//	printCorefChains();

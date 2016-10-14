@@ -245,25 +245,16 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		}
 		Map<Anaphora, List<MyNP>> allAnaphors = getAllAnaphors(anaphorasList);
 		
-		if(Parameters.classificationMode == ClassificationMode.BERGSMA){
-			eval.evaluate_Bergsma(allAnaphors, false);	
-		}		
-		
-		if(Parameters.classificationMode == ClassificationMode.LAST_N_SENTENCES){
-			eval.evaluate_last_n_sentences(allAnaphors, true);
-			//eval.evaluate_last_n_sentences_sameEntity(allAnaphors, corefChains, false);
-		}
+		eval.evaluateBergsma_KeepThreshold(allAnaphors, false);
+		eval.evaluateBergsma_LowerThreshold(allAnaphors, false);
+		eval.evaluate_last_n_sentences(allAnaphors, false);
+		eval.evaluate_last_n_sentences_sameEntity(allAnaphors, corefChains, false);
 
 	}
 	
 	@Override
 	public void collectionProcessComplete(){
-		if(Parameters.classificationMode == ClassificationMode.LAST_N_SENTENCES){
-			eval.printResults_last_n_sentences();
-		}
-		if(Parameters.classificationMode == ClassificationMode.BERGSMA){
-			eval.printResults_bergsma();
-		}
+		eval.printResults();
 	}
 	
 	/**

@@ -65,6 +65,26 @@
           <description/>
           <rangeTypeName>uima.cas.Float</rangeTypeName>
         </featureDescription>
+      <featureDescription>
+          <name>g_Masculine_HardConstraint</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>g_Feminine_HardConstraint</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>g_Neutral_HardConstraint</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>g_Plural_HardConstraint</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
       </features>
     </typeDescription>
   </types>

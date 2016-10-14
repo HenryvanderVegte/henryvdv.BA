@@ -1,6 +1,5 @@
 package de.unidue.henryvdv.ba.reader;
 
-import de.tudarmstadt.ukp.dkpro.core.api.coref.type.CoreferenceChain;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.unidue.henryvdv.ba.type.DocumentInfo;

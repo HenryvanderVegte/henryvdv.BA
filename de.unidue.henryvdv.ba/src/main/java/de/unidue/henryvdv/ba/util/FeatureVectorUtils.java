@@ -67,20 +67,28 @@ public class FeatureVectorUtils {
 		addG_StdGenderMismatch();
 		addG_PronounMismatch();
 		addG_MasculineMean();			
-//		addG_MasculineVariance();
+		addG_MasculineVariance();
 		addG_FeminineMean();		//35
-//		addG_FeminineVariance();
+		addG_FeminineVariance();
 		addG_NeutralMean();
-//		addG_NeutralVariance();			
+		addG_NeutralVariance();			
 		addG_PluralMean();
-//		addG_PluralVariance();
-		
+		addG_PluralVariance();
+	
+		/*
+		addG_HardConstraintMasculine();
+		addG_HardConstraintFeminine();
+		addG_HardConstraintNeutral();
+		addG_HardConstraintPlural();
+		*/
 									//40
 		//My own features:
-	//	addP_Reflexive();
-	//	addP_NpDistance();
-	//	addPA_IntermediatePronoun();
+		/*
+		addP_Reflexive();
+		addP_NpDistance();
+		addPA_IntermediatePronoun();
 		addA_CoveredTokens();
+		*/
 		return currentFeatureVector;
 	}
 	
@@ -269,6 +277,19 @@ public class FeatureVectorUtils {
 	
 	private void addA_CoveredTokens(){
 		addFloatFeature(currentAnaphora.getAntecedentFeatures().getA_CovTokens());
+	}
+	
+	private void addG_HardConstraintMasculine(){
+		addBinarizedFeature(currentAnaphora.getGenderFeatures().getG_Masculine_HardConstraint());
+	}
+	private void addG_HardConstraintFeminine(){
+		addBinarizedFeature(currentAnaphora.getGenderFeatures().getG_Feminine_HardConstraint());
+	}
+	private void addG_HardConstraintNeutral(){
+		addBinarizedFeature(currentAnaphora.getGenderFeatures().getG_Neutral_HardConstraint());
+	}
+	private void addG_HardConstraintPlural(){
+		addBinarizedFeature(currentAnaphora.getGenderFeatures().getG_Plural_HardConstraint());
 	}
 	
 	private void addBinarizedFeature(boolean value){

@@ -37,11 +37,9 @@ public class Parameters {
 	
 	public static final String genderCorpusDirectory = "src/main/resources/gendercorpus";
 		
-	public static final boolean removeCoveringNPs = true;
+	public static final boolean removeCoveringNPs = false;
 	
 	public static final boolean exactBoundMatch = true;
-	
-    public static final ClassificationMode classificationMode = ClassificationMode.BERGSMA;
     
 	public static final int MAX_SENTENCE_DIST = 1;
     

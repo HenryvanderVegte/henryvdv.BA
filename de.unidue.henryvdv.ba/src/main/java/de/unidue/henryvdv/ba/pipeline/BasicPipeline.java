@@ -4,8 +4,12 @@ import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.apache.uima.fit.pipeline.SimplePipeline;
 
+import de.tudarmstadt.ukp.dkpro.core.corenlp.CoreNlpLemmatizer;
 import de.tudarmstadt.ukp.dkpro.core.corenlp.CoreNlpNamedEntityRecognizer;
 import de.tudarmstadt.ukp.dkpro.core.corenlp.CoreNlpParser;
+import de.tudarmstadt.ukp.dkpro.core.corenlp.CoreNlpPosTagger;
+import de.tudarmstadt.ukp.dkpro.core.corenlp.CoreNlpSegmenter;
+
 import de.tudarmstadt.ukp.dkpro.core.snowball.SnowballStemmer;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordLemmatizer;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordNamedEntityRecognizer;
@@ -14,19 +18,15 @@ import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordSegmenter;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordCoreferenceResolver;
 import de.unidue.henryvdv.ba.modules.Baseline_Evaluator;
-import de.unidue.henryvdv.ba.modules.FeatureAnnotator_Antecedent;
-import de.unidue.henryvdv.ba.modules.FeatureAnnotator_Gender;
-import de.unidue.henryvdv.ba.modules.FeatureAnnotator_Pronoun;
-import de.unidue.henryvdv.ba.modules.FeatureAnnotator_PronounAntecedent;
+import de.unidue.henryvdv.ba.modules.FeatureAnnotator;
 import de.unidue.henryvdv.ba.modules.AnaphoraAnnotator;
 import de.unidue.henryvdv.ba.modules.InformationModule;
 import de.unidue.henryvdv.ba.modules.NegativeTrainingInstanceAnnotator;
 import de.unidue.henryvdv.ba.modules.QuotationAnnotator;
-import de.unidue.henryvdv.ba.modules.SVMLearn;
 import de.unidue.henryvdv.ba.modules.SVMTrainingInstanceCreator;
 import de.unidue.henryvdv.ba.reader.SimpleTextReader;
-import de.unidue.henryvdv.ba.reader.WikiCoref_DCorefReader;
 import de.unidue.henryvdv.ba.reader.WikiCoref_Reader;
+import de.unidue.henryvdv.ba.util.SVMLearn;
 
 public class BasicPipeline {
 	
@@ -34,7 +34,7 @@ public class BasicPipeline {
 
 	  public static void main(String[] args)
 			  throws Exception {	
-
+		  
      		runSimpleTextReader();
     		//  SVMLearn svmLearn = new SVMLearn();
     		//  svmLearn.learn();
@@ -47,20 +47,17 @@ public class BasicPipeline {
 				  CollectionReaderFactory.createReader(
 						  				SimpleTextReader.class,
 						  				SimpleTextReader.PARAM_INPUT_DIRECTORY,"src/test/resources/testDocuments"),
-				  AnalysisEngineFactory.createEngineDescription(StanfordSegmenter.class),
-				  AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
-			        AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
+				  AnalysisEngineFactory.createEngineDescription(CoreNlpSegmenter.class),
+			        AnalysisEngineFactory.createEngineDescription(CoreNlpPosTagger.class),
+			        AnalysisEngineFactory.createEngineDescription(CoreNlpLemmatizer.class),
 			        AnalysisEngineFactory.createEngineDescription(CoreNlpNamedEntityRecognizer.class),
 			        AnalysisEngineFactory.createEngineDescription(CoreNlpParser.class,
 																	CoreNlpParser.PARAM_ORIGINAL_DEPENDENCIES,
 																	false),
 			        AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
 			        AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
-			        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_PronounAntecedent.class),
-			        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_Antecedent.class),    
-			        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_Pronoun.class), 
-			        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_Gender.class), 
-			        AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)        	
+			        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator.class),        	
+			        AnalysisEngineFactory.createEngineDescription(InformationModule.class)      	
 				  );
 	  }
 	  
@@ -79,25 +76,13 @@ public class BasicPipeline {
 																	false),
 	        		AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
 	        		AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
-	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_PronounAntecedent.class),
-	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator_Antecedent.class),
-        		
+	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator.class),      		
 	        		AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class),       		
 	        		//AnalysisEngineFactory.createEngineDescription(Baseline_Evaluator.class),
 	                AnalysisEngineFactory.createEngineDescription(InformationModule.class)
 	        );
 		  
 	  }
-	  
-	  private static void runWikiCoref_DCorefReader() throws Exception{
-		  SimplePipeline.runPipeline(
-	                CollectionReaderFactory.createReader(
-	                        WikiCoref_DCorefReader.class,
-	                        WikiCoref_DCorefReader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_DCoref"
-	                ), 
-	                AnalysisEngineFactory.createEngineDescription(InformationModule.class)
-	            //    AnalysisEngineFactory.createEngineDescription(BaselineAnnotator.class)
-	        );
-	  }
+	 
 
 }

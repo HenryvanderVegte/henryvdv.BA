@@ -7,11 +7,11 @@ In the last decades, the amount of textual information in media has increased se
 
 The procedure of determining whether two expressions  refer to each other, meaning that they are instances of the same entity, is called anaphora resolution. The word to be resolved is termed anaphora while its predecessor is the antecedent. It differs from coreference resolution by considering only those words which get their meaning through its antecedent \citep{recasens2007anaphora} (1), while all corefering expressions are considered in coreference resolution (2).
 
-(1) [Aberfoyle] describes [itself] as [The Gateway to [the Trossachs]]. \\
-(resolve “itself" to “Aberfoyle")
+\begin{addmargin}[1cm]{1cm}
+(1) [Aberfoyle] describes [itself] as [The Gateway to [the Trossachs]]. (resolve “itself" to “Aberfoyle")
 
-(2) As late as 1790, all the residents in the parish of [Aberfoyle] spoke [Scottish Gaelic]. From 1882 [the village] was served by [Aberfoyle railway station].\\
-(resolve “the village"  to “Aberfoyle")
+(2) As late as 1790, all the residents in the parish of [Aberfoyle] spoke [Scottish Gaelic]. From 1882 [the village] was served by [Aberfoyle railway station]. (resolve “the village"  to “Aberfoyle")
+\end{addmargin}
 
 Resolving noun phrases is a growing task in Natural Language Processing (NLP) and increased its relevance in the last decades, that it even became a standalone subtask in the DARPA Message Understanding Conference in 1995 \citep{chinchor1995message}. The International Workshop on Semantic Evaluation (SemEval) conducted a coreference resolution task on multiple languages \citep{recasens2010semeval} emphasizing its importance. 
 There are several fundamental applications of coreference and anaphora resolution, such as Information Extraction (IE) \citep{mccarthy1995using} and Question Answering (QA) \citep{morton2000coreference}.\\ 

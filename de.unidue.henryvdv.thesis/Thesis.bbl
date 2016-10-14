@@ -120,25 +120,28 @@ Bergsma%
 }{%
 {\protect \APACyear {2006}}%
 }]{%
-bergsma2006bootstrapping}
+Bergsma:06}
 \APACinsertmetastar {%
-bergsma2006bootstrapping}%
+Bergsma:06}%
 \begin{APACrefauthors}%
 Bergsma, S.%
 \BCBT {}\ \BBA {} Lin, D.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
-\APACrefYearMonthDay{2006}{}{}.
+\APACrefYearMonthDay{2006}{July}{}.
 \newblock
-{\BBOQ}\APACrefatitle {Bootstrapping path-based pronoun resolution}
+{\BBOQ}\APACrefatitle {Bootstrapping Path-Based Pronoun Resolution}
   {Bootstrapping path-based pronoun resolution}.{\BBCQ}
 \newblock
 \BIn{} \APACrefbtitle {Proceedings of the 21st International Conference on
-  Computational Linguistics and the 44th annual meeting of the Association for
+  Computational Linguistics and 44th Annual Meeting of the Association for
   Computational Linguistics} {Proceedings of the 21st international conference
-  on computational linguistics and the 44th annual meeting of the association
-  for computational linguistics}\ (\BPGS\ 33--40).
+  on computational linguistics and 44th annual meeting of the association for
+  computational linguistics}\ (\BPGS\ 33--40).
+\newblock
+\APACaddressPublisher{Sydney, Australia}{Association for Computational
+  Linguistics}.
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -398,6 +401,32 @@ Ingria, R\BPBI J.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Jurafsky%
+\ \BBA {} Martin%
+}{%
+Jurafsky%
+\ \BBA {} Martin%
+}{%
+{\protect \APACyear {2014}}%
+}]{%
+jurafsky2014speech}
+\APACinsertmetastar {%
+jurafsky2014speech}%
+\begin{APACrefauthors}%
+Jurafsky, D.%
+\BCBT {}\ \BBA {} Martin, J\BPBI H.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{2014}.
+\newblock
+\APACrefbtitle {Speech and language processing} {Speech and language
+  processing}.
+\newblock
+\APACaddressPublisher{}{Pearson}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Kennedy%
 \ \BBA {} Boguraev%
 }{%
@@ -450,6 +479,40 @@ Kopec, M.%
   {Creating a coreference resolution system for polish.}{\BBCQ}
 \newblock
 \BIn{} \APACrefbtitle {LREC} {Lrec}\ (\BPGS\ 192--195).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Manning%
+\ \protect \BOthers {.}}{%
+Manning%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2014}}%
+}]{%
+manning-EtAl:2014:P14-5}
+\APACinsertmetastar {%
+manning-EtAl:2014:P14-5}%
+\begin{APACrefauthors}%
+Manning, C\BPBI D.%
+, Surdeanu, M.%
+, Bauer, J.%
+, Finkel, J.%
+, Bethard, S\BPBI J.%
+\BCBL {}\ \BBA {} McClosky, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2014}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {The {Stanford} {CoreNLP} Natural Language Processing
+  Toolkit} {The {Stanford} {CoreNLP} natural language processing
+  toolkit}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Association for Computational Linguistics (ACL) System
+  Demonstrations} {Association for computational linguistics (acl) system
+  demonstrations}\ (\BPGS\ 55--60).
+\newblock
+\begin{APACrefURL} \url{http://www.aclweb.org/anthology/P/P14/P14-5010}
+  \end{APACrefURL}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -991,6 +1054,39 @@ Versley, Y.%
   Demo Session} {Proceedings of the 46th annual meeting of the association for
   computational linguistics on human language technologies: Demo session}\
   (\BPGS\ 9--12).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Vilain%
+, Burger%
+, Aberdeen%
+, Connolly%
+\BCBL {}\ \BBA {} Hirschman%
+}{%
+Vilain%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {1995}}%
+}]{%
+vilain1995model}
+\APACinsertmetastar {%
+vilain1995model}%
+\begin{APACrefauthors}%
+Vilain, M.%
+, Burger, J.%
+, Aberdeen, J.%
+, Connolly, D.%
+\BCBL {}\ \BBA {} Hirschman, L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1995}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A model-theoretic coreference scoring scheme} {A
+  model-theoretic coreference scoring scheme}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 6th conference on Message
+  understanding} {Proceedings of the 6th conference on message understanding}\
+  (\BPGS\ 45--52).
 \PrintBackRefs{\CurrentBib}
 
 \end{thebibliography}
