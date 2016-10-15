@@ -39,7 +39,7 @@ public class AllFeaturevectorsAnnotator extends JCasAnnotator_ImplBase{
     private String ExportFileDirectory;
     
     public static final String PARAM_EXPORT= "ExportFileName";
-    @ConfigurationParameter(name = PARAM_EXPORT, mandatory = false, defaultValue = "allVectorsNoCov_NoExactMatch.dat")
+    @ConfigurationParameter(name = PARAM_EXPORT, mandatory = false, defaultValue = "allVectorsNoFilterOut.dat")
     private String exportFileName;
 	
 	@Override

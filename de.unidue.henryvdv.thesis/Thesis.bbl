@@ -145,6 +145,38 @@ Bergsma, S.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Boyd%
+, Gegg-Harrison%
+\BCBL {}\ \BBA {} Byron%
+}{%
+Boyd%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2005}}%
+}]{%
+boyd2005identifying}
+\APACinsertmetastar {%
+boyd2005identifying}%
+\begin{APACrefauthors}%
+Boyd, A.%
+, Gegg-Harrison, W.%
+\BCBL {}\ \BBA {} Byron, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2005}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Identifying non-referential it: a machine learning
+  approach incorporating linguistically motivated patterns} {Identifying
+  non-referential it: a machine learning approach incorporating linguistically
+  motivated patterns}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the ACL Workshop on Feature Engineering
+  for Machine Learning in Natural Language Processing} {Proceedings of the acl
+  workshop on feature engineering for machine learning in natural language
+  processing}\ (\BPGS\ 40--47).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Broscheit%
 , Poesio%
 \BCBL {}\ \protect \BOthers {.}}{%
@@ -479,6 +511,32 @@ Kopec, M.%
   {Creating a coreference resolution system for polish.}{\BBCQ}
 \newblock
 \BIn{} \APACrefbtitle {LREC} {Lrec}\ (\BPGS\ 192--195).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Lappin%
+\ \BBA {} Leass%
+}{%
+Lappin%
+\ \BBA {} Leass%
+}{%
+{\protect \APACyear {1994}}%
+}]{%
+lappin1994algorithm}
+\APACinsertmetastar {%
+lappin1994algorithm}%
+\begin{APACrefauthors}%
+Lappin, S.%
+\BCBT {}\ \BBA {} Leass, H\BPBI J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1994}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {An algorithm for pronominal anaphora resolution} {An
+  algorithm for pronominal anaphora resolution}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Computational linguistics}{20}{4}{535--561}.
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%

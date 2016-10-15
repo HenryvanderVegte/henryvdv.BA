@@ -21,6 +21,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
+import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.DocumentInfo;
 import de.unidue.henryvdv.ba.type.MyCoreferenceChain;
@@ -35,6 +36,7 @@ public class InformationModule
 	private JCas aJCas;
 	private FrequencyDistribution<Integer> sentenceDistanceFD;
 	private FrequencyDistribution<Integer> antecedentTokenSizeFD;
+	private FrequencyDistribution<String> pronounFD;
 	private Collection<Anaphora> anaphoras;
 	private Collection<Sentence> sentences;
 	private Collection<Token> tokens;
@@ -42,19 +44,37 @@ public class InformationModule
 	private Collection<NamedEntity> namedEntities;
 	private Collection<Constituent> constituents;
 	private Collection<Dependency> dependencies;
+	int i = 0;
 	
 	public void initialize(UimaContext context) throws ResourceInitializationException{
 		super.initialize(context);
 		sentenceDistanceFD = new FrequencyDistribution<Integer>();
 		antecedentTokenSizeFD = new FrequencyDistribution<Integer>();
+		pronounFD = new FrequencyDistribution<String>();
 	}
 	
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
+		
+		tokens = JCasUtil.select(aJCas, Token.class);
+		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
+		for(Token a : tokens){
+			if(a.getCoveredText().toLowerCase().equals("it"))
+				i++;
+		}
+		/*
+		for(Token t : tokens){
+			if(Arrays.asList(Parameters.resolvedPronouns).contains(t.getCoveredText().toLowerCase())){
+				pronounFD.addSample(t.getCoveredText().toLowerCase(), 1);
+			}
+		}
+		*/
+		
+		/*
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
 		sentences = JCasUtil.select(aJCas, Sentence.class);
-		tokens = JCasUtil.select(aJCas, Token.class);
+
 		lemmata = JCasUtil.select(aJCas, Lemma.class);
 		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
 		constituents = JCasUtil.select(aJCas, Constituent.class);
@@ -89,6 +109,7 @@ public class InformationModule
 		for(Dependency d : dependencies){
 			System.out.println(d.getCoveredText() + " " + d.getDependencyType() + " " + d.getGovernor().getCoveredText());
 		}
+		*/
 	//	collectAntecedentTokenSize();
 	//	collectSentenceDistanceInfo();
 	//	printyMyCorefChains();
@@ -106,12 +127,13 @@ public class InformationModule
 	
 	@Override
 	public void collectionProcessComplete(){
+		System.out.println(i);
 		/*
 		for(Integer s : sentenceDistanceFD.getKeys()){
 			System.out.println("Sentence-distance: " + s);
 			System.out.println("Count: " + ((float)sentenceDistanceFD.getCount(s)/(float)sentenceDistanceFD.getN()*100f) + " %");
 		}*/
-		
+		/*
 		int[] sortedList = new int[antecedentTokenSizeFD.getKeys().size()];
 		int j = 0;
 		for(Integer s : antecedentTokenSizeFD.getKeys()){
@@ -129,7 +151,7 @@ public class InformationModule
 			totalCount += currentCount;
 			System.out.println("Total: " + totalCount + " %");
 		}
-		
+		*/
 	}
 	
 	private void collectAntecedentTokenSize(){

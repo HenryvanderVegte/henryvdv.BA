@@ -41,9 +41,9 @@ public class TrainTestPipeline {
 		for(int i = 0; i < allDocs.length; i++){
 			allDocs[i] = i;
 		}
-	//	trainPipeline(allDocs);
+		trainPipeline(allDocs);
 		
-		crossvalidation(10,30, false);
+		//crossvalidation(10,30, false);
 	}
 	
 	/**
@@ -165,7 +165,8 @@ public class TrainTestPipeline {
 	        AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
 	        AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
 	        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator.class),
-	        AnalysisEngineFactory.createEngineDescription(AllFeaturevectorsAnnotator.class)
+	        AnalysisEngineFactory.createEngineDescription(AllFeaturevectorsAnnotator.class),
+	        AnalysisEngineFactory.createEngineDescription(InformationModule.class)      
 	       // AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)    
 	        );  
 	  }

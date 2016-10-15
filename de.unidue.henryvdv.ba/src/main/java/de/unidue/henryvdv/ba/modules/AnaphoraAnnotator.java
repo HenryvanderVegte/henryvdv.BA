@@ -52,14 +52,9 @@ extends JCasAnnotator_ImplBase{
 	private void setAnaphoras(){
 		List<Anaphora> anaphoras = new ArrayList<Anaphora>();
 		for(Token token : tokens){
-			if(token.getPos().getPosValue() == "PRP" || 
-					token.getPos().getPosValue() == "PRP$" || 
-					token.getPos().getPosValue() == "WP$"
-			){
-				if(Arrays.asList(Parameters.resolvedPronouns).contains(token.getCoveredText().toLowerCase())){
-					Anaphora a = new Anaphora(aJCas, token.getBegin(), token.getEnd());
-					anaphoras.add(a);
-				}
+			if(Arrays.asList(Parameters.resolvedPronouns).contains(token.getCoveredText().toLowerCase())){
+				Anaphora a = new Anaphora(aJCas, token.getBegin(), token.getEnd());
+				anaphoras.add(a);
 			}
 		}
 
@@ -68,8 +63,11 @@ extends JCasAnnotator_ImplBase{
 			if(bound[0] != 0 || bound[1] != 0){
 				Antecedent antecedent = new Antecedent(aJCas, bound[0], bound[1]);
 				List<Token> anteTokens = AnnotationUtils.getCoveredTokens(antecedent, tokens);
-				if(anteTokens.size() >= 10)
+				if(anteTokens.size() >= 10){
+					System.out.println(anaphoras.get(i).getCoveredText());
+					System.out.println(antecedent.getCoveredText());
 					continue;
+				}
 				anaphoras.get(i).setAntecedent(antecedent);
 				anaphoras.get(i).setHasCorrectAntecedent(true);
 				anaphoras.get(i).addToIndexes();
@@ -77,8 +75,6 @@ extends JCasAnnotator_ImplBase{
 			
 			
 		}
-		
-		
 	}
 	
 	

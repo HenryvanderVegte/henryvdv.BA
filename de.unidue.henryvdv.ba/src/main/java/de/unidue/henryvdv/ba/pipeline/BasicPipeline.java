@@ -30,12 +30,17 @@ import de.unidue.henryvdv.ba.util.SVMLearn;
 
 public class BasicPipeline {
 	
-	private static Integer[] usedDocs = {0,1};
+	private static Integer[] usedDocs;
 
 	  public static void main(String[] args)
 			  throws Exception {	
 		  
-     		runSimpleTextReader();
+		  	usedDocs = new Integer[30];
+		  	for(int i = 0; i < usedDocs.length; i++){
+		  		usedDocs[i] = i;
+		  	}
+     		//runSimpleTextReader();
+		  	runWikiCorefReader();
     		//  SVMLearn svmLearn = new SVMLearn();
     		//  svmLearn.learn();
 	  }
@@ -68,16 +73,16 @@ public class BasicPipeline {
 	                        WikiCoref_Reader.class,
 	                        WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
 	                        WikiCoref_Reader.PARAM_USED_DOCUMENT_NUMBERS, usedDocs),   
-	        		AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
-	        		AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
-	        		AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),
-	        		AnalysisEngineFactory.createEngineDescription(CoreNlpParser.class,
-																	CoreNlpParser.PARAM_ORIGINAL_DEPENDENCIES,
-																	false),
+	        	//	AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
+	        	//	AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
+	        	//	AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),
+	        	//	AnalysisEngineFactory.createEngineDescription(CoreNlpParser.class,
+																//	CoreNlpParser.PARAM_ORIGINAL_DEPENDENCIES,
+																//	false),
 	        		AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
-	        		AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
-	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator.class),      		
-	        		AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class),       		
+	        	//	AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
+	        	//	AnalysisEngineFactory.createEngineDescription(FeatureAnnotator.class),      		
+	        		//AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class),       		
 	        		//AnalysisEngineFactory.createEngineDescription(Baseline_Evaluator.class),
 	                AnalysisEngineFactory.createEngineDescription(InformationModule.class)
 	        );

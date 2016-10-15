@@ -343,26 +343,8 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 					fixedNPs.add(np1);
 				}
 			}
-		} else {
-			for(NP np1 : allNPs){
-				fixedNPs.add(np1);
-			}
-			for(Token t : tokens){
-				if(Arrays.asList(Parameters.allPronouns).contains(t.getCoveredText().toLowerCase())){
-					boolean alreadyContained = false;
-					for(NP np1 : fixedNPs){
-						if(np1.getBegin() == t.getBegin() && np1.getEnd() == t.getEnd())
-							alreadyContained = true;
-					}
-					if(!alreadyContained){
-						NP np = new NP(aJCas, t.getBegin(), t.getEnd());
-						fixedNPs.add(np);
-					}
-				}
-			}
 		}
 		
-		//TODO: Check for improvement?
 		for(Anaphora a : anaphoras){
 			if(!a.getHasCorrectAntecedent())
 				continue;
