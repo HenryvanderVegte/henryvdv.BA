@@ -227,6 +227,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		corefChains = JCasUtil.select(aJCas, MyCoreferenceChain.class);
 		DocumentInfo docInfo = JCasUtil.selectSingle(aJCas, DocumentInfo.class);
 		String docName = docInfo.getDocumentName();
+		eval.setSentences(sentences);
 		
 		aFUtil = new FeatureUtils_Antecedent(aJCas);
 		paFUtil = new FeatureUtils_PronounAntecedent(aJCas);
@@ -247,6 +248,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		
 		eval.evaluateBergsma_KeepThreshold(allAnaphors, false);
 		eval.evaluateBergsma_LowerThreshold(allAnaphors, false);
+		eval.evaluateBergsma_Baseline(allAnaphors, false);
 		eval.evaluate_last_n_sentences(allAnaphors, false);
 		eval.evaluate_last_n_sentences_sameEntity(allAnaphors, corefChains, false);
 
@@ -343,8 +345,12 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 					fixedNPs.add(np1);
 				}
 			}
-		}
-		
+		} else {
+			for(NP np1 : allNPs){
+				fixedNPs.add(np1);
+			}
+        }
+
 		for(Anaphora a : anaphoras){
 			if(!a.getHasCorrectAntecedent())
 				continue;

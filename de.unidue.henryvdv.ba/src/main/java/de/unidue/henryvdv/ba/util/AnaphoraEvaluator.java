@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.type.Anaphora;
@@ -20,7 +21,11 @@ import de.unidue.henryvdv.ba.type.GoldNP;
 import de.unidue.henryvdv.ba.type.MyCoreferenceChain;
 import de.unidue.henryvdv.ba.type.MyCoreferenceLink;
 import de.unidue.henryvdv.ba.type.MyNP;
-
+/**
+ * Class that performs various 
+ * @author Henry
+ *
+ */
 public class AnaphoraEvaluator {
 	
 	private static final String ACCURACY_FILE_NAME = "accuracyOutput.txt";
@@ -36,6 +41,8 @@ public class AnaphoraEvaluator {
 	 */
 	private int[] bergsmaLowerThreshold;
 	private int[] bergsmaKeepThreshold;
+	private int[] bergsmaSameEntity;
+	private int[] bergsmaBaseline;
 	private int[] lastNSentences;
 	private int[] lastNSentences_takeTheBest;
 	private int[] lastNSentences_baseline;
@@ -44,22 +51,36 @@ public class AnaphoraEvaluator {
 	private File accuracyOutputFile;
 	private File outputFile;
 	private List<String> output;
+	private Collection<Sentence> sentences;
 	
 	public AnaphoraEvaluator(){
 		super();
+		
 		accuracyOutputFile = new File(PRINT_FILE_DIRECTORY + "/" + ACCURACY_FILE_NAME);
 		outputFile = new File(PRINT_FILE_DIRECTORY + "/" + OUTPUT_FILE_NAME);
 		output = new ArrayList<String>();
 	}
 	
-	public void evaluateBergsma_SameEntity(List<DetectedNP> detectedAntecedents, List<Anaphora> anaphoras, Collection<MyCoreferenceChain> corefChains, boolean printChoices, String documentName){
-		//TODO: Fix
+	public void setSentences(Collection<Sentence> sentences){
+		this.sentences = sentences;
+	}
+	
+	public void evaluateBergsma_SameEntity(Map<Anaphora, List<MyNP>> allNPs, Collection<MyCoreferenceChain> corefChains, boolean printChoices){
+		if(bergsmaSameEntity == null)
+			bergsmaSameEntity = new int[]{0,0,0,0};
+		int TP = 0;
+		int FP = 0;
+		int FN = 0;
+		List<Anaphora> anaphoras = new ArrayList<Anaphora>();
+		for(Anaphora a :allNPs.keySet()){
+			anaphoras.add(a);
+		}
+		//Define for each anaphora its coreference chain:
 		List<MyCoreferenceChain> anaphoraChains = new ArrayList<MyCoreferenceChain>();
 		for(int i = 0; i < anaphoras.size(); i++){
 			int anaphoraBegin = anaphoras.get(i).getBegin();
-			int anaphoraEnd = anaphoras.get(i).getEnd();
-			
-			
+			int anaphoraEnd = anaphoras.get(i).getEnd();	
+			boolean foundIt = false;
 			for(MyCoreferenceChain c : corefChains){
 				MyCoreferenceLink corefLinkOld = c.getFirst();			
 				if(corefLinkOld.getBegin() == anaphoraBegin && corefLinkOld.getEnd() == anaphoraEnd){
@@ -72,46 +93,95 @@ public class AnaphoraEvaluator {
 					
 					if(corefLinkNew.getBegin() == anaphoraBegin && corefLinkNew.getEnd() == anaphoraEnd){					
 						anaphoraChains.add(c);
+						foundIt = true;
 						break;
 					}			
 					corefLinkOld = corefLinkNew;
 				}
+				if(foundIt)
+					break;
 			}
 		}
 		
-		if(detectedAntecedents.size() != anaphoras.size() || anaphoras.size() != anaphoraChains.size() ){
-			System.out.println("Gold Antecedent List and Detected Antecedent List are not the same size - return");
-			return;
-		}
-		int total = 0;
-		int correct = 0;
+		//Check all antecedents:
 		for(int i = 0; i < anaphoras.size(); i++){
-			
-			boolean foundIt = false;
-			int anteBegin = detectedAntecedents.get(i).getBegin();
-			int anteEnd = detectedAntecedents.get(i).getEnd();
-			
-			MyCoreferenceChain corefChain = anaphoraChains.get(i);
-			
-			MyCoreferenceLink corefLinkOld = corefChain.getFirst();			
-			if(corefLinkOld.getBegin() <= anteBegin && corefLinkOld.getEnd() >= anteEnd){
-				foundIt = true;		
+			int goldAntecedentBegin = anaphoras.get(i).getAntecedent().getBegin();
+			int goldAntecedentEnd = anaphoras.get(i).getAntecedent().getEnd();
+			List<MyNP> candidates = new ArrayList<MyNP>();
+			for(MyNP np : allNPs.get(anaphoras.get(i))){
+				candidates.add(np);				
 			}
-			
-			while(!foundIt && corefLinkOld.getNext() != null){
+			boolean foundPossibleAntecedent = false;
+			float threshold = Parameters.acceptAtThreshold;
+			MyNP possibleAntecedent = null;
+			//Get best candidate:
+			while(!foundPossibleAntecedent){
+				MyNP nearest = null;
+				int dist = Integer.MAX_VALUE;
+				int size = Integer.MAX_VALUE;
+				for(MyNP np : candidates){
+					if(anaphoras.get(i).getBegin() - np.getBegin() < dist){
+						nearest = np;
+						dist = anaphoras.get(i).getBegin() - np.getBegin();
+						size = np.getEnd() - np.getBegin();
+					} else if((anaphoras.get(i).getBegin() - np.getBegin() == dist) && (np.getEnd() - np.getBegin()) < size){
+						nearest = np;
+						dist = anaphoras.get(i).getBegin() - np.getBegin();
+						size = np.getEnd() - np.getBegin();
+					}
+				}
+				if(nearest == null){
+					System.out.println("No possible candidates!");
+					break;
+				}
+				if(nearest.getOutputValue() > threshold){
+					foundPossibleAntecedent = true;
+					possibleAntecedent = nearest;
+				} else {
+					candidates.remove(nearest);
+					if(candidates.size() == 0){
+						break;
+					}
+				}
+			}
+			if(possibleAntecedent == null){
+				FN++;
+				continue;
+			}
+			//Check if best candidate is in coreferenceChain
+			int npBegin = possibleAntecedent.getBegin();
+			int npEnd = possibleAntecedent.getEnd();			
+			MyCoreferenceChain anaphoraCorefChain = anaphoraChains.get(i);	
+			MyCoreferenceLink corefLinkOld = anaphoraCorefChain.getFirst();	
+			boolean candidateInChain = false;
+			if(corefLinkOld.getBegin() <= npBegin && corefLinkOld.getEnd() >= npEnd){
+				candidateInChain = true;		
+			}		
+			while(!candidateInChain && corefLinkOld.getNext() != null){
 				MyCoreferenceLink corefLinkNew = corefLinkOld.getNext();
-				
-				if(corefLinkNew.getBegin() <= anteBegin && corefLinkNew.getEnd() >= anteEnd){					
-					foundIt = true;
-				}			
+				if(Parameters.exactBoundMatch){
+					if(corefLinkNew.getBegin() == npBegin && corefLinkNew.getEnd() == npBegin){					
+						candidateInChain = true;
+					}	
+				}else {
+					if(corefLinkNew.getBegin() <= npBegin && corefLinkNew.getEnd() >= npBegin){					
+						candidateInChain = true;
+					}	
+				}
+		
 				corefLinkOld = corefLinkNew;
 			}
-			if(foundIt)
-				correct++;
-			total++;
+			
+			if(candidateInChain){
+				TP++;
+			} else {
+				FP++;
+			}		
 		}
-	//	anaphorsTotal += total;
-	//	correctAnaphorsTotal += correct;
+		bergsmaSameEntity[0] += TP;
+		bergsmaSameEntity[2] += FP;
+		bergsmaSameEntity[3] += FN;
+		
 	}
 	
 	public void evaluateBergsma_LowerThreshold(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
@@ -215,6 +285,11 @@ public class AnaphoraEvaluator {
 						size = np.getEnd() - np.getBegin();
 					}
 				}
+				if(nearest == null){
+					if(printChoices)
+						System.out.println("No possible candidates!");
+					break;
+				}
 				if(nearest.getOutputValue() > threshold){
 					foundPossibleAntecedent = true;
 					possibleAntecedent = nearest;
@@ -226,12 +301,80 @@ public class AnaphoraEvaluator {
 				}
 			}
 			if(possibleAntecedent == null){
+				if(printChoices){
+					System.out.println("-->Anaphora :" + anaphora.getCoveredText() + "   " + AnnotationUtils.getSentence(anaphora.getBegin(), sentences).getCoveredText());			
+					System.out.println("!!None found");
+					System.out.println("Antecedent " + anaphora.getAntecedent().getCoveredText() +
+							"   " + AnnotationUtils.getSentence(anaphora.getAntecedent().getBegin(), sentences).getCoveredText());
+				}
 				FN++;
 				continue;
 			}
-			
 			int npBegin = possibleAntecedent.getBegin();
 			int npEnd = possibleAntecedent.getEnd();
+			if(Parameters.exactBoundMatch){
+				if(printChoices)
+					System.out.println("-->Anaphora :" + anaphora.getCoveredText() + "   " + AnnotationUtils.getSentence(anaphora.getBegin(), sentences).getCoveredText());	
+				if(goldAntecedentBegin == npBegin && goldAntecedentEnd == npEnd){
+					if(printChoices)
+						System.out.println("Gold detected (" + anaphora.getAntecedent().getCoveredText() + ")");
+					TP++;
+				} else {
+					if(printChoices){
+						System.out.println("!!Detected:" + possibleAntecedent.getCoveredText() );
+						System.out.println("Antecedent " + anaphora.getAntecedent().getCoveredText() +
+								"   " + AnnotationUtils.getSentence(anaphora.getAntecedent().getBegin(), sentences).getCoveredText());
+					}
+					FP++;
+				}
+			} else {
+				if((goldAntecedentBegin >= npBegin && goldAntecedentEnd <= npEnd) || goldAntecedentBegin <= npBegin && goldAntecedentEnd >= npEnd){
+					TP++;
+				} else {
+					FP++;	
+				}
+			}		
+		}
+		if(printChoices)
+			System.out.println("TP : " + TP + "  FP : "+ FP + " FN : " + FN);
+		bergsmaKeepThreshold[0] += TP;
+		bergsmaKeepThreshold[2] += FP;
+		bergsmaKeepThreshold[3] += FN;
+
+	}
+	
+	public void evaluateBergsma_Baseline(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
+		if(bergsmaBaseline == null)
+			bergsmaBaseline = new int[]{0,0,0,0};
+		int TP = 0;
+		int FP = 0;
+		for(Anaphora anaphora : allNPs.keySet()){
+			int goldAntecedentBegin = anaphora.getAntecedent().getBegin();
+			int goldAntecedentEnd = anaphora.getAntecedent().getEnd();
+			List<MyNP> candidates = new ArrayList<MyNP>();
+			for(MyNP np : allNPs.get(anaphora)){
+				candidates.add(np);				
+			}
+			MyNP nearest = null;
+			int dist = Integer.MAX_VALUE;
+			int size = Integer.MAX_VALUE;
+			for(MyNP np : candidates){
+				if(anaphora.getBegin() - np.getBegin() < dist){
+					nearest = np;
+					dist = anaphora.getBegin() - np.getBegin();
+					size = np.getEnd() - np.getBegin();
+				} else if((anaphora.getBegin() - np.getBegin() == dist) && (np.getEnd() - np.getBegin()) < size){
+					nearest = np;
+					dist = anaphora.getBegin() - np.getBegin();
+					size = np.getEnd() - np.getBegin();
+				}
+			}
+			if(nearest == null){
+				System.out.println("No possible candidates!");
+			}
+
+			int npBegin = nearest.getBegin();
+			int npEnd = nearest.getEnd();
 			if(Parameters.exactBoundMatch){
 				if(goldAntecedentBegin == npBegin && goldAntecedentEnd == npEnd){
 					TP++;
@@ -246,14 +389,12 @@ public class AnaphoraEvaluator {
 				}
 			}		
 		}
-
-		bergsmaKeepThreshold[0] += TP;
-		bergsmaKeepThreshold[2] += FP;
-		bergsmaKeepThreshold[3] += FN;
+		bergsmaBaseline[0] += TP;
+		bergsmaBaseline[2] += FP;
 
 	}
 	
-	
+
 	public void evaluate_last_n_sentences(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
 		if(lastNSentences == null)
 			lastNSentences = new int[]{0,0,0,0};
@@ -537,6 +678,13 @@ public class AnaphoraEvaluator {
 		if(bergsmaKeepThreshold != null){
 			values += returnAllValues(bergsmaKeepThreshold);
 		}
+		if(bergsmaSameEntity != null){
+			values += returnAllValues(bergsmaSameEntity);
+		}
+		
+		if(bergsmaBaseline != null){
+			values += returnAllValues(bergsmaBaseline);
+		}
 		if(lastNSentences != null){
 			values += returnAllValues(lastNSentences);
 		}
@@ -564,6 +712,14 @@ public class AnaphoraEvaluator {
 		}
 		if(bergsmaKeepThreshold != null){
 			caption += "bergsmaKeepThreshold" + semi;
+			varNames += template;
+		}
+		if(bergsmaSameEntity != null){
+			caption += "bergsmaSameEntity" + semi;
+			varNames += template;
+		}
+		if(bergsmaBaseline != null){
+			caption += "bergsmaBaseline" + semi;
 			varNames += template;
 		}
 		if(lastNSentences != null){

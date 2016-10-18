@@ -8,47 +8,49 @@ import java.util.List;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
+import org.apache.uima.fit.descriptor.TypeCapability;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
-import org.apache.uima.resource.ResourceInitializationException;
 
-import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
-import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Antecedent;
-import de.unidue.henryvdv.ba.type.GoldNP;
 import de.unidue.henryvdv.ba.type.MyCoreferenceChain;
 import de.unidue.henryvdv.ba.type.MyCoreferenceLink;
 import de.unidue.henryvdv.ba.util.AnnotationUtils;
-
+/**
+ * Finds all requested pronominal anaphoras through coreference chains
+ * @author Henry
+ *
+ */
+@TypeCapability(
+        inputs = {
+                "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
+                "de.unidue.henryvdv.ba.type.MyCoreferenceChain" },
+        outputs = {
+                "de.unidue.henryvdv.ba.type.Anaphora" })
 public class AnaphoraAnnotator 
 extends JCasAnnotator_ImplBase{
 
-	JCas aJCas;
-	
-	private List<NP> npsWithAnaphora;
+	private JCas aJCas;
 	private Collection<MyCoreferenceChain> corefChains;
 	private Collection<Token> tokens;
-	private Collection<Sentence> sentences;	
 
 	
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
-		this.aJCas = aJCas;
-		npsWithAnaphora = new ArrayList<NP>();
-		sentences = JCasUtil.select(aJCas, Sentence.class);			
+		this.aJCas = aJCas;	
 		corefChains = JCasUtil.select(aJCas, MyCoreferenceChain.class);	
-		tokens = JCasUtil.select(aJCas, Token.class);
-		
-		setAnaphoras();
-		
-		
+		tokens = JCasUtil.select(aJCas, Token.class);	
+		setAnaphoras();	
 	}	
 	
+	/**
+	 * Annotates all requested anaphoras to the JCas
+	 */
 	private void setAnaphoras(){
 		List<Anaphora> anaphoras = new ArrayList<Anaphora>();
 		for(Token token : tokens){
@@ -63,9 +65,8 @@ extends JCasAnnotator_ImplBase{
 			if(bound[0] != 0 || bound[1] != 0){
 				Antecedent antecedent = new Antecedent(aJCas, bound[0], bound[1]);
 				List<Token> anteTokens = AnnotationUtils.getCoveredTokens(antecedent, tokens);
+				//Naive approach to filter non-NP antecedents
 				if(anteTokens.size() >= 10){
-					System.out.println(anaphoras.get(i).getCoveredText());
-					System.out.println(antecedent.getCoveredText());
 					continue;
 				}
 				anaphoras.get(i).setAntecedent(antecedent);
@@ -76,7 +77,11 @@ extends JCasAnnotator_ImplBase{
 			
 		}
 	}
-	
+	/**
+	 * Gets the begin and end of requested antecedent
+	 * @param anno Annotation
+	 * @return Integer[0] = begin, Integer[1] = end
+	 */
 	
 	private Integer[] getAntecedentBound(Annotation anno){		
 		int begin = anno.getBegin(); 
@@ -96,20 +101,7 @@ extends JCasAnnotator_ImplBase{
 					r[0] = corefLinkOld.getBegin();
 					r[1] = corefLinkOld.getEnd();
 					return r;
-				}
-				/*
-				if(corefLinkNew.getBegin() >= begin && corefLinkNew.getEnd() <= end){					
-					r[0] = corefLinkOld.getBegin();
-					r[1] = corefLinkOld.getEnd();
-					return r;
-				}
-				
-				if(corefLinkNew.getBegin() <= begin && corefLinkNew.getEnd() >= end){					
-					r[0] = corefLinkOld.getBegin();
-					r[1] = corefLinkOld.getEnd();
-					return r;
-				}*/
-				
+				}			
 				corefLinkOld = corefLinkNew;
 			}
 		

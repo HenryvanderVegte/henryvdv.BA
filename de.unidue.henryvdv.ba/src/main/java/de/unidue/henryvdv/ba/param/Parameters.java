@@ -1,8 +1,13 @@
 package de.unidue.henryvdv.ba.param;
 
 import de.unidue.henryvdv.ba.modules.SVMClassifier.ClassificationMode;
-
+/**
+ * All static parameters and used values can be adjusted here
+ * @author Henry
+ *
+ */
 public class Parameters {
+	
 	
 	public final static String[] resolvedPronouns = {"himself","his","he",
 			"herself","her","she",
@@ -31,9 +36,9 @@ public class Parameters {
 	
 	public final static String[] reflexivePronouns = {"themselves","himself","herself","itself"};
 	
-	public static final String[] maleDesignators = {"mr","mister","master","lord","mr.","sir"};
+	public static final String[] maleDesignators = {"mr","mister","master","lord","sir"};
 	
-	public static final String[] femaleDesignators = {"mrs","ms.","ms","mz","mz.","miss","lady","mrs.","madam","dame"};
+	public static final String[] femaleDesignators = {"mrs","ms.","ms","mz","miss","lady","madam","dame"};
 	
 	public static final String genderCorpusDirectory = "src/main/resources/gendercorpus";
 		

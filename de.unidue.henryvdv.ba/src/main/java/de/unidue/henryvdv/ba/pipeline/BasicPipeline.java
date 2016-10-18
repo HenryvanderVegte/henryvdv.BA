@@ -27,7 +27,11 @@ import de.unidue.henryvdv.ba.modules.SVMTrainingInstanceCreator;
 import de.unidue.henryvdv.ba.reader.SimpleTextReader;
 import de.unidue.henryvdv.ba.reader.WikiCoref_Reader;
 import de.unidue.henryvdv.ba.util.SVMLearn;
-
+/**
+ * Pipelines for basic testing (no crossvalidation)
+ * @author Henry
+ *
+ */
 public class BasicPipeline {
 	
 	private static Integer[] usedDocs;
@@ -39,7 +43,7 @@ public class BasicPipeline {
 		  	for(int i = 0; i < usedDocs.length; i++){
 		  		usedDocs[i] = i;
 		  	}
-     		//runSimpleTextReader();
+     	//	runSimpleTextReader();
 		  	runWikiCorefReader();
     		//  SVMLearn svmLearn = new SVMLearn();
     		//  svmLearn.learn();
@@ -58,10 +62,12 @@ public class BasicPipeline {
 			        AnalysisEngineFactory.createEngineDescription(CoreNlpNamedEntityRecognizer.class),
 			        AnalysisEngineFactory.createEngineDescription(CoreNlpParser.class,
 																	CoreNlpParser.PARAM_ORIGINAL_DEPENDENCIES,
-																	false),
-			        AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
-			        AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
-			        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator.class),        	
+																	false,
+																	CoreNlpParser.PARAM_WRITE_PENN_TREE,
+																	true),
+			       // AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
+			       // AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
+			       // AnalysisEngineFactory.createEngineDescription(FeatureAnnotator.class),        	
 			        AnalysisEngineFactory.createEngineDescription(InformationModule.class)      	
 				  );
 	  }
@@ -73,15 +79,15 @@ public class BasicPipeline {
 	                        WikiCoref_Reader.class,
 	                        WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
 	                        WikiCoref_Reader.PARAM_USED_DOCUMENT_NUMBERS, usedDocs),   
-	        	//	AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
-	        	//	AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
-	        	//	AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),
-	        	//	AnalysisEngineFactory.createEngineDescription(CoreNlpParser.class,
-																//	CoreNlpParser.PARAM_ORIGINAL_DEPENDENCIES,
-																//	false),
+	        		AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
+	        		AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
+	        		AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),
+	        		AnalysisEngineFactory.createEngineDescription(CoreNlpParser.class,
+																	CoreNlpParser.PARAM_ORIGINAL_DEPENDENCIES,
+																	false),
 	        		AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
-	        	//	AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
-	        	//	AnalysisEngineFactory.createEngineDescription(FeatureAnnotator.class),      		
+	        		AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
+	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator.class),      		
 	        		//AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class),       		
 	        		//AnalysisEngineFactory.createEngineDescription(Baseline_Evaluator.class),
 	                AnalysisEngineFactory.createEngineDescription(InformationModule.class)

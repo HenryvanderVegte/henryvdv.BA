@@ -39,6 +39,10 @@ public class SVMTrainEvaluator {
 		
 		int posSamples = 0;
 		int negSamples = 0;
+		int posMatches =0;
+		int negMatches = 0;
+		int gender = -1;
+		
 		for(String line : train){
 			line += " ";
 			if(line.charAt(0) == '#')

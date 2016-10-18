@@ -18,6 +18,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.PennTree;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
@@ -57,29 +58,123 @@ public class InformationModule
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
 		
-		tokens = JCasUtil.select(aJCas, Token.class);
-		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
-		for(Token a : tokens){
-			if(a.getCoveredText().toLowerCase().equals("it"))
-				i++;
-		}
+
 		/*
 		for(Token t : tokens){
 			if(Arrays.asList(Parameters.resolvedPronouns).contains(t.getCoveredText().toLowerCase())){
 				pronounFD.addSample(t.getCoveredText().toLowerCase(), 1);
 			}
 		}
-		*/
+
+		Collection<PennTree> pTree = JCasUtil.select(aJCas, PennTree.class); 
 		
-		/*
+		for(PennTree p : pTree){
+			System.out.println(p.getPennTree());
+		}
+				*/
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
 		sentences = JCasUtil.select(aJCas, Sentence.class);
-
+		tokens = JCasUtil.select(aJCas, Token.class);
 		lemmata = JCasUtil.select(aJCas, Lemma.class);
 		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
 		constituents = JCasUtil.select(aJCas, Constituent.class);
 		dependencies = JCasUtil.select(aJCas, Dependency.class);
 		
+		
+		Float[] posVal = new Float[]{0f,0f,0f,0f};
+		Integer[] posTotal = new Integer[]{0,0,0,0};
+		Float[] negVal = new Float[]{0f,0f,0f,0f};
+		Integer[] negTotal = new Integer[]{0,0,0,0};
+		for(Anaphora a : anaphoras){
+			if(a.getHasCorrectAntecedent()){
+				if(a.getPronounFeatures().getP_Masculine()){
+					System.out.println("Ante: " + a.getAntecedent().getCoveredText());
+					System.out.println(a.getGenderFeatures().getG_Masculine_Mean());
+					System.out.println(a.getGenderFeatures().getG_Feminine_Mean());
+					System.out.println(a.getGenderFeatures().getG_Neutral_Mean());
+					System.out.println(a.getGenderFeatures().getG_Plural_Mean());
+					posVal[0] += a.getGenderFeatures().getG_Masculine_Mean();
+					posTotal[0] += 1;
+				}
+				if(a.getPronounFeatures().getP_Feminine()){
+
+					posVal[1] += a.getGenderFeatures().getG_Feminine_Mean();
+					posTotal[1] += 1;
+				}
+				if(a.getPronounFeatures().getP_Neutral()){
+
+					posVal[2] += a.getGenderFeatures().getG_Neutral_Mean();
+					posTotal[2] += 1;
+				}
+				if(a.getPronounFeatures().getP_Plural()){
+
+					posVal[3] += a.getGenderFeatures().getG_Plural_Mean();
+					posTotal[3] += 1;
+				}
+			}
+			if(!a.getHasCorrectAntecedent()){
+				if(a.getPronounFeatures().getP_Masculine()){
+					negVal[0] += a.getGenderFeatures().getG_Masculine_Mean();
+					negTotal[0] += 1;
+				}
+				if(a.getPronounFeatures().getP_Feminine()){
+
+					negVal[1] += a.getGenderFeatures().getG_Feminine_Mean();
+					negTotal[1] += 1;
+				}
+				if(a.getPronounFeatures().getP_Neutral()){
+
+					negVal[2] += a.getGenderFeatures().getG_Neutral_Mean();
+					negTotal[2] += 1;
+				}
+				if(a.getPronounFeatures().getP_Plural()){
+					negVal[3] += a.getGenderFeatures().getG_Plural_Mean();
+					negTotal[3] += 1;
+				}
+			}
+
+		}
+		System.out.println("********************************");
+		System.out.println("POS");
+		System.out.println(posVal[0] + " " +  posTotal[0]);
+		System.out.println(posVal[1] + " " +  posTotal[1]);
+		System.out.println(posVal[2] + " " +  posTotal[2]);
+		System.out.println(posVal[3] + " " +  posTotal[3]);
+		System.out.println("");
+		System.out.println(posVal[0] / (float) posTotal[0]);
+		System.out.println(posVal[1] / (float) posTotal[1]);
+		System.out.println(posVal[2] / (float) posTotal[2]);
+		System.out.println(posVal[3] / (float) posTotal[3]);
+		System.out.println("********************************");
+		System.out.println("NEG");
+		System.out.println(negVal[0] + " " + negTotal[0]);
+		System.out.println(negVal[1] + " " + negTotal[1]);
+		System.out.println(negVal[2] + " " + negTotal[2]);
+		System.out.println(negVal[3] + " " + negTotal[3]);
+		System.out.println("");
+		System.out.println(negVal[0] / (float) negTotal[0]);
+		System.out.println(negVal[1] / (float) negTotal[1]);
+		System.out.println(negVal[2] / (float) negTotal[2]);
+		System.out.println(negVal[3] / (float) negTotal[3]);
+		System.out.println("********************************");
+		System.out.println("********************************");
+
+	//	collectAntecedentTokenSize();
+		collectSentenceDistanceInfo();
+	//	printyMyCorefChains();
+	//	printInfos();
+	//	printNounPhrases();
+	//	printDependencies();
+	//	printCorefChains();
+	//	printDocText();
+	//	printTokens();
+	//	printSentences();
+		
+		//explorePOS(10);
+		
+	}
+	
+	public void printAllInfos(){
 		System.out.println("Sentences: ");
 		for(Sentence s : sentences){
 			System.out.println(s.getCoveredText());
@@ -109,30 +204,18 @@ public class InformationModule
 		for(Dependency d : dependencies){
 			System.out.println(d.getCoveredText() + " " + d.getDependencyType() + " " + d.getGovernor().getCoveredText());
 		}
-		*/
-	//	collectAntecedentTokenSize();
-	//	collectSentenceDistanceInfo();
-	//	printyMyCorefChains();
-	//	printInfos();
-	//	printNounPhrases();
-	//	printDependencies();
-	//	printCorefChains();
-	//	printDocText();
-	//	printTokens();
-	//	printSentences();
-		
-		//explorePOS(10);
 		
 	}
 	
+	
 	@Override
 	public void collectionProcessComplete(){
-		System.out.println(i);
-		/*
+		//System.out.println(i);
+		
 		for(Integer s : sentenceDistanceFD.getKeys()){
 			System.out.println("Sentence-distance: " + s);
 			System.out.println("Count: " + ((float)sentenceDistanceFD.getCount(s)/(float)sentenceDistanceFD.getN()*100f) + " %");
-		}*/
+		}
 		/*
 		int[] sortedList = new int[antecedentTokenSizeFD.getKeys().size()];
 		int j = 0;

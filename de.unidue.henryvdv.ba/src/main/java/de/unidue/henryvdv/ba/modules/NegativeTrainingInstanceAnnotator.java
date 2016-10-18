@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
+import org.apache.uima.fit.descriptor.TypeCapability;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 
@@ -16,7 +17,19 @@ import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Antecedent;
 import de.unidue.henryvdv.ba.util.AnnotationUtils;
-
+/**
+ * Annotates the negative training instances e.g. all intermediate noun phrases 
+ * with the getHasCorrectAntecedent-value = false
+ * @author Henry
+ *
+ */
+@TypeCapability(
+        inputs = {
+                "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
+                "de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP",
+                "de.unidue.henryvdv.ba.type.Anaphora"},
+        outputs = {
+                "de.unidue.henryvdv.ba.type.Anaphora" })
 public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 
 	private JCas aJCas;
@@ -34,11 +47,13 @@ public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 		generateNegativeTrainingInstances();
 	}
 
+	/**
+	 * Adds all intermediate noun phrases with its anaphora to the JCas
+	 */
 	public void generateNegativeTrainingInstances(){
 		List<Anaphora> negAnaphoras = new ArrayList<Anaphora>();
 		for(Anaphora an : anaphoras){
-			for(NP np : getNPSBetween(an, an.getAntecedent())){
-				
+			for(NP np : getNPSBetween(an, an.getAntecedent())){			
 				
 				Anaphora negInst = new Anaphora(aJCas, an.getBegin(), an.getEnd());	
 				Antecedent antecedent = new Antecedent(aJCas, np.getBegin(), np.getEnd());			
@@ -64,19 +79,25 @@ public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 		
 	}
 	
-	private List<NP> getNPSBetween(Anaphora an, Antecedent ant){
+	/**
+	 * Creates a list of all intermediate noun phrases
+	 * @param anaphora Current Anaphora
+	 * @param antecedent Current Antecedent
+	 * @return A List with all intermediate NPs
+	 */
+	private List<NP> getNPSBetween(Anaphora anaphora, Antecedent antecedent){
 		List<NP> npsBetween = new ArrayList<NP>();
 		
 		for(NP np : nps){
-			if(np.getBegin() > ant.getEnd() && np.getEnd() > ant.getEnd() &&
-				np.getBegin() < an.getBegin() && np.getEnd() < an.getBegin()){
+			if(np.getBegin() > antecedent.getEnd() && np.getEnd() > antecedent.getEnd() &&
+				np.getBegin() < anaphora.getBegin() && np.getEnd() < anaphora.getBegin()){
 					
 					npsBetween.add(np);
 				
 				}
 		}
 		
-		//Delete nps which cover other nps
+		//If parameter is enabled, all nps covering other nps will be removed
 		if(Parameters.removeCoveringNPs){
 			List<NP> fixedNpsBetween = new ArrayList<NP>();
 			for(NP np1 : npsBetween){
@@ -94,11 +115,8 @@ public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 			}
 			return fixedNpsBetween;
 		} 
-		
-		List<NP> fixedNpsBetween = new ArrayList<NP>();
-		for(NP np1 : npsBetween){
-			fixedNpsBetween.add(np1);
-		}
+
+		/*
 		List<Token> covTokens = AnnotationUtils.getCoveredTokens(ant.getBegin() + 1, an.getBegin() - 1, tokens);
 		for(Token t : covTokens){
 			if(Arrays.asList(Parameters.allPronouns).contains(t.getCoveredText().toLowerCase())){
@@ -112,8 +130,8 @@ public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 					fixedNpsBetween.add(np);
 				}
 			}
-		}
-		return fixedNpsBetween;
+		}*/
+		return npsBetween;
 	}
 	
 }

@@ -9,33 +9,31 @@
 \BOOKMARK [1][-]{section.2.2}{Machine Learning-Based Techniques}{chapter.2}% 9
 \BOOKMARK [2][-]{subsection.2.2.1}{Anaphoras in Coreference Resolution}{section.2.2}% 10
 \BOOKMARK [2][-]{subsection.2.2.2}{BART}{section.2.2}% 11
-\BOOKMARK [2][-]{subsection.2.2.3}{Cluster-Based Coreference Resolution}{section.2.2}% 12
-\BOOKMARK [2][-]{subsection.2.2.4}{Pronoun Resolution in Spoken Dialogue}{section.2.2}% 13
-\BOOKMARK [2][-]{subsection.2.2.5}{Corpus- and Web-Mined Gender Information}{section.2.2}% 14
-\BOOKMARK [1][-]{section.2.3}{A Comparison of Both Strategies}{chapter.2}% 15
-\BOOKMARK [2][-]{subsection.2.3.1}{A Manually Designed Resolver \(MDR\)}{section.2.3}% 16
-\BOOKMARK [2][-]{subsection.2.3.2}{A Machine Learning-Based Resolver \(MLR\)}{section.2.3}% 17
-\BOOKMARK [2][-]{subsection.2.3.3}{Evaluation}{section.2.3}% 18
-\BOOKMARK [0][-]{chapter.3}{Data}{}% 19
-\BOOKMARK [1][-]{section.3.1}{WikiCoref}{chapter.3}% 20
-\BOOKMARK [1][-]{section.3.2}{Gender Corpus}{chapter.3}% 21
-\BOOKMARK [0][-]{chapter.4}{Methodology}{}% 22
-\BOOKMARK [1][-]{section.4.1}{Preprocessing}{chapter.4}% 23
-\BOOKMARK [1][-]{section.4.2}{Feature Set}{chapter.4}% 24
-\BOOKMARK [2][-]{subsection.4.2.1}{Pronoun Features}{section.4.2}% 25
-\BOOKMARK [2][-]{subsection.4.2.2}{Antecedent Features}{section.4.2}% 26
-\BOOKMARK [2][-]{subsection.4.2.3}{Pronoun-Antecedent Features}{section.4.2}% 27
-\BOOKMARK [2][-]{subsection.4.2.4}{Gender Features}{section.4.2}% 28
-\BOOKMARK [1][-]{section.4.3}{Generating Training Instances}{chapter.4}% 29
-\BOOKMARK [1][-]{section.4.4}{Baseline Approach}{chapter.4}% 30
-\BOOKMARK [1][-]{section.4.5}{SVM Classifier}{chapter.4}% 31
-\BOOKMARK [0][-]{chapter.5}{Evaluation}{}% 32
-\BOOKMARK [1][-]{section.5.1}{Learning curves}{chapter.5}% 33
-\BOOKMARK [1][-]{section.5.2}{Feature Contribution}{chapter.5}% 34
-\BOOKMARK [1][-]{section.5.3}{Error Analysis}{chapter.5}% 35
-\BOOKMARK [0][-]{chapter.6}{Conclusion}{}% 36
-\BOOKMARK [1][-]{section.6.1}{Summary}{chapter.6}% 37
-\BOOKMARK [1][-]{section.6.2}{Outlook}{chapter.6}% 38
-\BOOKMARK [0][-]{appendix*.13}{List of Figures}{}% 39
-\BOOKMARK [0][-]{appendix*.14}{List of Tables}{}% 40
-\BOOKMARK [0][-]{appendix*.15}{References}{}% 41
+\BOOKMARK [2][-]{subsection.2.2.3}{Pronoun Resolution in Spoken Dialogue}{section.2.2}% 12
+\BOOKMARK [2][-]{subsection.2.2.4}{Corpus- and Web-Mined Gender Information}{section.2.2}% 13
+\BOOKMARK [1][-]{section.2.3}{A Comparison of Both Strategies}{chapter.2}% 14
+\BOOKMARK [2][-]{subsection.2.3.1}{A Manually Designed Resolver \(MDR\)}{section.2.3}% 15
+\BOOKMARK [2][-]{subsection.2.3.2}{A Machine Learning-Based Resolver \(MLR\)}{section.2.3}% 16
+\BOOKMARK [2][-]{subsection.2.3.3}{Evaluation}{section.2.3}% 17
+\BOOKMARK [0][-]{chapter.3}{Data}{}% 18
+\BOOKMARK [1][-]{section.3.1}{WikiCoref}{chapter.3}% 19
+\BOOKMARK [1][-]{section.3.2}{Gender Corpus}{chapter.3}% 20
+\BOOKMARK [0][-]{chapter.4}{Methodology}{}% 21
+\BOOKMARK [1][-]{section.4.1}{Preprocessing}{chapter.4}% 22
+\BOOKMARK [1][-]{section.4.2}{Feature Set}{chapter.4}% 23
+\BOOKMARK [2][-]{subsection.4.2.1}{Pronoun Features}{section.4.2}% 24
+\BOOKMARK [2][-]{subsection.4.2.2}{Antecedent Features}{section.4.2}% 25
+\BOOKMARK [2][-]{subsection.4.2.3}{Pronoun-Antecedent Features}{section.4.2}% 26
+\BOOKMARK [2][-]{subsection.4.2.4}{Gender Features}{section.4.2}% 27
+\BOOKMARK [1][-]{section.4.3}{Baseline Approach}{chapter.4}% 28
+\BOOKMARK [1][-]{section.4.4}{Machine learning-based Classifiers}{chapter.4}% 29
+\BOOKMARK [0][-]{chapter.5}{Evaluation}{}% 30
+\BOOKMARK [1][-]{section.5.1}{Results}{chapter.5}% 31
+\BOOKMARK [1][-]{section.5.2}{Error Analysis}{chapter.5}% 32
+\BOOKMARK [0][-]{chapter.6}{Conclusion}{}% 33
+\BOOKMARK [1][-]{section.6.1}{Summary}{chapter.6}% 34
+\BOOKMARK [1][-]{section.6.2}{Outlook}{chapter.6}% 35
+\BOOKMARK [0][-]{appendix.A}{Appendix}{}% 36
+\BOOKMARK [0][-]{appendix*.28}{List of Figures}{}% 37
+\BOOKMARK [0][-]{appendix*.29}{List of Tables}{}% 38
+\BOOKMARK [0][-]{appendix*.30}{References}{}% 39

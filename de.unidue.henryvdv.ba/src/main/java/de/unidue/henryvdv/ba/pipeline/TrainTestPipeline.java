@@ -1,7 +1,12 @@
 package de.unidue.henryvdv.ba.pipeline;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.uima.UIMAException;
@@ -22,6 +27,7 @@ import de.unidue.henryvdv.ba.modules.InformationModule;
 import de.unidue.henryvdv.ba.modules.NegativeTrainingInstanceAnnotator;
 import de.unidue.henryvdv.ba.modules.SVMClassifier;
 import de.unidue.henryvdv.ba.modules.SVMTrainingInstanceCreator;
+import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.reader.WikiCoref_Reader;
 import de.unidue.henryvdv.ba.util.SVMLearn;
 import de.unidue.henryvdv.ba.util.SavedVectorWriter;
@@ -41,9 +47,10 @@ public class TrainTestPipeline {
 		for(int i = 0; i < allDocs.length; i++){
 			allDocs[i] = i;
 		}
-		trainPipeline(allDocs);
 		
-		//crossvalidation(10,30, false);
+		//trainPipeline(allDocs);
+		
+		crossvalidation(2,2, false);
 	}
 	
 	/**
@@ -104,9 +111,9 @@ public class TrainTestPipeline {
 			System.out.println("  ]");
 			
 			System.out.println("Train: ");
-			//trainPipeline(trainOnArray);
-			SavedVectorWriter s = new SavedVectorWriter(trainOnArray);
-			s.write();
+			trainPipeline(trainOnArray);
+			//SavedVectorWriter s = new SavedVectorWriter(trainOnArray);
+			//s.write();
 			
 			SVMLearn svmLearn = new SVMLearn();
 			svmLearn.learn();
@@ -116,10 +123,6 @@ public class TrainTestPipeline {
 			
 		}
 	}
-	
-	
-	
-	
 	
 	/**
 	 * The baseline classifier (see Baseline_Evaluator.class for further information)
@@ -157,7 +160,6 @@ public class TrainTestPipeline {
 	                      WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
 	                      WikiCoref_Reader.PARAM_USED_DOCUMENT_NUMBERS, usedDocs),			   
 	        AnalysisEngineFactory.createEngineDescription(CoreNlpPosTagger.class),
-	        AnalysisEngineFactory.createEngineDescription(CoreNlpLemmatizer.class),
 	        AnalysisEngineFactory.createEngineDescription(CoreNlpNamedEntityRecognizer.class),
 	        AnalysisEngineFactory.createEngineDescription(CoreNlpParser.class,
 															CoreNlpParser.PARAM_ORIGINAL_DEPENDENCIES,
@@ -165,8 +167,7 @@ public class TrainTestPipeline {
 	        AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
 	        AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
 	        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator.class),
-	        AnalysisEngineFactory.createEngineDescription(AllFeaturevectorsAnnotator.class),
-	        AnalysisEngineFactory.createEngineDescription(InformationModule.class)      
+	        AnalysisEngineFactory.createEngineDescription(AllFeaturevectorsAnnotator.class)  
 	       // AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)    
 	        );  
 	  }
@@ -183,7 +184,6 @@ public class TrainTestPipeline {
 	                        WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
 	                        WikiCoref_Reader.PARAM_USED_DOCUMENT_NUMBERS, usedDocs),	   
 	        		AnalysisEngineFactory.createEngineDescription(CoreNlpPosTagger.class),
-	        		AnalysisEngineFactory.createEngineDescription(CoreNlpLemmatizer.class),
 	        		AnalysisEngineFactory.createEngineDescription(CoreNlpNamedEntityRecognizer.class),
 	        		AnalysisEngineFactory.createEngineDescription(CoreNlpParser.class,
 																	CoreNlpParser.PARAM_ORIGINAL_DEPENDENCIES,

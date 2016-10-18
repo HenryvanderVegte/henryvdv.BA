@@ -11,6 +11,7 @@ The Naive Hobbs algorithm described by \citep{hobbs1978resolving} relies on pars
 Hobbs reported an accuracy score of 88.3 \% on the pronouns “he",“she",“it", and “them" with only using the algorithmic approach. The usage of additional constraints improved the accuracy to 91.7 \%.
 
 \subsection{CogNIAC}
+\label{baldwinCogNIAC}
 Another rule-based approach was presented by \citep{baldwin1997cogniac} with CogNIAC, a high precision pronoun resolution system. It only resolves pronouns when high confidence rules (shown in Table \ref{table:cogniacRules}) are satisfied in order to avoid decisions under ambiguity and to ensure that only very likely antecedents are attached (high precision). This might lead to a neglect of less probable but still correct antecedents and lower the recall score. 
 \\
 For each pronoun, the rules are applied one by one. If the given rule has found a matching candidate, it will be accepted. Otherwise, the next rule will be applied. If none matches the candidates, it will be left unresolved as this implicates a higher ambiguity. In order to apply Baldwins high confidence rules, information on sentences, part-of-speech, and noun phrases is required and therefore annotated. Semantic category information such as gender and number is determined through various databases. Confirming their prediction, \citep{baldwin1997cogniac} reported a high precision score (97 \%), but inferior recall (60 \%) on their training data consisting of 198 pronouns.\\
@@ -82,19 +83,10 @@ With additional language-dependent features, BART was successfully transferred t
 
 \citep{reiteretal:2011b} indicated that a great weakness of BART is the implementation of gender information as in their evaluation even noun phrases with explicit gender information were linked incorrectly.
 
-\subsection{Cluster-Based Coreference Resolution}
-The previously described machine learning approaches generate negative and positive training examples as pronoun-antecedent pairs. \cite{rahman2009supervised} pointed out several disadvantages of pairwise comparisons: First of all, each possible antecedents is considered on its own which makes a comparison between candidates impossible. For instance, if the first preceding candidate was accepted as the antecedent because it passed a defined threshold, no further candidate will be analysed even if it passed the threshold with a much higher value. Secondly, several contextual information might be missing as only the pronoun-antecedent pair is examined. Those contextual clues could inter alia give information on gender or number. 
-In order to solve those disadvantages \cite{rahman2009supervised} presented a cluster-ranking coreference module. A cluster ranker is trained to determine to which previous coreference cluster a coreference should be resolved. In contrast to rule-based approaches \citep{mitkov1998robust} no manual constraints restrict possible candidates. Instead, restrictions are learned through features automatically. \cite{rahman2009supervised} implemented three different classifiers baselines which represent previous learning-based approaches to coreference resolution. For instance, a mention-pair coreference model was implemented. This classifier learns from coreferent-anaphora-pairs which either conatin the correct or wrong antecedent (therefore this approach is similar to \cite{soon2001machine}). 
-The implemented cluster ranker!!!!!!!!!!!
 
-When evaluated on the ACE 2005
-coreference data sets, cluster rankers outperform
-three competing models — mention-pair, entitymention,
-and mention-ranking models — by a
-large margin.
 
 \subsection{Pronoun Resolution in Spoken Dialogue}
-As already mentioned, machine learning approaches are less domain-specific than rule-based systems. For that reason \citep{strube2003machine} presented a corpus-based approach for pronoun resolution in spoken language. Still, several extensions and adaptions had to be done as spoken dialogue differs from written texts gravely. Firstly, the number of pleonastic pronouns in spoken dialogue is substantially increased. Secondly, a not ignorable amount of anaphoras in spoken dialogue don't have a clearly defined antecedent so that even humans can't determine them. \citep{eckert2000dialogue} called them vague anaphoras and figured out that 13.2 \% of all anaphoras in their examined corpus fall into that category.\\
+As already mentioned, machine learning approaches are less domain-specific than rule-based systems. For that reason \citep{strube2003machine} presented a corpus-based approach for pronoun resolution in spoken language. Still, several extensions and adaptions had to be done as spoken dialogue differs from written texts gravely. Firstly, the number of pleonastic pronouns in spoken dialogue is substantially increased. Secondly, a not ignorable amount of anaphoras in spoken dialogue don't have a clearly defined antecedent so that even humans can't determine them. \cite{eckert2000dialogue} called them vague anaphoras and figured out that 13.2 \% of all anaphoras in their examined corpus fall into that category.\\
 A corpus of twenty switchboard dialogues was used. In order to generate training data, a list of all potential anaphoras was created. Potential anaphoras are all non-definite noun phrases except for first and second person pronouns. Each element in the remaining list forms a pair with every preceding noun phrase that does not disagree in gender, number, or person. If the instances corefer they were labeled P, else N. For all anaphoras without explicit noun phrase antecedents, other phrases (for instance verb phrases) in the last two sentences were used to form pairs. \\
 The feature set with a total of 25 features included noun-phrase features, coreference-level features and spoken dialogue features. Noun-phrase features rely on further preprocessing such as gender, number, or the grammatical function of the anaphora or the antecedent. Coreference-level features could be described as low-level preprocessing features. Those features mainly describe the distance between the antecedent and the anaphora, for instance, in words or sentences. The features especially for spoken dialogue contain, for instance, information on how many noun phrases are located between anaphora and antecedent.
 A decision tree classifier with 20-fold cross-validation was applied. \citep{strube2003machine} reported an F-measure of 47.42 \% for the full classifier, including all pronouns and all features. 
@@ -135,6 +127,7 @@ In order to solve those problems, \cite{bergsma2005automatic} treated the counts
 A complete distribution is presented in Table \ref{table:bergsma2004GenderFreqTable}. Note that, unlike the naive approach, these values can only be partially compared to one another, as each of them represents a single distribution. Furthermore, the percentages don't even sum up to 100 \%.
 
 \begin{table}[h]
+	\centering
     \renewcommand{\arraystretch}{2.0}
     \begin{tabular}{| l | l | l | l |}
     \hline
@@ -149,8 +142,6 @@ A complete distribution is presented in Table \ref{table:bergsma2004GenderFreqTa
      \label{table:bergsma2004GenderFreqTable}
 \end{table}
 
-
-
  \cite{bergsma2005automatic} expressed the certainty through the variance of Beta distributions:
 
 \begin{center}
@@ -161,9 +152,10 @@ In case of little or no counts at all, the variance will be approximately 1/12. 
 
 In order to prove the accuracy of their gender classification, \cite{bergsma2005automatic} built several SVM-Classifiers. Overall, a set of 20 features was used: Each of the five gender indicators (reflexive, possessive, etc.) has its mean and its variance as features (in this case, the standard deviation was used which is the square root of the variance). Each of the gender indicators was implemented corpus-based as well as web-based. All gender features led to an F-measure of 92 \%. Separate classifiers for either web-based or corpus-based information yielded to an F-measure of 85.4 \% for the corpus-based and 90.4 \% for the web-based approach.
 
-Various pronoun resolution classifiers were built in order to determine the influence of several aspects. In general, each classifier searches, beginning by the certain anaphora, the text backwards until a matching antecedent is found. The matching criteria vary depending upon the complexity of the classifier. The search backwards of the more complex classifiers was limited so that only the current and the previous sentence was considered, because a corpus observation showed that more than 97 \% of all antecedents could be found in that range. If no accepted antecedent was found a threshold was reduced so that antecedents with lower likelihood might be accepted. This procedure was repeated until the first candidate exceed the threshold. 
+Various pronoun resolution classifiers were build in order to determine the influence of several aspects. In general, each classifier searches, beginning by the certain anaphora, the text backwards until a matching antecedent is found. The matching criteria vary depending upon the complexity of the classifier. The search backwards of the more complex classifiers was limited so that only the current and the previous sentence was considered, because a corpus observation showed that more than 97 \% of all antecedents could be found in that range. If no accepted antecedent was found a threshold was reduced so that antecedents with lower likelihood might be accepted. This procedure was repeated until the first candidate exceed the threshold. 
 
-The first baseline approach was to always select the most recent noun phrase as antecedent. An accuracy of 26.0 \% was reported. \\
+The baseline approach was to always select the most recent noun phrase as antecedent. An accuracy of 26.0 \% was reported. 
+
 A first improvement consisted of the use of only explicit gender indicators such as “Mr." and “Mrs." to determine the gender. The first previous antecedent that does not mismatch will be chosen. The accuracy was improved up to 30.8\%. 
 In a third baseline approach, the previously mentioned gender SVM-classifiers were used to detect a gender match or mismatch. Underlining the importance of gender and number agreement, the accuracy rose up to 59.4 \%.
 
@@ -191,7 +183,8 @@ The machine learning-based resolver presented by \cite{aone1995evaluating} used 
 In total, six different classifiers depending on three parameters were trained. The first parameter was called anaphoric chain. If its value is true, a correct antecedent is detected if the candidate is part of the same anaphoric chains which means that both refer to the same real-world entity. Otherwise, just the preceding same-world entity will be accepted as correct antecedent. This parameter also affects the training instance generation. In case of anaphoric chains, all co-refering phrases will form positive training instances with its anaphora. In the other case, just the preceding co-refering phrase will be used for positive instances. In both cases, the remaining phrases will form negative training instances with the anaphora. The second parameter determines whether the decision tree will use further information of the anaphoric type (for instance whether the real-world entity of the anaphora is a proper name). A third parameter determines the pruning-factor of its decision tree. A high pruning-factor indicates a higher generalization while decision trees with a lower factor tend to overfit. 
 
 \subsection{Evaluation}
-The comparison was evaluated on japanese newspaper articles. In total, 1271 anaphoras were used. As it can be seen in Table \ref{table:aone1995evals}, all machine learning approaches using anaphoric chains outperformed the manual approach independent of their pruning-factor, while the approach without the usage of anaphoric chains performed slightly worse. The different pruning factors seemed to have a rather low impact on the performance.
+\label{aoneBennetEval}
+The comparison was evaluated on Japanese newspaper articles. In total, 1271 anaphoras were used. As it can be seen in Table \ref{table:aone1995evals}, all machine learning approaches using anaphoric chains outperformed the manual approach independent of their pruning-factor, while the approach without the usage of anaphoric chains performed slightly worse. The different pruning factors seemed to have a rather low impact on the performance.
 
 As the manually designed resolver also detects only the preceding same-world entity, it would be most reasonable to compare it to the MLR-6. Even though the manual approach performed better, no language specific information or relevance of features need to be determined as the algorithm learned it autonomously \citep{aone1995evaluating}. \cite{aone1995evaluating} interpreted the results as optimistic for machine learning techniques.
 

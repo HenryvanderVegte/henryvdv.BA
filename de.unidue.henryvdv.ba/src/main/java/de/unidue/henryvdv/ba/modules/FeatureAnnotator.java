@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
+import org.apache.uima.fit.descriptor.TypeCapability;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
@@ -21,11 +22,31 @@ import de.unidue.henryvdv.ba.type.AntecedentFeatures;
 import de.unidue.henryvdv.ba.type.GenderFeatures;
 import de.unidue.henryvdv.ba.type.PronounAntecedentFeatures;
 import de.unidue.henryvdv.ba.type.PronounFeatures;
+import de.unidue.henryvdv.ba.type.Quotation;
 import de.unidue.henryvdv.ba.util.FeatureUtils_Antecedent;
 import de.unidue.henryvdv.ba.util.FeatureUtils_Gender;
 import de.unidue.henryvdv.ba.util.FeatureUtils_Pronoun;
 import de.unidue.henryvdv.ba.util.FeatureUtils_PronounAntecedent;
 
+/**
+ * Annotates for all anaphoras all features
+ * @author Henry
+ *
+ */
+@TypeCapability(
+        inputs = {
+                "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
+                "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence",
+                "de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency",
+                "de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity",
+                "de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent",
+                "de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS",
+                "de.unidue.henryvdv.ba.type.Anaphora"},
+        outputs = {
+                "de.unidue.henryvdv.ba.util.FeatureUtils_Antecedent",
+                "de.unidue.henryvdv.ba.util.FeatureUtils_Gender",
+                "de.unidue.henryvdv.ba.util.FeatureUtils_Pronoun",
+                "de.unidue.henryvdv.ba.util.FeatureUtils_PronounAntecedent"})
 public class FeatureAnnotator  extends JCasAnnotator_ImplBase {
 
 	private JCas aJCas;
@@ -54,24 +75,28 @@ public class FeatureAnnotator  extends JCasAnnotator_ImplBase {
 		genderUtil = new FeatureUtils_Gender(aJCas, corpusFrequencies);
 		
 		for(Anaphora anaphora : anaphoras){
+			//Annotate Antecedent Features:
 			AntecedentFeatures antecedenFeatures = new AntecedentFeatures(aJCas);
 			anaphora.setAntecedentFeatures(antecedenFeatures);		
 			antecedentUtil.annotateFeatures(anaphora);
-			
+			//Annotate Pronoun Features:
 			PronounFeatures pronounFeatures = new PronounFeatures(aJCas);
 			anaphora.setPronounFeatures(pronounFeatures);
 			pronounUtil.annotateFeatures(anaphora);
-			
+			//Annotate Gender Features:
 			GenderFeatures genderFeatures = new GenderFeatures(aJCas);
 			anaphora.setGenderFeatures(genderFeatures);
 			genderUtil.annotateFeatures(anaphora);;
-			
+			//Annotate Pronoun-Antecedent Features:
 			PronounAntecedentFeatures a = new PronounAntecedentFeatures(aJCas);
 			anaphora.setPronounAntecedentFeatures(a);
 			pronounAntecedentUtil.annotateFeatures(anaphora);
 		}
 	}
 	
+	/**
+	 * Reads the corpus mined gender frequencies
+	 */
 	private void readCorpus(){
 		File folder = new File(Parameters.genderCorpusDirectory);
 	    File[] files = folder.listFiles();
@@ -86,7 +111,10 @@ public class FeatureAnnotator  extends JCasAnnotator_ImplBase {
 	    }
 	}
 	
-	// reads all lines in a document and puts the frequencies in the map
+	/**
+	 * Reads all lines in a document and puts the frequencies in the map
+	 * @param inputLines All corpus lines
+	 */
 	private void readCorpusLines(List<String> inputLines){
 		for(String s : inputLines){
 			String word = "";

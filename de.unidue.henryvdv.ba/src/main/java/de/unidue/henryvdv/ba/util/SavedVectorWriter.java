@@ -13,7 +13,7 @@ public class SavedVectorWriter {
 
 	private static final String INPUT_FOLDER= "src/main/resources/exportVectors";
 	
-	private static final String INPUT_FILE = "allVectors.dat";
+	private static final String INPUT_FILE = "current.dat";
 	
 	private static final String OUTPUT_FOLDER= "src/main/resources/svm/dat";
 	
@@ -102,6 +102,56 @@ public class SavedVectorWriter {
 		    }
 
 		    for(int i = 0; i < negUsedVectors.size(); i++){
+		    	writer.newLine();
+		    	writer.write(negUsedVectors.get(i));
+		    }
+		    writer.newLine();
+		    
+		} catch (IOException e) {
+		  System.out.println("Failed to write feature vectors to train file.");
+		  e.printStackTrace();
+		} finally {
+		   try {
+			   writer.close();
+		   } catch (Exception e)
+		   {
+			   System.out.println("Failed to close writer.");
+			   e.printStackTrace();
+		   }
+		}
+		
+	}
+	
+	public void write(int percent){
+		if(exportFile.isFile()){
+			exportFile.delete();
+		}		
+		
+		int posStop = (int)((float)posUsedVectors.size() * ((float)percent/100));
+		int negStop = (int)((float)negUsedVectors.size() * ((float)percent/100));
+		System.out.println("** pos: " + posStop + " of " + posUsedVectors.size());
+		System.out.println("** neg: " + negStop + " of " + negUsedVectors.size());
+		try {
+			exportFile.getParentFile().mkdirs();
+			exportFile.createNewFile();
+		} catch (IOException e) {
+			System.out.println("Error while creating the file.");
+			e.printStackTrace();
+		}
+		
+		BufferedWriter writer = null;
+		try {
+            writer = new BufferedWriter(new FileWriter(exportFile));
+		    writer.write("# svm train \"WikiCoref\" (training examples: " + posUsedVectors.size() + 
+		    				" positive / " + negUsedVectors.size() + " negative)");
+		    
+		    
+		    for(int i = 0; i < posStop; i++){
+		    	writer.newLine();
+		    	writer.write(posUsedVectors.get(i));
+		    }
+
+		    for(int i = 0; i < negStop; i++){
 		    	writer.newLine();
 		    	writer.write(negUsedVectors.get(i));
 		    }

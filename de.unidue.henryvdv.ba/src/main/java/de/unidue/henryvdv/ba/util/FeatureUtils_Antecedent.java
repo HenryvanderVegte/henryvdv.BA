@@ -17,21 +17,51 @@ import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Quotation;
-
+/**
+ * Class for the assignment of all antecedent features
+ * for a given anaphora
+ * @author Henry
+ *
+ */
 public class FeatureUtils_Antecedent {
-
+	/********************************************
+	 * 	Assigns the antecedent features:		*
+	 * 											*
+	 * 	-Antecedent Frequency (float)			*
+	 * 	-Subject (bool)							*
+	 * 	-Object (bool)							*
+	 * 	-Predicate (bool)						*
+	 * 	-Pronominal (bool)						*
+	 * 	-Head Word Emphasis (bool)				*
+	 * 	-Conjunction (bool)						*
+	 * 	-Prenominal Modifier (bool)				*
+	 * 	-Organization (bool)					*
+	 * 	-Person (bool)							*
+	 * 	-Time (bool)							*
+	 * 	-Date (bool)							*
+	 * 	-Money (bool)							*
+	 * 	-Number (bool)							*
+	 * 	-Definite (bool)						*
+	 * 	-His/Her (bool)							*
+	 * 	-He/His (bool)							*
+	 * 											*
+	 * 	+My own features						*
+	 * 	-CoveredTokens(float)					*
+	 ********************************************/
+	
+	/**
+	 * Required Annotations:
+	 */
 	private Collection<Token> tokens;
 	private Collection<Sentence> sentences;
 	private Collection<Dependency> dependencies;
 	private Collection<NamedEntity> namedEntities;
-	private Collection<Time> times;
 	
 	public FeatureUtils_Antecedent(JCas aJCas){
 		sentences = JCasUtil.select(aJCas, Sentence.class);
 		dependencies = JCasUtil.select(aJCas, Dependency.class);
 		tokens = JCasUtil.select(aJCas, Token.class);
 		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
-		times = JCasUtil.select(aJCas, Time.class);
 	}
 	
 	public void annotateFeatures(Anaphora a){
@@ -71,6 +101,7 @@ public class FeatureUtils_Antecedent {
 		a.getAntecedentFeatures().setA_HeHis(heHisPattern(a));
 		
 		//My own features:
+		//How many tokens the antecedent covers / 10f :
 		a.getAntecedentFeatures().setA_CovTokens(coveredTokens(a));
 	}
 	
@@ -79,16 +110,24 @@ public class FeatureUtils_Antecedent {
 		return (float)covTokens.size() / 10f;
 	}
 	
-	
-	public float antecedentFrequency(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());		
+	/**
+	 * Get antecedent Frequency
+	 * @param anaphora Anaphora
+	 * @return frequency value
+	 */
+	public float antecedentFrequency(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());		
 		int count = getNrOfOccurences(covTokens);
-		//TODO: maybe change it back to /10f
 		return (float)count  / 100f;
 	}
 	
-	public boolean subject(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());	
+	/**
+	 * Get containsSubject
+	 * @param anaphora Anaphora
+	 * @return subject value
+	 */
+	public boolean subject(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());	
 		boolean value = false;
 		for(Token t : covTokens){				
 			if(isSubject(t)){
@@ -98,8 +137,13 @@ public class FeatureUtils_Antecedent {
 		return value;
 	}
 	
-	public boolean object(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());	
+	/**
+	 * Get containsObject
+	 * @param anaphora Anaphora
+	 * @return object value
+	 */
+	public boolean object(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());	
 		boolean value = false;
 		for(Token t : covTokens){				
 			if(isObject(t)){
@@ -109,8 +153,13 @@ public class FeatureUtils_Antecedent {
 		return value;
 	}
 	
-	public boolean predicate(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());	
+	/**
+	 * Get containsPredicate
+	 * @param anaphora Anaphora
+	 * @return predicate value
+	 */
+	public boolean predicate(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());	
 		boolean value = false;
 		for(Token t : covTokens){				
 			if(isPredicate(t)){
@@ -120,8 +169,13 @@ public class FeatureUtils_Antecedent {
 		return value;
 	}
 	
-	public boolean pronominal(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());	
+	/**
+	 * Get containsPronominal
+	 * @param anaphora Anaphora
+	 * @return pronominal value
+	 */
+	public boolean pronominal(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());	
 		boolean value = false;
 		for(Token t : covTokens){				
 			if(isPronoun(t)){
@@ -130,21 +184,43 @@ public class FeatureUtils_Antecedent {
 		}
 		return value;
 	}
-	
-	public boolean headWordEmphasis(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
-		boolean parentIsNoun = false;
+
+	/**
+	 * Get Head-Word Emphasis (if parent is no noun)
+	 * @param anaphora Anaphora
+	 * @return Head-Word-Emphasis Value
+	 */
+	public boolean headWordEmphasis(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
+		boolean value = false;
+		int nounsTotal = 0;
 		for(Token t : covTokens){
-			Token parent = getParent(t);
-			if(parent != null && isNoun(parent)){
-				parentIsNoun = true;
+			if(isNoun(t))
+				nounsTotal++;
+		}
+		if(nounsTotal > 1){
+			Token headNoun = getHeadNoun(anaphora.getAntecedent());	
+			if(headNoun != null && headNoun.getBegin() < anaphora.getAntecedent().getBegin()){
+				if(!isParentNoun(headNoun)){
+					value = true;
+				}
+			}
+		} else {
+			for(Token t : covTokens){
+				if(isNoun(t) && !isParentNoun(t))
+					value = true;
 			}
 		}
-		return !parentIsNoun;
+		return value;
 	}
 	
-	public boolean conjunction(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+	/**
+	 * Get containsConjunction
+	 * @param anaphora Anaphora
+	 * @return conjunction value
+	 */
+	public boolean conjunction(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
 		boolean containsConjunction = false;
 		for(Token t : covTokens){
 			if(isConjunction(t)){
@@ -153,20 +229,38 @@ public class FeatureUtils_Antecedent {
 		}
 		return !containsConjunction;
 	}
-	
-	public boolean prenominalModifier(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
-		boolean value = false;
-		for(Token t : covTokens){
-			if(isPrenominalModifier(t)){
-				value = true;
-			}
-		}
-		return value;
+	/**
+	 * Get containsPrenominalModifier
+	 * @param anaphora Anaphora
+	 * @return prenominal Modifier value
+	 */
+	public boolean prenominalModifier(Anaphora anaphora){	
+        List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
+        boolean value = false;
+        for(Token t : covTokens){
+            if(isPrenominalModifier(t)){
+                value = true;
+            }
+        }
+        return value;
 	}
-	
-	public boolean organization(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+	/**
+	 * modifier value for single token
+	 * @param token Token
+	 * @return value
+	 */
+    private boolean isPrenominalModifier(Token token){
+        if(isNoun(token) && isModifier(token) && getParent(token) != null && isNoun(getParent(token)))
+            return true;
+        return false;
+    }
+    /**
+     * whether the antecedent contains an organization
+     * @param anaphora Anaphora
+     * @return value
+     */
+	public boolean organization(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
 		boolean value = false;			
 		for(Token t : covTokens){
 			String ne = getNamedEntityValue(t);
@@ -177,8 +271,13 @@ public class FeatureUtils_Antecedent {
 		return value;
 	}
 	
-	public boolean person(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+    /**
+     * whether the antecedent contains a person
+     * @param anaphora Anaphora
+     * @return value
+     */
+	public boolean person(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
 		boolean value = false;			
 		for(Token t : covTokens){
 			String ne = getNamedEntityValue(t);
@@ -188,9 +287,13 @@ public class FeatureUtils_Antecedent {
 		}
 		return value;
 	}
-	
-	public boolean time(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+    /**
+     * whether the antecedent contains a time unit
+     * @param anaphora Anaphora
+     * @return value
+     */
+	public boolean time(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
 		boolean value = false;			
 		for(Token t : covTokens){
 			String ne = getNamedEntityValue(t);
@@ -200,9 +303,13 @@ public class FeatureUtils_Antecedent {
 		}
 		return value;
 	}
-	
-	public boolean date(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+    /**
+     * whether the antecedent contains a date
+     * @param anaphora Anaphora
+     * @return value
+     */
+	public boolean date(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
 		boolean value = false;			
 		for(Token t : covTokens){
 			String ne = getNamedEntityValue(t);
@@ -212,9 +319,13 @@ public class FeatureUtils_Antecedent {
 		}
 		return value;
 	}
-	
-	public boolean money(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+    /**
+     * whether the antecedent contains a monetary denomination
+     * @param anaphora Anaphora
+     * @return value
+     */
+	public boolean money(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
 		boolean value = false;			
 		for(Token t : covTokens){
 			String ne = getNamedEntityValue(t);
@@ -224,9 +335,13 @@ public class FeatureUtils_Antecedent {
 		}
 		return value;
 	}
-	
-	public boolean number(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+    /**
+     * whether the antecedent contains a number
+     * @param anaphora Anaphora
+     * @return value
+     */
+	public boolean number(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
 		boolean value = false;			
 		for(Token t : covTokens){
 			String ne = getNamedEntityValue(t);
@@ -236,16 +351,24 @@ public class FeatureUtils_Antecedent {
 		}
 		return value;
 	}
-	
-	public boolean definiteArticle(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+    /**
+     * whether the antecedent begins with "the"
+     * @param anaphora Anaphora
+     * @return value
+     */
+	public boolean definiteArticle(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
 		if(covTokens.get(0).getCoveredText().equalsIgnoreCase("the"))
 			return true;
 		return false;
 	}
-	
-	public boolean hisHerPattern(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+    /**
+     * whether the antecedent contains his or her
+     * @param anaphora Anaphora
+     * @return value
+     */
+	public boolean hisHerPattern(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
 		boolean value = false;			
 		for(Token t : covTokens){
 			if(t.getCoveredText().equalsIgnoreCase("his")||t.getCoveredText().equalsIgnoreCase("her")){
@@ -254,9 +377,13 @@ public class FeatureUtils_Antecedent {
 		}
 		return value;
 	}
-	
-	public boolean heHisPattern(Anaphora a){
-		List<Token> covTokens = getCoveredTokens(a.getAntecedent());
+    /**
+     * whether the antecedent contains he or his
+     * @param anaphora Anaphora
+     * @return value
+     */
+	public boolean heHisPattern(Anaphora anaphora){
+		List<Token> covTokens = getCoveredTokens(anaphora.getAntecedent());
 		boolean value = false;			
 		for(Token t : covTokens){
 			if(t.getCoveredText().equalsIgnoreCase("he")||t.getCoveredText().equalsIgnoreCase("his")){
@@ -266,8 +393,11 @@ public class FeatureUtils_Antecedent {
 		return value;
 	}
 	
-	
-	
+	/**
+	 * how often a given part of a text is contained in the document
+	 * @param checkTokens list of successive tokens
+	 * @return number of occurences
+	 */
 	private int getNrOfOccurences(List<Token> checkTokens){
 		Token[] tokenArray = tokens.toArray(new Token[tokens.size()]);
 		int nrOfOcc = 0;
@@ -291,7 +421,12 @@ public class FeatureUtils_Antecedent {
 		}	
 		return nrOfOcc;		
 	}
-		
+	
+	/**
+	 * if a given Token is tagged as Subject
+	 * @param token Token
+	 * @return value
+	 */
 	private boolean isSubject(Token token){
 		for(Dependency d : dependencies){
 			if(d.getDependent() == token && d.getDependencyType().contains("subj")){
@@ -301,7 +436,11 @@ public class FeatureUtils_Antecedent {
 		return false;
 	}
 	
-
+	/**
+	 * if a given Token is tagged as Object
+	 * @param token Token
+	 * @return value
+	 */
 	private boolean isObject(Token token){
 		for(Dependency d : dependencies){
 			if(d.getDependent() == token && d.getDependencyType().contains("obj")){
@@ -311,23 +450,33 @@ public class FeatureUtils_Antecedent {
 		return false;
 	}
 	
+	/**
+	 * if a given Token is tagged as predicate
+	 * @param token Token
+	 * @return value
+	 */
 	private boolean isPredicate(Token token){
 		if(token.getPos().getPosValue().length() >= 2 && token.getPos().getPosValue().substring(0, 2).equals("VB"))
 			return true;
 		return false;
 	}
 	
+	/**
+	 * if a given Token is a pronoun
+	 * @param token Token
+	 * @return value
+	 */
 	private boolean isPronoun(Token token){
-		if(Arrays.asList(Parameters.thirdPersonPronouns).contains(token.getCoveredText())){
+		if(Arrays.asList(Parameters.allPronouns).contains(token.getCoveredText())){
 			return true;
 		}
-		
-		if(token.getPos().getPosValue().length() >= 3 && 
-				token.getPos().getPosValue().substring(0, 3).equals("PRP")) //TODO: Think about implementing WP & WP$		
-			return true;
 		return false;
 	}
-
+	/**
+	 * if a given Token is a noun
+	 * @param token Token
+	 * @return value
+	 */
 	private boolean isNoun(Token token){
 		if(token.getPos().getPosValue().length() >= 2 && 
 				token.getPos().getPosValue().substring(0, 2).equals("NN")) 		
@@ -335,6 +484,11 @@ public class FeatureUtils_Antecedent {
 		return false;
 	}	
 	
+	/**
+	 * if a given Token is a conjunction
+	 * @param token Token
+	 * @return value
+	 */
 	private boolean isConjunction(Token token){
 		if(token.getPos().getPosValue().length() >= 2 && 
 				token.getPos().getPosValue().substring(0, 2).equals("CC")){ 	//TODO: Maybe Check for subordinating conjunctions	
@@ -343,12 +497,22 @@ public class FeatureUtils_Antecedent {
 		return false;
 	}
 	
-	private boolean isPrenominalModifier(Token token){
-		if(isNoun(token) && isModifier(token) && getParent(token) != null && isNoun(getParent(token)))
+	/**
+	 * if the parent of a given Token is a noun
+	 * @param token Token
+	 * @return value
+	 */
+	private boolean isParentNoun(Token token){
+		if(getParent(token) != null && isNoun(getParent(token)))
 			return true;
 		return false;
 	}
 	
+	/**
+	 * If a given Token is a modifier
+	 * @param token Token
+	 * @return value
+	 */
 	private boolean isModifier(Token token){
 		for(Dependency d : dependencies){
 			if(d.getDependent() == token && d.getDependencyType().contains("mod")){
@@ -358,6 +522,11 @@ public class FeatureUtils_Antecedent {
 		return false;
 	}
 	
+	/**
+	 * Get the named Entity category (if available) for a token
+	 * @param token Token
+	 * @return if available: value, else null
+	 */
 	private String getNamedEntityValue(Token token){
 		for(NamedEntity n : namedEntities){
 			if(n.getBegin() <= token.getBegin() && n.getEnd() >= token.getEnd()){
@@ -367,12 +536,43 @@ public class FeatureUtils_Antecedent {
 		return null;
 	}
 	
-	private List<Token> getCoveredTokens(Annotation anno){
-		return AnnotationUtils.getCoveredTokens(anno, tokens);
+	/**
+	 * Gets all covered Tokens
+	 * @param annotation Annotation
+	 * @return list of covered Tokens
+	 */
+	private List<Token> getCoveredTokens(Annotation annotation){
+		return AnnotationUtils.getCoveredTokens(annotation, tokens);
 	}
 	
-	
+	/**
+	 * Gets the parent token of a token
+	 * @param token Token
+	 * @return if availabe: parent token, else null
+	 */
 	private Token getParent(Token token){
 		return AnnotationUtils.getParent(token, dependencies);
+	}
+	/**
+	 * Gets the head noun of a nounphrase
+	 * @param nounphrase Nounphrase
+	 * @return if available: the head noun, else null
+	 */
+	private Token getHeadNoun(Annotation nounphrase){
+		List<Token> covTokens = AnnotationUtils.getCoveredTokens(nounphrase, tokens);
+		
+		for(Token t : covTokens){
+			if(t.getPos().getPosValue().contains("NN")){
+				for(Dependency d : dependencies){
+					if(d.getDependent() == t && d.getGovernor().getPos().getPosValue().contains("NN")){
+						Token gov = d.getGovernor();
+						if(nounphrase.getBegin() <= gov.getBegin() && nounphrase.getEnd() >= gov.getEnd())
+							return d.getGovernor();					
+					}
+				}
+			}
+		}
+		
+		return null;
 	}
 }

@@ -72,6 +72,7 @@ public class FeatureUtils_Gender {
 		boolean plural = false;
 
 		Integer[] freq = {0,0,0,0};
+		
 		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
 		String person = null;
 		for(Token t : covTokens){
@@ -103,14 +104,52 @@ public class FeatureUtils_Gender {
 				}
 			}
 		}
-		if(freq[0] > freq[1] && freq[0] > freq[2] && freq[0] > freq[3])
+		/*
+		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
+		if(corpusFrequencies.containsKey(ante)){
+			Integer[] freq1 = corpusFrequencies.get(ante);
+			freq[0] += freq1[0];
+			freq[1] += freq1[1];
+			freq[2] += freq1[2];
+			freq[3] += freq1[3];
+			}
+		String firstWord = covTokens.get(0).getCoveredText().toLowerCase() + " !";
+		if(corpusFrequencies.containsKey(firstWord)){
+			Integer[] freq1 = corpusFrequencies.get(firstWord);
+			freq[0] += freq1[0];
+			freq[1] += freq1[1];
+			freq[2] += freq1[2];
+			freq[3] += freq1[3];
+		}
+		String lastWord = "! " + covTokens.get(covTokens.size() - 1).getCoveredText().toLowerCase();
+		if(corpusFrequencies.containsKey(lastWord)){
+			Integer[] freq1 = corpusFrequencies.get(lastWord);
+			freq[0] += freq1[0];
+			freq[1] += freq1[1];
+			freq[2] += freq1[2];
+			freq[3] += freq1[3];
+		}
+		*/
+		
+		/*
+		if(freq[0] > freq[1] +  freq[2] + freq[3])
 			masculine = true;
-		if(freq[1] > freq[0] && freq[1] > freq[2] && freq[1] > freq[3])
+		if(freq[1] > freq[0]+ freq[2] + freq[3])
 			feminine = true;
-		if(freq[2] > freq[0] && freq[2] > freq[1] && freq[2] > freq[3])
+		if(freq[2] > freq[0] + freq[1] +freq[3])
 			neutral = true;
-		if(freq[3] > freq[0] && freq[3] > freq[1] && freq[3] > freq[2])
+		if(freq[3] > freq[0] + freq[1] + freq[2])
 			plural = true;
+		*/
+		if(freq[0] > freq[1] && freq[0] >  freq[2] && freq[0] > freq[3])
+			masculine = true;
+		if(freq[1] > freq[0]&& freq[1] >  freq[2] && freq[1] > freq[3])
+			feminine = true;
+		if(freq[2] > freq[0] && freq[2] >  freq[1]  && freq[2] > freq[3])
+			neutral = true;
+		if(freq[3] > freq[0] && freq[3] >  freq[1] && freq[3] >  freq[2])
+			plural = true;
+		
 		
 		a.getGenderFeatures().setG_Masculine_HardConstraint(masculine);
 		a.getGenderFeatures().setG_Feminine_HardConstraint(feminine);
@@ -118,34 +157,18 @@ public class FeatureUtils_Gender {
 		a.getGenderFeatures().setG_Plural_HardConstraint(plural);
 	}
 	
-	
 	public boolean stdGenderMatch(Anaphora a){
 		Gender anteGender = Gender.unknown;
 		
 		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
-		
-		for(Token token : covTokens){
-			if(Arrays.asList(Parameters.maleDesignators).contains(token.getCoveredText().toLowerCase())){
-				//Gender could be male or female - too unspecific
-				if(anteGender == Gender.female)
-					return false;
-				anteGender = Gender.male;
-			}
-			if(Arrays.asList(Parameters.femaleDesignators).contains(token.getCoveredText().toLowerCase())){
-				//Gender could be male or female - too unspecific
-				if(anteGender == Gender.male)
-					return false;
-				anteGender = Gender.female;
-			}
-		}
-		
-		if(Arrays.asList(Parameters.malePronouns).contains(a.getAntecedent().getCoveredText().toLowerCase())){
+		String first = covTokens.get(0).getCoveredText().toLowerCase();
+		if(Arrays.asList(Parameters.maleDesignators).contains(first)){
 			anteGender = Gender.male;
 		}
-		if(Arrays.asList(Parameters.femalePronouns).contains(a.getAntecedent().getCoveredText().toLowerCase())){
+		if(Arrays.asList(Parameters.femaleDesignators).contains(first)){
 			anteGender = Gender.female;
 		}
-		
+
 		Gender anaphoraGender = Gender.unknown;
 		if(Arrays.asList(Parameters.malePronouns).contains(a.getCoveredText().toLowerCase())){
 			anaphoraGender = Gender.male;
@@ -164,23 +187,15 @@ public class FeatureUtils_Gender {
 		Gender anteGender = Gender.unknown;
 		
 		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
-		
-		for(Token token : covTokens){
-			if(Arrays.asList(Parameters.maleDesignators).contains(token.getCoveredText().toLowerCase())){
-				//Gender could be male or female - too unspecific
-				if(anteGender == Gender.female)
-					return false;
-				anteGender = Gender.male;
-			}
-			if(Arrays.asList(Parameters.femaleDesignators).contains(token.getCoveredText().toLowerCase())){
-				//Gender could be male or female - too unspecific
-				if(anteGender == Gender.male)
-					return false;
-				anteGender = Gender.female;
-			}
-		}	
+		String first = covTokens.get(0).getCoveredText().toLowerCase();
+		if(Arrays.asList(Parameters.maleDesignators).contains(first)){
+			anteGender = Gender.male;
+		}
+		if(Arrays.asList(Parameters.femaleDesignators).contains(first)){
+			anteGender = Gender.female;
+		}
+
 		Gender anaphoraGender = Gender.unknown;
-		
 		if(Arrays.asList(Parameters.malePronouns).contains(a.getCoveredText().toLowerCase())){
 			anaphoraGender = Gender.male;
 		}
@@ -188,22 +203,13 @@ public class FeatureUtils_Gender {
 			anaphoraGender = Gender.female;
 		}
 		
-		if(Arrays.asList(Parameters.malePronouns).contains(a.getCoveredText().toLowerCase())){
-			anaphoraGender = Gender.male;
-		}
-		if(Arrays.asList(Parameters.femalePronouns).contains(a.getCoveredText().toLowerCase())){
-			anaphoraGender = Gender.female;
-		}
-		
-		if(anteGender != anaphoraGender && anteGender != Gender.unknown){
+		if(anteGender == anaphoraGender && anteGender != Gender.unknown){
 			return true;
 		}
-		
 		return false;
 	}
 	
 	public boolean pronounMismatch(Anaphora a){
-
 		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
 		PronounType antecedentType = PronounType.unknown;
 		
@@ -263,14 +269,62 @@ public class FeatureUtils_Gender {
 		}
 		
 		return false;
-	}
-
-	public void setMasculineDistribution(Anaphora a){
-		String ante = a.getAntecedent().getCoveredText().toLowerCase();
-		int alpha = 1;
-		int beta = 1;
 		
-		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
+	}
+	
+	private Integer[] getDistribution(Anaphora anaphora, PronounType alpha){
+		int a = 0;
+		int b1 = 0;
+		int b2= 0;
+		int b3 = 0;
+		if(alpha == PronounType.male){
+			a = 0;
+			b1 = 1;
+			b2 = 2;
+			b3 = 3;
+		}
+		if(alpha == PronounType.female){
+			a = 1;
+			b1 = 0;
+			b2 = 2;
+			b3 = 3;
+		}
+		if(alpha == PronounType.neutral){
+			a = 2;
+			b1 = 0;
+			b2 = 1;
+			b3 = 3;
+		}
+		if(alpha == PronounType.plural){
+			a = 3;
+			b1 = 0;
+			b2 = 1;
+			b3 = 2;
+		}
+		
+		String ante = anaphora.getAntecedent().getCoveredText().toLowerCase();
+		int alphaV = 1;
+		int betaV = 1;
+		/*
+		List<Token> covTokens = AnnotationUtils.getCoveredTokens(anaphora.getAntecedent(), tokens);		
+		if(corpusFrequencies.containsKey(ante)){
+			Integer[] freq = corpusFrequencies.get(ante);
+			alphaV += freq[a];
+			betaV += freq[b1] + freq[b2] + freq[b3];
+		}
+		String firstWord = covTokens.get(0).getCoveredText().toLowerCase() + " !";
+		if(corpusFrequencies.containsKey(firstWord)){
+			Integer[] freq = corpusFrequencies.get(firstWord);
+			alphaV += freq[a];
+			betaV += freq[b1] + freq[b2] + freq[b3];
+		}
+		String lastWord = "! " + covTokens.get(covTokens.size() - 1).getCoveredText().toLowerCase();
+		if(corpusFrequencies.containsKey(lastWord)){
+			Integer[] freq = corpusFrequencies.get(lastWord);
+			alphaV += freq[a];
+			betaV += freq[b1] + freq[b2] + freq[b3];
+		}*/
+		List<Token> covTokens = AnnotationUtils.getCoveredTokens(anaphora.getAntecedent(), tokens);
 		String person = null;
 		for(Token t : covTokens){
 			if(isPerson(t)){
@@ -278,187 +332,66 @@ public class FeatureUtils_Gender {
 				person = t.getCoveredText();
 			}
 		}
-		
+		Integer[] freq = new Integer[]{0,0,0,0};
 		if(corpusFrequencies.containsKey(ante)){
-			Integer[] freq = corpusFrequencies.get(ante);
-			alpha += freq[0];
-			beta += freq[1] + freq[2] + freq[3];
+			freq = corpusFrequencies.get(ante);
 		} else if(person != null) {
 			if(corpusFrequencies.containsKey(person.toLowerCase())){
-				Integer[] freq = corpusFrequencies.get(person.toLowerCase());
-				alpha += freq[0];
-				beta += freq[1] + freq[2] + freq[3];
+				freq = corpusFrequencies.get(person.toLowerCase());
 			}
 
 		} else {
-			Token head = getHeadNoun(a.getAntecedent());
+			Token head = getHeadNoun(anaphora.getAntecedent());
 			if(head != null && corpusFrequencies.containsKey(head.getCoveredText().toLowerCase())){
-				Integer[] freq = corpusFrequencies.get(head.getCoveredText().toLowerCase());
-				alpha += freq[0];
-				beta += freq[1] + freq[2] + freq[3];
+				freq = corpusFrequencies.get(head.getCoveredText().toLowerCase());
 			} else {
 				for(Token t : covTokens){
 					if(t.getPos().getPosValue().contains("NN")){
 						if(corpusFrequencies.containsKey(t.getCoveredText().toLowerCase())){
-							Integer[] freq = corpusFrequencies.get(t.getCoveredText().toLowerCase());
-							alpha += freq[0];
-							beta += freq[1] + freq[2] + freq[3];
+							freq = corpusFrequencies.get(t.getCoveredText().toLowerCase());
 							break;
 						}
 					}
 				}
 			}
 		}
+		alphaV += freq[a];
+		betaV += freq[b1] + freq[b2] + freq[b3];
+
+		return new Integer[]{alphaV,betaV};
+	}
+
+	public void setMasculineDistribution(Anaphora a){
+		Integer[] val = getDistribution(a, PronounType.male);	
+		int alpha = val[0];
+		int beta = val[1];
 		a.getGenderFeatures().setG_Masculine_Mean(getMean(alpha, beta));
-		a.getGenderFeatures().setG_Masculine_Variance(getVariance(alpha, beta));
+		a.getGenderFeatures().setG_Masculine_Variance(getStdDeviation(alpha, beta));
 		
 	}
 	
 	public void setFeminineDistribution(Anaphora a){
-		String ante = a.getAntecedent().getCoveredText().toLowerCase();
-		int alpha = 1;
-		int beta = 1;
-
-		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
-		String person = null;
-		for(Token t : covTokens){
-			if(isPerson(t)){
-				//Only take the first name (e.g. token) of a person
-				person = t.getCoveredText();
-			}
-		}
-		
-		if(corpusFrequencies.containsKey(ante)){
-			Integer[] freq = corpusFrequencies.get(ante);
-			alpha += freq[1];
-			beta += freq[0] + freq[2] + freq[3];
-		} else if(person != null) {
-			if(corpusFrequencies.containsKey(person.toLowerCase())){
-				Integer[] freq = corpusFrequencies.get(person.toLowerCase());
-				alpha += freq[1];
-				beta += freq[0] + freq[2] + freq[3];
-			}
-
-		} else {
-			Token head = getHeadNoun(a.getAntecedent());
-			if(head != null && corpusFrequencies.containsKey(head.getCoveredText().toLowerCase())){
-				Integer[] freq = corpusFrequencies.get(head.getCoveredText().toLowerCase());
-				alpha += freq[1];
-				beta += freq[0] + freq[2] + freq[3];
-			} else {
-				for(Token t : covTokens){
-					if(t.getPos().getPosValue().contains("NN")){
-						if(corpusFrequencies.containsKey(t.getCoveredText().toLowerCase())){
-							Integer[] freq = corpusFrequencies.get(t.getCoveredText().toLowerCase());
-							alpha += freq[1];
-							beta += freq[0] + freq[2] + freq[3];
-							break;
-						}
-					}
-				}
-			}	
-		}
+		Integer[] val = getDistribution(a, PronounType.female);	
+		int alpha = val[0];
+		int beta = val[1];
 		a.getGenderFeatures().setG_Feminine_Mean(getMean(alpha, beta));
-		a.getGenderFeatures().setG_Feminine_Variance(getVariance(alpha, beta));
+		a.getGenderFeatures().setG_Feminine_Variance(getStdDeviation(alpha, beta));
 	}
 	
 	public void setNeutralDistribution(Anaphora a){
-		String ante = a.getAntecedent().getCoveredText().toLowerCase();
-		int alpha = 1;
-		int beta = 1;
-
-		
-		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
-		String person = null;
-		for(Token t : covTokens){
-			if(isPerson(t)){
-				//Only take the first name (e.g. token) of a person
-				person = t.getCoveredText();
-			}
-		}
-		
-		if(corpusFrequencies.containsKey(ante)){
-			Integer[] freq = corpusFrequencies.get(ante);
-			alpha += freq[2];
-			beta += freq[0] + freq[1] + freq[3];
-		} else if(person != null) {
-			if(corpusFrequencies.containsKey(person.toLowerCase())){
-				Integer[] freq = corpusFrequencies.get(person.toLowerCase());
-				alpha += freq[2];
-				beta += freq[0] + freq[1] + freq[3];
-			}
-
-		} else {
-			Token head = getHeadNoun(a.getAntecedent());
-			if(head != null && corpusFrequencies.containsKey(head.getCoveredText().toLowerCase())){
-				Integer[] freq = corpusFrequencies.get(head.getCoveredText().toLowerCase());
-				alpha += freq[2];
-				beta += freq[0] + freq[1] + freq[3];
-			}else {
-				for(Token t : covTokens){
-					if(t.getPos().getPosValue().contains("NN")){
-						if(corpusFrequencies.containsKey(t.getCoveredText().toLowerCase())){
-							Integer[] freq = corpusFrequencies.get(t.getCoveredText().toLowerCase());
-							alpha += freq[2];
-							beta += freq[0] + freq[1] + freq[3];
-							break;
-						}
-					}
-				}
-			}	
-		}
-	
+		Integer[] val = getDistribution(a, PronounType.neutral);	
+		int alpha = val[0];
+		int beta = val[1];	
 		a.getGenderFeatures().setG_Neutral_Mean(getMean(alpha, beta));
-		a.getGenderFeatures().setG_Neutral_Variance(getVariance(alpha, beta));
+		a.getGenderFeatures().setG_Neutral_Variance(getStdDeviation(alpha, beta));
 	}
 	
 	public void setPluralDistribution(Anaphora a){
-		String ante = a.getAntecedent().getCoveredText().toLowerCase();
-		int alpha = 1;
-		int beta = 1;
-
-		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
-		String person = null;
-		for(Token t : covTokens){
-			if(isPerson(t)){
-				//Only take the first name (e.g. token) of a person
-				person = t.getCoveredText();
-			}
-		}
-		
-		if(corpusFrequencies.containsKey(ante)){
-			Integer[] freq = corpusFrequencies.get(ante);
-			alpha += freq[3];
-			beta += freq[0] + freq[1] + freq[2];
-		} else if(person != null) {
-			if(corpusFrequencies.containsKey(person.toLowerCase())){
-				Integer[] freq = corpusFrequencies.get(person.toLowerCase());
-				alpha += freq[3];
-				beta += freq[0] + freq[1] + freq[2];
-			}
-
-		} else {
-			Token head = getHeadNoun(a.getAntecedent());
-			if(head != null && corpusFrequencies.containsKey(head.getCoveredText().toLowerCase())){
-				Integer[] freq = corpusFrequencies.get(head.getCoveredText().toLowerCase());
-				alpha += freq[3];
-				beta += freq[0] + freq[1] + freq[2];
-			}else {
-				for(Token t : covTokens){
-					if(t.getPos().getPosValue().contains("NN")){
-						if(corpusFrequencies.containsKey(t.getCoveredText().toLowerCase())){
-							Integer[] freq = corpusFrequencies.get(t.getCoveredText().toLowerCase());
-							alpha += freq[3];
-							beta += freq[0] + freq[1] + freq[2];
-							break;
-						}
-					}
-				}
-			}
-		}
-		
+		Integer[] val = getDistribution(a, PronounType.plural);	
+		int alpha = val[0];
+		int beta = val[1];		
 		a.getGenderFeatures().setG_Plural_Mean(getMean(alpha, beta));
-		a.getGenderFeatures().setG_Plural_Variance(getVariance(alpha, beta));
+		a.getGenderFeatures().setG_Plural_Variance(getStdDeviation(alpha, beta));
 	}
 	
 	public float getMean(int alpha, int beta){
@@ -466,6 +399,12 @@ public class FeatureUtils_Gender {
 		float fBeta = beta;
 		return (fAlpha / (fAlpha + fBeta));
 		
+	}
+	
+	public float getStdDeviation(int alpha, int beta){
+		float var = getVariance(alpha, beta);
+		double stdDev = Math.sqrt((double)var);	
+		return (float)stdDev;
 	}
 	
 	public float getVariance(int alpha, int beta){

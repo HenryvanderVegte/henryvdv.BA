@@ -1,9 +1,151 @@
 \chapter{Evaluation}
 \label{sec:Evaluation}
 
-\section{Learning curves}
+This chapter will present different performance measures and comparing evaluations in order to draw an appropriate conclusion. Additionally, a closer look at the errors made by the implemented system will give a hint on possible improvements.
 
-\section{Feature Contribution}
+\section{Results}
+A precision measure indicates in how many percent of all cases the classifier identified the correct antecedent relative to the sum of all correct identified and falsely neglected antecedents. A recall measure indicates the amount of all correct identified cases relative to all identified cases. The F-measure is a balanced mean of both values.
+
+The baseline achieved an accuracy of 26 \%, just like what \cite{bergsma2005automatic} reported as baseline on the American National Corpus \citep{ide2001american}. Calculating the precision is not useful in this case as the baseline does not neglect any cases. Therefore, the precision would always be 100 \%. The recall measure is identical to the accuracy in that case.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+	\hline
+	Method & Accuracy & Precision & Recall & F-measure \\ \hline
+	\hline
+	SVM Classifier (without corpus gender) & 61.9 \% & 95.8 \% & 63.6 \% & 76.5 \% \\ \hline
+	SVM Classifier (with corpus gender frequencies) & 63.4 \%  & 92.6 \% & 66.8 \% & 77.6 \% \\ \hline
+	SVM Classifier (with corpus gender constraints) & 64 \%  & 92.6 \% & 67.4 \% & 78 \% \\ \hline
+	\end{tabular}
+  \caption{Pronoun Resolution Performance Scores}
+     \label{table:pronounResScores}
+\end{table}
+
+
+Table \ref{table:pronounResScores} shows the results of the SVM classifiers. The whole resolution system with all features received an F-measure of 76.5 \% and an accuracy of 61.9 \% which is more than twice as much as the baseline accuracy, indicating the clear benefit of the implemented system. A comparison with other anaphora resolution systems is only partially reasonable since different data sets and implementations were used. Still, the high precision rule-based approach presentend by \cite{baldwin1997cogniac} in Section \ref{baldwinCogNIAC} received similar precision and recall measures on the MUC-6 data set \citep{grishman1996message}. The in Section \ref{aoneBennetEval} described approach by \cite{aone1995evaluating} achieved an F-measure of approximately 77 \% for their best machine-learned classifiers on Japanese newspaper articles.
+
+\cite{bergsma2005automatic} received with a similar approach an accuracy of 73.3 \%. The inferiority of the implemented system could be explained through various reasons. \\
+First of all, a slightly greater feature set was used by Bergsma. Secondly, the implemented approach uses only corpus mined gender information, while \cite{bergsma2005automatic} also counts web occurrences through Google requests. Since a corpus can't cover extremely sparse events, Google might give information on those. Thirdly, Bergsma's implementation lowered the threshold if no accepted antecedent was found in the current and last sentence, while the implemented system in this work accepts none in that case. Therefore, the approach of \cite{bergsma2005automatic} was also implemented in this work. A slight increase in accuracy of 2.3 \% (to a total of 64.2 \%) was recorded. 
+
+The corpus mined gender frequencies had only a slight impact on the classifiers performance, but caused an increased accuracy and F-measure. In order to associate the increase to the gender frequencies, a third classifier was build. It used the whole feature set except for the gender means and standard deviations. Four new variables were added instead. Each variable represents a gender. The corpus frequencies were used to determine the most frequent gender of an antecedent candidate. The variable representing the most frequent outcome was set to one while the others were set to zero. For instance, \textit{Peter} was found 4479 times masculine, 76 times feminine, 81 times neutral, and 120 times plural. Since 4479 is the highest, the new variable representing the masculine gender will be set to one while all other new variables will be set to zero. This hard constraint implementation performed slightly better than the classifier using gender frequencies.
+
+In order to explain that results, an error analysis on six random chosen documents was done.
 
 \section{Error Analysis}
-%Wieviele der gold antecedents werden überhaupt vom Modul genau so erkannt? -> Soon2001
+\begin{table}[h]
+\centering
+  \caption{Types and frequencies of errors}
+\begin{tabular}{|l|l|l|}
+	\hline
+	Type & Frequency & Percentage \\ \hline
+	\hline
+	Another previous instance detected & 20 & 32.7 \% \\ \hline
+	Wrong antecedent & 14 & 23 \% \\ \hline
+	No accepted antecedent & 11 & 18 \% \\ \hline
+	Wrong bound & 7 & 11.5 \% \\ \hline
+	Gender mismatch & 6 & 9.8 \% \\ \hline
+	Other & 3 & 4.9 \% \\ \hline
+	\end{tabular}
+
+     \label{table:errorFreq}
+\end{table}
+
+The errors made by the anaphora resolution system can be divided into six different categories (Table \ref{table:errorFreq}).
+
+
+The most frequent error was that the an instance of the requested anaphora was found, but not the nearest. For instance, in Figure \ref{figure:prevInstError} \textit{Kirk} was detected while \textit{minister of Aberfoyle parish} was the correct antecedent. However, both refer to the same real-world entity.
+
+\begin{figure}[h]
+\centering
+	\fbox{\scalebox{0.8}{
+\xytext{
+  \xybarnode{It was after this, while} &&
+  \xybarnode{\fbox{Kirk}} &&
+ \xybarnode{was} &&
+  \xybarnode{\fbox{minister of Aberfoyle parish}} &&
+  \xybarnode{, that} &&
+  \xybarnode{\fbox{he}}
+\xybarconnect[][--](D,D){-4} 
+\xybarconnect(U,U){-8} &&
+  \xybarnode{died in unusual circumstances .} 
+}
+}
+}
+\caption{Previous instance error example}
+	\label{figure:prevInstError}
+\end{figure}
+
+In 14 of 61 cases, a wrong antecedent that does not explicitly disagree in gender was detected. Figure \ref{figure:wrongAnteError} shows an example of this case: \textit{they} referred to \textit{the French} but \textit{The Swedes} was detected instead. %eval mit vorheriger instanz auswerten!
+
+\begin{figure}[h]
+\centering
+	\fbox{\scalebox{0.8}{
+\xytext{
+  \xybarnode{\fbox{The Swedes}} &&
+ \xybarnode{were also allied to} &&
+  \xybarnode{\fbox{the French}} &&
+  \xybarnode{, but} &&
+  \xybarnode{\fbox{they}}
+\xybarconnect[][--](D,D){-4} 
+\xybarconnect(U,U){-8} &&
+  \xybarnode{played no part in the battle .} &&
+}
+}
+}
+\caption{Wrong antecedent error example}
+	\label{figure:wrongAnteError}
+\end{figure}
+
+No accepted antecedent means, that the classifier has searched backwards through the current and previous sentence and none of the examined noun phrases has been detected as the antecedent. In four of those cases the antecedent was more than one sentence distant and therefore no correct antecedent could be found by the algorithm. 
+
+A wrong bound means, that the correct antecedent might be detected, but not exactly as the annotation scheme expected:
+\begin{addmargin}[25pt]{25pt}
+Sarah Eldridge's son-in-law John Tizard inherited her share of the business, and when he died in 1871 the Popes assumed full control.
+\end{addmargin}
+In the example above, \textit{Sarah Eldridge's son-in-law John Tizard} was labelled as the correct antecedent for the pronoun \textit{he} while the system detected \textit{Sarah Eldridge's son-in-law}. One could argue that the system nonetheless detected the correct phrase. However, in some cases another span might change the complete meaning of the phrase. For instance,  if the detected noun phrase is \textit{Gonzales 's musical style} and the correct antecedent is \textit{Gonzales's}.
+
+Figure \ref{figure:wrongGenderError} shows a case in which the system clearly identified an noun phrase of the wrong gender. The corpus mined gender frequencies indicating a $\mu$  of approximately 90.5 \% for \textit{Sarah} to be female while its masculine $\mu$ was only 2.4 \%.
+
+\begin{figure}[h]
+\centering
+	\fbox{\scalebox{0.8}{
+\xytext{
+\xybarnode{...} &&
+  \xybarnode{\fbox{Sarah}} &&
+ \xybarnode{continued to run it in partnership with} &&
+  \xybarnode{\fbox{local brewer Samuel Mason}} &&
+  \xybarnode{. Upon} &&
+  \xybarnode{\fbox{his}} 
+\xybarconnect[][--](D,D){-4} 
+\xybarconnect(U,U){-8} &&
+  \xybarnode{retirement ...} &&
+}
+}
+}
+\caption{Gender mismatch example}
+	\label{figure:wrongGenderError}
+\end{figure}
+
+The least frequent category of errors includes all remaining error types caused by parsing errors, other noise, or unclear bindings. For instance, \textit{their} in Figure \ref{figure:otherError} could either refer to \textit{Their commanders} or \textit{the Swedish troops}
+
+\begin{figure}[h]
+\centering
+	\fbox{\scalebox{0.8}{
+\xytext{
+  \xybarnode{\fbox{Their commanders}} &&
+ \xybarnode{waited for some time for} &&
+  \xybarnode{\fbox{the Swedish troops}} &&
+  \xybarnode{to appear on the open fields to} &&
+  \xybarnode{\fbox{their}} 
+\xybarconnect[2][--](D,D){-8} 
+\xybarconnect(U,U){-4} &&
+  \xybarnode{front.} &&
+}
+}
+}
+\caption{Ambiguity example}
+	\label{figure:otherError}
+\end{figure}
+
+

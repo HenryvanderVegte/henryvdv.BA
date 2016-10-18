@@ -11,8 +11,6 @@ import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 
-import com.google.common.reflect.Parameter;
-
 import de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
@@ -25,9 +23,38 @@ import de.unidue.henryvdv.ba.type.Antecedent;
 import de.unidue.henryvdv.ba.type.MyNP;
 import de.unidue.henryvdv.ba.type.Quotation;
 import de.unidue.henryvdv.ba.util.FeatureUtils_Gender.Gender;
-
+/**
+ * Class for the assignment of all pronoun-antecedent features
+ * for a given anaphora
+ * @author Henry
+ *
+ */
 public class FeatureUtils_PronounAntecedent {
 	
+	/********************************************
+	 * 	Assigns the antecedent features:		*
+	 * 											*
+	 * 	-Binding Theory (bool)					*
+	 * 	-Same Sentence (bool)					*
+	 * 	-Previous Sentence (bool)				*
+	 * 	-Inter-Sentence Difference (float)		*
+	 * 	-Intra-Sentence Difference (float)		*
+	 * 	-Prepositional Parallel (bool)			*
+	 * 	-Singular Match (bool)					*
+	 * 	-Plural Match (bool)					*
+	 * 											*
+	 * 	Not used:								*
+ 	 * 	-Parent Category Match (bool)			*
+	 * 	-Parent Word Match (bool)				*
+	 * 											*
+	 * 	+My own features						*
+	 * 	-Difference in noun phrases(float)		*
+	 * 	-Difference in pronouns(float)			*
+	 ********************************************/
+	
+	/**
+	 * Required Annotations:
+	 */
 	private Collection<Token> tokens;
 	private Collection<Sentence> sentences;
 	private Collection<Dependency> dependencies;
@@ -50,7 +77,6 @@ public class FeatureUtils_PronounAntecedent {
 		constituents = JCasUtil.select(aJCas, Constituent.class);
 		nps = JCasUtil.select(aJCas, NP.class);
 		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
-		
 	}
 	
 	
@@ -81,64 +107,70 @@ public class FeatureUtils_PronounAntecedent {
 		//My own features:
 		a.getPronounAntecedentFeatures().setP_A_NPDistance(npDistance(a));
 		a.getPronounAntecedentFeatures().setP_A_IntermediatePronoun(intermediatePronouns(a));
-	
 	}
 	
-	public float intermediatePronouns(Anaphora a){
-		List<Token> intermediateTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent().getEnd() + 1, a.getBegin() - 1, tokens);
+	/**
+	 * Returns all intermediate pronouns of the same gender
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public float intermediatePronouns(Anaphora anaphora){
+		List<Token> intermediateTokens = AnnotationUtils.getCoveredTokens(anaphora.getAntecedent().getEnd() + 1, anaphora.getBegin() - 1, tokens);
 		int i = 0;
-		if(Arrays.asList(Parameters.malePronouns).contains(a.getCoveredText().toLowerCase())){
+		if(Arrays.asList(Parameters.malePronouns).contains(anaphora.getCoveredText().toLowerCase())){
 			for(Token t : intermediateTokens){
 				if(Arrays.asList(Parameters.malePronouns).contains(t.getCoveredText().toLowerCase()))
 					i++;
 			}
 		}
-		if(Arrays.asList(Parameters.femalePronouns).contains(a.getCoveredText().toLowerCase())){
+		if(Arrays.asList(Parameters.femalePronouns).contains(anaphora.getCoveredText().toLowerCase())){
 			for(Token t : intermediateTokens){
 				if(Arrays.asList(Parameters.femalePronouns).contains(t.getCoveredText().toLowerCase()))
 					i++;
 			}
 		}
-		if(Arrays.asList(Parameters.neutralPronouns).contains(a.getCoveredText().toLowerCase())){
+		if(Arrays.asList(Parameters.neutralPronouns).contains(anaphora.getCoveredText().toLowerCase())){
 			for(Token t : intermediateTokens){
 				if(Arrays.asList(Parameters.neutralPronouns).contains(t.getCoveredText().toLowerCase()))
 					i++;
 			}
 		}
-		if(Arrays.asList(Parameters.pluralPronouns).contains(a.getCoveredText().toLowerCase())){
+		if(Arrays.asList(Parameters.pluralPronouns).contains(anaphora.getCoveredText().toLowerCase())){
 			for(Token t : intermediateTokens){
 				if(Arrays.asList(Parameters.pluralPronouns).contains(t.getCoveredText().toLowerCase()))
 					i++;
 			}
 		}
-
-		return (float)i;
+		return (float)i / 10f;
 	}
 	
-	
-	public boolean bindingTheory(Anaphora a){	
-		
+	/**
+	 * Whether Binding Principle B & C are satisfied
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public boolean bindingTheory(Anaphora anaphora){		
 		//If Principle B is satisfied:
-		if(!isFreeInBindingDomain(a, a.getAntecedent()))
+		if(!isFreeInBindingDomain(anaphora, anaphora.getAntecedent()))
 			return false;
 	
 		//If Principle C is satisfied:
-		Antecedent ante = a.getAntecedent();
+		Antecedent ante = anaphora.getAntecedent();
 		if(!person(ante) && !organization(ante) && !definiteArticle(ante)){
 			return true;
 		} else {
-			if(!isFreeInBindingDomain(ante, a))
+			if(!isFreeInBindingDomain(ante, anaphora))
 				return false;
 		}
-
+	
 		return true;
 	}
 	
 	/**
-	 * 
+	 * if annotation alpha is free in its binding domain (e.g. not bound by beta)
 	 * @param alpha
 	 * @param beta
-	 * @return true if annotation alpha is free in its binding domain (e.g. not bound by beta)
+	 * @return value
 	 */
 	public boolean isFreeInBindingDomain(Annotation alpha, Annotation beta){
 		if(getSentenceNr(alpha.getBegin()) == getSentenceNr(beta.getBegin())){
@@ -155,16 +187,21 @@ public class FeatureUtils_PronounAntecedent {
 		}
 		return true;
 	}
-	
-	
-	public Annotation getBindingDomain(Annotation a){
-		boolean isSubject = isSubject(AnnotationUtils.getCoveredToken(a, tokens));
+	/**
+	 * Returns the binding domain for an annotation A - either the smallest sentence (if A is a subject)
+	 * or the smallest sentence with another noun phrase c-commanding A
+	 * @param annotation Annotation
+	 * @return binding Domain
+	 */
+	public Annotation getBindingDomain(Annotation annotation){
+		boolean isSubject = isSubject(AnnotationUtils.getCoveredToken(annotation, tokens));
 		
+		//get smallest sentence if a is subject 
 		if(isSubject){
 			Annotation smallest = null;
 			int size = Integer.MAX_VALUE;
 			for(Constituent c : constituents){			
-				if(c.getConstituentType().equals("S") && c.getBegin() <= a.getBegin() && c.getEnd() >= a.getEnd()){
+				if(c.getConstituentType().equals("S") && c.getBegin() <= annotation.getBegin() && c.getEnd() >= annotation.getEnd()){
 					if((c.getEnd() - c.getBegin()) < size ){
 						size = c.getEnd() - c.getBegin();
 						smallest = new Annotation(aJCas, c.getBegin(), c.getEnd());
@@ -177,12 +214,11 @@ public class FeatureUtils_PronounAntecedent {
 		//get smallest sentence with a NP c-commanding the anaphora
 		Sentence currentSentence = null;
 		for(Sentence s : sentences){
-			if(s.getBegin() <= a.getBegin() && s.getEnd() >= a.getEnd())
+			if(s.getBegin() <= annotation.getBegin() && s.getEnd() >= annotation.getEnd())
 				currentSentence = s;
 		}
 			
-		Map<Integer, Annotation> annotationSizes = new HashMap<Integer, Annotation>();	
-	
+		Map<Integer, Annotation> annotationSizes = new HashMap<Integer, Annotation>();		
 		for(Constituent c : constituents){			
 			if(c.getConstituentType().equals("S") && currentSentence.getBegin() <= c.getBegin() && currentSentence.getEnd() >= c.getEnd()){
 				Integer size = c.getEnd() - c.getBegin();
@@ -197,14 +233,12 @@ public class FeatureUtils_PronounAntecedent {
 					smallest = i;
 				}
 			}
-			if(containsCCommandingNP(annotationSizes.get(smallest), a)){
+			if(containsCCommandingNP(annotationSizes.get(smallest), annotation)){
 				return annotationSizes.get(smallest);
 			} else {
 				annotationSizes.remove(smallest);
 			}
-			
-		}
-		
+		}	
 		return null;
 	}
 	
@@ -226,14 +260,20 @@ public class FeatureUtils_PronounAntecedent {
 		return false;
 	}
 	
-	public boolean cCommands(NP np, Annotation a){
+	/**
+	 * If alpha c-commmands beta
+	 * @param np alpha
+	 * @param annotation beta
+	 * @return value
+	 */
+	public boolean cCommands(NP np, Annotation annotation){
 		Sentence currentSentence = null;
 		for(Sentence s : sentences){
-			if(s.getBegin() <= a.getBegin() && s.getEnd() >= a.getEnd())
+			if(s.getBegin() <= annotation.getBegin() && s.getEnd() >= annotation.getEnd())
 				currentSentence = s;
 		}
 		Constituent alphaParent = getConstituent(np.getParent());
-		Constituent beta = getConstituent(a);
+		Constituent beta = getConstituent(annotation);
 		int i = 0;
 		while(beta.getParent() != null){
 			if(beta.getParent().getBegin() == alphaParent.getBegin() && 
@@ -251,11 +291,16 @@ public class FeatureUtils_PronounAntecedent {
 		return false;
 	}
 	
-	public Constituent getConstituent(Annotation a){
+	/**
+	 * Returns the smallest constituent containing the annotation
+	 * @param annotation Annotation
+	 * @return value
+	 */
+	public Constituent getConstituent(Annotation annotation){
 		Constituent smallest = null;
 		int size = Integer.MAX_VALUE;
 		for(Constituent c : constituents){			
-			if(c.getBegin() <= a.getBegin() && c.getEnd() >= a.getEnd()){
+			if(c.getBegin() <= annotation.getBegin() && c.getEnd() >= annotation.getEnd()){
 				if((c.getEnd() - c.getBegin()) < size ){
 					size = c.getEnd() - c.getBegin();
 					smallest = c;
@@ -264,54 +309,76 @@ public class FeatureUtils_PronounAntecedent {
 		}
 		return smallest;
 	}
-	
-	public float npDistance(Anaphora a){
+	/**
+	 * Returns the distance of nps between the anaphora and its antecedent
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public float npDistance(Anaphora anaphora){
 		int count = 0;
-		
 		for(NP np : nps){
-			if(np.getBegin() > a.getAntecedent().getBegin() && np.getEnd() < a.getEnd())
+			if(np.getBegin() > anaphora.getAntecedent().getBegin() && np.getEnd() < anaphora.getEnd())
 				count++;
-		}
-		
-		
+		}		
 		return (float)count / 10f;
 	}
 	
-	
-	
-	public boolean antecedentInSameSentence(Anaphora a){
-		boolean value = (getSentenceNr(a.getBegin()) == getSentenceNr(a.getAntecedent().getBegin()));
+	/**
+	 * Whether the anaphora and its antecedent are in the same sentence
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public boolean antecedentInSameSentence(Anaphora anaphora){
+		boolean value = (getSentenceNr(anaphora.getBegin()) == getSentenceNr(anaphora.getAntecedent().getBegin()));
 		return value;
 	}
 	
-	public boolean antecedentInPreviousSentence(Anaphora a){
-		boolean value = (getSentenceNr(a.getBegin()) -1 == getSentenceNr(a.getAntecedent().getBegin()));
+	/**
+	 * Whether the antecedent is in the previous sentence
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public boolean antecedentInPreviousSentence(Anaphora anaphora){
+		boolean value = (getSentenceNr(anaphora.getBegin()) -1 == getSentenceNr(anaphora.getAntecedent().getBegin()));
 		return value;
 	}
 	
-	public float interSentenceDiff(Anaphora a){
-		int anaphoraS = getSentenceNr(a.getBegin());
-		int antecedentS = getSentenceNr(a.getAntecedent().getBegin());
+	/**
+	 * Difference between anaphora and antecedent in sentences
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public float interSentenceDiff(Anaphora anaphora){
+		int anaphoraS = getSentenceNr(anaphora.getBegin());
+		int antecedentS = getSentenceNr(anaphora.getAntecedent().getBegin());
 		float value = (anaphoraS - antecedentS)/ 50.0f;
 		return value;
 	}
-	
-	public float intraSentenceDiff(Anaphora a){
+	/**
+	 * Difference between anaphora and antecedent in tokens
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public float intraSentenceDiff(Anaphora anaphora){
 		int dist = 0;
 		for(Token t : tokens){
-			if(t.getBegin() > a.getAntecedent().getBegin() && t.getBegin() < a.getBegin())
+			if(t.getBegin() > anaphora.getAntecedent().getBegin() && t.getBegin() < anaphora.getBegin())
 				dist++;
 		}
 		float value = (float)dist / 50.0f;
 		return value;
 	}
-	
-	public boolean parentWordMatch(Anaphora a){
-		Token anaphoraparent = getParent(a);
+	/**
+	 * Whether the antecedent and the anaphora parent words match
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public boolean parentWordMatch(Anaphora anaphora){
+		Token anaphoraparent = getParent(anaphora);
 		if(anaphoraparent == null)
 			return false;
 		String anaphoraParentString = anaphoraparent.getCoveredText();
-		List<Token> anteTokens = getCoveredTokens(a.getAntecedent().getBegin(), a.getAntecedent().getEnd());					
+		List<Token> anteTokens = getCoveredTokens(anaphora.getAntecedent().getBegin(), anaphora.getAntecedent().getEnd());					
 		boolean value = false;
 		for(Token t : anteTokens){
 			Token tParent = getParent(t);
@@ -324,10 +391,14 @@ public class FeatureUtils_PronounAntecedent {
 		}
 		return value;
 	}
-	
-	public boolean quotationSituation(Anaphora a){
-		boolean valueA = isInQuotes(a);
-		boolean valueB = isInQuotes(a.getAntecedent());
+	/**
+	 * Whether anaphora and antecedent are in quotes
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public boolean quotationSituation(Anaphora anaphora){
+		boolean valueA = isInQuotes(anaphora);
+		boolean valueB = isInQuotes(anaphora.getAntecedent());
 		boolean value = false;
 		if(valueA == valueB){
 			value = true;

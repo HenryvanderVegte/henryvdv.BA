@@ -20,8 +20,7 @@ public class FeatureVectorUtils {
 		}
 		
 		//Pronoun-Antecedent-Features (10)
-		
-		addPA_BindingTheory();//!
+		addPA_BindingTheory();
 		addPA_SameSentence();
 		addPA_IntraSentenceDiff(); 		
 		addPA_InPreviousSentence();
@@ -30,9 +29,6 @@ public class FeatureVectorUtils {
 		addPA_QuotationSituation();
 		addPA_SingularMatch();
 		addPA_PluralMatch();			
-		//->überarbeiten		addPA_ParentCatMatch(); 
-		//->überarbeiten		addPA_ParentWordMatch();
-		
 		//Antecedent Features (17)
 		
 		addA_AntecedentFrequency();		//10
@@ -53,35 +49,37 @@ public class FeatureVectorUtils {
 		addA_Definite();				
 		addA_HisHer();					//25
 		addA_HeHis();
-
+		
 		//Pronoun Features (4)
 		addP_Masculine();
 		addP_Feminine();
 		addP_Neutral();					
 		addP_Plural();//30
 
-		
+
 		//Gender Features (11)
-	
+
 		addG_StdGenderMatch();
-		addG_StdGenderMismatch();
-		addG_PronounMismatch();
+		addG_StdGenderMismatch();		
+		addG_PronounMismatch();	
+		
 		addG_MasculineMean();			
-		addG_MasculineVariance();
-		addG_FeminineMean();		//35
+		addG_MasculineVariance(); 		//35
+		addG_FeminineMean();		
 		addG_FeminineVariance();
 		addG_NeutralMean();
 		addG_NeutralVariance();			
 		addG_PluralMean();
 		addG_PluralVariance();
+		
 	
-		/*
+	/*
 		addG_HardConstraintMasculine();
 		addG_HardConstraintFeminine();
 		addG_HardConstraintNeutral();
 		addG_HardConstraintPlural();
-		*/
-									//40
+
+	*/								//40
 		//My own features:
 		/*
 		addP_Reflexive();

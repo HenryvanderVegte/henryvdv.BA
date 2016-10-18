@@ -25,16 +25,22 @@ citestyle=authoryear
 %% +++++++++++++++++++++++++++++++++
 %% Einbinden von Paketen
 %% +++++++++++++++++++++++++++++++++
+
 \usepackage{pdfpages}
+\usepackage{mdframed}
 \usepackage{changepage}
+\usepackage{enumitem}
+\usepackage{caption}
 \usepackage{moresize}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
 \usepackage{tikz-dependency}
 \usepackage{svg}
 \usepackage{amsmath}
 \usepackage{multirow}
 \usepackage{units}
 \usepackage{apacite}
-\usepackage{caption}
+\usepackage{subfig}
 \usepackage{istitle}
 \usepackage{geometry}
 \usepackage[utf8]{inputenc} 
@@ -58,7 +64,8 @@ citestyle=authoryear
 \usepackage{placeins}
 \usepackage[font=small,labelfont=bf,labelsep=colon]{caption}
 \usepackage{natbib}
-
+\usepackage{etex}
+\usepackage{xytree}
 %\bibliographystyle{abbrvnat}
 
 \input{pdf}
@@ -200,7 +207,7 @@ citestyle=authoryear
 
 % Anhang
 \cleardoublepage
-%\pagenumbering{roman}
+\pagenumbering{roman}
 \part*{Appendix}
 \begin{appendix}
 \include{Appendix}

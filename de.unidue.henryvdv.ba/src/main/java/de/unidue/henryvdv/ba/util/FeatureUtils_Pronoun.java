@@ -6,8 +6,25 @@ import org.apache.uima.jcas.JCas;
 
 import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.type.Anaphora;
-
+/**
+ * Class for the assignment of all pronoun features
+ * for a given anaphora
+ * @author Henry
+ *
+ */
 public class FeatureUtils_Pronoun {
+	
+	/************************************
+	 * 	Assigns the pronoun features:	*
+	 * 									*
+	 * 	-Masculine(bool)				*					
+	 * 	-Feminine(bool)					*
+	 * 	-Neutral (bool)					*
+	 * 	-Plural (bool					*
+	 * 									*
+	 * 	+My own features				*
+	 * 	-Reflexive(float)				*
+	 ************************************/
 
 	public void annotateFeatures(Anaphora a){
 		// Masculine
@@ -19,50 +36,62 @@ public class FeatureUtils_Pronoun {
 		// Plural
 		a.getPronounFeatures().setP_Plural(plural(a));	
 		
+		// My own features:
+		// Reflexive
 		a.getPronounFeatures().setP_Reflexive(isReflexive(a));
 	}
-	
-	public boolean isReflexive(Anaphora a){
-		if(Arrays.asList(Parameters.reflexivePronouns).contains(a.getCoveredText().toLowerCase())){
+	/**
+	 * if the anaphora is a masculine pronoun
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public boolean masculine(Anaphora anaphora){
+		if(Arrays.asList(Parameters.malePronouns).contains(anaphora.getCoveredText().toLowerCase())){
 			return true;
 		}
 		return false;
 	}
-	
-	public boolean masculine(Anaphora a){
-		String text = a.getCoveredText().toLowerCase();
-		
-		for(int i = 0; i < Parameters.malePronouns.length; i++){
-			if(text.equals(Parameters.malePronouns[i]))
-				return true;
+	/**
+	 * if the anaphora is a feminine pronoun
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public boolean feminine(Anaphora anaphora){
+		if(Arrays.asList(Parameters.femalePronouns).contains(anaphora.getCoveredText().toLowerCase())){
+			return true;
 		}
 		return false;
 	}
-	
-	public boolean feminine(Anaphora a){
-		String text = a.getCoveredText().toLowerCase();
-		
-		for(int i = 0; i < Parameters.femalePronouns.length; i++){
-			if(text.equals(Parameters.femalePronouns[i]))
-				return true;
+	/**
+	 * if the anaphora is a neutral pronoun
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public boolean neutral(Anaphora anaphora){
+		if(Arrays.asList(Parameters.neutralPronouns).contains(anaphora.getCoveredText().toLowerCase())){
+			return true;
 		}
 		return false;
 	}
-	
-	public boolean neutral(Anaphora a){
-		String text = a.getCoveredText().toLowerCase();
-		for(int i = 0; i < Parameters.neutralPronouns.length; i++){
-			if(text.equals(Parameters.neutralPronouns[i]))
-				return true;
+	/**
+	 * if the anaphora is a plural pronoun
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public boolean plural(Anaphora anaphora){
+		if(Arrays.asList(Parameters.pluralPronouns).contains(anaphora.getCoveredText().toLowerCase())){
+			return true;
 		}
 		return false;
 	}
-	
-	public boolean plural(Anaphora a){
-		String text = a.getCoveredText().toLowerCase();
-		for(int i = 0; i < Parameters.pluralPronouns.length; i++){
-			if(text.equals(Parameters.pluralPronouns[i]))
-				return true;
+	/**
+	 * if the anaphora is a reflexive pronoun
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public boolean isReflexive(Anaphora anaphora){
+		if(Arrays.asList(Parameters.reflexivePronouns).contains(anaphora.getCoveredText().toLowerCase())){
+			return true;
 		}
 		return false;
 	}

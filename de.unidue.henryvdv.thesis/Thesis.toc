@@ -1,6 +1,6 @@
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
 \contentsline {section}{\numberline {1.1}Background}{1}{section.1.1}
-\contentsline {section}{\numberline {1.2}Motivation}{2}{section.1.2}
+\contentsline {section}{\numberline {1.2}Motivation}{3}{section.1.2}
 \contentsline {chapter}{\numberline {2}Related Work}{4}{chapter.2}
 \contentsline {section}{\numberline {2.1}Rule-Based Techniques}{4}{section.2.1}
 \contentsline {subsection}{\numberline {2.1.1}The Naive Hobbs algorithm}{4}{subsection.2.1.1}
@@ -9,33 +9,31 @@
 \contentsline {section}{\numberline {2.2}Machine Learning-Based Techniques}{7}{section.2.2}
 \contentsline {subsection}{\numberline {2.2.1}Anaphoras in Coreference Resolution}{8}{subsection.2.2.1}
 \contentsline {subsection}{\numberline {2.2.2}BART}{9}{subsection.2.2.2}
-\contentsline {subsection}{\numberline {2.2.3}Cluster-Based Coreference Resolution}{9}{subsection.2.2.3}
-\contentsline {subsection}{\numberline {2.2.4}Pronoun Resolution in Spoken Dialogue}{10}{subsection.2.2.4}
-\contentsline {subsection}{\numberline {2.2.5}Corpus- and Web-Mined Gender Information}{11}{subsection.2.2.5}
-\contentsline {section}{\numberline {2.3}A Comparison of Both Strategies}{14}{section.2.3}
-\contentsline {subsection}{\numberline {2.3.1}A Manually Designed Resolver (MDR)}{14}{subsection.2.3.1}
-\contentsline {subsection}{\numberline {2.3.2}A Machine Learning-Based Resolver (MLR)}{15}{subsection.2.3.2}
+\contentsline {subsection}{\numberline {2.2.3}Pronoun Resolution in Spoken Dialogue}{9}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.4}Corpus- and Web-Mined Gender Information}{10}{subsection.2.2.4}
+\contentsline {section}{\numberline {2.3}A Comparison of Both Strategies}{13}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}A Manually Designed Resolver (MDR)}{13}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}A Machine Learning-Based Resolver (MLR)}{14}{subsection.2.3.2}
 \contentsline {subsection}{\numberline {2.3.3}Evaluation}{15}{subsection.2.3.3}
-\contentsline {chapter}{\numberline {3}Data}{17}{chapter.3}
-\contentsline {section}{\numberline {3.1}WikiCoref}{17}{section.3.1}
-\contentsline {section}{\numberline {3.2}Gender Corpus}{18}{section.3.2}
-\contentsline {chapter}{\numberline {4}Methodology}{19}{chapter.4}
-\contentsline {section}{\numberline {4.1}Preprocessing}{19}{section.4.1}
-\contentsline {section}{\numberline {4.2}Feature Set}{22}{section.4.2}
+\contentsline {chapter}{\numberline {3}Data}{16}{chapter.3}
+\contentsline {section}{\numberline {3.1}WikiCoref}{16}{section.3.1}
+\contentsline {section}{\numberline {3.2}Gender Corpus}{17}{section.3.2}
+\contentsline {chapter}{\numberline {4}Methodology}{18}{chapter.4}
+\contentsline {section}{\numberline {4.1}Preprocessing}{18}{section.4.1}
+\contentsline {section}{\numberline {4.2}Feature Set}{21}{section.4.2}
 \contentsline {subsection}{\numberline {4.2.1}Pronoun Features}{22}{subsection.4.2.1}
-\contentsline {subsection}{\numberline {4.2.2}Antecedent Features}{24}{subsection.4.2.2}
-\contentsline {subsection}{\numberline {4.2.3}Pronoun-Antecedent Features}{24}{subsection.4.2.3}
-\contentsline {subsection}{\numberline {4.2.4}Gender Features}{24}{subsection.4.2.4}
-\contentsline {section}{\numberline {4.3}Generating Training Instances}{24}{section.4.3}
-\contentsline {section}{\numberline {4.4}Baseline Approach}{24}{section.4.4}
-\contentsline {section}{\numberline {4.5}SVM Classifier}{24}{section.4.5}
-\contentsline {chapter}{\numberline {5}Evaluation}{25}{chapter.5}
-\contentsline {section}{\numberline {5.1}Learning curves}{25}{section.5.1}
-\contentsline {section}{\numberline {5.2}Feature Contribution}{25}{section.5.2}
-\contentsline {section}{\numberline {5.3}Error Analysis}{25}{section.5.3}
-\contentsline {chapter}{\numberline {6}Conclusion}{26}{chapter.6}
-\contentsline {section}{\numberline {6.1}Summary}{26}{section.6.1}
-\contentsline {section}{\numberline {6.2}Outlook}{26}{section.6.2}
-\contentsline {chapter}{\nonumberline List of Figures}{29}{appendix*.13}
-\contentsline {chapter}{\nonumberline List of Tables}{30}{appendix*.14}
-\contentsline {chapter}{\nonumberline References}{31}{appendix*.15}
+\contentsline {subsection}{\numberline {4.2.2}Antecedent Features}{22}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Pronoun-Antecedent Features}{22}{subsection.4.2.3}
+\contentsline {subsection}{\numberline {4.2.4}Gender Features}{26}{subsection.4.2.4}
+\contentsline {section}{\numberline {4.3}Baseline Approach}{26}{section.4.3}
+\contentsline {section}{\numberline {4.4}Machine learning-based Classifiers}{26}{section.4.4}
+\contentsline {chapter}{\numberline {5}Evaluation}{27}{chapter.5}
+\contentsline {section}{\numberline {5.1}Results}{27}{section.5.1}
+\contentsline {section}{\numberline {5.2}Error Analysis}{28}{section.5.2}
+\contentsline {chapter}{\numberline {6}Conclusion}{31}{chapter.6}
+\contentsline {section}{\numberline {6.1}Summary}{31}{section.6.1}
+\contentsline {section}{\numberline {6.2}Outlook}{31}{section.6.2}
+\contentsline {chapter}{\numberline {A}Appendix}{ii}{appendix.A}
+\contentsline {chapter}{\nonumberline List of Figures}{vii}{appendix*.28}
+\contentsline {chapter}{\nonumberline List of Tables}{viii}{appendix*.29}
+\contentsline {chapter}{\nonumberline References}{ix}{appendix*.30}

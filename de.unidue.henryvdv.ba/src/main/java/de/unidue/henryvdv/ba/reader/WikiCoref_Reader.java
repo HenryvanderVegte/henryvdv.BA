@@ -18,14 +18,29 @@ import org.apache.uima.UimaContext;
 import org.apache.uima.collection.CollectionException;
 import org.apache.uima.fit.component.JCasCollectionReader_ImplBase;
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
+import org.apache.uima.fit.descriptor.TypeCapability;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Progress;
-
+/**
+ * Reads the WikiCoref documents with tokens, sentences, and CoreferenceChains
+ * @author Henry
+ *
+ */
+@TypeCapability(
+        inputs = {},
+        outputs = {
+                "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
+                "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence",
+                "de.unidue.henryvdv.ba.type.MyCoreferenceChain",
+                "de.unidue.henryvdv.ba.type.DocumentInfo"})
 public class WikiCoref_Reader 
 extends JCasCollectionReader_ImplBase{
 	
+	/**
+	 * Input directory
+	 */
     public static final String PARAM_INPUT_DIRECTORY = "InputDirectory";
     @ConfigurationParameter(name = PARAM_INPUT_DIRECTORY, mandatory = true)
     private String inputDirectory;
@@ -37,7 +52,9 @@ extends JCasCollectionReader_ImplBase{
     public static final String PARAM_USED_DOCUMENT_NUMBERS = "usedDocuments";
     @ConfigurationParameter(name = PARAM_USED_DOCUMENT_NUMBERS, mandatory = true)
     private Integer[] usedDocuments;
-    
+    /**
+     * Tags used in class
+     */
     private static final String TAG_WORD = "word";
     private static final String TAG_WORDS = "words";
     private static final String TAG_MARKABLES = "markables";
@@ -46,14 +63,18 @@ extends JCasCollectionReader_ImplBase{
     private String documentText;
     private JCas aJCas;
     
-    
+    /**
+     * Basedata files contain the document text
+     */
     private List<File> inputBasedataFiles;
     private int basedataIndex;
-    private List<String> basedataDoc;
+    private List<String> basedataDoc;  
     
+    /**
+     * Markable files contain the sentence and coreference annotations
+     */
     private List<File> inputMarkablesFiles;
     private int markablesDataIndex;
-    
     private List<String> sentenceDoc;
     private List<String> corefDoc;
 
@@ -66,13 +87,13 @@ extends JCasCollectionReader_ImplBase{
     {
         super.initialize(context);
         
-        
         String[] fileExtensions = {"xml"};
         File inputBasedataDirectory = new File(inputDirectory + "/Basedata");
         inputBasedataFiles = (List<File>) FileUtils.listFiles(inputBasedataDirectory, fileExtensions, false);
         File inputMarkablesDirectory = new File(inputDirectory + "/Markables");
         inputMarkablesFiles = (List<File>) FileUtils.listFiles(inputMarkablesDirectory, fileExtensions, false);
-        
+     
+        //Since there are two markable files for each document file:
         if(inputBasedataFiles.size()*2 != inputMarkablesFiles.size()){
         	System.out.println("ERROR: Basedata and Markables - sizes are wrong. ( " + inputBasedataFiles.size() + " - " + inputMarkablesFiles.size() + ")" );
         	throw new ResourceInitializationException();
@@ -140,7 +161,7 @@ extends JCasCollectionReader_ImplBase{
 	}
 
 	private void processSentences(){
-		//skip DOCTYPE lines
+		//starts with 2 to skip DOCTYPE lines
 		currentLine = 2;
 		int startAt = 0;
 		int stopAt = 0;

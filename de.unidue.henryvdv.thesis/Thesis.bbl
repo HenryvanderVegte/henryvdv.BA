@@ -271,6 +271,76 @@ Chinchor, N\BPBI A.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Chomsky%
+}{%
+Chomsky%
+}{%
+{\protect \APACyear {1993}}%
+}]{%
+chomsky1993lectures}
+\APACinsertmetastar {%
+chomsky1993lectures}%
+\begin{APACrefauthors}%
+Chomsky, N.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{1993}.
+\newblock
+\APACrefbtitle {Lectures on government and binding: The Pisa lectures}
+  {Lectures on government and binding: The pisa lectures}\ (\BNUM~9).
+\newblock
+\APACaddressPublisher{}{Walter de Gruyter}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Crystal%
+}{%
+Crystal%
+}{%
+{\protect \APACyear {2011}}%
+}]{%
+crystal2011dictionary}
+\APACinsertmetastar {%
+crystal2011dictionary}%
+\begin{APACrefauthors}%
+Crystal, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{2011}.
+\newblock
+\APACrefbtitle {Dictionary of linguistics and phonetics} {Dictionary of
+  linguistics and phonetics}\ (\BVOL~30).
+\newblock
+\APACaddressPublisher{}{John Wiley \& Sons}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Cutting%
+\ \protect \BOthers {.}}{%
+Cutting%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2005}}%
+}]{%
+cutting2005pragmatics}
+\APACinsertmetastar {%
+cutting2005pragmatics}%
+\begin{APACrefauthors}%
+Cutting, J.%
+\BCBT {}\ \BOthersPeriod {.}
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{2005}.
+\newblock
+\APACrefbtitle {Pragmatics and discourse: A resource book for students}
+  {Pragmatics and discourse: A resource book for students}.
+\newblock
+\APACaddressPublisher{}{Routledge}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Eckert%
 \ \BBA {} Strube%
 }{%
@@ -382,6 +452,32 @@ Graff, D.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Grishman%
+\ \BBA {} Sundheim%
+}{%
+Grishman%
+\ \BBA {} Sundheim%
+}{%
+{\protect \APACyear {1996}}%
+}]{%
+grishman1996message}
+\APACinsertmetastar {%
+grishman1996message}%
+\begin{APACrefauthors}%
+Grishman, R.%
+\BCBT {}\ \BBA {} Sundheim, B.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1996}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Message Understanding Conference-6: A Brief History.}
+  {Message understanding conference-6: A brief history.}{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {COLING} {Coling}\ (\BVOL~96, \BPGS\ 466--471).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Hobbs%
 }{%
 Hobbs%
@@ -402,6 +498,34 @@ Hobbs, J\BPBI R.%
   references}.{\BBCQ}
 \newblock
 \APACjournalVolNumPages{Lingua}{44}{4}{311--338}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Ide%
+\ \BBA {} Macleod%
+}{%
+Ide%
+\ \BBA {} Macleod%
+}{%
+{\protect \APACyear {2001}}%
+}]{%
+ide2001american}
+\APACinsertmetastar {%
+ide2001american}%
+\begin{APACrefauthors}%
+Ide, N.%
+\BCBT {}\ \BBA {} Macleod, C.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2001}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {The american national corpus: A standardized resource of
+  american english} {The american national corpus: A standardized resource of
+  american english}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of Corpus Linguistics 2001} {Proceedings of
+  corpus linguistics 2001}\ (\BVOL~3).
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -430,6 +554,30 @@ Ingria, R\BPBI J.%
 \BIn{} \APACrefbtitle {Proceedings of the 27th annual meeting on Association
   for Computational Linguistics} {Proceedings of the 27th annual meeting on
   association for computational linguistics}\ (\BPGS\ 262--271).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Joachims%
+}{%
+Joachims%
+}{%
+{\protect \APACyear {1999}}%
+}]{%
+joachims1999svmlight}
+\APACinsertmetastar {%
+joachims1999svmlight}%
+\begin{APACrefauthors}%
+Joachims, T.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1999}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Svmlight: Support vector machine} {Svmlight: Support
+  vector machine}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{SVM-Light Support Vector Machine http://svmlight.
+  joachims. org/, University of Dortmund}{19}{4}{}.
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
