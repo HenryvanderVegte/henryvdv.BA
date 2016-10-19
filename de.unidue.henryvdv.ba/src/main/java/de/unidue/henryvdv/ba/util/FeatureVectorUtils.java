@@ -2,18 +2,29 @@ package de.unidue.henryvdv.ba.util;
 
 import de.unidue.henryvdv.ba.type.Anaphora;
 
+/**
+ * Class for creating the feature vector. 
+ * All values need to be provided on the anaphora
+ * @author Henry
+ *
+ */
 public class FeatureVectorUtils {
 
 	private Anaphora currentAnaphora;
 	private int currentFeatureCount;
 	private String currentFeatureVector;
 	
-	public String createFeatureVector(Anaphora a){
+	/**
+	 * Returns the whole feature vector with all annotated features in this class
+	 * @param anaphora Anaphora
+	 * @return feature vector
+	 */
+	public String createFeatureVector(Anaphora anaphora){
 		currentFeatureCount = 1;
 		currentFeatureVector = "";
-		currentAnaphora = a;	
+		currentAnaphora = anaphora;	
 		
-		if(a.getHasCorrectAntecedent()){
+		if(anaphora.getHasCorrectAntecedent()){
 			currentFeatureVector += "1";
 		} else {
 			currentFeatureVector += "-1";
@@ -22,71 +33,77 @@ public class FeatureVectorUtils {
 		//Pronoun-Antecedent-Features (10)
 		addPA_BindingTheory();
 		addPA_SameSentence();
-		addPA_IntraSentenceDiff(); 		
+		addPA_IntraSentenceDiff(); 	
 		addPA_InPreviousSentence();
 		addPA_InterSentenceDiff();		//5
+		
 	 	addPA_PrepositionalParallel();   
 		addPA_QuotationSituation();
+
 		addPA_SingularMatch();
-		addPA_PluralMatch();			
-		//Antecedent Features (17)
+		addPA_PluralMatch();	
 		
+		//Antecedent Features (17)
 		addA_AntecedentFrequency();		//10
 		
 		addA_Subject();
 		addA_Object();
 		addA_Predicate();
-		addA_Pronominal();				
+		addA_Pronominal();		
+		
 		addA_HeadWordEmphasis();		//15
 		addA_Conjunction();
 		addA_PrenominalModifier();
+		
 		addA_Org();
 		addA_Person();					
 		addA_Time();					//20
 		addA_Date();
 		addA_Money();
 		addA_Number();
-		addA_Definite();				
+		
+		addA_Definite();
+
 		addA_HisHer();					//25
 		addA_HeHis();
-		
+	
 		//Pronoun Features (4)
 		addP_Masculine();
 		addP_Feminine();
 		addP_Neutral();					
 		addP_Plural();//30
 
-
 		//Gender Features (11)
-
 		addG_StdGenderMatch();
 		addG_StdGenderMismatch();		
 		addG_PronounMismatch();	
-		
+			
 		addG_MasculineMean();			
 		addG_MasculineVariance(); 		//35
 		addG_FeminineMean();		
 		addG_FeminineVariance();
 		addG_NeutralMean();
 		addG_NeutralVariance();			
-		addG_PluralMean();
+		addG_PluralMean();				//40
 		addG_PluralVariance();
 		
 	
-	/*
+		//Hard Constraint gender features:
+		/*
 		addG_HardConstraintMasculine();
 		addG_HardConstraintFeminine();
 		addG_HardConstraintNeutral();
 		addG_HardConstraintPlural();
 
-	*/								//40
-		//My own features:
-		/*
+		 */
+		
+		//My own features (not added because of no or negligible impact)
+		
 		addP_Reflexive();
 		addP_NpDistance();
 		addPA_IntermediatePronoun();
 		addA_CoveredTokens();
-		*/
+		
 		return currentFeatureVector;
 	}
 	
@@ -222,7 +239,6 @@ public class FeatureVectorUtils {
 		addBinarizedFeature(currentAnaphora.getPronounFeatures().getP_Reflexive());
 	}
 	
-	
 	private void addG_StdGenderMatch(){
 		addBinarizedFeature(currentAnaphora.getGenderFeatures().getG_StdGenderMatch());
 	}
@@ -290,6 +306,10 @@ public class FeatureVectorUtils {
 		addBinarizedFeature(currentAnaphora.getGenderFeatures().getG_Plural_HardConstraint());
 	}
 	
+	/**
+	 * Adds a binarized value to the feature vector
+	 * @param value feature output
+	 */
 	private void addBinarizedFeature(boolean value){
 		currentFeatureVector += " ";
 		if(value){
@@ -300,6 +320,10 @@ public class FeatureVectorUtils {
 		currentFeatureCount++;
 	}
 	
+	/**
+	 * Adds a float value to the feature vector
+	 * @param value feature output
+	 */
 	private void addFloatFeature(float value){
 		currentFeatureVector += " ";  
 		currentFeatureVector += currentFeatureCount + ":" + value;

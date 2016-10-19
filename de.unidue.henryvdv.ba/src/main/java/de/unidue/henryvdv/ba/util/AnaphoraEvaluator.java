@@ -42,6 +42,7 @@ public class AnaphoraEvaluator {
 	private int[] bergsmaLowerThreshold;
 	private int[] bergsmaKeepThreshold;
 	private int[] bergsmaSameEntity;
+	private int[] bergsmaHighestValue;
 	private int[] bergsmaBaseline;
 	private int[] lastNSentences;
 	private int[] lastNSentences_takeTheBest;
@@ -105,8 +106,6 @@ public class AnaphoraEvaluator {
 		
 		//Check all antecedents:
 		for(int i = 0; i < anaphoras.size(); i++){
-			int goldAntecedentBegin = anaphoras.get(i).getAntecedent().getBegin();
-			int goldAntecedentEnd = anaphoras.get(i).getAntecedent().getEnd();
 			List<MyNP> candidates = new ArrayList<MyNP>();
 			for(MyNP np : allNPs.get(anaphoras.get(i))){
 				candidates.add(np);				
@@ -151,20 +150,23 @@ public class AnaphoraEvaluator {
 			//Check if best candidate is in coreferenceChain
 			int npBegin = possibleAntecedent.getBegin();
 			int npEnd = possibleAntecedent.getEnd();			
+	
+
 			MyCoreferenceChain anaphoraCorefChain = anaphoraChains.get(i);	
 			MyCoreferenceLink corefLinkOld = anaphoraCorefChain.getFirst();	
 			boolean candidateInChain = false;
-			if(corefLinkOld.getBegin() <= npBegin && corefLinkOld.getEnd() >= npEnd){
+			if(corefLinkOld.getBegin() == npBegin && corefLinkOld.getEnd() == npEnd){
 				candidateInChain = true;		
 			}		
+			
 			while(!candidateInChain && corefLinkOld.getNext() != null){
 				MyCoreferenceLink corefLinkNew = corefLinkOld.getNext();
 				if(Parameters.exactBoundMatch){
-					if(corefLinkNew.getBegin() == npBegin && corefLinkNew.getEnd() == npBegin){					
+					if(corefLinkNew.getBegin() == npBegin && corefLinkNew.getEnd() == npEnd){		
 						candidateInChain = true;
 					}	
 				}else {
-					if(corefLinkNew.getBegin() <= npBegin && corefLinkNew.getEnd() >= npBegin){					
+					if(corefLinkNew.getBegin() <= npBegin && corefLinkNew.getEnd() >= npEnd){					
 						candidateInChain = true;
 					}	
 				}
@@ -394,7 +396,54 @@ public class AnaphoraEvaluator {
 
 	}
 	
-
+	public void evaluateBergsma_HighestValue(Map<Anaphora, List<MyNP>> allNPs){
+		if(bergsmaHighestValue == null)
+			bergsmaHighestValue = new int[]{0,0,0,0};
+		int TP = 0;
+		int FP = 0;
+		int FN = 0;
+		for(Anaphora anaphora : allNPs.keySet()){
+			int goldAntecedentBegin = anaphora.getAntecedent().getBegin();
+			int goldAntecedentEnd = anaphora.getAntecedent().getEnd();
+			List<MyNP> candidates = new ArrayList<MyNP>();
+			for(MyNP np : allNPs.get(anaphora)){
+				candidates.add(np);				
+			}
+			MyNP highestValueCandidate = null;
+			float highestValue = -Float.MAX_VALUE;
+			for(MyNP np : candidates){
+				if(np.getOutputValue() > highestValue){
+					highestValue = np.getOutputValue();
+					highestValueCandidate = np;
+				}
+			}
+			if(highestValueCandidate == null){
+				FN++;
+				System.out.println("No candidate found");
+				continue;
+			}
+			int npBegin = highestValueCandidate.getBegin();
+			int npEnd = highestValueCandidate.getEnd();
+			if(Parameters.exactBoundMatch){
+				if(goldAntecedentBegin == npBegin && goldAntecedentEnd == npEnd){
+						TP++;
+				} else {
+					FP++;
+				}
+			} else {
+				if((goldAntecedentBegin >= npBegin && goldAntecedentEnd <= npEnd) || goldAntecedentBegin <= npBegin && goldAntecedentEnd >= npEnd){
+					TP++;
+				} else {
+					FP++;	
+				}
+			}		
+		}
+		bergsmaHighestValue[0] += TP;
+		bergsmaHighestValue[2] += FP;
+		bergsmaHighestValue[3] += FN;
+	}
+	
+	
 	public void evaluate_last_n_sentences(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
 		if(lastNSentences == null)
 			lastNSentences = new int[]{0,0,0,0};
@@ -408,10 +457,8 @@ public class AnaphoraEvaluator {
 			if(printChoices){
 				System.out.println("++++ANAPHORA:  " + anaphora.getCoveredText() + "    +++++++");
 				System.out.println("++++GOLD ANTECEDENT:  " + anaphora.getAntecedent().getCoveredText() + "    +++++++");	
-			}
-			
-			List<MyNP> sortedList = AnnotationUtils.sortMyNPList(allNPs.get(anaphora));
-			
+			}		
+			List<MyNP> sortedList = AnnotationUtils.sortMyNPList(allNPs.get(anaphora));			
 			for(MyNP np : sortedList){
 				if(printChoices){
 					System.out.println(np.getCoveredText() + "   [ " + np.getOutputValue() + " ]" );
@@ -466,7 +513,7 @@ public class AnaphoraEvaluator {
 			int goldAntecedentEnd = anaphora.getAntecedent().getEnd();
 
 			MyNP bestChoice = null;
-			float maxOutputValue = Float.MIN_VALUE;
+			float maxOutputValue = -Float.MAX_VALUE;
 			for(MyNP np : allNPs.get(anaphora)){
 				if(np.getOutputValue() > maxOutputValue){
 					maxOutputValue = np.getOutputValue();
@@ -603,7 +650,7 @@ public class AnaphoraEvaluator {
 				while(!anteInChain && corefLinkOld.getNext() != null){
 					MyCoreferenceLink corefLinkNew = corefLinkOld.getNext();
 					
-					if(corefLinkNew.getBegin() <= npBegin && corefLinkNew.getEnd() >= npBegin){					
+					if(corefLinkNew.getBegin() <= npBegin && corefLinkNew.getEnd() >= npEnd){					
 						anteInChain = true;
 					}			
 					corefLinkOld = corefLinkNew;
@@ -631,8 +678,7 @@ public class AnaphoraEvaluator {
 	}	
 
 	
-	public void printResults(){
-		
+	public void printResults(){		
 		boolean isEmptyFile = false;
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(accuracyOutputFile));     
@@ -681,7 +727,9 @@ public class AnaphoraEvaluator {
 		if(bergsmaSameEntity != null){
 			values += returnAllValues(bergsmaSameEntity);
 		}
-		
+		if(bergsmaHighestValue != null){
+			values += returnAllValues(bergsmaHighestValue);
+		}
 		if(bergsmaBaseline != null){
 			values += returnAllValues(bergsmaBaseline);
 		}
@@ -697,7 +745,6 @@ public class AnaphoraEvaluator {
 		if(lastNSentences_sameEntity != null){
 			values += returnAllValues(lastNSentences_sameEntity);
 		}
-
 		output.add(values);	
 	}
 	
@@ -716,6 +763,10 @@ public class AnaphoraEvaluator {
 		}
 		if(bergsmaSameEntity != null){
 			caption += "bergsmaSameEntity" + semi;
+			varNames += template;
+		}
+		if(bergsmaHighestValue != null){
+			caption += "bergsmaHighestValue" + semi;
 			varNames += template;
 		}
 		if(bergsmaBaseline != null){

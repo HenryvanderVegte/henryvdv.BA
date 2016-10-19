@@ -14,6 +14,7 @@ import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.fit.component.JCasAnnotator_ImplBase;
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
+import org.apache.uima.fit.descriptor.TypeCapability;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
@@ -21,27 +22,41 @@ import org.apache.uima.resource.ResourceInitializationException;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.unidue.henryvdv.ba.type.Anaphora;
-import de.unidue.henryvdv.ba.type.Antecedent;
 import de.unidue.henryvdv.ba.util.FeatureVectorUtils;
 
+/**
+ * Adds all created feature vectors to the svm train file 
+ * @author Henry
+ *
+ */
+@TypeCapability(
+        inputs = {"de.unidue.henryvdv.ba.type.Anaphora",
+                "de.unidue.henryvdv.ba.util.FeatureUtils_Antecedent",
+                "de.unidue.henryvdv.ba.util.FeatureUtils_Gender",
+                "de.unidue.henryvdv.ba.util.FeatureUtils_Pronoun",
+                "de.unidue.henryvdv.ba.util.FeatureUtils_PronounAntecedent"
+        },
+        outputs = {})
 public class SVMTrainingInstanceCreator 
 extends JCasAnnotator_ImplBase{
 	
-	private JCas aJCas;
 	private File trainFile;
 	private String trainFilePath;
 	private List<String> posFeatureVectors;
 	private List<String> negFeatureVectors;
 	private Collection<Anaphora> anaphoras;
-	private Collection<NP> nps;
 	
 	private FeatureVectorUtils featureVectorUtil;
 	
-
+	/**
+	 * Training file direction
+	 */
     public static final String PARAM_TRAINFILE_DIRECTORY= "TrainFileDirectory";
     @ConfigurationParameter(name = PARAM_TRAINFILE_DIRECTORY, mandatory = true, defaultValue = "src/main/resources/svm/dat")
     private String trainFileDirectory;
-    
+    /**
+     * Training file name
+     */
     public static final String PARAM_TRAINFILE= "TrainFileName";
     @ConfigurationParameter(name = PARAM_TRAINFILE, mandatory = false, defaultValue = "train.dat")
     private String trainFileName;
@@ -54,7 +69,7 @@ extends JCasAnnotator_ImplBase{
 		posFeatureVectors = new ArrayList<String>();
 		negFeatureVectors = new ArrayList<String>();
 		featureVectorUtil = new FeatureVectorUtils();
-		
+		//So that no old vectors are in the file
 		if(trainFile.isFile()){
 			trainFile.delete();
 		}		
@@ -71,9 +86,7 @@ extends JCasAnnotator_ImplBase{
     
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
-		this.aJCas = aJCas;
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
-		nps = JCasUtil.select(aJCas, NP.class);
 		generateFeatureVectors();
 	}
 	
@@ -82,7 +95,9 @@ extends JCasAnnotator_ImplBase{
 		super.collectionProcessComplete();
 		writeFeaturevectorsToFile();
 	}
-	
+	/**
+	 * Creates for each anaphora (and negative training instance) the feature vector
+	 */
 	private void generateFeatureVectors(){
 		for(Anaphora anaphora : anaphoras){
 			String currentFeatureVector = featureVectorUtil.createFeatureVector(anaphora);		
@@ -95,7 +110,9 @@ extends JCasAnnotator_ImplBase{
 		}
 	}
 	
-	
+	/**
+	 * Writes all feature vectors to the train file
+	 */
 	private void writeFeaturevectorsToFile(){
 		BufferedWriter writer = null;
 		try {

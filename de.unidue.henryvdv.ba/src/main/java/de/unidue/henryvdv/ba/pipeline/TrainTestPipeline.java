@@ -47,10 +47,14 @@ public class TrainTestPipeline {
 		for(int i = 0; i < allDocs.length; i++){
 			allDocs[i] = i;
 		}
-		
-		//trainPipeline(allDocs);
-		
-		crossvalidation(2,2, false);
+		Integer[] trainDoc = new Integer[]{0,1,3};
+		Integer[] testDoc = new Integer[]{9,10,11,12,13};
+
+		trainPipeline(trainDoc);
+		SavedVectorWriter s = new SavedVectorWriter(trainDoc);
+		s.write();
+		testPipeline(testDoc);
+		//crossvalidation(10,30, false);
 	}
 	
 	/**
@@ -111,9 +115,9 @@ public class TrainTestPipeline {
 			System.out.println("  ]");
 			
 			System.out.println("Train: ");
-			trainPipeline(trainOnArray);
-			//SavedVectorWriter s = new SavedVectorWriter(trainOnArray);
-			//s.write();
+			//trainPipeline(trainOnArray);
+			SavedVectorWriter s = new SavedVectorWriter(trainOnArray);
+			s.write();
 			
 			SVMLearn svmLearn = new SVMLearn();
 			svmLearn.learn();

@@ -48,27 +48,38 @@ import de.unidue.henryvdv.ba.util.FeatureUtils_PronounAntecedent;
                 "de.unidue.henryvdv.ba.util.FeatureUtils_Pronoun",
                 "de.unidue.henryvdv.ba.util.FeatureUtils_PronounAntecedent"})
 public class FeatureAnnotator  extends JCasAnnotator_ImplBase {
-
-	private JCas aJCas;
+	
+	/**
+	 * All anaphoras
+	 */
 	private Collection<Anaphora> anaphoras;
 	
+	/**
+	 * All utils to annotate the features
+	 */
 	private FeatureUtils_Antecedent antecedentUtil;
 	private FeatureUtils_Pronoun pronounUtil;
 	private FeatureUtils_PronounAntecedent pronounAntecedentUtil;
 	private FeatureUtils_Gender genderUtil;
-	
+	/**
+	 * A map with the gender frequencies. The String represents the noun (e.g. "John").
+	 * The Integer array represents its values
+	 * [0] = masc. frequency, [1] = fem. frequency, [2] = neutral frequency, [3] plural frequency
+	 */
 	private Map<String, Integer[]> corpusFrequencies = new HashMap<String, Integer[]>();
 	
-	
+	/**
+	 * Reads the corpus first
+	 */
 	public void initialize(UimaContext context) throws ResourceInitializationException{
 		super.initialize(context);
 		readCorpus();
 	}
 	
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
-		this.aJCas = aJCas;
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
 		
+		//All utilities that are needed to annotate the features
 		antecedentUtil = new FeatureUtils_Antecedent(aJCas);
 		pronounUtil = new FeatureUtils_Pronoun();
 		pronounAntecedentUtil = new FeatureUtils_PronounAntecedent(aJCas);

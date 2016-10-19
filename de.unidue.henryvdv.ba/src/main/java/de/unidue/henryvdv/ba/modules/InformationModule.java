@@ -29,7 +29,11 @@ import de.unidue.henryvdv.ba.type.MyCoreferenceChain;
 import de.unidue.henryvdv.ba.type.MyCoreferenceLink;
 import de.unidue.henryvdv.ba.util.AnnotationUtils;
 import edu.stanford.nlp.trees.Tree;
-
+/**
+ * A helpful module to detect errors or to have a look on the data.
+ * @author Henry
+ *
+ */
 public class InformationModule 
 	extends JCasAnnotator_ImplBase
 {

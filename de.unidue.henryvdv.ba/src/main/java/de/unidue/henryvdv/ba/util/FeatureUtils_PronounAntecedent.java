@@ -31,26 +31,26 @@ import de.unidue.henryvdv.ba.util.FeatureUtils_Gender.Gender;
  */
 public class FeatureUtils_PronounAntecedent {
 	
-	/********************************************
-	 * 	Assigns the antecedent features:		*
-	 * 											*
-	 * 	-Binding Theory (bool)					*
-	 * 	-Same Sentence (bool)					*
-	 * 	-Previous Sentence (bool)				*
-	 * 	-Inter-Sentence Difference (float)		*
-	 * 	-Intra-Sentence Difference (float)		*
-	 * 	-Prepositional Parallel (bool)			*
-	 * 	-Singular Match (bool)					*
-	 * 	-Plural Match (bool)					*
-	 * 											*
-	 * 	Not used:								*
- 	 * 	-Parent Category Match (bool)			*
-	 * 	-Parent Word Match (bool)				*
-	 * 											*
-	 * 	+My own features						*
-	 * 	-Difference in noun phrases(float)		*
-	 * 	-Difference in pronouns(float)			*
-	 ********************************************/
+	/****************************************************
+	 * 	Assigns the pronoun-antecedent features:		*
+	 * 													*
+	 * 	-Binding Theory (bool)							*
+	 * 	-Same Sentence (bool)							*
+	 * 	-Previous Sentence (bool)						*
+	 * 	-Inter-Sentence Difference (float)				*
+	 * 	-Intra-Sentence Difference (float)				*
+	 * 	-Prepositional Parallel (bool)					*
+	 * 	-Singular Match (bool)							*
+	 * 	-Plural Match (bool)							*
+	 * 													*
+	 * 	Not used:										*
+ 	 * 	-Parent Category Match (bool)					*
+	 * 	-Parent Word Match (bool)						*
+	 * 													*
+	 * 	+My own features								*
+	 * 	-Difference in noun phrases(float)				*
+	 * 	-Difference in pronouns(float)					*
+	 ****************************************************/
 	
 	/**
 	 * Required Annotations:
@@ -79,7 +79,10 @@ public class FeatureUtils_PronounAntecedent {
 		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
 	}
 	
-	
+	/**
+	 * Annotates all pronoun-antecedent features to an anaphora
+	 * @param a Anaphora
+	 */
 	public void annotateFeatures(Anaphora a){	
 		//In Same Sentence:
 		a.getPronounAntecedentFeatures().setP_A_BindingTheory(bindingTheory(a));
@@ -92,7 +95,7 @@ public class FeatureUtils_PronounAntecedent {
 		//Intra-Sentence Diff
 		a.getPronounAntecedentFeatures().setP_A_IntraSentenceDiff(intraSentenceDiff(a));
 		//Prepositional Parallel
-		a.getPronounAntecedentFeatures().setP_A_PrepositionalParallel(prepositionalParallel(a, a.getAntecedent()));
+		a.getPronounAntecedentFeatures().setP_A_PrepositionalParallel(prepositionalParallel(a));
 		//Parent Category Match
 		a.getPronounAntecedentFeatures().setP_A_ParentCatMatch(parentCategoryMatch(a, a.getAntecedent()));
 		//Parent Word Match
@@ -242,17 +245,23 @@ public class FeatureUtils_PronounAntecedent {
 		return null;
 	}
 	
-	public boolean containsCCommandingNP(Annotation anno, Annotation a){
+	/**
+	 * Whether the annotation anno contains a c-commanding np for alpha
+	 * @param anno
+	 * @param alpha
+	 * @return
+	 */
+	public boolean containsCCommandingNP(Annotation anno, Annotation alpha){
 		List<NP> containedNPs = new ArrayList<NP>();
 		for(NP  np : nps){
 			if(anno.getBegin() < np.getBegin() && anno.getEnd() >= np.getEnd()){
-				if(!(np.getBegin() <= a.getBegin() && np.getEnd() >= a.getEnd()))
+				if(!(np.getBegin() <= alpha.getBegin() && np.getEnd() >= alpha.getEnd()))
 						containedNPs.add(np);
 			}
 		}
 		
 		for(NP np : containedNPs){
-			if(cCommands(np, a)){
+			if(cCommands(np, alpha)){
 				return true;
 			}
 		}
@@ -274,7 +283,6 @@ public class FeatureUtils_PronounAntecedent {
 		}
 		Constituent alphaParent = getConstituent(np.getParent());
 		Constituent beta = getConstituent(annotation);
-		int i = 0;
 		while(beta.getParent() != null){
 			if(beta.getParent().getBegin() == alphaParent.getBegin() && 
 					beta.getParent().getEnd() == alphaParent.getEnd()){
@@ -309,6 +317,7 @@ public class FeatureUtils_PronounAntecedent {
 		}
 		return smallest;
 	}
+	
 	/**
 	 * Returns the distance of nps between the anaphora and its antecedent
 	 * @param anaphora Anaphora
@@ -354,6 +363,7 @@ public class FeatureUtils_PronounAntecedent {
 		float value = (anaphoraS - antecedentS)/ 50.0f;
 		return value;
 	}
+	
 	/**
 	 * Difference between anaphora and antecedent in tokens
 	 * @param anaphora Anaphora
@@ -368,6 +378,7 @@ public class FeatureUtils_PronounAntecedent {
 		float value = (float)dist / 50.0f;
 		return value;
 	}
+	
 	/**
 	 * Whether the antecedent and the anaphora parent words match
 	 * @param anaphora Anaphora
@@ -391,6 +402,7 @@ public class FeatureUtils_PronounAntecedent {
 		}
 		return value;
 	}
+	
 	/**
 	 * Whether anaphora and antecedent are in quotes
 	 * @param anaphora Anaphora
@@ -406,6 +418,12 @@ public class FeatureUtils_PronounAntecedent {
 		return value;
 	}
 	
+	/**
+	 * Returns the text of the governing token if the annotation is a preposition, 
+	 * else null
+	 * @param anno Annotation
+	 * @return 
+	 */
 	public String getPrepositionText(Annotation anno){
 		Token govToken = null;
 		for(Dependency d : dependencies){
@@ -423,9 +441,12 @@ public class FeatureUtils_PronounAntecedent {
 		}		
 		return null;
 	}
-	
 
-	
+	/**
+	 * Returns the parent token of a given annotation
+	 * @param anno Annotation
+	 * @return parent token
+	 */
 	public Token getParent(Annotation anno){
 		for(Dependency d : dependencies){
 			if(d.getDependent().getBegin() == anno.getBegin() && 
@@ -436,8 +457,14 @@ public class FeatureUtils_PronounAntecedent {
 		return null;
 	}
 	
-	public boolean prepositionalParallel(Annotation anaphora, Annotation antecedent){
+	/**
+	 * Whether anaphora and antecedent are objects of the same preposition
+	 * @param anaphora
+	 * @return value
+	 */
+	public boolean prepositionalParallel(Anaphora anaphora){
 		String prepText = getPrepositionText(anaphora);		
+		Antecedent antecedent = anaphora.getAntecedent();
 		List<Token> antecedentTokens = getCoveredTokens(antecedent.getBegin(), antecedent.getEnd());		
 		boolean value = false;
 		if(prepText != null){
@@ -453,6 +480,12 @@ public class FeatureUtils_PronounAntecedent {
 		return value;
 	}
 	
+	/**
+	 * If both annotations have the same relation
+	 * @param anno1
+	 * @param anno2
+	 * @return true if yes, else false
+	 */
 	public boolean relationMatch(Annotation anno1, Annotation anno2){
 		String type1 = null;
 		String type2 = null;
@@ -477,6 +510,12 @@ public class FeatureUtils_PronounAntecedent {
 		return false;		
 	}
 
+	/**
+	 * Whether both parents have the same category
+	 * @param anaphora
+	 * @param antecedent
+	 * @return true if yes, else false
+	 */
 	public boolean parentCategoryMatch(Annotation anaphora, Annotation antecedent){
 		Token anaphoraParent = getParent(anaphora);	
 		if(anaphoraParent == null)
@@ -492,16 +531,26 @@ public class FeatureUtils_PronounAntecedent {
 		return value;
 	}
 
-	public boolean isInQuotes(Annotation anno){
+	/**
+	 * Whether an annotation is in quotes
+	 * @param annotation annotation
+	 * @return value
+	 */
+	public boolean isInQuotes(Annotation annotation){
 		boolean value = false;
 		for(Quotation q : quotes){
-			if(q.getBegin() <= anno.getBegin() && q.getEnd() >= anno.getEnd()){
+			if(q.getBegin() <= annotation.getBegin() && q.getEnd() >= annotation.getEnd()){
 				value = true;
 			}
 		}	
 		return value;
 	}
 	
+	/**
+	 * Whether anaphora and antecedent are both singular
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
 	public boolean isBothSingular(Anaphora anaphora){
 		Number anaphoraNumber = Number.unknown;
 		Number antecedentNumber = Number.unknown;
@@ -527,11 +576,14 @@ public class FeatureUtils_PronounAntecedent {
 		if(anaphoraNumber == Number.singular && antecedentNumber == Number.singular){
 			return true;
 		}
-	
 		return false;
-
 	}
 	
+	/**
+	 * Whether anaphora and antecedent are both plural
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
 	public boolean isBothPlural(Anaphora anaphora){
 		Number anaphoraNumber = Number.unknown;
 		Number antecedentNumber = Number.unknown;
@@ -560,19 +612,40 @@ public class FeatureUtils_PronounAntecedent {
 	
 		return false;
 	}
-	
+	/**
+	 * Returns the sentence at a char nr
+	 * @param begin char nr
+	 * @return sentence nr
+	 */
 	public int getSentenceNr(int begin){
 		return AnnotationUtils.getSentenceNr(begin, sentences);
 	}
 	
+	/**
+	 * Returns a list of all tokens between two points in the document
+	 * @param begin Start at that char nr in document
+	 * @param end End at that char nr in document
+	 * @return covered Tokens
+	 */
 	public List<Token> getCoveredTokens(int begin, int end){
 		return AnnotationUtils.getCoveredTokens(begin, end, tokens);
 	}
 	
+	/**
+	 * Returns all covered tokens as list of an annotation
+	 * @param anno Annotation
+	 * @return covered Tokens
+	 */
 	public List<Token> getCoveredTokens(Annotation anno){
 		return AnnotationUtils.getCoveredTokens(anno.getBegin(), anno.getEnd(), tokens);
 	}
 	
+	/**
+	 * Return whether the antecedent is singular, plural or
+	 * unknown
+	 * @param antecedent Antecedent
+	 * @return antecedent number
+	 */
 	public Number getAntecedentNumber(Antecedent antecedent){
 		Number returnNumber = Number.unknown;
 		
@@ -582,9 +655,10 @@ public class FeatureUtils_PronounAntecedent {
 			if(isNoun(t))
 				nouns++;
 		}
+		//No noun contained: Got no number
 		if(nouns == 0)
 			return Number.unknown;
-		
+		//One noun contained: Get the number of that noun
 		if(nouns == 1){
 			for(Token t : anteTokens){
 				if(isSingularNoun(t))
@@ -593,6 +667,7 @@ public class FeatureUtils_PronounAntecedent {
 					returnNumber = Number.plural;
 			}
 		} else {
+			//More than one noun contained: Get the head noun and its number
 			Token relevantToken = null;
 			for(Token t : anteTokens){
 				if(isNoun(t)){
@@ -622,7 +697,12 @@ public class FeatureUtils_PronounAntecedent {
 		
 	}
 	
-	
+	/**
+	 * If the token is a noun it will return true, 
+	 * else false
+	 * @param annotation Annotation
+	 * @return
+	 */
 	public boolean isNoun(Token token){
 		String posValue = token.getPos().getPosValue();
 		if(posValue.equalsIgnoreCase("NN") || 
@@ -635,6 +715,12 @@ public class FeatureUtils_PronounAntecedent {
 		return false;
 	}
 	
+	/**
+	 * If the token is a singular noun it will return true, 
+	 * else false
+	 * @param annotation Annotation
+	 * @return
+	 */
 	public boolean isSingularNoun(Token token){
 		String posValue = token.getPos().getPosValue();
 		if(posValue.equalsIgnoreCase("NN") || 
@@ -645,6 +731,12 @@ public class FeatureUtils_PronounAntecedent {
 		return false;
 	}
 	
+	/**
+	 * If the token is a plural noun it will return true, 
+	 * else false
+	 * @param annotation Annotation
+	 * @return
+	 */
 	public boolean isPluralNoun(Token token){
 		String posValue = token.getPos().getPosValue();
 		if(posValue.equalsIgnoreCase("NNS") || 
@@ -655,6 +747,12 @@ public class FeatureUtils_PronounAntecedent {
 		return false;
 	}
 	
+	/**
+	 * If the token is the subject it will return true, 
+	 * else false
+	 * @param annotation Annotation
+	 * @return
+	 */
 	private boolean isSubject(Token token){
 		for(Dependency d : dependencies){
 			if(d.getDependent() == token && d.getDependencyType().contains("subj")){
@@ -664,6 +762,12 @@ public class FeatureUtils_PronounAntecedent {
 		return false;
 	}
 	
+	/**
+	 * If the annotation is an organization it will return true, 
+	 * else false
+	 * @param annotation Annotation
+	 * @return
+	 */
 	public boolean organization(Annotation annotation){
 		List<Token> covTokens = getCoveredTokens(annotation);
 		boolean value = false;			
@@ -676,6 +780,12 @@ public class FeatureUtils_PronounAntecedent {
 		return value;
 	}
 	
+	/**
+	 * If the annotation is a person it will return true, 
+	 * else false
+	 * @param annotation Annotation
+	 * @return
+	 */
 	public boolean person(Annotation annotation){
 		List<Token> covTokens = getCoveredTokens(annotation);
 		boolean value = false;			
@@ -688,6 +798,12 @@ public class FeatureUtils_PronounAntecedent {
 		return value;
 	}
 	
+	/**
+	 * If the annotation contains a definite Article, 
+	 * it will return true
+	 * @param annotation Annotation
+	 * @return
+	 */
 	public boolean definiteArticle(Annotation annotation){
 		List<Token> covTokens = getCoveredTokens(annotation);
 		boolean value = false;			
@@ -699,6 +815,12 @@ public class FeatureUtils_PronounAntecedent {
 		return value;
 	}
 	
+	/**
+	 * If the Token has an named entity value, it will be returned
+	 * else null
+	 * @param token Token
+	 * @return named entity value
+	 */
 	private String getNamedEntityValue(Token token){
 		for(NamedEntity n : namedEntities){
 			if(n.getBegin() <= token.getBegin() && n.getEnd() >= token.getEnd()){

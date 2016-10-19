@@ -1,6 +1,5 @@
 package de.unidue.henryvdv.ba.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -10,7 +9,6 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 
 import de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity;
-import de.tudarmstadt.ukp.dkpro.core.api.ner.type.Time;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
@@ -64,6 +62,10 @@ public class FeatureUtils_Antecedent {
 		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
 	}
 	
+	/**
+	 * Annotates all antecedent features to an anaphora
+	 * @param a Anaphora
+	 */
 	public void annotateFeatures(Anaphora a){
 		//Antecedent Frequency
 		a.getAntecedentFeatures().setA_AntecedentFrequency(antecedentFrequency(a));	

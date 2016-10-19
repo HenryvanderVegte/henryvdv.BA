@@ -100,19 +100,12 @@ extends JCasAnnotator_ImplBase{
 		
 		for(int i = 0; i < goldAntecedent.size(); i++){
 			if(goldAntecedent.get(i) == null && detectedAntecedent.get(i) == null){
-				/*
-				System.out.println("--Wrong--");
-				System.out.println("One is zero");
-				*/
 				correctAnaphorsInDoc++;	
 				anaphorsInDoc++;
 				continue;
 			}
 			if(goldAntecedent.get(i) == null || detectedAntecedent.get(i) == null){
-				/*
-				System.out.println("--Correct--");
-				System.out.println("Both are zero");
-				*/
+
 				anaphorsInDoc++;
 				continue;
 			}
@@ -120,12 +113,7 @@ extends JCasAnnotator_ImplBase{
 			if(goldAntecedent.get(i).getBegin() >= detectedAntecedent.get(i).getBegin() && 
 				goldAntecedent.get(i).getEnd() <= detectedAntecedent.get(i).getEnd()){
 				
-				/*
-				System.out.println("--Correct--");
-				System.out.println("Anaphora: " + npsWithAnaphora.get(i).getCoveredText() + "(Sentence: " + getSentenceNr(npsWithAnaphora.get(i).getBegin()) + ")" );
-				System.out.println("Gold : " + goldAntecedent.get(i).getCoveredText() + "(Sentence: " + getSentenceNr(goldAntecedent.get(i).getBegin()) + ")");
-				System.out.println("Detected : " + detectedAntecedent.get(i).getCoveredText() + "(Sentence: " + getSentenceNr(detectedAntecedent.get(i).getBegin()) + ")");
-				*/
+
 				
 				correctAnaphorsInDoc++;	
 				anaphorsInDoc++;
@@ -134,24 +122,12 @@ extends JCasAnnotator_ImplBase{
 			
 			if(goldAntecedent.get(i).getBegin() <= detectedAntecedent.get(i).getBegin() && 
 				goldAntecedent.get(i).getEnd() >= detectedAntecedent.get(i).getEnd()){
-				/*
-				System.out.println("--Correct--");
-				System.out.println("Anaphora: " + npsWithAnaphora.get(i).getCoveredText() + "(Sentence: " + getSentenceNr(npsWithAnaphora.get(i).getBegin()) + ")" );
-				System.out.println("Gold : " + goldAntecedent.get(i).getCoveredText() + "(Sentence: " + getSentenceNr(goldAntecedent.get(i).getBegin()) + ")");
-				System.out.println("Detected : " + detectedAntecedent.get(i).getCoveredText() + "(Sentence: " + getSentenceNr(detectedAntecedent.get(i).getBegin()) + ")");
-				*/
-				
+
 				
 				correctAnaphorsInDoc++;		
 				anaphorsInDoc++;
 				continue;
 			}
-			/*
-			System.out.println("--Wrong--");
-			System.out.println("Anaphora: " + npsWithAnaphora.get(i).getCoveredText() + "(Sentence: " + getSentenceNr(npsWithAnaphora.get(i).getBegin()) + ")" );
-			System.out.println("Gold : " + goldAntecedent.get(i).getCoveredText() + "(Sentence: " + getSentenceNr(goldAntecedent.get(i).getBegin()) + ")");
-			System.out.println("Detected : " + detectedAntecedent.get(i).getCoveredText() + "(Sentence: " + getSentenceNr(detectedAntecedent.get(i).getBegin()) + ")");
-			*/
 			anaphorsInDoc++;
 			
 		}

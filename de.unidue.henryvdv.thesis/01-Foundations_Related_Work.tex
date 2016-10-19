@@ -19,6 +19,7 @@ As can be seen the order of rules leads from higher to lower precision: if only 
 In a second evaluation, CogNIAC was compared to the Hobbs Algorithm \citep{baldwin1997cogniac,hobbs1978resolving} on singular third-person pronoun resolution. In order to maximize the ambiguity, the training data texts were narrations about same gender characters. To make accuracy scores comparable, \cite{baldwin1997cogniac} added lower precision rules, such as the most recent antecedent should be picked if no other rule found a matching noun phrase. The Accuracy scores reported were nearly equal (78.8\% on the Hobbs Algorithm, 77.9\% on CogNIAC), underlining the reason of existence of various approaches.
 
 \begin{table}[h]
+  \caption{CogNIAC core rules}
     \begin{tabular}{| l |p{8cm} |}
     \hline
     Rule & Description \\ \hline
@@ -30,7 +31,7 @@ In a second evaluation, CogNIAC was compared to the Hobbs Algorithm \citep{baldw
     5) Unique Current Sentence & If there is a single possible antecedent in the read-in portion of the current sentence, then pick i as the antecedent  \\ \hline
     6) Unique Subject/ Subject Pronoun & If the subject of the prior sentence contains a single possible antecedent i, and the anaphora is the subject of the current sentence, then pick i as the antecedent \\ \hline
     \end{tabular}
-  \caption{CogNIAC core rules}
+
      \label{table:cogniacRules}
 \end{table}
 
@@ -54,14 +55,13 @@ First of all, three new antecedent indicators and a module for identification of
 
 A modular anaphora resolution tool called GuiTAR relying on Mitkovs MARS-algorithm \citep{mitkov2002new} was developed by \cite{poesio2004general}. It was designed to be domain-unspecific and usable off-the-shelf which means that preprocessing steps such as part-of-speech tagging and named entity recognition will be added on itself. Either raw text data or XML files can be used as the input. In case of raw text data, XML files with annotated part-of-speech tags, noun phrase boundaries, pronoun categories etc. will be created. \citep{poesio2004mate} reported an F-measure of 64.2 \% for personal pronouns on raw text data of the GNOME corpus \citep{poesio2004general}. In comparison, the baseline approach (choosing the most recent antecedent) achieved an F-measure of 50.5 \% on the same data.
 
-%vllt noch ergänzen für andere Sprachen
 \section{Machine Learning-Based Techniques}
 
 Most machine learning-based techniques learn principles from annotated text corpora \citep{soon2001machine, bergsma2005automatic}, which include the correct label for each instance. In this context, a label will contain the information whether a noun phrase is the antecedent. A decisive factor of machine learning is that irrelevant information (presented through features) has a lower impact on success factors (the accuracy for instance) compared to rule-based techniques, as the algorithm automatically learns to rate those as irrelevant and vice versa. Therefore, machine learning approaches tend to have little information on linguistic principles as the algorithm should learn those autonomously. This causes the algorithm to be fewer domain specific, but increases the risk to miss relevant clues. However, top-performing machine learning approaches achieve accuracy scores comparable to best non-learning techniques \citep{soon2001machine}. \\
 Additionally, machine learning algorithms are usually more time-consuming due to the learning process.
 
 \subsection{Anaphoras in Coreference Resolution}
-\label{soon2001traininginstances} %falls später darauf verwiesen werden soll wie die Instanzen erstellt werden
+\label{soon2001traininginstances}
 
 As already stated, coreference resolution aims for linking all noun phrases referring to the same entity in the real world in a document. The most common kind of storing coreferential information is through coreference chains, in which the current element always points towards the following same entity-element. Another way of storing coreferences is to define a unique ID for each real-life entity. All occurrences in the text will be assigned to their belonging IDs.
 
@@ -86,7 +86,7 @@ With additional language-dependent features, BART was successfully transferred t
 
 
 \subsection{Pronoun Resolution in Spoken Dialogue}
-As already mentioned, machine learning approaches are less domain-specific than rule-based systems. For that reason \citep{strube2003machine} presented a corpus-based approach for pronoun resolution in spoken language. Still, several extensions and adaptions had to be done as spoken dialogue differs from written texts gravely. Firstly, the number of pleonastic pronouns in spoken dialogue is substantially increased. Secondly, a not ignorable amount of anaphoras in spoken dialogue don't have a clearly defined antecedent so that even humans can't determine them. \cite{eckert2000dialogue} called them vague anaphoras and figured out that 13.2 \% of all anaphoras in their examined corpus fall into that category.\\
+As already mentioned, machine learning approaches are less domain-specific than rule-based systems. For that reason \citep{strube2003machine} presented a corpus-based approach for pronoun resolution in spoken language. Still, several extensions and adaptions had to be done as spoken dialogue differs from written texts gravely. Firstly, the number of pleonastic pronouns in spoken dialogue is substantially increased. Secondly, a not ignorable amount of anaphoras in spoken dialogue don not have a clearly defined antecedent so that even humans can not determine them. \cite{eckert2000dialogue} called them vague anaphoras and figured out that 13.2 \% of all anaphoras in their examined corpus fall into that category.\\
 A corpus of twenty switchboard dialogues was used. In order to generate training data, a list of all potential anaphoras was created. Potential anaphoras are all non-definite noun phrases except for first and second person pronouns. Each element in the remaining list forms a pair with every preceding noun phrase that does not disagree in gender, number, or person. If the instances corefer they were labeled P, else N. For all anaphoras without explicit noun phrase antecedents, other phrases (for instance verb phrases) in the last two sentences were used to form pairs. \\
 The feature set with a total of 25 features included noun-phrase features, coreference-level features and spoken dialogue features. Noun-phrase features rely on further preprocessing such as gender, number, or the grammatical function of the anaphora or the antecedent. Coreference-level features could be described as low-level preprocessing features. Those features mainly describe the distance between the antecedent and the anaphora, for instance, in words or sentences. The features especially for spoken dialogue contain, for instance, information on how many noun phrases are located between anaphora and antecedent.
 A decision tree classifier with 20-fold cross-validation was applied. \citep{strube2003machine} reported an F-measure of 47.42 \% for the full classifier, including all pronouns and all features. 
@@ -100,6 +100,7 @@ The gender information was derived of two sources: a text corpus and the web.
 For the former, all occurrences of nouns and pronouns in lexico-syntactic patterns are counted. Five different patterns for reflexives, possessives, nominatives, predicates, and designators were used (Table \ref{table:bergsma2004GenderTable}). A reflexive masculine occurrence would be for instance “John likes himself". In this case, a counter for “John" with masculine gender and reflexive pronoun will be increased. This procedure was repeated for all other patterns and remaining genders and numbers (masculine, feminine, neutral, and plural). \cite{bergsma2005automatic} applied lots of textual data in order to offset parser errors and other noise sources. The whole data set included the AQUAINT corpus \citep{graff2002aquaint} as well as the Reuters corpus \citep{rose2002reuters}. In total, a data set of approximately six gigabytes of text was used.
 
 \begin{table}[h]
+  \caption{Gender Corpus Patterns}
     \begin{tabular}{| l | p{5cm} | p{5cm} |}
     \hline
     Gender Corpus Indicators & Contained Elements & Pattern \\ \hline
@@ -110,12 +111,12 @@ For the former, all occurrences of nouns and pronouns in lexico-syntactic patter
     4) Predicate & he, she, it, and they & \textit{pronoun} + is/are [a] + \textit{noun}  \\ \hline
     5) Designator & Mr. and Mrs. & \textit{designator} + \textit{noun}\\ \hline
     \end{tabular}
-  \caption{Gender Corpus Patterns}
+
      \label{table:bergsma2004GenderTable}
 \end{table}
 
 
-Since a text corpus, no matter how big it is, can't contain all possible words and word combinations, the web was used as a second information source. The Google API was used to count the web pages that appear if a noun, the Google wildcard operator (“*"), and the gender indicator were searched. For instance, if the gender of “John" should be determined, a Google request will be sent with all gender indicating elements of Table \ref{table:bergsma2004GenderTable} ( John * himself, John * herself, John * itself, etc.).
+Since a text corpus, no matter how big it is, can not contain all possible words and word combinations, the web was used as a second information source. The Google API was used to count the web pages that appear if a noun, the Google wildcard operator (“*"), and the gender indicator were searched. For instance, if the gender of “John" should be determined, a Google request will be sent with all gender indicating elements of Table \ref{table:bergsma2004GenderTable} ( John * himself, John * herself, John * itself, etc.).
 In the following step, the probabilities for each gender will be determined through the five corpus sources and the five web sources. The naive approach would be that the probability of the indicator to be masculine is the percentage of all cases in that the word occurs with its masculine indicator. For instance, in Table \ref{table:bergsma2004GenderFreqTable} the cumulated frequency of "Alex" occurring with “himself" is 60. In total, “Alex" was found 100 times with a reflexive pronoun. As a consequence, the probability for “Alex" to be masculine would be estimated at 60 \% from reflexive indicators.
 This approach leads to three major problems. First of all, zero-probabilities would indicate that there is no possibility for noun to belong to that gender. This might be true - some words might never be part of a certain gender. On the other hand, however, it might just be a rare event and an occurrence would be found with a larger or different text corpus. Secondly, adding a further count could change the likelihood enormous for small frequencies. This leads to the third problem: a measure is needed to determine the certainty of a likelihood. A 70 \% probability of a word to be masculine is more meaningful if 1000 cases are considered rather than 10. 
  
@@ -124,9 +125,10 @@ In order to solve those problems, \cite{bergsma2005automatic} treated the counts
 	 $\mu$ =  $\dfrac{\alpha }{\alpha + \beta}$  
 \end{center}
 
-A complete distribution is presented in Table \ref{table:bergsma2004GenderFreqTable}. Note that, unlike the naive approach, these values can only be partially compared to one another, as each of them represents a single distribution. Furthermore, the percentages don't even sum up to 100 \%.
+A complete distribution is presented in Table \ref{table:bergsma2004GenderFreqTable}. Note that, unlike the naive approach, these values can only be partially compared to one another, as each of them represents a single distribution. Furthermore, the percentages do not sum up to 100 \%.
 
 \begin{table}[h]
+      \caption{Gender Frequencies Example}
 	\centering
     \renewcommand{\arraystretch}{2.0}
     \begin{tabular}{| l | l | l | l |}
@@ -138,7 +140,7 @@ A complete distribution is presented in Table \ref{table:bergsma2004GenderFreqTa
     3) Neutral & 10 & $\dfrac{10}{100}$ = 10 \% & $\dfrac{11}{102}$ $\approx$ 10.8 \%  \\ \hline
     4) Plural & 0 &    $\dfrac{0}{100}$ =  0 \% &  $\dfrac{1}{102}$ $\approx$ 0.1 \% \\ \hline
     \end{tabular}
-      \caption{Gender Frequencies Example}
+
      \label{table:bergsma2004GenderFreqTable}
 \end{table}
 
@@ -148,7 +150,7 @@ A complete distribution is presented in Table \ref{table:bergsma2004GenderFreqTa
 	$\sigma$\textsuperscript{2} =  $\dfrac{\alpha \beta }{(\alpha + \beta)\textsuperscript{2}(\alpha + \beta + 1)}$
 \end{center}
 
-In case of little or no counts at all, the variance will be approximately 1/12. The classifier should automatically learn that distributions with that variance won't be meaningful.
+In case of little or no counts at all, the variance will be approximately 1/12. The classifier should automatically learn that distributions with that variance will not be meaningful.
 
 In order to prove the accuracy of their gender classification, \cite{bergsma2005automatic} built several SVM-Classifiers. Overall, a set of 20 features was used: Each of the five gender indicators (reflexive, possessive, etc.) has its mean and its variance as features (in this case, the standard deviation was used which is the square root of the variance). Each of the gender indicators was implemented corpus-based as well as web-based. All gender features led to an F-measure of 92 \%. Separate classifiers for either web-based or corpus-based information yielded to an F-measure of 85.4 \% for the corpus-based and 90.4 \% for the web-based approach.
 
@@ -191,6 +193,7 @@ As the manually designed resolver also detects only the preceding same-world ent
 %Zero-pronouns!
 
 \begin{table}[h]
+  \caption{Aone \& Bennett Evaluation}
 \begin{tabular}{|c|c|c|c|c|}
 	\cline{1-5}
 	Algorithm & Anaphoric Chains & Anaphoric Type& Confidence & F-measure \\ \cline{1-5}
@@ -205,7 +208,7 @@ As the manually designed resolver also detects only the preceding same-world ent
 	\multicolumn{2}{r}{} & &  MDR & 69.57 \\
 \cline{4-5}
 	\end{tabular}
-  \caption{Aone \& Bennett Evaluation}
+
      \label{table:aone1995evals}
 \end{table}
 

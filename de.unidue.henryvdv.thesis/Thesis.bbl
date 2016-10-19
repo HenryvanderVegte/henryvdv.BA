@@ -1020,35 +1020,6 @@ Poesio, M.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
-Rahman%
-\ \BBA {} Ng%
-}{%
-Rahman%
-\ \BBA {} Ng%
-}{%
-{\protect \APACyear {2009}}%
-}]{%
-rahman2009supervised}
-\APACinsertmetastar {%
-rahman2009supervised}%
-\begin{APACrefauthors}%
-Rahman, A.%
-\BCBT {}\ \BBA {} Ng, V.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{2009}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {Supervised models for coreference resolution}
-  {Supervised models for coreference resolution}.{\BBCQ}
-\newblock
-\BIn{} \APACrefbtitle {Proceedings of the 2009 Conference on Empirical Methods
-  in Natural Language Processing: Volume 2-Volume 2} {Proceedings of the 2009
-  conference on empirical methods in natural language processing: Volume
-  2-volume 2}\ (\BPGS\ 968--977).
-\PrintBackRefs{\CurrentBib}
-
-\bibitem [\protect \citeauthoryear {%
 Recasens%
 \ \protect \BOthers {.}}{%
 Recasens%
@@ -1169,6 +1140,29 @@ Rose, T.%
   news to tomorrow's language resources.}{\BBCQ}
 \newblock
 \BIn{} \APACrefbtitle {LREC} {Lrec}\ (\BVOL~2, \BPGS\ 827--832).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Shapiro%
+}{%
+Shapiro%
+}{%
+{\protect \APACyear {1992}}%
+}]{%
+shapiro1992encyclopedia}
+\APACinsertmetastar {%
+shapiro1992encyclopedia}%
+\begin{APACrefauthors}%
+Shapiro, S\BPBI C.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{1992}.
+\newblock
+\APACrefbtitle {Encyclopedia of Artificial Intelligence, Second Edition}
+  {Encyclopedia of artificial intelligence, second edition}.
+\newblock
+\APACaddressPublisher{}{New Jersey: A Wiley Interscience Publication}.
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%

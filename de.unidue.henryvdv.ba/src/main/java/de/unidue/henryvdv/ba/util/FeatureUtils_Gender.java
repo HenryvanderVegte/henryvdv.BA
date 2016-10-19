@@ -18,8 +18,42 @@ import de.unidue.henryvdv.ba.param.Parameters;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.type.Quotation;
 
+/**
+ * Class for the assignment of all gender features
+ * for a given anaphora
+ * @author Henry
+ *
+ */
 public class FeatureUtils_Gender {
+	/********************************************
+	 * 	Assigns the gender features:			*
+	 * 											*
+	 * 	-Standard Gender Match (bool)			*
+	 * 	-Standard Gender Mismatch (bool)		*
+	 * 	-Pronoun Mismatch (bool)				*
+	 * 											*
+	 *  Gender Frequency features:				*
+	 *  -Masculine Mean							*
+	 *  -Masculine Standard Deviation			*
+	 *  -Feminine Mean							*
+	 *  -Feminine Standard Deviation			*
+	 *  -Neutral Mean							*
+	 *  -Neutral Standard Deviation				*
+	 *  -Plural Mean							*
+	 *  -Plural Standard Deviation				*
+	 * 											*
+	 * 	Hard Constraint Gender Features:		*
+	 * 	-Masculine Hard Constraint				*
+	 * 	-Feminine Hard Constraint				*
+	 * 	-Neutral Hard Constraint				*
+	 * 	-Plural Hard Constraint					*
+	 * 											*
+	 ********************************************/
 	
+	
+	/**
+	 * Required information
+	 */
 	private Collection<Token> tokens;
 	private Map<String, Integer[]> corpusFrequencies;
 	private Collection<NamedEntity> namedEntities;
@@ -40,7 +74,11 @@ public class FeatureUtils_Gender {
 	public enum PronounType {
 		unknown, male, female, neutral, plural
 	}
-
+	
+	/**
+	 * Annotates all gender features to an anaphora
+	 * @param a Anaphora
+	 */
 	public void annotateFeatures(Anaphora a){
 		// Gender known and matches
 		a.getGenderFeatures().setG_StdGenderMatch(stdGenderMatch(a));
@@ -61,11 +99,15 @@ public class FeatureUtils_Gender {
 		// Mean & standard deviation of plural Beta Distribution
 		setPluralDistribution(a);
 		
+		//The hard constraint gender:
 		setHardConstraintGender(a);
 	}
-	
-	public void setHardConstraintGender(Anaphora a){
-		String ante = a.getAntecedent().getCoveredText().toLowerCase();
+	/**
+	 * Sets the most frequent gender outcome of antecedent as the predicted gender
+	 * @param anaphora Anaphora
+	 */
+	public void setHardConstraintGender(Anaphora anaphora){
+		String ante = anaphora.getAntecedent().getCoveredText().toLowerCase();
 		boolean masculine = false;
 		boolean feminine = false;
 		boolean neutral = false;
@@ -73,7 +115,7 @@ public class FeatureUtils_Gender {
 
 		Integer[] freq = {0,0,0,0};
 		
-		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
+		List<Token> covTokens = AnnotationUtils.getCoveredTokens(anaphora.getAntecedent(), tokens);
 		String person = null;
 		for(Token t : covTokens){
 			if(isPerson(t)){
@@ -90,7 +132,7 @@ public class FeatureUtils_Gender {
 			}
 
 		} else {
-			Token head = getHeadNoun(a.getAntecedent());
+			Token head = getHeadNoun(anaphora.getAntecedent());
 			if(head != null && corpusFrequencies.containsKey(head.getCoveredText().toLowerCase())){
 				freq = corpusFrequencies.get(head.getCoveredText().toLowerCase());
 			} else {
@@ -104,6 +146,10 @@ public class FeatureUtils_Gender {
 				}
 			}
 		}
+		/*
+		 * A different, but still valid style of getting the frequencies, 
+		 * therefore it is excluded:
+		 */
 		/*
 		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
 		if(corpusFrequencies.containsKey(ante)){
@@ -131,16 +177,6 @@ public class FeatureUtils_Gender {
 		}
 		*/
 		
-		/*
-		if(freq[0] > freq[1] +  freq[2] + freq[3])
-			masculine = true;
-		if(freq[1] > freq[0]+ freq[2] + freq[3])
-			feminine = true;
-		if(freq[2] > freq[0] + freq[1] +freq[3])
-			neutral = true;
-		if(freq[3] > freq[0] + freq[1] + freq[2])
-			plural = true;
-		*/
 		if(freq[0] > freq[1] && freq[0] >  freq[2] && freq[0] > freq[3])
 			masculine = true;
 		if(freq[1] > freq[0]&& freq[1] >  freq[2] && freq[1] > freq[3])
@@ -151,16 +187,22 @@ public class FeatureUtils_Gender {
 			plural = true;
 		
 		
-		a.getGenderFeatures().setG_Masculine_HardConstraint(masculine);
-		a.getGenderFeatures().setG_Feminine_HardConstraint(feminine);
-		a.getGenderFeatures().setG_Neutral_HardConstraint(neutral);
-		a.getGenderFeatures().setG_Plural_HardConstraint(plural);
+		anaphora.getGenderFeatures().setG_Masculine_HardConstraint(masculine);
+		anaphora.getGenderFeatures().setG_Feminine_HardConstraint(feminine);
+		anaphora.getGenderFeatures().setG_Neutral_HardConstraint(neutral);
+		anaphora.getGenderFeatures().setG_Plural_HardConstraint(plural);
 	}
 	
-	public boolean stdGenderMatch(Anaphora a){
+	/**
+	 * If the gender (obtained through designators) of the antecedent is known and mismatches 
+	 * with the pronoun
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public boolean stdGenderMatch(Anaphora anaphora){
 		Gender anteGender = Gender.unknown;
 		
-		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
+		List<Token> covTokens = AnnotationUtils.getCoveredTokens(anaphora.getAntecedent(), tokens);
 		String first = covTokens.get(0).getCoveredText().toLowerCase();
 		if(Arrays.asList(Parameters.maleDesignators).contains(first)){
 			anteGender = Gender.male;
@@ -170,10 +212,10 @@ public class FeatureUtils_Gender {
 		}
 
 		Gender anaphoraGender = Gender.unknown;
-		if(Arrays.asList(Parameters.malePronouns).contains(a.getCoveredText().toLowerCase())){
+		if(Arrays.asList(Parameters.malePronouns).contains(anaphora.getCoveredText().toLowerCase())){
 			anaphoraGender = Gender.male;
 		}
-		if(Arrays.asList(Parameters.femalePronouns).contains(a.getCoveredText().toLowerCase())){
+		if(Arrays.asList(Parameters.femalePronouns).contains(anaphora.getCoveredText().toLowerCase())){
 			anaphoraGender = Gender.female;
 		}
 		
@@ -183,10 +225,16 @@ public class FeatureUtils_Gender {
 		return false;
 	}
 	
-	public boolean stdGenderMismatch(Anaphora a){
+	/**
+	 * If the gender (obtained through designators) of the antecedent is known and matches 
+	 * with the pronoun
+	 * @param anaphora Anaphora
+	 * @return value
+	 */
+	public boolean stdGenderMismatch(Anaphora anaphora){
 		Gender anteGender = Gender.unknown;
 		
-		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
+		List<Token> covTokens = AnnotationUtils.getCoveredTokens(anaphora.getAntecedent(), tokens);
 		String first = covTokens.get(0).getCoveredText().toLowerCase();
 		if(Arrays.asList(Parameters.maleDesignators).contains(first)){
 			anteGender = Gender.male;
@@ -196,10 +244,10 @@ public class FeatureUtils_Gender {
 		}
 
 		Gender anaphoraGender = Gender.unknown;
-		if(Arrays.asList(Parameters.malePronouns).contains(a.getCoveredText().toLowerCase())){
+		if(Arrays.asList(Parameters.malePronouns).contains(anaphora.getCoveredText().toLowerCase())){
 			anaphoraGender = Gender.male;
 		}
-		if(Arrays.asList(Parameters.femalePronouns).contains(a.getCoveredText().toLowerCase())){
+		if(Arrays.asList(Parameters.femalePronouns).contains(anaphora.getCoveredText().toLowerCase())){
 			anaphoraGender = Gender.female;
 		}
 		
@@ -208,9 +256,14 @@ public class FeatureUtils_Gender {
 		}
 		return false;
 	}
-	
-	public boolean pronounMismatch(Anaphora a){
-		List<Token> covTokens = AnnotationUtils.getCoveredTokens(a.getAntecedent(), tokens);
+
+	/**
+	 * If both (antecedent and anaphora) are pronouns and mismatch in gender
+	 * @param anaphora
+	 * @return true if both are pronouns and mismatch, else false
+	 */
+	public boolean pronounMismatch(Anaphora anaphora){
+		List<Token> covTokens = AnnotationUtils.getCoveredTokens(anaphora.getAntecedent(), tokens);
 		PronounType antecedentType = PronounType.unknown;
 		
 		for(Token token : covTokens){
@@ -241,7 +294,7 @@ public class FeatureUtils_Gender {
 
 		
 		PronounType anaphoraType = PronounType.unknown;
-		String anaphoraText = a.getCoveredText().toLowerCase();
+		String anaphoraText = anaphora.getCoveredText().toLowerCase();
 		
 		if(Arrays.asList(Parameters.malePronouns).contains(anaphoraText)){
 			anaphoraType = PronounType.male;
@@ -257,21 +310,18 @@ public class FeatureUtils_Gender {
 		}
 				
 		if(anaphoraType != antecedentType){
-			if(!a.getHasCorrectAntecedent()){
-				//System.out.println("Pronoun Mismatch: ");
-				//System.out.println(a.getCoveredText() + " ----- " + a.getAntecedent().getCoveredText());
-			}
 			return true; 
-		}
-		if(!a.getHasCorrectAntecedent()){
-			//System.out.println("Pronoun match: ");
-			//System.out.println(a.getCoveredText() + " ----- " + a.getAntecedent().getCoveredText());
 		}
 		
 		return false;
 		
 	}
-	
+	/**
+	 * Gets the output of alpha and beta values for all genders
+	 * @param anaphora Anaphora
+	 * @param alpha The alpha gender: whether masculine, feminine, neutral, or plural
+	 * @return Array with [0] = alpha and [1] = beta
+	 */
 	private Integer[] getDistribution(Anaphora anaphora, PronounType alpha){
 		int a = 0;
 		int b1 = 0;
@@ -305,6 +355,11 @@ public class FeatureUtils_Gender {
 		String ante = anaphora.getAntecedent().getCoveredText().toLowerCase();
 		int alphaV = 1;
 		int betaV = 1;
+		
+		/*
+		 * A different, but still valid style of getting the frequencies, 
+		 * therefore it is excluded:
+		 */
 		/*
 		List<Token> covTokens = AnnotationUtils.getCoveredTokens(anaphora.getAntecedent(), tokens);		
 		if(corpusFrequencies.containsKey(ante)){
@@ -324,6 +379,8 @@ public class FeatureUtils_Gender {
 			alphaV += freq[a];
 			betaV += freq[b1] + freq[b2] + freq[b3];
 		}*/
+		
+		
 		List<Token> covTokens = AnnotationUtils.getCoveredTokens(anaphora.getAntecedent(), tokens);
 		String person = null;
 		for(Token t : covTokens){
@@ -361,39 +418,61 @@ public class FeatureUtils_Gender {
 		return new Integer[]{alphaV,betaV};
 	}
 
-	public void setMasculineDistribution(Anaphora a){
-		Integer[] val = getDistribution(a, PronounType.male);	
+	/**
+	 * Annotates the masculine mean and std. dev.
+	 * @param anaphora Anaphora
+	 */
+	public void setMasculineDistribution(Anaphora anaphora){
+		Integer[] val = getDistribution(anaphora, PronounType.male);	
 		int alpha = val[0];
 		int beta = val[1];
-		a.getGenderFeatures().setG_Masculine_Mean(getMean(alpha, beta));
-		a.getGenderFeatures().setG_Masculine_Variance(getStdDeviation(alpha, beta));
+		anaphora.getGenderFeatures().setG_Masculine_Mean(getMean(alpha, beta));
+		anaphora.getGenderFeatures().setG_Masculine_Variance(getStdDeviation(alpha, beta));
 		
 	}
 	
-	public void setFeminineDistribution(Anaphora a){
-		Integer[] val = getDistribution(a, PronounType.female);	
+	/**
+	 * Annotates the feminine mean and std. dev.
+	 * @param anaphora Anaphora
+	 */
+	public void setFeminineDistribution(Anaphora anaphora){
+		Integer[] val = getDistribution(anaphora, PronounType.female);	
 		int alpha = val[0];
 		int beta = val[1];
-		a.getGenderFeatures().setG_Feminine_Mean(getMean(alpha, beta));
-		a.getGenderFeatures().setG_Feminine_Variance(getStdDeviation(alpha, beta));
+		anaphora.getGenderFeatures().setG_Feminine_Mean(getMean(alpha, beta));
+		anaphora.getGenderFeatures().setG_Feminine_Variance(getStdDeviation(alpha, beta));
 	}
 	
-	public void setNeutralDistribution(Anaphora a){
-		Integer[] val = getDistribution(a, PronounType.neutral);	
+	/**
+	 * Annotates the neutral mean and std. dev.
+	 * @param anaphora Anaphora
+	 */
+	public void setNeutralDistribution(Anaphora anaphora){
+		Integer[] val = getDistribution(anaphora, PronounType.neutral);	
 		int alpha = val[0];
 		int beta = val[1];	
-		a.getGenderFeatures().setG_Neutral_Mean(getMean(alpha, beta));
-		a.getGenderFeatures().setG_Neutral_Variance(getStdDeviation(alpha, beta));
+		anaphora.getGenderFeatures().setG_Neutral_Mean(getMean(alpha, beta));
+		anaphora.getGenderFeatures().setG_Neutral_Variance(getStdDeviation(alpha, beta));
 	}
 	
-	public void setPluralDistribution(Anaphora a){
-		Integer[] val = getDistribution(a, PronounType.plural);	
+	/**
+	 * Annotates the plural mean and std. dev.
+	 * @param anaphora Anaphora
+	 */
+	public void setPluralDistribution(Anaphora anaphora){
+		Integer[] val = getDistribution(anaphora, PronounType.plural);	
 		int alpha = val[0];
 		int beta = val[1];		
-		a.getGenderFeatures().setG_Plural_Mean(getMean(alpha, beta));
-		a.getGenderFeatures().setG_Plural_Variance(getStdDeviation(alpha, beta));
+		anaphora.getGenderFeatures().setG_Plural_Mean(getMean(alpha, beta));
+		anaphora.getGenderFeatures().setG_Plural_Variance(getStdDeviation(alpha, beta));
 	}
 	
+	/**
+	 * Mean of alpha / beta distribution
+	 * @param alpha
+	 * @param beta
+	 * @return
+	 */
 	public float getMean(int alpha, int beta){
 		float fAlpha = alpha;
 		float fBeta = beta;
@@ -401,12 +480,24 @@ public class FeatureUtils_Gender {
 		
 	}
 	
+	/**
+	 * Standard deviation of alpha / beta distribution
+	 * @param alpha
+	 * @param beta
+	 * @return
+	 */
 	public float getStdDeviation(int alpha, int beta){
 		float var = getVariance(alpha, beta);
 		double stdDev = Math.sqrt((double)var);	
 		return (float)stdDev;
 	}
 	
+	/**
+	 * Variance of alpha / beta distribution
+	 * @param alpha
+	 * @param beta
+	 * @return
+	 */
 	public float getVariance(int alpha, int beta){
 		float fAlpha = alpha;
 		float fBeta = beta;
@@ -421,6 +512,11 @@ public class FeatureUtils_Gender {
 		return variance;
 	}
 	
+	/**
+	 * Whether the token "contains" a person
+	 * @param token
+	 * @return
+	 */
 	private boolean isPerson(Token token){
 		for(NamedEntity n : namedEntities){
 			if(n.getBegin() <= token.getBegin() && n.getEnd() >= token.getEnd() && n.getValue().equals("PERSON")){
@@ -429,7 +525,11 @@ public class FeatureUtils_Gender {
 		}
 		return false;
 	}
-	
+	/**
+	 * Returns the head noun for a given noun phrase
+	 * @param nounphrase
+	 * @return head noun, else null
+	 */
 	private Token getHeadNoun(Annotation nounphrase){
 		List<Token> covTokens = AnnotationUtils.getCoveredTokens(nounphrase, tokens);
 		

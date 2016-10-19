@@ -6,12 +6,12 @@
 \contentsline {table}{\numberline {2.4}{\ignorespaces Aone \& Bennett Evaluation\relax }}{15}{table.caption.9}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Pronoun Resolution Feature Set\relax }}{23}{table.caption.14}
+\contentsline {table}{\numberline {4.1}{\ignorespaces Pronoun Resolution Feature Set\relax }}{22}{table.caption.14}
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {5.1}{\ignorespaces Pronoun Resolution Performance Scores\relax }}{27}{table.caption.17}
-\contentsline {table}{\numberline {5.2}{\ignorespaces Types and frequencies of errors\relax }}{28}{table.caption.18}
+\contentsline {table}{\numberline {5.2}{\ignorespaces Types and frequencies of errors\relax }}{29}{table.caption.18}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {A.1}{\ignorespaces All used Part-of-Speech Tags\relax }}{iii}{table.caption.24}
-\contentsline {table}{\numberline {A.2}{\ignorespaces All used Constituency Tags\relax }}{iv}{table.caption.25}
-\contentsline {table}{\numberline {A.3}{\ignorespaces All used Dependency Tags\relax }}{v}{table.caption.26}
+\contentsline {table}{\numberline {A.1}{\ignorespaces Part-of-Speech Tagset\relax }}{iii}{table.caption.24}
+\contentsline {table}{\numberline {A.2}{\ignorespaces Constituency Tagset\relax }}{iv}{table.caption.25}
+\contentsline {table}{\numberline {A.3}{\ignorespaces Dependency Tagset\relax }}{v}{table.caption.26}

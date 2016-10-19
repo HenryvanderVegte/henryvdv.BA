@@ -26,6 +26,10 @@ public class FeatureUtils_Pronoun {
 	 * 	-Reflexive(float)				*
 	 ************************************/
 
+	/**
+	 * Annotates all pronoun features to an anaphora
+	 * @param a Anaphora
+	 */
 	public void annotateFeatures(Anaphora a){
 		// Masculine
 		a.getPronounFeatures().setP_Masculine(masculine(a));

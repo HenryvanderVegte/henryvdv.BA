@@ -33,7 +33,9 @@ import de.unidue.henryvdv.ba.util.AnnotationUtils;
 public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 
 	private JCas aJCas;
-	
+	/**
+	 * Required collections:
+	 */
 	Collection<Anaphora> anaphoras;
 	Collection<NP> nps;
 	Collection<Token> tokens;
@@ -115,22 +117,6 @@ public class NegativeTrainingInstanceAnnotator extends JCasAnnotator_ImplBase{
 			}
 			return fixedNpsBetween;
 		} 
-
-		/*
-		List<Token> covTokens = AnnotationUtils.getCoveredTokens(ant.getBegin() + 1, an.getBegin() - 1, tokens);
-		for(Token t : covTokens){
-			if(Arrays.asList(Parameters.allPronouns).contains(t.getCoveredText().toLowerCase())){
-				boolean alreadyContained = false;
-				for(NP np1 : npsBetween){
-					if(np1.getBegin() == t.getBegin() && np1.getEnd() == t.getEnd())
-						alreadyContained = true;
-				}
-				if(!alreadyContained){
-					NP np = new NP(aJCas, t.getBegin(), t.getEnd());
-					fixedNpsBetween.add(np);
-				}
-			}
-		}*/
 		return npsBetween;
 	}
 	

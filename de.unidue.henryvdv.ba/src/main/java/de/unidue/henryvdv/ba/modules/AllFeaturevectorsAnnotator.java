@@ -12,6 +12,7 @@ import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.fit.component.JCasAnnotator_ImplBase;
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
+import org.apache.uima.fit.descriptor.TypeCapability;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
@@ -19,25 +20,42 @@ import org.apache.uima.resource.ResourceInitializationException;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.NP;
 import de.unidue.henryvdv.ba.type.Anaphora;
 import de.unidue.henryvdv.ba.util.FeatureVectorUtils;
-
+/**
+ * This class is useful to save all feature vectors external, so that they don't
+ * need to be created each time again. Writes all feature vectors with 
+ * their document numbers to the directed file
+ * @author Henry
+ *
+ */
+@TypeCapability(
+        inputs = {"de.unidue.henryvdv.ba.type.Anaphora",
+                "de.unidue.henryvdv.ba.util.FeatureUtils_Antecedent",
+                "de.unidue.henryvdv.ba.util.FeatureUtils_Gender",
+                "de.unidue.henryvdv.ba.util.FeatureUtils_Pronoun",
+                "de.unidue.henryvdv.ba.util.FeatureUtils_PronounAntecedent"
+        },
+        outputs = {})
 public class AllFeaturevectorsAnnotator extends JCasAnnotator_ImplBase{
 	
-	private JCas aJCas;
 	private File exportFile;
 	private String exportFilePath;
 	private List<String> posFeatureVectors;
 	private List<String> negFeatureVectors;
 	private Collection<Anaphora> anaphoras;
-	private Collection<NP> nps;
 	private int documentCounter;
 	
 	private FeatureVectorUtils featureVectorUtil;
 	
-
+	/**
+	 * Export direction
+	 */
     public static final String PARAM_EXPORT_DIRECTORY= "ExportFileDirectory";
     @ConfigurationParameter(name = PARAM_EXPORT_DIRECTORY, mandatory = false, defaultValue = "src/main/resources/exportVectors")
     private String ExportFileDirectory;
     
+    /**
+     * Export file
+     */
     public static final String PARAM_EXPORT= "ExportFileName";
     @ConfigurationParameter(name = PARAM_EXPORT, mandatory = false, defaultValue = "current.dat")
     private String exportFileName;
@@ -69,9 +87,7 @@ public class AllFeaturevectorsAnnotator extends JCasAnnotator_ImplBase{
     
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
-		this.aJCas = aJCas;
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
-		nps = JCasUtil.select(aJCas, NP.class);
 		generateFeatureVectors();
 		documentCounter++;
 	}
@@ -82,6 +98,9 @@ public class AllFeaturevectorsAnnotator extends JCasAnnotator_ImplBase{
 		writeFeaturevectorsToFile();
 	}
 	
+	/**
+	 * Adds all feature vectors to a list and adds the document number + ";" to it
+	 */
 	private void generateFeatureVectors(){
 		for(Anaphora anaphora : anaphoras){
 			String currentFeatureVector = documentCounter + ";" + featureVectorUtil.createFeatureVector(anaphora);		
@@ -89,12 +108,13 @@ public class AllFeaturevectorsAnnotator extends JCasAnnotator_ImplBase{
 				posFeatureVectors.add(currentFeatureVector);
 			} else {
 				negFeatureVectors.add(currentFeatureVector);
-			}
-			
+			}		
 		}
 	}
 	
-	
+	/**
+	 * Writes all feature vectors + document numbers to a file
+	 */
 	private void writeFeaturevectorsToFile(){
 		BufferedWriter writer = null;
 		try {
