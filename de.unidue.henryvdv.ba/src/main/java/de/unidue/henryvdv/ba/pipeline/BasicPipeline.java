@@ -17,7 +17,6 @@ import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordParser;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordSegmenter;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordCoreferenceResolver;
-import de.unidue.henryvdv.ba.modules.Baseline_Evaluator;
 import de.unidue.henryvdv.ba.modules.FeatureAnnotator;
 import de.unidue.henryvdv.ba.modules.AnaphoraAnnotator;
 import de.unidue.henryvdv.ba.modules.InformationModule;
@@ -88,8 +87,7 @@ public class BasicPipeline {
 	        		AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
 	        		AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
 	        		AnalysisEngineFactory.createEngineDescription(FeatureAnnotator.class),      		
-	        		//AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class),       		
-	        		//AnalysisEngineFactory.createEngineDescription(Baseline_Evaluator.class),
+	        		//AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class),       	
 	                AnalysisEngineFactory.createEngineDescription(InformationModule.class)
 	        );
 		  

@@ -15,9 +15,18 @@ import org.apache.uima.util.Progress;
 
 import de.unidue.henryvdv.ba.type.DocumentInfo;
 
+/**
+ * Simple reader class, reads from text documents
+ * Annotates only the document text
+ * @author Henry
+ *
+ */
 public class SimpleTextReader
 	extends JCasCollectionReader_ImplBase{
 	
+	/**
+	 * Input directory of all files
+	 */
     public static final String PARAM_INPUT_DIRECTORY= "InputDirectory";
     @ConfigurationParameter(name = PARAM_INPUT_DIRECTORY, mandatory = true)
     private String inputDirectory;

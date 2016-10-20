@@ -21,7 +21,6 @@ import de.tudarmstadt.ukp.dkpro.core.corenlp.CoreNlpPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.corenlp.CoreNlpLemmatizer;
 import de.unidue.henryvdv.ba.modules.AllFeaturevectorsAnnotator;
 import de.unidue.henryvdv.ba.modules.AnaphoraAnnotator;
-import de.unidue.henryvdv.ba.modules.Baseline_Evaluator;
 import de.unidue.henryvdv.ba.modules.FeatureAnnotator;
 import de.unidue.henryvdv.ba.modules.InformationModule;
 import de.unidue.henryvdv.ba.modules.NegativeTrainingInstanceAnnotator;
@@ -43,18 +42,7 @@ public class TrainTestPipeline {
 
 	public static void main(String[] args)
 			  throws Exception {	
-		Integer[] allDocs = new Integer[30];
-		for(int i = 0; i < allDocs.length; i++){
-			allDocs[i] = i;
-		}
-		Integer[] trainDoc = new Integer[]{0,1,3};
-		Integer[] testDoc = new Integer[]{9,10,11,12,13};
-
-		trainPipeline(trainDoc);
-		SavedVectorWriter s = new SavedVectorWriter(trainDoc);
-		s.write();
-		testPipeline(testDoc);
-		//crossvalidation(10,30, false);
+		crossvalidation(10,30, false);
 	}
 	
 	/**
@@ -115,10 +103,16 @@ public class TrainTestPipeline {
 			System.out.println("  ]");
 			
 			System.out.println("Train: ");
-			//trainPipeline(trainOnArray);
+			trainPipeline(trainOnArray);
+			/*
+			 * If no training instances should be created new on every evaluation, 
+			 * SavedVectorWriter can be used to get them from a file (in exportVectors)
+			 * useful to reduce the required time
+			 */
+			/* 
 			SavedVectorWriter s = new SavedVectorWriter(trainOnArray);
 			s.write();
-			
+			*/
 			SVMLearn svmLearn = new SVMLearn();
 			svmLearn.learn();
 			
@@ -147,7 +141,6 @@ public class TrainTestPipeline {
 																false),
 		        AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
 		        AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
-		        AnalysisEngineFactory.createEngineDescription(Baseline_Evaluator.class),
 		        AnalysisEngineFactory.createEngineDescription(InformationModule.class)	        
 		        );
 	}
@@ -170,9 +163,13 @@ public class TrainTestPipeline {
 															false),
 	        AnalysisEngineFactory.createEngineDescription(AnaphoraAnnotator.class),
 	        AnalysisEngineFactory.createEngineDescription(NegativeTrainingInstanceAnnotator.class),
-	        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator.class),
-	        AnalysisEngineFactory.createEngineDescription(AllFeaturevectorsAnnotator.class)  
-	       // AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)    
+	        AnalysisEngineFactory.createEngineDescription(FeatureAnnotator.class),     
+	       AnalysisEngineFactory.createEngineDescription(SVMTrainingInstanceCreator.class)
+	       /*
+	        * Can write all produced feature vectors to an external file so that they can loaded from the
+	        * SavedVectorWriter :
+	        */
+	        //AnalysisEngineFactory.createEngineDescription(AllFeaturevectorsAnnotator.class)  
 	        );  
 	  }
 	

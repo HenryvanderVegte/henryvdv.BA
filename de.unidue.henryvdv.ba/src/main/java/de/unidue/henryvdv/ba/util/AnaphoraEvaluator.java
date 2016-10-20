@@ -22,15 +22,19 @@ import de.unidue.henryvdv.ba.type.MyCoreferenceChain;
 import de.unidue.henryvdv.ba.type.MyCoreferenceLink;
 import de.unidue.henryvdv.ba.type.MyNP;
 /**
- * Class that performs various 
+ * Class that performs various evaluations. Receives its 
+ * data from the SVMClassifier (For each anaphora all candidates and their values)
  * @author Henry
  *
  */
 public class AnaphoraEvaluator {
 	
-	private static final String ACCURACY_FILE_NAME = "accuracyOutput.txt";
+	/**
+	 * Output of evaluation is created here 
+	 * Can be read in excel
+	 */
+	private static final String ACCURACY_FILE_NAME = "evaluationOutput.txt";
 	
-	private static final String OUTPUT_FILE_NAME = "output.txt";
 
 	private static final String PRINT_FILE_DIRECTORY = "src/main/resources/output";
 	
@@ -50,22 +54,29 @@ public class AnaphoraEvaluator {
 	private int[] lastNSentences_sameEntity;
 	
 	private File accuracyOutputFile;
-	private File outputFile;
 	private List<String> output;
 	private Collection<Sentence> sentences;
 	
 	public AnaphoraEvaluator(){
 		super();
-		
 		accuracyOutputFile = new File(PRINT_FILE_DIRECTORY + "/" + ACCURACY_FILE_NAME);
-		outputFile = new File(PRINT_FILE_DIRECTORY + "/" + OUTPUT_FILE_NAME);
 		output = new ArrayList<String>();
 	}
 	
+	/**
+	 * Give access to all sentence annotation
+	 * @param sentences
+	 */
 	public void setSentences(Collection<Sentence> sentences){
 		this.sentences = sentences;
 	}
 	
+	/**
+	 * Previous candidates in the same corefchain are also valued as true in this approach
+	 * @param allNPs
+	 * @param corefChains
+	 * @param printChoices
+	 */
 	public void evaluateBergsma_SameEntity(Map<Anaphora, List<MyNP>> allNPs, Collection<MyCoreferenceChain> corefChains, boolean printChoices){
 		if(bergsmaSameEntity == null)
 			bergsmaSameEntity = new int[]{0,0,0,0};
@@ -186,6 +197,11 @@ public class AnaphoraEvaluator {
 		
 	}
 	
+	/**
+	 * Classic Bergsma approach. Lowers the threshold until an antecedent is accepted
+	 * @param allNPs
+	 * @param printChoices
+	 */
 	public void evaluateBergsma_LowerThreshold(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
 		if(bergsmaLowerThreshold == null)
 			bergsmaLowerThreshold = new int[]{0,0,0,0};
@@ -256,6 +272,12 @@ public class AnaphoraEvaluator {
 		bergsmaLowerThreshold[2] += FP;
 	}
 	
+	/**
+	 * Searches backwards, if no candidate is found exceeding the threshold, 
+	 * a false negative will be applied
+	 * @param allNPs
+	 * @param printChoices
+	 */
 	public void evaluateBergsma_KeepThreshold(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
 		if(bergsmaKeepThreshold == null)
 			bergsmaKeepThreshold = new int[]{0,0,0,0};
@@ -345,6 +367,11 @@ public class AnaphoraEvaluator {
 
 	}
 	
+	/**
+	 * Baseline- always detects the most recent candidate as correct antecedent
+	 * @param allNPs
+	 * @param printChoices
+	 */
 	public void evaluateBergsma_Baseline(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
 		if(bergsmaBaseline == null)
 			bergsmaBaseline = new int[]{0,0,0,0};
@@ -396,6 +423,10 @@ public class AnaphoraEvaluator {
 
 	}
 	
+	/**
+	 * Rates the candidate exceeding the threshold the highest as correct antecedent
+	 * @param allNPs
+	 */
 	public void evaluateBergsma_HighestValue(Map<Anaphora, List<MyNP>> allNPs){
 		if(bergsmaHighestValue == null)
 			bergsmaHighestValue = new int[]{0,0,0,0};
@@ -443,7 +474,12 @@ public class AnaphoraEvaluator {
 		bergsmaHighestValue[3] += FN;
 	}
 	
-	
+	/**
+	 * Assigns a value (TP,FP,TN,FN) for all antecedent candidates in the last
+	 * N sentences
+	 * @param allNPs
+	 * @param printChoices
+	 */
 	public void evaluate_last_n_sentences(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
 		if(lastNSentences == null)
 			lastNSentences = new int[]{0,0,0,0};
@@ -500,6 +536,11 @@ public class AnaphoraEvaluator {
 		lastNSentences[3] += currentFN;	
 	}
 
+	/**
+	 * Annotates the best candidate in the last n sentences as true and the remaining as false
+	 * @param allNPs
+	 * @param printChoices
+	 */
 	public void last_n_sentences_takeTheBest(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
 		if(lastNSentences_takeTheBest == null)
 			lastNSentences_takeTheBest = new int[]{0,0,0,0};
@@ -546,6 +587,11 @@ public class AnaphoraEvaluator {
 		lastNSentences_takeTheBest[3] += currentFN;	
 	}
 	
+	/**
+	 * Rates the best candidate in the last n sentences as true and the remaining as false
+	 * @param allNPs
+	 * @param printChoices
+	 */
 	public void last_n_sentences_baseline(Map<Anaphora, List<MyNP>> allNPs, boolean printChoices){
 		if(lastNSentences_baseline == null)
 			lastNSentences_baseline = new int[]{0,0,0,0};
@@ -593,6 +639,13 @@ public class AnaphoraEvaluator {
 		lastNSentences_baseline[3] += currentFN;
 	}
 	
+	/**
+	 * Assigns a value (TP,FP,TN,FN) for all antecedent candidates in the last n sentences, 
+	 * candidates in the same coreference chain are also rated as the correct antecedent
+	 * @param allNPs
+	 * @param corefChains
+	 * @param printChoices
+	 */
 	public void evaluate_last_n_sentences_sameEntity(Map<Anaphora, List<MyNP>> allNPs,Collection<MyCoreferenceChain> corefChains, boolean printChoices){
 		if(lastNSentences_sameEntity == null)
 			lastNSentences_sameEntity = new int[]{0,0,0,0};
@@ -677,7 +730,9 @@ public class AnaphoraEvaluator {
 		lastNSentences_sameEntity[3] += currentFN;
 	}	
 
-	
+	/**
+	 * Prints out all results in the accuracy file
+	 */
 	public void printResults(){		
 		boolean isEmptyFile = false;
 		try {
@@ -716,6 +771,9 @@ public class AnaphoraEvaluator {
 		}
 	}
 	
+	/**
+	 * Returns a string with all used evalutation measures
+	 */
 	private void createOutput(){
 		String values = "";
 		if(bergsmaLowerThreshold != null){
@@ -748,6 +806,9 @@ public class AnaphoraEvaluator {
 		output.add(values);	
 	}
 	
+	/**
+	 * Creates a caption if its the first line in the accuracy output
+	 */
 	private void createCaptions(){
 		String caption = "";
 		String semi = ";;;;;;;;;";
@@ -793,6 +854,11 @@ public class AnaphoraEvaluator {
 		output.add(varNames);
 	}
 	
+	/**
+	 * Returns the string output for a given distribution
+	 * @param input [0] = TP, [1] = TN, ...
+	 * @return
+	 */
 	private String returnAllValues(int[] input){
 		String returnString = "";
 		returnString += input[0] + ";" + input[1] + ";"
@@ -800,6 +866,11 @@ public class AnaphoraEvaluator {
 		return returnString + ";;;;;";
 	}
 	
+	/**
+	 * Calculates the Fmeasure 
+	 * @param input Distribution, [0] = TP, [1] = TN, ...
+	 * @return
+	 */
 	private float getFmeasure(int[] input){
 		float precision = getPrecision(input);
 		float recall = getRecall(input);
@@ -810,6 +881,12 @@ public class AnaphoraEvaluator {
 		return fMeasure;	
 	}
 	
+
+	/**
+	 * Calculates the precision
+	 * @param input Distribution, [0] = TP, [1] = TN, ...
+	 * @return
+	 */
 	private float getPrecision(int[] input){
 		int totalTPFN = input[0] + input[3];	
 		float precision = 0f;
@@ -819,6 +896,11 @@ public class AnaphoraEvaluator {
 		return precision;
 	}
 	
+	/**
+	 * Calculates the recall
+	 * @param input Distribution, [0] = TP, [1] = TN, ...
+	 * @return
+	 */
 	private float getRecall(int[] input){
 		int totalTPFP = input[0] + input[2];	
 		float recall = 0f;
@@ -828,6 +910,11 @@ public class AnaphoraEvaluator {
 		return recall;
 	}
 
+	/**
+	 * Calculates the accuracy
+	 * @param input Distribution, [0] = TP, [1] = TN, ...
+	 * @return
+	 */
 	private float getAccuracy(int[] input){
 		int correct = input[0] + input[1];
 		int total = input[0] + input[1] + input[2] + input[3];

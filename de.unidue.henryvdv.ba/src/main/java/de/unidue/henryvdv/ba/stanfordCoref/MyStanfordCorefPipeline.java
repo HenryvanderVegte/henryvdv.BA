@@ -15,6 +15,12 @@ import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
 import de.unidue.henryvdv.ba.modules.AnaphoraAnnotator;
 import de.unidue.henryvdv.ba.reader.WikiCoref_Reader;
 
+/**
+ * Additional pipeline to test in how many cases the stanford coref-Annotator 
+ * also finds the previous instance of an anaphora
+ * @author Henry
+ *
+ */
 public class MyStanfordCorefPipeline {
 
 	public static void main(String[] args)

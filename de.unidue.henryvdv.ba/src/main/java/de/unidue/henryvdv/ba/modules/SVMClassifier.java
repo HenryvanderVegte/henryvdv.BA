@@ -14,6 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
+import org.apache.uima.fit.descriptor.TypeCapability;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
@@ -45,6 +46,16 @@ import de.unidue.henryvdv.ba.util.FeatureUtils_Pronoun;
  * @author Henry
  *
  */
+@TypeCapability(
+        inputs = {"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
+                 "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence",
+                 "de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency",
+                 "de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity",
+                 "de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent",
+                 "de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS",
+                 "de.unidue.henryvdv.ba.type.Anaphora"
+        },
+        outputs = {})
 public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 
 	/**
@@ -83,8 +94,14 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	private FeatureUtils_Gender gFUtil;
 	private FeatureVectorUtils featureVectorUtil;
 	
+	/**
+	 * Gender corpus frequencies
+	 */
 	private Map<String, Integer[]> corpusFrequencies = new HashMap<String, Integer[]>();
 	
+	/**
+	 * Used files
+	 */
 	private File modelFile;
 	private File testFile;
 	private File outputFile;
@@ -107,6 +124,10 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		readCorpus();
 	}
 	
+	/**
+	 * Initializes all used files
+	 * @throws ResourceInitializationException
+	 */
 	private void prepareFiles() throws ResourceInitializationException{
 		String modelFilePath = MODEL_DIRECTORY + "/" + MODEL_NAME;
 		modelFile = new File(modelFilePath);
@@ -165,7 +186,6 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 
 		allNPs = JCasUtil.select(aJCas, NP.class);
 		setFixedNPs(); 
-		
 		List<Anaphora> anaphorasList = new ArrayList<Anaphora>();
 		for(Anaphora a : anaphoras){
 			if(a.getHasCorrectAntecedent()){
@@ -174,6 +194,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		}
 		Map<Anaphora, List<MyNP>> allAnaphors = getAllAnaphors(anaphorasList);
 		
+		//Evaluates all kind of measures:
 		eval.evaluateBergsma_SameEntity(allAnaphors, corefChains, false);
 		eval.evaluateBergsma_KeepThreshold(allAnaphors, false);
 		eval.evaluateBergsma_LowerThreshold(allAnaphors, false);
@@ -216,11 +237,16 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		}
 		return frequencies;
 	}
-
 	
-	private float getOutputValue(Anaphora a, NP n){
-		Anaphora possibleA = new Anaphora(aJCas, a.getBegin(), a.getEnd());
-		Antecedent ant = new Antecedent(aJCas, n.getBegin(), n.getEnd());
+	/**
+	 * Returns the test result of an anaphora and its antecedent candidate
+	 * @param anaphora Anaphora
+	 * @param np Antecedent candidate
+	 * @return
+	 */
+	private float getOutputValue(Anaphora anaphora, NP np){
+		Anaphora possibleA = new Anaphora(aJCas, anaphora.getBegin(), anaphora.getEnd());
+		Antecedent ant = new Antecedent(aJCas, np.getBegin(), np.getEnd());
 		possibleA.setAntecedent(ant);
 		featureVector = createFeatureVector(possibleA);
 		writeFeatureVectorToFile();
@@ -242,19 +268,28 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		return value;
 	}
 	
-	private String createFeatureVector(Anaphora a){		
-		a.setAntecedentFeatures(new AntecedentFeatures(aJCas));
-		a.setPronounAntecedentFeatures(new PronounAntecedentFeatures(aJCas));
-		a.setPronounFeatures(new PronounFeatures(aJCas));
-		a.setGenderFeatures(new GenderFeatures(aJCas));
+	/**
+	 * Annotates all feature values for a given Anaphora and then returns the feature vector
+	 * @param anaphora
+	 * @return
+	 */
+	private String createFeatureVector(Anaphora anaphora){		
+		anaphora.setAntecedentFeatures(new AntecedentFeatures(aJCas));
+		anaphora.setPronounAntecedentFeatures(new PronounAntecedentFeatures(aJCas));
+		anaphora.setPronounFeatures(new PronounFeatures(aJCas));
+		anaphora.setGenderFeatures(new GenderFeatures(aJCas));
 		
-		paFUtil.annotateFeatures(a);
-		aFUtil.annotateFeatures(a);
-		pFUtil.annotateFeatures(a);
-		gFUtil.annotateFeatures(a);
-		return featureVectorUtil.createFeatureVector(a);
+		paFUtil.annotateFeatures(anaphora);
+		aFUtil.annotateFeatures(anaphora);
+		pFUtil.annotateFeatures(anaphora);
+		gFUtil.annotateFeatures(anaphora);
+		return featureVectorUtil.createFeatureVector(anaphora);
 	}
 	
+	/**
+	 * If Parameter removeCoveringNPs in Parameters is true, 
+	 * all np covering other np will be removed
+	 */
 	private void setFixedNPs(){		
 		fixedNPs = new ArrayList<NP>();
 		if(Parameters.removeCoveringNPs){			
@@ -276,7 +311,7 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 				fixedNPs.add(np1);
 			}
         }
-
+		//Gold antecedents are added as candidates
 		for(Anaphora a : anaphoras){
 			if(!a.getHasCorrectAntecedent())
 				continue;
@@ -295,7 +330,10 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		}
 	}
 	
-	
+	/**
+	 * Writes the observed feature vector to train file 
+	 * (All feature vectors are observed one by one)
+	 */
 	private void writeFeatureVectorToFile(){
 		BufferedWriter writer = null;
 		try {
@@ -316,7 +354,11 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		   }
 		}		
 	}
-
+	
+	/**
+	 * Runs the test and writes the output in the svm/dat/output.txt
+	 * @throws IOException
+	 */
 	public void classify() throws IOException  {			
 		try {
 			runCommand(testCommand);
@@ -326,6 +368,13 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		}
 	}
 	
+	/**
+	 * Creates the command for executing the test
+	 * @param testFile
+	 * @param modelFile
+	 * @param outputFile
+	 * @return
+	 */
 	private List<String> buildTestCommand(File testFile, File modelFile, File outputFile) {
 		List<String> result = new ArrayList<String>();
 		result.add(BINARIES_BASE_LOCATION + "/svm_classify.exe");		
@@ -338,6 +387,11 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 		return result;
 	}
 
+	/**
+	 * Runs the command for executing the test
+	 * @param command
+	 * @throws Exception
+	 */
 	private void runCommand(List<String> command) throws Exception {
 		ProcessBuilder b = new ProcessBuilder();
 
@@ -346,7 +400,9 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 
 	}
 
-	//reads all documents for the gender corpus frequencies
+	/**
+	 * Reads all documents for the gender corpus frequencies
+	 */
 	private void readCorpus(){
 		File folder = new File(Parameters.genderCorpusDirectory);
 	    File[] files = folder.listFiles();
@@ -361,7 +417,11 @@ public class SVMClassifier extends JCasAnnotator_ImplBase implements Constants {
 	    }
 	}
 	
-	// reads all lines in a document and puts the frequencies in the corpusFrequencies-Map
+
+	/**
+	 * reads all lines in a document and puts the frequencies in the corpusFrequencies-Map
+	 * @param inputLines the corpus lines
+	 */
 	private void readCorpusLines(List<String> inputLines){
 		for(String s : inputLines){
 			String word = "";

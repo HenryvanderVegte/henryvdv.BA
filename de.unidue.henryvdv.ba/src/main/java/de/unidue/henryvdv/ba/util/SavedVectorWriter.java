@@ -9,14 +9,34 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+/**
+ * Class that reads all Vectors from a .dat-file
+ * and writes the required ones to the train-file
+ * (so that the same feature vectors don't need to be created
+ * every time the pipeline is executed)
+ * @author Henry
+ *
+ */
 public class SavedVectorWriter {
 
+	/**
+	 * Folder of all vectors
+	 */
 	private static final String INPUT_FOLDER= "src/main/resources/exportVectors";
 	
+	/**
+	 * File storing all vectors
+	 */
 	private static final String INPUT_FILE = "current.dat";
 	
+	/**
+	 * train.dat folder
+	 */
 	private static final String OUTPUT_FOLDER= "src/main/resources/svm/dat";
 	
+	/**
+	 * train.dat file
+	 */
 	private static final String OUTPUT_FILE = "train.dat";
 	
 	private List<String> inputLines;
@@ -25,6 +45,10 @@ public class SavedVectorWriter {
 	
 	private File exportFile;
 	
+	/**
+	 * Constructor for the Writer
+	 * @param usedDocs Integer[] with all document numbers the system should be trained on
+	 */
 	public SavedVectorWriter(Integer[] usedDocs){
 		File inputFile = new File(INPUT_FOLDER + "/" + INPUT_FILE);
 		exportFile = new File(OUTPUT_FOLDER + "/" + OUTPUT_FILE);
@@ -43,6 +67,11 @@ public class SavedVectorWriter {
 		
 	}
     
+	/**
+	 * Stores all vectors (positive as well as negative) of a given document
+	 * to a list 
+	 * @param documentNr 
+	 */
 	public void saveUsedVectors(int documentNr){
 		for(int i = 1; i < inputLines.size(); i++){
 			if(inputLines.get(i).length() == 0)
@@ -62,6 +91,12 @@ public class SavedVectorWriter {
 		}
 	}
 	
+	/**
+	 * Returns the document number of a feature vector
+	 * (since the stored vectors are sorted by their document number)
+	 * @param line
+	 * @return
+	 */
 	private int getDocNumber(String line){
 		int breakAt = 0;
 		for(int i = 0; i < line.length(); i++){
@@ -76,6 +111,9 @@ public class SavedVectorWriter {
 		return returnValue;
 	}
 	
+	/**
+	 * Writes all train vectors to train file
+	 */
 	public void write(){
 		if(exportFile.isFile()){
 			exportFile.delete();
@@ -121,7 +159,10 @@ public class SavedVectorWriter {
 		}
 		
 	}
-	
+	/**
+	 * Useful to see how many percent of all used vectors achieve the best result
+	 * @param percent percentage of used vectors
+	 */
 	public void write(int percent){
 		if(exportFile.isFile()){
 			exportFile.delete();

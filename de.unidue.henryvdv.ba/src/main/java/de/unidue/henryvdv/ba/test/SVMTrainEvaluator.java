@@ -9,23 +9,37 @@ import org.apache.commons.io.FileUtils;
 
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
 
+/**
+ * Prints out the mean values of all feature vectors received from train file. Useful to have a closer look on the data
+ * (maybe for error detection)
+ * @author Henry
+ *
+ */
 public class SVMTrainEvaluator {
 
+	/**
+	 * SVM Training file
+	 */
 	private static final String TRAIN_NAME = "train.dat";
-
+	
+	/**
+	 * SVM Training file direction
+	 */
 	private static final String TRAIN_DIRECTORY = "src/main/resources/svm/dat";
 	
+	/**
+	 * Training file lines
+	 */
 	private List<String> train;
 	
 	public static void main(String[] args){
-
 		SVMTrainEvaluator s = new SVMTrainEvaluator();
 		s.evaluate();
-		
-		
 	}
 	
-	
+	/**
+	 * Evaluate and print the results:
+	 */
 	public void evaluate(){
 		File trainFile = new File(TRAIN_DIRECTORY + "/" + TRAIN_NAME);
 		

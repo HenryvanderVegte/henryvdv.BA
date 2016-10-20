@@ -98,12 +98,12 @@ public class FeatureVectorUtils {
 		 */
 		
 		//My own features (not added because of no or negligible impact)
-		
+		/*
 		addP_Reflexive();
 		addP_NpDistance();
 		addPA_IntermediatePronoun();
 		addA_CoveredTokens();
-		
+		*/
 		return currentFeatureVector;
 	}
 	

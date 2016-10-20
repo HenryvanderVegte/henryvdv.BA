@@ -493,7 +493,7 @@ public class FeatureUtils_Antecedent {
 	 */
 	private boolean isConjunction(Token token){
 		if(token.getPos().getPosValue().length() >= 2 && 
-				token.getPos().getPosValue().substring(0, 2).equals("CC")){ 	//TODO: Maybe Check for subordinating conjunctions	
+				token.getPos().getPosValue().substring(0, 2).equals("CC")){
 			return true;
 		}
 		return false;

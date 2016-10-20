@@ -31,6 +31,7 @@ import de.unidue.henryvdv.ba.util.AnnotationUtils;
 import edu.stanford.nlp.trees.Tree;
 /**
  * A helpful module to detect errors or to have a look on the data.
+ * All printed out information should be executed here
  * @author Henry
  *
  */
@@ -91,6 +92,10 @@ public class InformationModule
 		
 	}
 	
+	/**
+	 * Prints infos on sentences, tokens, named entities, 
+	 * constituents, and dependencies
+	 */
 	public void printAllInfos(){
 		System.out.println("Sentences: ");
 		for(Sentence s : sentences){
@@ -100,11 +105,6 @@ public class InformationModule
 		System.out.println("Tokens: ");
 		for(Token t : tokens){
 			System.out.println(t.getCoveredText() + " -- " + t.getPos().getPosValue());
-		}
-		System.out.println(" ");
-		System.out.println("Lemmata: ");
-		for(Lemma l : lemmata){
-			System.out.println(l.getCoveredText() + " -- " + l.getValue());
 		}
 		System.out.println(" ");
 		System.out.println("Named Entities: ");
@@ -128,12 +128,13 @@ public class InformationModule
 	@Override
 	public void collectionProcessComplete(){
 		//System.out.println(i);
-		
+		/* Code for printing out the sentence distance
 		for(Integer s : sentenceDistanceFD.getKeys()){
 			System.out.println("Sentence-distance: " + s);
 			System.out.println("Count: " + ((float)sentenceDistanceFD.getCount(s)/(float)sentenceDistanceFD.getN()*100f) + " %");
 		}
-		/*
+	*/
+		/* Code for printing out the token sizes
 		int[] sortedList = new int[antecedentTokenSizeFD.getKeys().size()];
 		int j = 0;
 		for(Integer s : antecedentTokenSizeFD.getKeys()){
@@ -154,6 +155,9 @@ public class InformationModule
 		*/
 	}
 	
+	/**
+	 * Adds a distribution for each pronoun
+	 */
 	private void collectPronounDistribution(){
 		for(Token t : tokens){
 			if(Arrays.asList(Parameters.resolvedPronouns).contains(t.getCoveredText().toLowerCase())){
@@ -162,6 +166,10 @@ public class InformationModule
 		}
 	}
 	
+	/**
+	 * Creates a distribution for the amount of covered tokens
+	 * on each pronoun
+	 */
 	private void collectAntecedentTokenSize(){
 		for(Anaphora anaphora : anaphoras){
 			if(anaphora.getHasCorrectAntecedent()){
@@ -171,6 +179,9 @@ public class InformationModule
 		}
 	}
 	
+	/**
+	 * Creates a distribution to have a look on the sentence distances
+	 */
 	private void collectSentenceDistanceInfo(){
 		for(Anaphora anaphora : anaphoras){
 			int nr1 = getSentenceNr(anaphora.getBegin());
@@ -186,6 +197,9 @@ public class InformationModule
 		}
 	}
 	
+	/**
+	 * Prints out all own created coreference chains
+	 */
 	private void printyMyCorefChains(){
 		Collection<MyCoreferenceChain> corefChains = JCasUtil.select(aJCas, MyCoreferenceChain.class);
 		for(MyCoreferenceChain c : corefChains){
@@ -205,6 +219,9 @@ public class InformationModule
 		}
 	}
 	
+	/**
+	 * Prints out all noun phrases
+	 */
 	private void printNounPhrases(){
 		Collection<Constituent> constituents = JCasUtil.select(aJCas, Constituent.class);
 		if(constituents == null){
@@ -218,6 +235,9 @@ public class InformationModule
 		}
 	}
 	
+	/**
+	 * Prints all infos on the current document
+	 */
 	private void printInfos(){
 		DocumentInfo docInfo = JCasUtil.selectSingle(aJCas, DocumentInfo.class);
 		System.out.println("Document name: " + docInfo.getDocumentName());
@@ -242,6 +262,9 @@ public class InformationModule
 		*/
 	}
 	
+	/**
+	 * Prints out all dependencies
+	 */
 	private void printDependencies(){
 		Collection<Dependency> dependencies = JCasUtil.select(aJCas, Dependency.class);
 		System.out.println("----------------DEPENDENCIES-------------");
@@ -254,6 +277,9 @@ public class InformationModule
 		System.out.println("----------------DEPENDENCIES-------------");
 	}
 	
+	/**
+	 * Prints out all coreference chains (if annotated)
+	 */
 	private void printCorefChains(){
 		Collection<CoreferenceChain> corefChains = JCasUtil.select(aJCas, CoreferenceChain.class);
 		for(CoreferenceChain cChain : corefChains){
@@ -267,10 +293,17 @@ public class InformationModule
 		}
 	}
 	
+	/**
+	 * Prints the whole document text
+	 */
 	private void printDocText(){
 		System.out.println("DocText:" + aJCas.getDocumentText());
 	}	
 	
+	/**
+	 * Prints out the most frequent POS tags
+	 * @param n get the n most frequent samples
+	 */
 	private void explorePOS(int n){
 		Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
 		FrequencyDistribution<String> fd = new FrequencyDistribution<String>();
@@ -282,6 +315,9 @@ public class InformationModule
 		}
 	}
 	
+	/**
+	 * Prints out all tokens
+	 */
 	private void printTokens(){
 		Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
 		for(Token t : tokens){
@@ -292,6 +328,9 @@ public class InformationModule
 		}
 	}
 	
+	/**
+	 * Prints out all sentences
+	 */
 	private void printSentences(){
 		Collection<Sentence> sentences = JCasUtil.select(aJCas, Sentence.class);
 		int i = 1;
@@ -300,6 +339,11 @@ public class InformationModule
 		}
 	}
 	
+	/**
+	 * Returns the sentence nr of a point
+	 * @param begin the point in the sentence
+	 * @return
+	 */
 	private int getSentenceNr(int begin){
 		int i = 1;
 		for(Sentence s : sentences){

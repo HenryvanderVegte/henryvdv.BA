@@ -23,6 +23,7 @@ import de.unidue.henryvdv.ba.type.MyCoreferenceLink;
 import de.unidue.henryvdv.ba.util.AnnotationUtils;
 /**
  * Finds all requested pronominal anaphoras through coreference chains
+ * and annotates them
  * @author Henry
  *
  */

@@ -160,6 +160,9 @@ extends JCasCollectionReader_ImplBase{
         
 	}
 
+	/**
+	 * Get all information on sentences
+	 */
 	private void processSentences(){
 		//starts with 2 to skip DOCTYPE lines
 		currentLine = 2;
@@ -197,6 +200,9 @@ extends JCasCollectionReader_ImplBase{
 		
 	}
 	
+	/**
+	 * Get all information on words
+	 */
 	private void processWords(){
 		//skip DOCTYPE lines
 		currentLine = 2;
@@ -214,7 +220,10 @@ extends JCasCollectionReader_ImplBase{
 			currentLine++;
 		}
 	}
-
+	
+	/**
+	 * Get all information on coreferences
+	 */
 	private void processCoreferences(){
 		HashMap<String, MyCoreferenceChain>  corefChains = new HashMap<String, MyCoreferenceChain>();
 		currentLine = 2;
@@ -276,6 +285,12 @@ extends JCasCollectionReader_ImplBase{
 		}
 	}
 	
+	/**
+	 * Returns the string in a specific tag
+	 * @param docLine Observed line
+	 * @param typeName name of the tag
+	 * @return
+	 */
 	private String getStringAtTag(String docLine, String typeName){
 		String r = "";
 		typeName += "=\"";
@@ -293,7 +308,11 @@ extends JCasCollectionReader_ImplBase{
 		return r;
 	}
 	
-	
+	/**
+	 * Returns the span of a word in a specific line
+	 * @param docLine observed line
+	 * @return
+	 */
 	private Integer[] getWordSpan(String docLine){
 		int startToken = 0;
 		int stopToken = 0;

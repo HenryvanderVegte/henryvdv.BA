@@ -716,9 +716,6 @@ Manning, C\BPBI D.%
 \BIn{} \APACrefbtitle {Association for Computational Linguistics (ACL) System
   Demonstrations} {Association for computational linguistics (acl) system
   demonstrations}\ (\BPGS\ 55--60).
-\newblock
-\begin{APACrefURL} \url{http://www.aclweb.org/anthology/P/P14/P14-5010}
-  \end{APACrefURL}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%

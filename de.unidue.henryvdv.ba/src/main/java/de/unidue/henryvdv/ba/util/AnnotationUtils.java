@@ -11,8 +11,19 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
 import de.unidue.henryvdv.ba.type.MyNP;
 
+/**
+ * Class that stores several methods that are used by all kind of different annotators or similar
+ * @author Henry
+ *
+ */
 public class AnnotationUtils {
 
+	/**
+	 * Returns the "position" of a token in a document
+	 * @param anno
+	 * @param tokens all Tokens
+	 * @return
+	 */
 	public static int getTokenNr(Annotation anno, Collection<Token> tokens){
 		int i = 1;
 		for(Token t : tokens){
@@ -24,6 +35,12 @@ public class AnnotationUtils {
 		return i;
 	}
 	
+	/**
+	 * Returns token at nr
+	 * @param nr
+	 * @param tokens all Tokens
+	 * @return
+	 */
 	public static Token getToken(int nr, Collection<Token> tokens){
 		int i = 1;
 		for(Token t : tokens){
@@ -35,6 +52,12 @@ public class AnnotationUtils {
 		return null;
 	}
 	
+	/**
+	 * Returns the first Token covered by an annotation
+	 * @param anno
+	 * @param tokens
+	 * @return
+	 */
 	public static Token getCoveredToken(Annotation anno, Collection<Token> tokens){
 		for(Token t : tokens){
 			if(t.getBegin() >= anno.getBegin()){
@@ -44,6 +67,12 @@ public class AnnotationUtils {
 		return null;
 	}
 	
+	/**
+	 * Whether a list of tokens contains a specific word
+	 * @param word
+	 * @param tokens
+	 * @return
+	 */
 	public static boolean containsWord(String word, List<Token> tokens){
 		for(int i = 0; i < tokens.size(); i++){
 			if(tokens.get(i).getCoveredText().toLowerCase().equals(word.toLowerCase())){
@@ -53,6 +82,13 @@ public class AnnotationUtils {
 		return false;
 	}
 	
+	/**
+	 * Returns all tokens in a specific span
+	 * @param begin 
+	 * @param end
+	 * @param tokens
+	 * @return
+	 */
 	public static List<Token> getCoveredTokens(int begin, int end, Collection<Token> tokens){
 		List<Token> coveredTokens = new ArrayList<Token>();
 		for(Token t : tokens){
@@ -63,6 +99,12 @@ public class AnnotationUtils {
 		return coveredTokens;
 	}
 	
+	/**
+	 * Returns all tokens covered by an annotation
+	 * @param anno
+	 * @param tokens
+	 * @return
+	 */
 	public static List<Token> getCoveredTokens(Annotation anno, Collection<Token> tokens){
 		List<Token> coveredTokens = new ArrayList<Token>();
 		for(Token t : tokens){
@@ -73,7 +115,12 @@ public class AnnotationUtils {
 		return coveredTokens;
 	}
 	
-	
+	/**
+	 * Returns the number of the sentence at a specific index
+	 * @param begin index
+	 * @param sentences all sentences
+	 * @return
+	 */
 	public static int getSentenceNr(int begin, Collection<Sentence> sentences){
 		int sentenceNr = 1;
 		for(Sentence s : sentences){
@@ -85,6 +132,12 @@ public class AnnotationUtils {
 		return sentenceNr;
 	}
 	
+	/**
+	 * Returns the sentence at a specific index
+	 * @param begin index
+	 * @param sentences all sentences
+	 * @return
+	 */
 	public static Sentence getSentence(int begin, Collection<Sentence> sentences){
 		for(Sentence s : sentences){
 			if(s.getEnd() > begin){
@@ -94,6 +147,12 @@ public class AnnotationUtils {
 		return null;
 	}
 	
+	/**
+	 * Returns the parent of a specific token
+	 * @param token
+	 * @param dependencies all dependencies
+	 * @return
+	 */
 	public static Token getParent(Token token, Collection<Dependency> dependencies){
 		for(Dependency d : dependencies){
 			if(d.getDependent() == token){
@@ -103,6 +162,11 @@ public class AnnotationUtils {
 		return null;
 	}
 
+	/**
+	 * Sorts a list of MyNP - noun phrases according to their begin
+	 * @param unsortedList
+	 * @return sorted List
+	 */
 	public static List<MyNP> sortMyNPList(List<MyNP> unsortedList){
 		List<MyNP> returnList = new ArrayList<MyNP>();
 		List<MyNP> helpList = new ArrayList<MyNP>();
