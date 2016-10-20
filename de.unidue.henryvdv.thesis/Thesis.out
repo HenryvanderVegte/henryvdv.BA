@@ -10,8 +10,8 @@
 \BOOKMARK [1][-]{section.2.2}{Machine Learning-Based Approaches}{chapter.2}% 10
 \BOOKMARK [2][-]{subsection.2.2.1}{Machine Learning Based Coreference Resolution}{section.2.2}% 11
 \BOOKMARK [2][-]{subsection.2.2.2}{Pronoun Resolution in Spoken Dialogue}{section.2.2}% 12
-\BOOKMARK [2][-]{subsection.2.2.3}{Corpus- and Web-Mined Gender Information}{section.2.2}% 13
-\BOOKMARK [2][-]{subsection.2.2.4}{A Machine Learning-Based Resolver \(MLR\)}{section.2.2}% 14
+\BOOKMARK [2][-]{subsection.2.2.3}{Corpus and Web Mined Gender Information}{section.2.2}% 13
+\BOOKMARK [2][-]{subsection.2.2.4}{Anaphora Resolution with Various Parameters}{section.2.2}% 14
 \BOOKMARK [0][-]{chapter.3}{Data}{}% 15
 \BOOKMARK [1][-]{section.3.1}{WikiCoref}{chapter.3}% 16
 \BOOKMARK [1][-]{section.3.2}{Gender Corpus}{chapter.3}% 17

@@ -61,21 +61,6 @@ public class InformationModule
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		this.aJCas = aJCas;
-		
-
-		/*
-		for(Token t : tokens){
-			if(Arrays.asList(Parameters.resolvedPronouns).contains(t.getCoveredText().toLowerCase())){
-				pronounFD.addSample(t.getCoveredText().toLowerCase(), 1);
-			}
-		}
-
-		Collection<PennTree> pTree = JCasUtil.select(aJCas, PennTree.class); 
-		
-		for(PennTree p : pTree){
-			System.out.println(p.getPennTree());
-		}
-				*/
 		anaphoras = JCasUtil.select(aJCas, Anaphora.class);
 		sentences = JCasUtil.select(aJCas, Sentence.class);
 		tokens = JCasUtil.select(aJCas, Token.class);
@@ -83,86 +68,14 @@ public class InformationModule
 		namedEntities = JCasUtil.select(aJCas, NamedEntity.class);
 		constituents = JCasUtil.select(aJCas, Constituent.class);
 		dependencies = JCasUtil.select(aJCas, Dependency.class);
-		
-		
-		Float[] posVal = new Float[]{0f,0f,0f,0f};
-		Integer[] posTotal = new Integer[]{0,0,0,0};
-		Float[] negVal = new Float[]{0f,0f,0f,0f};
-		Integer[] negTotal = new Integer[]{0,0,0,0};
+
+		int i = 0;
 		for(Anaphora a : anaphoras){
-			if(a.getHasCorrectAntecedent()){
-				if(a.getPronounFeatures().getP_Masculine()){
-					System.out.println("Ante: " + a.getAntecedent().getCoveredText());
-					System.out.println(a.getGenderFeatures().getG_Masculine_Mean());
-					System.out.println(a.getGenderFeatures().getG_Feminine_Mean());
-					System.out.println(a.getGenderFeatures().getG_Neutral_Mean());
-					System.out.println(a.getGenderFeatures().getG_Plural_Mean());
-					posVal[0] += a.getGenderFeatures().getG_Masculine_Mean();
-					posTotal[0] += 1;
-				}
-				if(a.getPronounFeatures().getP_Feminine()){
-
-					posVal[1] += a.getGenderFeatures().getG_Feminine_Mean();
-					posTotal[1] += 1;
-				}
-				if(a.getPronounFeatures().getP_Neutral()){
-
-					posVal[2] += a.getGenderFeatures().getG_Neutral_Mean();
-					posTotal[2] += 1;
-				}
-				if(a.getPronounFeatures().getP_Plural()){
-
-					posVal[3] += a.getGenderFeatures().getG_Plural_Mean();
-					posTotal[3] += 1;
-				}
-			}
-			if(!a.getHasCorrectAntecedent()){
-				if(a.getPronounFeatures().getP_Masculine()){
-					negVal[0] += a.getGenderFeatures().getG_Masculine_Mean();
-					negTotal[0] += 1;
-				}
-				if(a.getPronounFeatures().getP_Feminine()){
-
-					negVal[1] += a.getGenderFeatures().getG_Feminine_Mean();
-					negTotal[1] += 1;
-				}
-				if(a.getPronounFeatures().getP_Neutral()){
-
-					negVal[2] += a.getGenderFeatures().getG_Neutral_Mean();
-					negTotal[2] += 1;
-				}
-				if(a.getPronounFeatures().getP_Plural()){
-					negVal[3] += a.getGenderFeatures().getG_Plural_Mean();
-					negTotal[3] += 1;
-				}
-			}
-
+			if(a.getAntecedent().getCoveredText().toLowerCase().equals("aberfoyle"))
+				i++;
 		}
-		System.out.println("********************************");
-		System.out.println("POS");
-		System.out.println(posVal[0] + " " +  posTotal[0]);
-		System.out.println(posVal[1] + " " +  posTotal[1]);
-		System.out.println(posVal[2] + " " +  posTotal[2]);
-		System.out.println(posVal[3] + " " +  posTotal[3]);
-		System.out.println("");
-		System.out.println(posVal[0] / (float) posTotal[0]);
-		System.out.println(posVal[1] / (float) posTotal[1]);
-		System.out.println(posVal[2] / (float) posTotal[2]);
-		System.out.println(posVal[3] / (float) posTotal[3]);
-		System.out.println("********************************");
-		System.out.println("NEG");
-		System.out.println(negVal[0] + " " + negTotal[0]);
-		System.out.println(negVal[1] + " " + negTotal[1]);
-		System.out.println(negVal[2] + " " + negTotal[2]);
-		System.out.println(negVal[3] + " " + negTotal[3]);
-		System.out.println("");
-		System.out.println(negVal[0] / (float) negTotal[0]);
-		System.out.println(negVal[1] / (float) negTotal[1]);
-		System.out.println(negVal[2] / (float) negTotal[2]);
-		System.out.println(negVal[3] / (float) negTotal[3]);
-		System.out.println("********************************");
-		System.out.println("********************************");
-
+		
+		System.out.println("I:" + i);
 	//	collectAntecedentTokenSize();
 		collectSentenceDistanceInfo();
 	//	printyMyCorefChains();
@@ -239,6 +152,14 @@ public class InformationModule
 			System.out.println("Total: " + totalCount + " %");
 		}
 		*/
+	}
+	
+	private void collectPronounDistribution(){
+		for(Token t : tokens){
+			if(Arrays.asList(Parameters.resolvedPronouns).contains(t.getCoveredText().toLowerCase())){
+				pronounFD.addSample(t.getCoveredText().toLowerCase(), 1);
+			}
+		}
 	}
 	
 	private void collectAntecedentTokenSize(){

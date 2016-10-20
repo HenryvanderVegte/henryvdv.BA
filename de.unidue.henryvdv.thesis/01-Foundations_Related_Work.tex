@@ -35,9 +35,9 @@ In a second evaluation, CogNIAC was compared to the Hobbs Algorithm \citep{baldw
      \label{table:cogniacRules}
 \end{table}
 
+~\\
 \subsection{Anaphora Resolution with Limited Knowledge}
 \label{anaphoraLimitedKnowledgeSection}
-
 A domain independent approach by \cite{mitkov1998robust} tried to eliminate the disadvantages of previous rule-based systems. Mitkov renounced complex syntax and semantic analysis in order to keep the algorithm as less domain specific as possible. Only a part-of-speech tagger and a simple noun phrase identifitcation module were applied. The algorithm was informally described by Mitkov in three steps:
 \begin{enumerate} 
 \item Examine the current sentence and the two preceding sentences (if available). Look for noun phrases only to the left of the anaphora
@@ -61,12 +61,12 @@ The former contains antecedent generators to determine all possible antecedents,
 The \textit{Discourse Phenomenon} contains all possible part-of-speech categories in which the anaphora could occur in a hierarchical order. For instance, ``third-person pronoun" is a subclass of ``pronoun". Each class includes its definition, two resolution strategies (a second one is needed if the main strategy fails), and specific language information if a category only exists in a certain language.\\
 The third knowledge base is responsible for domain-specific information. 
 
-A module called \textit{Discourse Administrator} was used to determine the application domain and in a further step to select and filter the knowledge bases in order to generate the best possible resolution system. Therefore, the information stored in each knowledge base is heavily dependent on the considered language and domain. The general resolution process is as follows: The discourse phenomena are used to determine all anaphoras. In a second step, the discourse knowledge sources are applied in order to generate and filter all possible candidates (candidates with mismatching gender were neglected). A syntactic gender filter was applied. If only one candidate remains, it will be chosen as antecedent. Otherwise, one or more orderers are applied and the best candidate will be chosen by order. If no candidate was found at all, the second strategy specified in the discourse phenomenon will be applied. A comparing evaluation to another machine learning based approach by \cite{aone1995evaluating} will be presented in Section \ref{MLRMDRComparison}.
+A module called \textit{Discourse Administrator} was used to determine the application domain and in a further step to select and filter the knowledge bases in order to generate the best possible resolution system. Therefore, the information stored in each knowledge base is heavily dependent on the considered language and domain. The general resolution process is as follows: The discourse phenomena are used to determine all anaphoras. In a second step, the discourse knowledge sources are applied in order to generate and filter all possible candidates (candidates with mismatching gender were neglected). A syntactic gender filter was applied. If only one candidate remains, it will be chosen as antecedent. Otherwise, one or more orderers are applied and the best candidate will be chosen by order. If no candidate was found at all, the second strategy specified in the discourse phenomenon will be applied. A comparing evaluation to another machine learning based approach by \cite{aone1995evaluating} will be presented in Section \ref{aoneBennetEval}.
 
 \section{Machine Learning-Based Approaches}
 
 Most machine learning-based techniques learn principles from annotated text corpora \citep{soon2001machine, bergsma2005automatic}, which include the correct label for each instance. In this context, a label will contain the information whether a noun phrase is the antecedent. A decisive factor of machine learning is that irrelevant information (presented through features) has a lower impact on success factors (the accuracy for instance) compared to rule-based techniques, as the algorithm automatically learns to rate those as irrelevant and vice versa. Machine learning approaches tend to have little information on linguistic principles as the algorithm should learn principles autonomously. This causes the algorithm to be less domain specific, but increases the risk to miss relevant clues. However, top-performing machine learning approaches achieve accuracy scores comparable to best non-learning techniques \citep{soon2001machine}. \\
-Additionally, machine learning algorithms are usually more time-consuming due to the learning process.
+Additionally, machine learning algorithms are usually more time-consuming due to its learning process.
 
 \subsection{Machine Learning Based Coreference Resolution}
 \label{soon2001traininginstances}
@@ -95,7 +95,7 @@ A corpus of twenty switchboard dialogues was used by \cite{strube2003machine}. I
 The feature set with a total of 25 features included noun phrase features, coreference level features, and spoken dialogue features. Noun-phrase features such as gender, number, or the grammatical function of the anaphora or the antecedent rely on preprocessing. Coreference level features could be described as low-level preprocessing features. Those features mainly describe the distance between the antecedent and the anaphora, for instance, in words or sentences. The features especially for spoken dialogue contain, for instance, information on how many noun phrases are located between anaphora and antecedent.
 A decision tree classifier with 20-fold cross-validation was applied. \citep{strube2003machine} reported an F-measure of 47.42 \% for the full classifier, including all pronouns and all features. 
 
-\subsection{Corpus- and Web-Mined Gender Information}
+\subsection{Corpus and Web Mined Gender Information}
 \label{section:bergsma2005automatic}
 \cite{bergsma2005automatic} presented a machine learning approach to anaphora resolution which treats gender information not as a hard constraint, but as a probability distribution of possible outcomes. A majority of previous approaches assigned either a specific gender and number (e.g. masculine, feminine, neutral, or plural) or, in case of uncertainty, no gender at all \citep{soon2001machine, broscheit2010bart}. Another motivation was that \cite{kennedy1996anaphora} reported to attribute 35 \% of their resolution errors to gender mismatch. Only third-person pronouns were considered.
 
@@ -103,7 +103,7 @@ The gender information was derived from two sources: a text corpus and the web.
 For the former, all occurrences of nouns and pronouns in lexico-syntactic patterns are counted. Five different patterns for reflexives, possessives, nominatives, predicates, and designators were used (Table \ref{table:bergsma2004GenderTable}). A reflexive masculine occurrence would be for instance ``John likes himself". In this case, a counter for \textit{John} with masculine gender and reflexive pronoun will be increased. This procedure was repeated for all other patterns and remaining genders and numbers. \cite{bergsma2005automatic} applied lots of textual data in order to offset parser errors and other noise sources. The whole data set included the AQUAINT corpus \citep{graff2002aquaint} as well as the Reuters corpus \citep{rose2002reuters}. In total, a data set of approximately six gigabytes of text was used.
 
 \begin{table}[h]
-  \caption{Gender Corpus Patterns}
+  \caption{Gender corpus patterns}
     \begin{tabular}{| l | p{5cm} | p{5cm} |}
     \hline
     Gender Corpus Indicators & Contained Elements & Pattern \\ \hline
@@ -130,7 +130,7 @@ In order to solve those problems, \cite{bergsma2005automatic} treated the counts
 A complete distribution is presented in Table \ref{table:bergsma2004GenderFreqTable}. It should be noted that, unlike the naive approach, these values can only be partially compared to one another as each of value represents a single distribution. Furthermore, the percentages do not sum up to 100 \%.
 
 \begin{table}[h]
-      \caption{Gender Frequencies Example}
+      \caption{Gender frequencies example}
 	\centering
     \renewcommand{\arraystretch}{2.0}
     \begin{tabular}{| l | l | l | l |}
@@ -145,8 +145,9 @@ A complete distribution is presented in Table \ref{table:bergsma2004GenderFreqTa
 
      \label{table:bergsma2004GenderFreqTable}
 \end{table}
+~\\
 
- \cite{bergsma2005automatic} expressed the certainty through the variance of Beta distributions:
+\cite{bergsma2005automatic} expressed the certainty through the variance of Beta distributions:
 
 \begin{center}
 	$\sigma$\textsuperscript{2} =  $\dfrac{\alpha \beta }{(\alpha + \beta)\textsuperscript{2}(\alpha + \beta + 1)}$
@@ -167,20 +168,20 @@ The first machine learning approach included a feature set of 42 features, where
 
 The classifier reached a performance score of 62.3 \% which is above all baseline approaches. The additional use of corpus and web frequency features led to a performance score of 73.3 \%. 
 
-\subsection{A Machine Learning-Based Resolver (MLR)}
-\label{MLRMDRComparison}
-A machine learning-based anaphora resolution system presented by \cite{aone1995evaluating} used pairwise training examples containing information on the anaphora and its possible antecedent. A whole set of 66 features was used. \cite{aone1995evaluating} divided most of them into one of four subcategories, namely lexical, syntactic, semantic, and positional. The feature selection was inspired by the manually designed resolver of \cite{aone1993language} (described in Section \ref{aonediscourseMD}), but was generalized and changed in order to be domain and language independent.
+\subsection{Anaphora Resolution with Various Parameters}
+\label{aoneBennetEval}
+A machine learning-based anaphora resolution system presented by \cite{aone1995evaluating} used pairwise training examples containing information on the anaphora and its possible antecedent. A whole set of 66 features was used. \cite{aone1995evaluating} divided most of them into one of four subcategories namely lexical, syntactic, semantic, and positional. The feature set was inspired by the manually designed resolver of \cite{aone1993language} (described in Section \ref{aonediscourseMD}), but was generalized and changed in order to be domain and language independent.
 
 In total, six different classifiers depending on three parameters were trained. The first parameter was called anaphoric chain. If its value is true, a correct antecedent is detected if the candidate is part of the same anaphoric chains which means that both refer to the same real-world entity. Otherwise, only the preceding same-world entity will be accepted as correct antecedent. This parameter also affects the training instance generation. In case of anaphoric chains, all corefering phrases will form positive training instances with its anaphora. In the other case, just the preceding corefering phrase will be used for positive instances. In both cases, the remaining phrases will form negative training instances with the anaphora. The second parameter determines whether the decision tree will use further information of the anaphoric type (for instance whether the real-world entity of the anaphora is a proper name). A third parameter determines the pruning-factor of its decision tree. A high pruning-factor indicates a higher generalization while decision trees with a lower factor tend to overfit. 
 
-A comparison with the manually designed resolver by \cite{aone1993language} was evaluated on Japanese newspaper articles. In total, 1271 anaphoras were used. As it can be seen in Table \ref{table:aone1995evals}, all machine learning approaches using anaphoric chains outperformed the manual approach independent of their pruning-factor, while the approach without the usage of anaphoric chains performed slightly worse. The different pruning factors seemed to have a rather low impact on the performance.
+A comparison with the manually designed resolver (MDR) by \cite{aone1993language} was evaluated on Japanese newspaper articles. Since Japanese contains so-called zero-pronoun which are pronouns that are not explicitly mentioned in the text, the results can only partially be compared to English. However, the comparison of the approaches among themselves could still be informative. In total, 1271 anaphoras were used. As it can be seen in Table \ref{table:aone1995evals}, all machine learning approaches using anaphoric chains outperformed the manual approach independent of their pruning-factor, while the approach without the usage of anaphoric chains performed slightly worse. The different pruning factors seemed to have a rather low impact on the performance.
 
 As the manually designed resolver also detects only the preceding same-world entity, it would be most reasonable to compare it to the MLR-6. Even though the manual approach performed better, no language specific information or relevance of features needed to be determined on the machine learning-based resolver as the algorithm learned it autonomously \citep{aone1995evaluating}. \cite{aone1995evaluating} interpreted the results as optimistic for machine learning techniques.
 
 %Zero-pronouns!
 
 \begin{table}[h]
-  \caption{Aone \& Bennett Evaluation}
+  \caption{Parameter dependent evaluation and comparison}
 \begin{tabular}{|c|c|c|c|c|}
 	\cline{1-5}
 	Algorithm & Anaphoric Chains & Anaphoric Type& Confidence & F-measure \\ \cline{1-5}

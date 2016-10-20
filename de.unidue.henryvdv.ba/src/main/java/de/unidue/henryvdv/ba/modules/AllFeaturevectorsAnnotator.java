@@ -37,15 +37,6 @@ import de.unidue.henryvdv.ba.util.FeatureVectorUtils;
         outputs = {})
 public class AllFeaturevectorsAnnotator extends JCasAnnotator_ImplBase{
 	
-	private File exportFile;
-	private String exportFilePath;
-	private List<String> posFeatureVectors;
-	private List<String> negFeatureVectors;
-	private Collection<Anaphora> anaphoras;
-	private int documentCounter;
-	
-	private FeatureVectorUtils featureVectorUtil;
-	
 	/**
 	 * Export direction
 	 */
@@ -60,6 +51,27 @@ public class AllFeaturevectorsAnnotator extends JCasAnnotator_ImplBase{
     @ConfigurationParameter(name = PARAM_EXPORT, mandatory = false, defaultValue = "current.dat")
     private String exportFileName;
 	
+    /**
+     * Files
+     */
+	private File exportFile;
+	private String exportFilePath;
+	/**
+	 * All anaphoras
+	 */
+	private Collection<Anaphora> anaphoras;
+	/**
+	 * All feature vectors (will later be written to file)
+	 */
+	private List<String> posFeatureVectors;
+	private List<String> negFeatureVectors;
+	/**
+	 * The current doc nr
+	 */
+	private int documentCounter;
+	
+	private FeatureVectorUtils featureVectorUtil;
+    
 	@Override
 	public void initialize(UimaContext context) throws ResourceInitializationException{
 		super.initialize(context);

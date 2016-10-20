@@ -43,6 +43,7 @@ public class BasicPipeline {
 		  	for(int i = 0; i < usedDocs.length; i++){
 		  		usedDocs[i] = i;
 		  	}
+			usedDocs = new Integer[]{0};
      	//	runSimpleTextReader();
 		  	runWikiCorefReader();
     		//  SVMLearn svmLearn = new SVMLearn();
@@ -79,9 +80,8 @@ public class BasicPipeline {
 	                        WikiCoref_Reader.class,
 	                        WikiCoref_Reader.PARAM_INPUT_DIRECTORY, "src/test/resources/WikiCoref_Annotation",
 	                        WikiCoref_Reader.PARAM_USED_DOCUMENT_NUMBERS, usedDocs),   
-	        		AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class),
-	        		AnalysisEngineFactory.createEngineDescription(StanfordLemmatizer.class),
-	        		AnalysisEngineFactory.createEngineDescription(StanfordNamedEntityRecognizer.class),
+	        		AnalysisEngineFactory.createEngineDescription(CoreNlpPosTagger.class),
+	        		AnalysisEngineFactory.createEngineDescription(CoreNlpNamedEntityRecognizer.class),
 	        		AnalysisEngineFactory.createEngineDescription(CoreNlpParser.class,
 																	CoreNlpParser.PARAM_ORIGINAL_DEPENDENCIES,
 																	false),

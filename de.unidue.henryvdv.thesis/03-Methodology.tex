@@ -7,9 +7,9 @@ This chapter will present the whole procedure of the implemented anaphora resolu
 \begin{figure}[h]
 	\centering
 
-	\fbox{ 
+	\fbox{ \scalebox{0.96}{
   		\includegraphics[width=\linewidth]{figures/nlppipelinev5.pdf}
-	}	
+	}}
 	\caption{Natural language preprocessing pipeline}
 	\label{figure:nlppipeline}
 \end{figure}
@@ -23,9 +23,9 @@ An illustrative example of these elements is shown in Figure \ref{figure:nlppipe
 
 \begin{figure}[h]
 	\centering
-	\fbox{ 
-  		\includegraphics[width=\linewidth]{figures/pipelineExample4.pdf}
-	}	
+	\fbox{ \scalebox{0.96}{
+  		\includegraphics[width=\linewidth]{figures/pipelineExample6.pdf}
+	}}
 	\caption{Annotation example}
 	\label{figure:nlppipelineexample}
 \end{figure}
@@ -34,18 +34,21 @@ The Parser can be subdivided into two different modules named constituent parser
 
 The constituent parser divides the sentence into sub-phrases in a hierarchical order. The type of the phrase is defined by the central word in it (also called head word) \citep{jurafsky2014speech}. For instance, if the head word is a noun, the considered phrase is called noun-phrase. The most common kind of illustration is through a dependency parsed tree as shown in Figure \ref{figure:constituencytree}.
 
-The dependency parser describes the relationship of words among each other. A word that depends on another is linked to it. Additionally, the relationship between both words is annotated. Most graphic representations visualize the relationship through pointed arrows based on the dependent word. An exemplary dependency parsed model is shown in Figure \ref{figure:dependencytree}. The arrow description will thereby represent the type of the relationship. The abbreviations subj., mod., obj., and det. represent subjects, modifiers, object, and determiners. The starting point of the arrow is called the dependent while arrowhead points to its governor.
-
-Note that the level of granularity of the used tags is reduced in the examples in order to keep them as comprehensible as possible. For instance, the dependency tag ``subject" is subdivided into clausal subject, clausal passive subject, nominal subject, and nominal passive subject. A whole list of all used constituency tags is given in Appendix \ref{table:AllConstituencyTags} and of all used dependency tags in Appendix \ref{table:AllDependencyTags}.
+It should be noted that the level of granularity of the used tags is reduced in Figure \ref{figure:constituencytree} and Figure \ref{figure:dependencytree} in order to keep them as comprehensible as possible and to facilitate the start with parsed syntax trees. For instance, the dependency tag ``subject"  (abbreviated ``subj.") is normally subdivided into clausal subject, clausal passive subject, nominal subject, and nominal passive subject. Constituency parsed trees considered later in this work will also use abbreviations, whereas the tags in Figure \ref{figure:constituencytree} are written out. A whole list of all used constituency tags is given in Appendix \ref{table:AllConstituencyTags} and of all used dependency tags in Appendix \ref{table:AllDependencyTags}.
 
 \begin{figure}[h]
 	\centering
-	\fbox{ 
-  		\includegraphics[width=\linewidth]{figures/constituencyTree2.pdf}
-	}	
-	\caption{Simplified Constituency-parsed Tree }
+	\fbox{ \scalebox{0.96}{
+  		\includegraphics[width=\linewidth]{figures/constituencyTree4.pdf}
+	}}
+	\caption{Simplified constituency parsed tree }
 	\label{figure:constituencytree}
 \end{figure}
+
+
+
+The dependency parser describes the relationship of words among each other. A word that depends on another is linked to it. Additionally, the relationship between both words is annotated. Most graphic representations visualize the relationship through pointed arrows based on the governing word. An exemplary dependency parsed model is shown in Figure \ref{figure:dependencytree}. The arrow description will thereby represent the type of the relationship. The abbreviations subj., mod., obj., and det. represent subjects, modifiers, object, and determiners.
+
 
 \begin{figure}[h]
 	\centering
@@ -64,7 +67,7 @@ Note that the level of granularity of the used tags is reduced in the examples i
 \end{dependency}
 	}	
 }
-	\caption{Dependency-parsed example}
+	\caption{Dependency parsed tree}
 	\label{figure:dependencytree}
 \end{figure}
 
@@ -74,7 +77,7 @@ Coreferential information in WikiCoref is stored through a joint identification 
 As soon as all relevant information is annotated, a training set needs to be created. In order to do so, the procedure used by \cite{soon2001machine} was adopted. As already stated in Section \ref{soon2001traininginstances}, all anaphoras and their respective antecedents form thereby positive feature vectors while all intermediate noun phrases form negative feature vectors with their corresponding anaphoras. For instance, a sequence of noun phrases A-B-C-D with A coreferring D and D as a pronoun is considered. In this case the pair (A,D) forms a positive instance while (C,D) and (B,D) form negative instances.\\
 The idea of selecting that approach is as follows: A human would reject all intermediate noun phrases due to several indicators that exclude the candidate for some reason. In contrast, noun phrases earlier in the text than the antecedent could be legitimate candidates if the antecedent did not exist. In conclusion, a valid rejection of candidates preceding the antecedent is only possible if the antecedent is already detected. However, if the antecedent is already detected no further examination needs to be done. With the algorithm of \cite{soon2001machine}, 904 positive and 2846 negative feature vectors were created in total.
 
-The anaphora set consists of 17 reflexives (herself, himself, themselves, itself), 379 nominatives (he, she, they), and 508 possessives (their, its, her, his). There are several ways of dealing with the pronoun \textit{it} as it could either be referential or pleonastic (like the \textit{it} in ``it is raining"). Pronoun resolution systems either decide to manually exclude pleonastic pronouns \citep{kennedy1996anaphora,bergsma2005automatic}, or to identify and filter them. The identification of pleonastic pronoun can be considered as a natural language processing task on its own with several different approaches, leading from machine learning \citep{boyd2005identifying} to rule-based systems \citep{lappin1994algorithm}.\\
+The anaphora set consists of 17 reflexives (herself, himself, themselves, itself), 379 nominatives (he, she, they), and 508 possessives (their, its, her, his). There are several ways of dealing with the pronoun \textit{it} as it could either be referential or pleonastic (like the \textit{it} in ``it is raining"). Previous pronoun resolution systems either decide to manually exclude pleonastic pronouns \citep{kennedy1996anaphora,bergsma2005automatic}, or to identify and filter them. The identification of pleonastic pronoun can be considered as a natural language processing task on its own with several different approaches, leading from machine learning \citep{boyd2005identifying} to rule-based systems \citep{lappin1994algorithm}.\\
 As the number of occurrences of \textit{it} is not decisive, it will be neglected in this work.
 
 %aussortierte Fälle
@@ -84,7 +87,7 @@ The whole feature set can be divided in four different categories. There are fea
 
 \begin{table}[p]
 \centering
-  \caption{Pronoun Resolution Feature Set}
+  \caption{Pronoun resolution feature set}
 	\scalebox{0.9}{ 
   \begin{tabular}{| l |r | r |}
 
@@ -219,11 +222,11 @@ In \ref{example1} it is obvious, that the pronoun ``him" cannot refer to John. U
 
 }
 }
-    \caption{Constituency-parsed examples 1 and 2}%
+    \caption{Constituency parsed examples 1 and 2}%
     \label{fig:twoTreeExample}%
 \end{figure}
 
-As it can be seen in Figure \ref{fig:twoTreeExample}, ``John" is deeper buried in the sentence structure in \ref{example2} than in \ref{example1}. This relationship can be expressed through c-commands. Its definition is: ''$\alpha$ c-commands $\beta$ if every node dominating $\alpha$ dominates $\beta$."\footnote{http://web.mit.edu/norvin/www/24.902/binding.html} In \ref{example1} the node ``John" c-commands the node ''him, but not in \ref{example2}. A first idea would be that a phrase that c-commands the anaphora cannot be the antecedent. That works for the first two sentences, but fails in the third one (Figure \ref{fig:ExampleTreeThree}). The new Tags are SB for subordinating clauses with an introduction, S' for subordinating clauses, and IN for prepositions.
+As it can be seen in Figure \ref{fig:twoTreeExample}, ``John" is deeper buried in the sentence structure in \ref{example2} than in \ref{example1}. This relationship can be expressed through c-commands. Its definition is: ''$\alpha$ c-commands $\beta$ if every node dominating $\alpha$ dominates $\beta$."\footnote{http://web.mit.edu/norvin/www/24.902/binding.html} In \ref{example1} the node ``John" c-commands the node ''him", but not in \ref{example2}. A first idea would be that a phrase that c-commands the anaphora cannot be the antecedent. That works for the first two sentences, but fails in the third one (Figure \ref{fig:ExampleTreeThree}). The new Tags are SB for subordinating clauses with an introduction, S' for subordinating clauses, and IN for prepositions.
 
 \begin{figure}[h]
     \centering\sffamily
@@ -241,7 +244,7 @@ As it can be seen in Figure \ref{fig:twoTreeExample}, ``John" is deeper buried i
             [.\node[draw]{NP}; [.PR him ] ] ] ] ] ] ]
 	\end{tikzpicture}
 }
-    \caption{Constituency-parsed example 3}%
+    \caption{Constituency parsed example 3}%
     \label{fig:ExampleTreeThree}%
 \end{figure}
 
@@ -261,5 +264,5 @@ Finally, corpus mined gender frequencies were assigned. The procedure is similar
 The implemented baseline system detects always the previous noun phrase as the correct antecedent. Similar anaphora resolution systems also used this technique \citep{poesio2004general,bergsma2005automatic}.
 
 \section{Machine learning-based Classifiers}
-Several Support Vector Machine (SVM) classifiers were build in order to determine the influence of specific features or groups. The used implementation is SVM\textsuperscript{light} with a linear kernel \citep{joachims1999svmlight}. The anaphora resolution algorithm is as follows: for each anaphora, the preceding noun phrases will be searched successively, beginning with the nearest. If no accepted noun phrase is found in the current and the previous sentence, the algorithm will terminate and assign a False Negative (FN) value for this anaphora. This means, that the algorithm assumes that the correct antecedent was falsely identified as wrong and therefore missed. This approach is different to \cite{bergsma2005automatic}, as it does not lower the threshold for acceptance until a matching antecedent is found. Even though the implementation of \cite{bergsma2005automatic} will increase the accuracy of the system (because the correct antecedent can be found in the initially neglected candidates while the implementation in this work cannot find those), it might distort the results. The pronoun resolution should rather aim for finding the correct antecedent in the regarded candidates.\\
+Several Support Vector Machine (SVM) classifiers were built in order to determine the influence of specific features or groups. The used implementation is SVM\textsuperscript{light} with a linear kernel \citep{joachims1999svmlight}. The anaphora resolution algorithm operates as follows: for each anaphora, the preceding noun phrases will be searched successively, beginning with the nearest. If no accepted noun phrase is found in the current and the previous sentence, the algorithm will terminate and assign a False Negative (FN) value for this anaphora. This means, that the algorithm assumes that the correct antecedent was falsely identified as wrong and therefore missed. This approach is different to \cite{bergsma2005automatic}, as it does not lower the threshold for acceptance until a matching antecedent is found. Even though the implementation of \cite{bergsma2005automatic} will increase the accuracy of the system (because the correct antecedent can be found in the initially neglected candidates while the implementation in this work cannot find those), it might distort the results. The pronoun resolution should rather aim for finding the correct antecedent in the regarded candidates.\\
  The chosen sentence distance is motivated by a look in the data. Approximately 97.4 \% of all considered antecedents could be found in the same or previous sentence of the anaphora.

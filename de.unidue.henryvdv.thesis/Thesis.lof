@@ -2,22 +2,22 @@
 \contentsline {figure}{\numberline {1.1}{\ignorespaces Visualization of anaphora resolution\relax }}{1}{figure.caption.2}
 \contentsline {figure}{\numberline {1.2}{\ignorespaces Visualization of coreference resolution\relax }}{2}{figure.caption.3}
 \contentsline {figure}{\numberline {1.3}{\ignorespaces Masculine gender match\relax }}{2}{figure.caption.4}
-\contentsline {figure}{\numberline {1.4}{\ignorespaces Feminine gender match\relax }}{2}{figure.caption.5}
+\contentsline {figure}{\numberline {1.4}{\ignorespaces Feminine gender match\relax }}{3}{figure.caption.5}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {4.1}{\ignorespaces Natural language preprocessing pipeline\relax }}{18}{figure.caption.10}
 \contentsline {figure}{\numberline {4.2}{\ignorespaces Annotation example\relax }}{19}{figure.caption.11}
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Simplified Constituency-parsed Tree \relax }}{20}{figure.caption.12}
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Dependency-parsed example\relax }}{20}{figure.caption.13}
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Constituency-parsed examples 1 and 2\relax }}{24}{figure.caption.15}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Simplified constituency parsed tree \relax }}{20}{figure.caption.12}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Dependency parsed tree\relax }}{20}{figure.caption.13}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Constituency parsed examples 1 and 2\relax }}{24}{figure.caption.15}
 \contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Sentence \ref {example1}}}}{24}{subfigure.5.1}
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Sentence \ref {example2}}}}{24}{subfigure.5.2}
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Constituency-parsed example 3\relax }}{25}{figure.caption.16}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Constituency parsed example 3\relax }}{25}{figure.caption.16}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Previous instance error example\relax }}{29}{figure.caption.19}
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Wrong antecedent error example\relax }}{29}{figure.caption.20}
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Gender mismatch example\relax }}{29}{figure.caption.21}
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Ambiguity example\relax }}{30}{figure.caption.22}
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Previous instance error example\relax }}{30}{figure.caption.19}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Wrong antecedent error example\relax }}{30}{figure.caption.20}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Gender mismatch example\relax }}{31}{figure.caption.21}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Ambiguity example\relax }}{31}{figure.caption.22}
 \addvspace {10\p@ }
 \addvspace {10\p@ }

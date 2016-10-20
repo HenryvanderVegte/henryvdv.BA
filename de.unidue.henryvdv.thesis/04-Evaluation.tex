@@ -10,7 +10,8 @@ The baseline achieved an accuracy of 26 \%, just like what \cite{bergsma2005auto
 
 \begin{table}[h]
 \centering
-  \caption{Pronoun Resolution Performance Scores}
+  \caption{Pronoun resolution performance scores}
+\scalebox{0.9}{
 \begin{tabular}{|l|c|c|c|c|}
 	\hline
 	Method & Accuracy & Precision & Recall & F-measure \\ \hline
@@ -19,19 +20,20 @@ The baseline achieved an accuracy of 26 \%, just like what \cite{bergsma2005auto
 	SVM Classifier (with corpus gender frequencies) & 63.4 \%  & 92.6 \% & 66.8 \% & 77.6 \% \\ \hline
 	SVM Classifier (with corpus gender constraints) & 64 \%  & 92.6 \% & 67.4 \% & 78 \% \\ \hline
 	\end{tabular}
-
+}
      \label{table:pronounResScores}
 \end{table}
 
 
-Table \ref{table:pronounResScores} shows the results of the SVM classifiers. All results were calculated with a 10-fold-crossvalidation on all 30 documents. The whole resolution system with all features received an F-measure of 76.5 \% and an accuracy of 61.9 \% which is more than twice as much as the baseline accuracy, indicating the clear benefit of the implemented system. A comparison with other anaphora resolution systems is only partially reasonable since different data sets and implementations were used. Still, the high precision rule-based approach presentend by \cite{baldwin1997cogniac} in Section \ref{baldwinCogNIAC} received similar precision and recall measures on the MUC-6 data set \citep{grishman1996message}. The in Section \ref{aoneBennetEval} described approach by \cite{aone1995evaluating} achieved an F-measure of approximately 77 \% for their best machine-learned classifiers on Japanese newspaper articles.
+Table \ref{table:pronounResScores} shows the results of the SVM classifiers. All results were calculated with a 10-fold-crossvalidation on all 30 documents. The whole resolution system with all features received an F-measure of 76.5 \% and an accuracy of 61.9 \% which is more than twice as much as the baseline accuracy, indicating the clear benefit of the implemented system. A comparison with other anaphora resolution systems is only partially reasonable since different data sets and implementations were used. Still, the high precision rule-based approach presentend by \cite{baldwin1997cogniac} in Section \ref{baldwinCogNIAC} received similar precision and recall measures on the MUC-6 data set \citep{grishman1996message}. The approach of \cite{aone1995evaluating} described in Section \ref{aoneBennetEval} achieved an F-measure of approximately 77 \% for their best machine-learned classifiers on Japanese newspaper articles.
 
-\cite{bergsma2005automatic} received with a similar approach an accuracy of 73.3 \%. The inferiority of the implemented system could be explained through various reasons. \\
-First of all, a slightly greater feature set was used by Bergsma. Secondly, the implemented approach uses only corpus mined gender information, while \cite{bergsma2005automatic} also counts web occurrences through Google requests. Since a corpus can't cover extremely sparse events, Google might give information on those. Thirdly, Bergsma's implementation lowered the threshold if no accepted antecedent was found in the current and last sentence, while the implemented system in this work accepts none in that case. Therefore, the approach of \cite{bergsma2005automatic} was also implemented in this work. A slight increase in accuracy of 1.4 \% (to a total of 63.3 \%) was recorded. 
+The corpus mined gender frequencies had only a slight impact on the classifiers performance, but caused an increased accuracy and F-measure. In order to associate the increase to the gender frequencies, a third classifier was built. It used the whole feature set except for gender means and standard deviations. Four new variables were added instead. Each variable represents a gender. The corpus frequencies were used to determine the most frequent gender of an antecedent candidate. The variable representing the most frequent outcome was set to one while the others were set to zero. For instance, \textit{Peter} was found 4479 times masculine, 76 times feminine, 81 times neutral, and 120 times plural. Since 4479 is the highest, the new variable representing the masculine gender will be set to one while all other new variables will be set to zero. This hard constraint implementation performed slightly better than the classifier using gender frequencies.
 
-The corpus mined gender frequencies had only a slight impact on the classifiers performance, but caused an increased accuracy and F-measure. In order to associate the increase to the gender frequencies, a third classifier was build. It used the whole feature set except for the gender means and standard deviations. Four new variables were added instead. Each variable represents a gender. The corpus frequencies were used to determine the most frequent gender of an antecedent candidate. The variable representing the most frequent outcome was set to one while the others were set to zero. For instance, \textit{Peter} was found 4479 times masculine, 76 times feminine, 81 times neutral, and 120 times plural. Since 4479 is the highest, the new variable representing the masculine gender will be set to one while all other new variables will be set to zero. This hard constraint implementation performed slightly better than the classifier using gender frequencies.
+\cite{bergsma2005automatic} received with a similar approach using corpus gender frequencies an accuracy of 73.3 \%. In order to make both approaches as comparable as possible, another classifier lowering the threshold if no accepted antecedent was found in a first step was implemented. The approach of \cite{bergsma2005automatic} slightly increased the accuracy by 1.4 \% (to a total of 63.3 \%). 
 
-In order to explain that results, an error analysis on six random chosen documents was done.
+Another legitimate evaluation measure is that not the most recent antecedent exceeding the threshold is accepted, but the candidate exceeding the threshold the most. This approach was also implemented and achieved an accuracy of 51.5 \% and an F-measure of 68 \%. The feature set including corpus mined gender frequencies was used for this implementation.
+
+In order to make the results more comprehensible, an error analysis on six randomly chosen documents was done.
 
 \section{Error Analysis}
 \begin{table}[h]
@@ -54,8 +56,7 @@ In order to explain that results, an error analysis on six random chosen documen
 
 The errors made by the anaphora resolution system can be divided into six different categories (Table \ref{table:errorFreq}).
 
-
-The most frequent error was that the an instance of the requested anaphora was found, but not the nearest. For instance, in Figure \ref{figure:prevInstError} \textit{Kirk} was detected while \textit{minister of Aberfoyle parish} was the correct antecedent. However, both refer to the same real-world entity. Since a classifier detecting another noun phrase representing the same real-world entity is only partially wrong, the impact on the performance score of this error might also be relevant. Therefore, a seperate SVM classifier with corpus gender frequencies was build which also accepts previous real-world entities as the correct antecedent. This information was derived through coreference chains (pictured in Figure \ref{figure:nlppipeline}). A 10-fold crossvalidation yielded an accuracy increase of 5.1 \%.
+The most frequent error was that an instance of the requested anaphora was found, but not the nearest. For instance, in Figure \ref{figure:prevInstError} \textit{Kirk} was detected while \textit{minister of Aberfoyle parish} was the correct antecedent. However, both refer to the same real-world entity. Since a classifier detecting another noun phrase representing the same real-world entity is only partially wrong, the impact on the performance score of this error might also be relevant. Therefore, a seperate SVM classifier with corpus gender frequencies was build which also accepts previous real-world entities as the correct antecedent. This information was derived through coreference chains (pictured in Figure \ref{figure:nlppipeline}). A 10-fold crossvalidation yielded an accuracy increase of 5.1 \%.
 
 \begin{figure}[h]
 \centering
@@ -98,7 +99,7 @@ In 10 of 49 cases, a wrong antecedent that does not explicitly disagree in gende
 	\label{figure:wrongAnteError}
 \end{figure}
 
-Figure \ref{figure:wrongGenderError} shows a case in which the system clearly identified an noun phrase of the wrong gender. The corpus mined gender frequencies indicating a $\mu$  of approximately 90.5 \% for \textit{Sarah} to be female while its masculine $\mu$ was only 2.4 \%.
+Figure \ref{figure:wrongGenderError} shows a case in which the system clearly identified an noun phrase of the wrong gender. The corpus mined gender frequencies indicating a $\mu$ of approximately 90.5 \% for \textit{Sarah} to be female while its masculine $\mu$ was only 2.4 \%.
 
 \begin{figure}[h]
 \centering
@@ -126,7 +127,7 @@ A wrong bound means that the correct antecedent might be detected, but not exact
 \begin{addmargin}[25pt]{25pt}
 Sarah Eldridge's son-in-law John Tizard inherited her share of the business, and when he died in 1871 the Popes assumed full control.
 \end{addmargin}
-In the example above, \textit{Sarah Eldridge's son-in-law John Tizard} was labelled as the correct antecedent for the pronoun \textit{he} while the system detected \textit{Sarah Eldridge's son-in-law}. One could argue that the system nonetheless detected the correct phrase. However, in some cases another span might change the complete meaning of the phrase. For instance,  if the detected noun phrase is \textit{Gonzales 's musical style} and the correct antecedent is \textit{Gonzales's}.
+In the example above, \textit{Sarah Eldridge's son-in-law John Tizard} was labelled as the correct antecedent for the pronoun \textit{he} while the system detected \textit{Sarah Eldridge's son-in-law}. One could argue that the system nonetheless detected the correct phrase. However, in some cases another span might change the complete meaning of the phrase. For instance, if the detected noun phrase is \textit{Gonzales 's musical style} and the correct antecedent is \textit{Gonzales's}.
 
 The least frequent category of errors includes all remaining error types caused by parsing errors, other noise, or unclear bindings. For instance, \textit{their} in Figure \ref{figure:otherError} could either refer to \textit{Their commanders} or \textit{the Swedish troops}
 
