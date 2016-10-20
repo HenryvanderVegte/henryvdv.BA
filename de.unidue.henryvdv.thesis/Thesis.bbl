@@ -719,6 +719,34 @@ Manning, C\BPBI D.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Marcus%
+, Marcinkiewicz%
+\BCBL {}\ \BBA {} Santorini%
+}{%
+Marcus%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {1993}}%
+}]{%
+marcus1993building}
+\APACinsertmetastar {%
+marcus1993building}%
+\begin{APACrefauthors}%
+Marcus, M\BPBI P.%
+, Marcinkiewicz, M\BPBI A.%
+\BCBL {}\ \BBA {} Santorini, B.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1993}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Building a large annotated corpus of English: The Penn
+  Treebank} {Building a large annotated corpus of english: The penn
+  treebank}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Computational linguistics}{19}{2}{313--330}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 McCarthy%
 \ \BBA {} Lehnert%
 }{%

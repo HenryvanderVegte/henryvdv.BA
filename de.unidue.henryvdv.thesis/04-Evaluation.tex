@@ -6,7 +6,7 @@ This chapter will present different performance measures and comparing evaluatio
 \section{Results}
 A precision measure indicates in how many percent of all cases the classifier identified the correct antecedent relative to the sum of all correct identified and falsely neglected antecedents. A recall measure indicates the amount of all correct identified cases relative to all identified cases. The F-measure is a balanced mean of both values.
 
-The baseline achieved an accuracy of 26 \%, just like what \cite{bergsma2005automatic} reported as baseline on the American National Corpus \citep{ide2001american}. Calculating the precision is not useful in this case as the baseline does not neglect any cases. Therefore, the precision would always be 100 \%. The recall measure is identical to the accuracy in that case.
+The baseline achieved an accuracy of 26 \%, just like what \cite{bergsma2005automatic} reported as a baseline on the American National Corpus \citep{ide2001american}. Calculating the precision is not useful in this case as the baseline does not neglect any cases. Therefore, the precision would always be 100 \%. The recall measure is identical to the accuracy in that case.
 
 \begin{table}[h]
 \centering
@@ -56,7 +56,7 @@ In order to make the results more comprehensible, an error analysis on six rando
 
 The errors made by the anaphora resolution system can be divided into six different categories (Table \ref{table:errorFreq}).
 
-The most frequent error was that an instance of the requested anaphora was found, but not the nearest. For instance, in Figure \ref{figure:prevInstError} \textit{Kirk} was detected while \textit{minister of Aberfoyle parish} was the correct antecedent. However, both refer to the same real-world entity. Since a classifier detecting another noun phrase representing the same real-world entity is only partially wrong, the impact on the performance score of this error might also be relevant. Therefore, a seperate SVM classifier with corpus gender frequencies was build which also accepts previous real-world entities as the correct antecedent. This information was derived through coreference chains (pictured in Figure \ref{figure:nlppipeline}). A 10-fold crossvalidation yielded an accuracy increase of 5.1 \%.
+The most frequent error was that an instance of the requested anaphora was found, but not the nearest. For instance, in Figure \ref{figure:prevInstError} \textit{Kirk} was detected while \textit{minister of Aberfoyle parish} was the correct antecedent. However, both refer to the same real-world entity. Since a classifier detecting another noun phrase representing the same real-world entity is only partially wrong, the impact on the performance score of this error might be relevant as well. Therefore, a seperate SVM classifier with corpus gender frequencies was built which also accepts previous real-world entities as the correct antecedent. This information was derived through coreference chains (pictured in Figure \ref{figure:nlppipeline}). A 10-fold crossvalidation yielded an accuracy increase of 5.1 \%.
 
 \begin{figure}[h]
 \centering
