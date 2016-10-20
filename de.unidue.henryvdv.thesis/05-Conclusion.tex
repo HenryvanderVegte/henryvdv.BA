@@ -1,6 +1,6 @@
 \chapter{Conclusion}
 \label{sec:Conclusion}
-In this thesis, three different implementations of machine-learning based classifiers using Support Vector Machines (SVM) for pronominal anaphora resolution were presented in order to determine the influence of corpus mined gender frequencies. This section will first of all summarize the implemented systems, followed by a discussion of the results and explanatory approaches. Finally, the last section will describe what could be done in future work and how the system could exert influence on other domains and scopes.
+In this thesis, three different implementations of machine-learning based classifiers using Support Vector Machines (SVM) for pronominal anaphora resolution were presented in order to determine the influence of corpus mined gender frequencies. This section will first of all summarize the implemented systems followed by a discussion of the results and explanatory approaches. Finally, the last section will describe what could be done in future work and how the system could exert influence on other domains and scopes.
 
 \section{Summary}
 This work presented a pronominal anaphora resolution system using various information sources including syntactic, semantic, and corpus mined gender knowledge. A preprocessing pipeline including part-of-speech tagging, named entity recognition, constituency parsing, and dependency parsing was implemented in order to gain relevant information for feature assignment. In total, a feature set of 33 features was used (excluding gender probability features). Various implementations were done. First of all, a baseline system that assigns always the most recent noun phrase as antecedent was implemented. The first SVM classifier without usage of corpus mined gender information outperformed the baseline approach by far, indicating a clear benefit of machine learning in anaphora resolution. 
@@ -21,7 +21,7 @@ Additionally, \cite{bergsma2005automatic} split the corpus and web mined gender 
 The quality of preprocessing also affects the results, as parsing errors or falsely linked antecedents are unavoidable on huge corpora. In pronoun resolution some ambiguity might result of cases in which no clearly identifiable antecedent exists or multiple candidates are equally likely. 
 
 Another impact on performance measures are cases in which world knowledge is required. For finding all antecedents, the algorithm needs to draw conclusions and recognize contextual relationships. \cite{baldwin1997cogniac} considered anaphora resolution as an ``A.I. complete'' task, meaning that the creation of a flawless anaphora resolution system requires a generally intelligent computer \citep{shapiro1992encyclopedia}. The Winograd Schema Challenge\footnote{A detailed description is available at http://www.nuance.com/company/news-room/press-releases/Winograd-Schema-Challenge.docx} is a test of artificial intelligence which adresses those hard cases. The participating systems need to identify the correct antecedent for a pronominal anaphora. The antecedent candidates share the same semantic class which makes the identification challenging. For instance, a question in the challenge might be:
-
+%Wikipedia->sehr speziell, deshalb ist web gender info vllt wichtig ``Aberfoyle'' ist nur 1 mal im corpus
 \begin{addmargin}[25pt]{25pt}
 The cat tried to climb in the box but got stuck because it was too big.\\ What was too big?\footnote{The example was taken from https://artistdetective.wordpress.com/}
 \end{addmargin}
@@ -29,5 +29,5 @@ The cat tried to climb in the box but got stuck because it was too big.\\ What w
 The pronoun \textit{it} could either refer to \textit{The cat} or \textit{the box}. The identification of the correct antecedent requires background information on sizes (``if A is in B, then B is bigger'') and additionally needs to identify that ``but got stuck'' indicates that the cat was too big. The implemented algorithm will most likely fail to identify the correct antecedent in those cases since it does not provide any kind of world knowledge.
 
 \section{Outlook}
-
+Future research could test the implemented anaphora resolution system on different domains in order to 
 What can/has to be/may be done in future research? Impact on other branches of science? society?
