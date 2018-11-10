@@ -8,8 +8,9 @@ Anaphora Resolution describes the process of finding the most recent preceding p
 ## Installation 
 
 ```
-git clone git@github.com:github.com/HenryvanderVegte/henryvdv.BA.git
-cd de.unidue.henryvdv.ba
+git clone https://github.com/HenryvanderVegte/henryvdv.BA
+cd henryvdv.BA/de.unidue.henryvdv.ba
 ```
 
 Import as maven project.
+Note that this project uses the [DKPro Core](https://dkpro.github.io/dkpro-core) software components. 
